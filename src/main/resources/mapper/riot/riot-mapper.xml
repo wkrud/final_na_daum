@@ -31,6 +31,17 @@
 		where
 			puuid = #{puuid}
 	</select>
+	
+	<insert id="insertRiotFavo">
+		insert into
+			riot_myaccount(no, member_id, sm_id)
+		values(
+		seq_riot_myaccount_no.nextval,
+			#{member_Id},
+			#{sm_Id}
+			
+		)
+	</insert>
 
 </mapper>
 

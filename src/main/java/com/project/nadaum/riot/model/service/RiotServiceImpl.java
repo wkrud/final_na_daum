@@ -1,9 +1,12 @@
 package com.project.nadaum.riot.model.service;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.nadaum.riot.model.dao.RiotDao;
+import com.project.nadaum.riot.model.vo.RiotFavo;
 import com.project.nadaum.riot.model.vo.Summoner;
 
 
@@ -23,6 +26,12 @@ public class RiotServiceImpl implements RiotService {
 	public Summoner selectOneSummoner(String puuid) {
 		
 		return riotDao.selectOneSummoner(puuid);
+	}
+
+	@Override
+	public int insertRiotFavo(Map<String, Object> map) {
+		
+		return riotDao.insertRiotFavo(map);
 	}
 
 }
