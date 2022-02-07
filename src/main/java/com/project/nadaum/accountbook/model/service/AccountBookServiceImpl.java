@@ -77,6 +77,11 @@ public class AccountBookServiceImpl implements AccountBookService {
 		return accountBookDao.categoryChart(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> paymentList(Map<String, Object> param) {
+		return accountBookDao.paymentList(param);
+	}
+
 	
 	
 	

@@ -40,10 +40,11 @@
 			//차트 상단의 제목
 			/*title: '월별 차트',*/
 			 //차트 크기 설정
-			 width : 800,
-			 height : 300
+			 width : 700,
+			 height : 300,
+			 backgroundColor : '#FFFBF5',
 			};
-			var chart = new google.visualization.LineChart(document.getElementById('monthly_chart'));
+			var chart = new google.visualization.LineChart(document.getElementById('monthly-total-chart'));
 			chart.draw(chartData, options);
 			}
 		});
@@ -76,10 +77,11 @@
 			//차트 상단의 제목
 			/*title: '월별 차트',*/
 			 //차트 크기 설정
-			 width : 400,
+			 width : 550,
 			 height : 300,
+			 backgroundColor : '#FFFBF5',
 			};
-			var chart = new google.visualization.ColumnChart(document.getElementById('incomeChartArea'));
+			var chart = new google.visualization.ColumnChart(document.getElementById('income-category-chart'));
 			chart.draw(chartData, options);
 			}
 		});
@@ -111,26 +113,15 @@
 			//차트 상단의 제목
 			/*title: '월별 차트',*/
 			 //차트 크기 설정
-			 width : 400,
+			 width : 550,
 			 height : 300,
+			 backgroundColor : '#FFFBF5',
 			};
-			var chart = new google.visualization.ColumnChart(document.getElementById('expenseChartArea'));
+			var chart = new google.visualization.ColumnChart(document.getElementById('expense-category-chart'));
 			chart.draw(chartData, options);
 			}
 		});
 	};
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	//past month
 		let monthly = 0;
