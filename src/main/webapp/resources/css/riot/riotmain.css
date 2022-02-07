@@ -1,0 +1,309 @@
+@charset "UTF-8";
+
+#nadaumgg {
+	text-align: center;
+	
+}
+
+#nadaumgg h1 {
+	font-family: 'CookieRun-Regular';
+	color: #00f0f7
+}
+
+#aaa {
+	text-align: center;
+	position: relative;
+}
+
+#bbb {
+	width: 500px;
+	height: 500px;
+	position: absolute;
+	right: 5%;
+}
+
+#recentgame {
+	display: grid;
+}
+
+#detailgame {
+	display: grid;
+}
+
+input[type="text"] {
+	width: 70%;
+	height: 100%;
+	font-size: 1em;
+	padding-left: 5px;
+	font-style: oblique;
+	display: inline;
+	box-sizing: border-box;
+	color: black;
+}
+
+input[type=button] {
+	width: 30%;
+	height: 100%;
+	background-color: lightgray;
+	border: none;
+	background-color: white;
+	font-size: 1em;
+	color: #042AaC;
+	outline: none;
+	display: inline;
+	margin-left: -10px;
+	box-sizing: border-box;
+}
+
+
+.recentchamp {
+
+	width: 62px;
+	height: 62px;
+}
+
+.detailchamp {
+	width: 100px;
+}
+
+.detailname {
+	font-weight: bold;
+}
+
+.recentgameinfo {
+	display: grid;
+	grid-template-columns: 85px 65px 188px auto 146px 30px;
+	width: 740;
+	height: 100px;
+	align-items: center;
+	margin: auto;
+	color: #24292ed0;
+}
+.detailgamewrap {
+	display: grid;
+	grid-template-columns: 50% 2% 49%;
+	
+}
+
+
+
+.detailgameinfo {
+	display: grid;
+    grid-template-columns: 71px 60px 48px 115px 198px;
+    width: 740;
+    height: 100px;
+    align-items: center;
+    margin: auto;
+    color: #24292ed0;
+}
+
+.recent-champ-img {
+	margin: 1px;
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	width: 60px;
+}
+
+.detail-champ-img {
+	margin: 1px;
+	height: 45px;
+	border-radius: 30px;
+	width: 45px;
+}
+
+.recent-champ-lev {
+	position: absolute;
+    float: left;
+    top: 49px;
+    left: 54px;
+    background-color: #24292e;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    align-items: center;
+    text-align: center;
+}
+
+.detail-champ-lev {
+	position: absolute;
+	float: left;
+	background-color: #24292e;
+	width: 15px;
+	height: 15px;
+	border-radius: 10px;
+	align-items: center;
+	text-align: center;
+	font-size: 0.8em;
+}
+
+.runespellwrap {
+	margin: auto;
+}
+
+.detailrunespellwrap {
+	margin: auto;
+}
+
+.recent-rune {
+	align-items: center;
+	position: relative;
+	width: 35px;
+	height: 25px;
+	text-align: left;
+	margin: auto;
+	margin-bottom: 6px;
+}
+
+.detail-rune {
+	align-items: center;
+	position: relative;
+	width: 35px;
+	height: 25px;
+	text-align: left;
+	margin: auto;
+	margin-bottom: 6px;
+}
+
+.recent-main-rune {
+	width: 25px;
+	height: 25px;
+	border-radius: 15px;
+	background-color: #011925;
+}
+
+.detail-main-rune {
+	width: 25px;
+	height: 25px;
+	border-radius: 15px;
+	background-color: #011925;
+}
+
+.recent-sub-rune {
+	position: absolute;
+	left: 18px;
+	top: 10px;
+	width: 14px;
+	height: 14px;
+	background-color: #011925;
+	border-radius: 8px;
+	padding: 1px;
+	background-color: #011925;
+}
+
+.detail-sub-rune {
+	position: absolute;
+	left: 18px;
+	top: 10px;
+	width: 14px;
+	height: 14px;
+	background-color: #011925;
+	border-radius: 8px;
+	padding: 1px;
+	background-color: #011925;
+}
+
+.recent-spell {
+	float: left;
+	border: solid 1px #463714;
+	background-color: #011925;
+	width: 20px;
+	height: 20px;
+}
+
+.detail-spell {
+	float: left;
+	border: solid 1px #463714;
+	background-color: #011925;
+	width: 20px;
+	height: 20px;
+}
+
+.recent-kda {
+	font-size: 1.2em;
+	font-weight: 700;
+	margin: auto;
+	align-items: center;
+}
+
+.detail-kda {
+	font-size: 0.8em;
+	font-weight: 700;
+	margin: auto;
+	align-items: center;
+}
+
+.recent-it-wrap {
+	display: grid;
+	grid-template-columns: 50% 50%;
+}
+
+.detail-it-wrap {
+	display: grid;
+	grid-template-columns: 50% 50%;
+}
+
+.recent-item {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	margin-bottom: 5px;
+}
+
+.detail-item {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	margin-bottom: 5px;
+}
+
+.sword {
+	width: 40px;
+	height: 50px;
+}
+
+.detailsword {
+	width: 30px;
+	height: 40px;
+}
+
+.recent-items-wrap {
+	display: grid;
+	grid-template-columns: 50% 50%;
+}
+
+.detail-items-wrap {
+	display: grid;
+	grid-template-columns: 50% 50%;
+}
+
+.recent-item06 {
+	float: left;
+	border: solid 1px #463714;
+	margin: 1px;
+	width: 60px;
+	height: 60px;
+}
+
+.detail-item06 {
+	float: left;
+	border: solid 1px #463714;
+	margin: 1px;
+	width: 31px;
+	height: 31px;
+}
+
+input[type=button]:hover {
+	background-color: lightgray;
+}
+
+.recent-button-wrap {
+	margin-top: 85px;
+	margin-left: 70px;
+}
+
+.main-div {
+	display: flex;
+}
+.fav-button-wrap {
+	margin-top: 154px;
+    margin-left: 70px;
+}
