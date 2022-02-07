@@ -65,7 +65,7 @@ padding : 100px;
 	<div class="movie-container">
 		<!-- 썸네일 그림, 타이틀  -->
 		<div class="movie-banner">
-			<div id="myCarousel" class="carousel slide" data-ride="carousel">
+			<!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
 				<ol class="carousel-indicators">
 					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 					<li data-target="#myCarousel" data-slide-to="1"></li>
@@ -126,7 +126,7 @@ padding : 100px;
 					data-slide="next"> <span class="carousel-control-next-icon"
 					aria-hidden="true"></span> <span class="sr-only">Next</span>
 				</a>
-			</div>
+			</div> -->
 
 
 			<!-- 검색창 -->
@@ -138,6 +138,8 @@ padding : 100px;
 				</div>
 				<button type="submit" class="btn orange btn-default" id="search-btn">검색</button>
 			</form>
+			
+			<a href="${pageContext.request.contextPath}/scrap/scrapList.do">스크랩</a>
 		</div>
 
 		<!-- 영화정보진흥원 api -->
@@ -198,7 +200,7 @@ $(".goDetail").click((e) => {
 	console.log(e.target);
 	console.log(apiCode);
 	
- 	location.href = `${pageContext.request.contextPath}/movie/movieDetail.do?apiCode=\${apiCode}`;
+ 	location.href = `${pageContext.request.contextPath}/movie/movieDetail/\${apiCode}`;
 	
  });
  

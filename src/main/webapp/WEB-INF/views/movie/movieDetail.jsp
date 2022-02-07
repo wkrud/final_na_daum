@@ -198,8 +198,8 @@ div#board-container label.custom-file-label {
 									<input type="text" class="id-detail movie-detail" name="id" id="id" value="${loginMember.nickname}" /></i>
 									</label>
 							</div>
-							<form action="${pageContext.request.contextPath}/board/boardCommentEnroll.do"
-								method="post" name="boardCommentFrm" id="insertCommentFrm">
+							
+							<form id="insertCommentFrm">
 
 								<!-- api 코드 -->
 								<input type="hidden" name="apiCode" value="${apiCode}" /> 
@@ -210,7 +210,7 @@ div#board-container label.custom-file-label {
 								<!-- 대댓글인 경우 써여져야함 -->
 								<input type="hidden" name="commentRef" value="" />
 								<div class="col-sm-10">
-									<input type="hidden" class="form-control" name="category" >
+									<input type="hidden" class="form-control" name="star" >
 									<select id="category-select" class="form-control" aria-label="Default select example">
 									<option selected>평점</option>
 									<option value="1">1</option>
@@ -225,6 +225,7 @@ div#board-container label.custom-file-label {
 								<button type="submit" id="btn-comment-enroll1"	class="btn btn-outline-primary" onClick="fn_comment('${apiCode}')">등록</button>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 							</form>
+							
 						</li>
 					</ul>
 				</div>
@@ -253,20 +254,27 @@ div#board-container label.custom-file-label {
 												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.nickname}</strong>
 											</label> &nbsp;&nbsp;
 											<fmt:formatDate value="${comment.regDate}"	pattern="yyyy-MM-dd HH:mm" />
-										</div> <textarea class="form-control"
-											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+										</div> 
+										
+										<div class="col-sm-10">
+										<input type="hidden" class="form-control" name="category" >
+										<select id="category-select" class="form-control" aria-label="Default select example">
+										<option selected>${comment.star}</option>
+										</select>
+										</div>
+										
+										<textarea class="form-control" id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
 
 										<%-- 회원일때만 답글 버튼이 나타남 --%>
 										<div class="row float-right">
-											<button type="button" onclick="firstReply()"
-												class="btn btn-warning btnReComment btn-reply"
-												value="${comment.commentCode}">답글</button>
+											<button type="button" onclick="firstReply()" class="btn btn-warning btnReComment btn-reply"	value="${comment.code}">답글</button>
 											&nbsp;
 											<%-- 회원이고 글쓴이 본인일 경우 댓글 삭제 버튼--%>
 											<c:if test="${comment.id eq loginMember.id}">
-											<button type="button"
-												class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
-												value="${comment.commentCode}">삭제</button>
+											<form id="deleteCommentFrm">
+											<input type="hidden" name="code" value="${comment.code}"></input>
+											<button type="submit" class="btn btn-outline-secondary disabled btnCommentDelete btn-delete" id="deleteComment-btn" value="${comment.code}">삭제</button>
+											</form>
 											&nbsp;
 											</c:if>
 										</div>
@@ -287,17 +295,26 @@ div#board-container label.custom-file-label {
 											<fmt:formatDate value="${comment.regDate}"
 												pattern="yyyy-MM-dd HH:mm" />
 										</div> <textarea class="form-control"
-											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+											id="exampleFormControlTextarea1" rows="1" >${comment.content}</textarea>
 										<div class="row float-right">
 
 											<!-- 회원이고 글쓴이 본인일 경우 -->
 											
 											<c:if test="${loginMember.id eq comment.id}">
-												<button type="button"
-												class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
-												value="${comment.commentCode}">삭제</button>
+												<form id="deleteCommentFrm">
+												<input type="hidden" name="code" value="${comment.code}"></input>
+												<button type="submit" class="btn btn-outline-secondary disabled btnCommentDelete btn-delete" id="deleteComment-btn" value="${comment.code}">삭제</button>
+												</form>
 												&nbsp;
-											 </c:if>
+												
+												<form id="updateCommentFrm">
+				    							<input type="hidden" name="code" value="${comment.code}"/>
+				    							<input type="hidden" name="star" value="${comment.star}"/>
+				    							<input type="hidden" name="content" value="${comment.content}"/>
+				    							<input type="hidden" name="code" value="${comment.code}"/>
+				    							<button type="submit" class="btn btn-outline-dark" id="updateComment-btn" value="${comment.code}">수정</button>
+				    							</form>
+											</c:if>
 											
 										</div>
 									</li>
@@ -314,18 +331,9 @@ div#board-container label.custom-file-label {
 
 	</div>
 </div>
-<form id="deleteCommentFrm">
-	<input type="hidden" name="code" value="${comment.code}"></input>
-	<!-- <button type="submit" class="btn btn-outline-danger" id="deleteComment-btn">삭제</button> -->
-</form>
+
 <script>
-//댓글 등록
-
-const csrfToken = $("meta[name='_csrf']").attr("content");
-const csrfHeader = $("meta[name='_csrf_header']").attr("content");
-const headers = {};
-headers[csrfHeader] = csrfToken;
-
+/* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
 	e.preventDefault();
 	
@@ -333,10 +341,11 @@ $(insertCommentFrm).submit((e) => {
     const csrfToken = "${_csrf.token}";
     const headers = {};
     headers[csrfHeader] = csrfToken;
+    
 	$.ajax({
-		headers : headers,
-		url: `${pageContext.request.contextPath}/culture/board/view/${apiCode}`,
+		url: `${pageContext.request.contextPath}/movie/movieDetail/${apiCode}`,
 		method: "POST",
+		headers : headers,
 		data: $(insertCommentFrm).serialize(),
 		success(resp){
 			console.log(resp)
@@ -348,6 +357,64 @@ $(insertCommentFrm).submit((e) => {
 	});
 	
 });
+
+/* 댓글 삭제 */
+ $(deleteCommentFrm).submit((e) => {
+				e.preventDefault();
+				const code = $(e.target).find("[name=code]").val();
+				console.log(code);
+				
+				const csrfHeader = "${_csrf.headerName}";
+		        const csrfToken = "${_csrf.token}";
+		        const headers = {};
+		        headers[csrfHeader] = csrfToken;
+				var data = {"code" : code};
+		        
+				$.ajax({
+					url:`${pageContext.request.contextPath}/movie/movieDetail/${apiCode}/\${code}`,
+					method: "DELETE",
+					headers : headers, 
+					type : "POST",
+					data : JSON.stringify(data),
+					success(resp){
+						console.log(resp);
+						location.reload();
+						alert(resp.msg);
+					},
+					error(xhr,statusText){
+						switch(xhr.status){
+						case 404: alert("해당 댓글이 존재하지않습니다."); break;
+						default: console.log(xhr, statusText);
+						}				
+					}
+				});
+			});  
+ 
+ 	$(updateCommentFrm).submit((e) => {	
+ 		e.preventDefault();
+		const code = $(e.target).find("[name=code]").val();
+		console.log(code);
+		
+		const csrfHeader = "${_csrf.headerName}";
+    	 const csrfToken = "${_csrf.token}";
+    	 const headers = {};
+     	headers[csrfHeader] = csrfToken;
+     	
+     	var data = {"code" : code};
+		$.ajax({
+			headers : headers,
+			url: `${pageContext.request.contextPath}/movie/movieDetail/${apiCode}/\${code}`,
+			method: "PUT",
+			data: $(updateCommentFrm).serialize(),
+			success(resp){
+				console.log(resp)
+				location.reload();
+				alert(resp.msg);
+			},
+			error: console.log
+		});
+		
+	});
 </script>
 
 

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -63,8 +64,8 @@ public class GetMovieDetailApi {
 //@RequestParam(value="movieCd", required=false) String movieCd
 	
 	// 영화 상세정보API
-	@GetMapping("/movieDetail.do")
-	public ModelAndView getMovieDetailApi(@RequestParam String apiCode, Model model) {
+	@GetMapping("/movieDetail/{apiCode}")
+	public ModelAndView getMovieDetailApi(@PathVariable String apiCode, Model model) {
 		log.debug("movieCd = {} ", apiCode);
 		
 		List<Object> list = new ArrayList<>();
@@ -138,9 +139,10 @@ public class GetMovieDetailApi {
 				list.add(map);
 			}
 			
-//			List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
-//			model.addAttribute("list",list);
-//			log.debug("list = {}" , list);
+			List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
+			model.addAttribute("list",list);
+			model.addAttribute("commentList",commentList);
+			log.debug("list = {}" , list);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
