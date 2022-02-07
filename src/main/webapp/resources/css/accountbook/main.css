@@ -54,7 +54,7 @@ select:disabled {
 /* 버튼 기본 설정 */
 .defaultBtn{
 	border : none;
-	background : #F2F2E6;	
+	background : #FFFBF5;	
 	outline:0;
 }
 
@@ -178,7 +178,7 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 	width : 30px;
 	height : 30px;
 	font-size : 20px;
-	background-color : #F2F2E6;
+	background-color : #FFFBF5;
 }
 
 .search-selectbox, .search-inputbox {
@@ -187,7 +187,15 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 
 .search-inputbox {
 	margin : 20px;
+	margin-left : 35px;
 	margin-left : 100px;
+}
+
+.searchBox {
+	width : 80%;
+	display : block;
+	padding : 15px;
+	text-align : center;
 }
 
 .fillterSection {
@@ -252,7 +260,7 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   width : 300px;
   height: 150px;
   position: relative;
-  bottom: -20px;
+  bottom: -100px;
   background : rgba(225, 225, 225, 0.1);
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
   border : 1px solid rgba(225, 225, 225, 0.5);
@@ -395,62 +403,118 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   width : 400px;
   height: 50px;
   margin-top : 10px;
+   /* display : none;  */
+}
+
+.accountPage {
+	width : 300px;
+	height : 50px;
+	position : relative;
+	margin : 30px auto;
 }
 
 
-/* 디테일 차트 */
-/* 디테일 차트 */
-.analyze-ac {
-	width : 60%;
-	height : 1800px;
+/* 어카운트 레터 */
+.analyze-account {
+	width : 70%;
+	height : 100%;
 	margin : auto;
 }
 
-.analyze-header {
+.analyze-account-header {
 	text-align : center;
 	font-size : 30px;
 	letter-spacing : 5px;
-	margin-bottom : 120px;
 }
 
-.analyze-date{
-	text-align : right;
-	padding : 10px;	
-	font-size : 20px;
-}
-
-.analyze-income::after {
-	border : 2px solid lightgray;
-}
-
-.analyze-income h3, .analyze-expense h3, .analyze-monthly h3 {
-	margin : 30px;
-}
-
-.analyze-income table, .analyze-expense table {
-	margin : 20px;
-}
-
-.analyze-income td, .analyze-expense td {
- 	border : 1px solid black;
-	width : 150px;
-	height : 50px;
-	font-size : 20px;
-	text-align : center;
-}
-
-.incomeChartArea, .incomeAnalyzeArea, .expenseChartArea, .expenseAnalyzeArea {
-	width : 400px;
-	height : 300px;
-	margin : 50px 21px;
+.analyze-account-header i, .analyze-account-header p{
 	display : inline-flex;
+	margin : 50px;
+	padding : 3px;
 }
 
-.analyze-expense h3{
+.incomeArea, .expenseArea, .monthlyArea {
+	padding : 10px;
+	font-size : 18px;
+}
+
+.incomeArea-title p, .expenseArea-title p, .monthlyArea-title p {
+	font-size : 30px;
+	padding : 5px;
+	display : inline-flex;
+	margin : 7px;
+	letter-spacing : 4px;
+	color : #0A1F33;
+}
+
+.incomeArea-title span, .expenseArea-title span {
+	color : pink;
+}
+
+.expenseArea-title {
 	text-align : right;
 }
 
-.analyze-monthly h3 {
+.monthlyArea-title {
 	text-align : center;
 }
 
+.incomeArea ul, .expenseArea ul {
+	list-style-type: none;
+}
+
+.incomeArea-payment-count {
+	text-align : right;	
+}
+
+.incomeArea-payment-count li, .expenseArea-payment-count li {
+	display:inline-flex;
+	margin : 10px 20px;
+	text-align : center;
+	width : 100px;
+	padding : 5px;
+	font-size : 18px;
+}
+
+.incomeArea-payment-count li:nth-child(1), .expenseArea-payment-count li:nth-child(1) {
+	background-color : rgba(255, 128, 128, 0.4);
+}
+.incomeArea-payment-count li:nth-child(2), .expenseArea-payment-count li:nth-child(2) {
+	background-color : rgba(128, 255, 255, 0.4);
+}
+.incomeArea-payment-count li:nth-child(3), .expenseArea-payment-count li:nth-child(3) {
+	background-color : rgba(255, 255, 128, 0.4);
+}
+
+.income-category-ranking, .expense-category-ranking {
+	width : 30%;
+	height : 300px;
+	text-align : center;
+	margin : 10px 30px;
+	display : inline-block;
+	padding-top : 80px;
+}
+
+.income-category-ranking, .expense-category-chart{
+	float : left;
+}
+
+.income-category-chart, .expense-category-ranking {
+	clear : both;
+}
+
+.income-category-chart, .expense-category-chart {
+	width : 550px;
+	height : 300px;
+	display : inline-block;
+	margin : 10px 0;
+}
+
+.monthly-total-chart {
+	width : 700px;
+	height : 300px;
+	margin : 10px auto;
+}
+
+
+/* 월별차트 */
