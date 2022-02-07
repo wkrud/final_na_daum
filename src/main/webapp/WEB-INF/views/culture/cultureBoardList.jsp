@@ -42,16 +42,10 @@ padding-left: 20px;
 </style>
 <script>
 //cultureDetail
-$(() => {
-		$(".card").click((e) => {
-			/* const code = $card.data("code"); */
-			const code = $(e.target).find("[name=code]").val();
-			const $card = $(e.target).parent().parent();
-			location.href = `${pageContext.request.contextPath}/culture/board/view/\${code}`;
-		});
+/* $(() => {
 		
 		//날짜 넣기
-		const value = new Date();
+		 const value = new Date();
 		
 		const f = n => n < 10 ? "0" + n : n;
 		// yyyy-mm-dd
@@ -64,8 +58,8 @@ $(() => {
 		const after_month = `\${value.getFullYear()}-\${f(value.getMonth() + 2)}-\${f(value.getDate())}`;
 		console.log(after_month);
 		end = document.getElementById("endDate");
-		end.value = after_month;
-});
+		end.value = after_month; 
+}); */
 
 
 
@@ -76,37 +70,12 @@ $(() => {
 			<!-- 썸네일 그림, 타이틀  -->
 			<img src="${pageContext.request.contextPath}/resources/images/culture/festival.jpg" alt="문화썸네일" />
 			<h1 class="title">Culture</h1>
-			<form class="form-inline search-form">
-				 
-				  <div class="form-group">
-				    <label for="Date" class="control-label">기간</label>
-				    <input type="date" class="form-control" id="startDate">
-				    <input type="date" class="form-control" id="endDate">
-				  </div>
-				  <div class="form-group">
-				    <label for="area" class="control-label">지역</label>
-				      <select class="form-control" name="search-area" id="search-area">
-				        <option value="all">모두</option>
-				        <option value="1">서울</option>
-				        <option value="2">경기</option>
-				        <option value="3">기타</option>
-				      </select>
-				  </div>
-				  <div class="form-group">
-				    <label for="genre" class="control-label">장르</label>
-				      <select class="form-control" name="search-genre" id="search-genre">
-				      	<option value="all">모두</option>
-				        <option value="1">연극</option><!-- A연극 -->
-				        <option value="2">음악</option><!-- B 음악  -->
-				        <option value="3">무용</option><!-- C 무용-->
-				        <option value="4">미술</option><!-- D 미술  -->
-				        
-				      </select>
-				  </div>
+			<form class="form-inline" id="searchFrm">
+				 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
 				  <button type="submit" class="btn orange btn-default">Search</button>
+					<button type="button" class="btn btn-dark">나다운 찜 목록</button>
 			</form>
 		</div>
-		
 	<div id="culture-container">
 	    <br />
 	    
@@ -117,13 +86,12 @@ $(() => {
 	     <c:forEach var="culture" items="${list}">
 	    	<div class="col-md-4" style="padding: 15px;">
 	         <div class="card"> 
-	            <div class="card-block">
-	            <input type="hidden" name="code" value="${culture.seq}" />
-	              <h4 class="card-title">${culture.title}</h4>
-	              <p class="card-text p-y-1">${culture.area}</p>
-	              <p class="card-text p-y-1">${culture.place}</p>
-	              <p class="card-text p-y-1">${culture.realmName}</p>
-	              <img class="thumnail" src="${culture.thumbnail}" alt="" />
+	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
+	              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
+	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>
+	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.place}</p>
+	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.realmName}</p>
+	              <img class="thumnail" src="${culture.thumbnail}" alt="" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`"/>
 	               </div>
 	          </div>
 	        </div>
@@ -152,7 +120,39 @@ $(() => {
 		</div>
 	</div>
 </body>
+<script>
+ $(searchFrm).submit((e) => {
+	e.preventDefault();
+	
+	
+/* 	const startDate = $(e.target).find("[id=startDate]").val();
+	console.log(startDate); */
+	
+/* 	var area_opt = document.getElementById("search-area");
+	var area = area_opt.options[area_opt.selectedIndex].value;
+	
+	console.log(area); */
 
+	
+	const csrfHeader = "${_csrf.headerName}";
+    const csrfToken = "${_csrf.token}";
+    const headers = {};
+    headers[csrfHeader] = csrfToken;
+    
+    
+	$.ajax({
+		headers : headers, 
+		url: `${pageContext.request.contextPath}/culture/board/${page}`,
+		method: "POST",
+		data : $(searchFrm).serialize(),
+		success(resp){
+			console.log(resp);
+		},
+		error: console.log
+	});
+	
+}); 
+</script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
   <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
