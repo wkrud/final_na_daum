@@ -137,9 +137,10 @@ public class GetMovieDetailApi {
 				
 				list.add(map);
 			}
-			List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
-			model.addAttribute("list",list);
-			log.debug("list = {}" , list);
+			
+//			List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
+//			model.addAttribute("list",list);
+//			log.debug("list = {}" , list);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
