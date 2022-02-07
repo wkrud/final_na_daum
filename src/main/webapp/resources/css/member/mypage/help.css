@@ -1,0 +1,105 @@
+.help-detail-body{
+	width: 700px;
+}
+
+
+.question-list-wrap{
+	display:flex;
+	justify-content: center;
+}
+.question-list-head{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.question-list-body{
+	display: flex;
+	border: 1px solid ghostwhite;
+	width: 1024px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.help-search-btn-wrap{
+	display: flex;
+	justify-content: center;
+}
+.help-search-btn-wrap input{
+	width: 400px;
+}
+.help-btn-wrap{
+	text-align: right;
+}
+.write-btn-wrap{
+	display:flex;
+	width: 700px;
+	justify-content: flex-end;
+}
+.write-help-btn{
+	margin-bottom: 10px; 
+}
+
+.question-list-body > div{
+	display:flex;
+	flex-direction: column;
+	justify-content: space-between;
+	border: 1px solid black;
+	width: 350px;
+	margin: 10px;
+}
+.question-list-body span{
+	margin: 5px;
+}
+.help-list-footer{
+	margin: 5px;
+	text-align: right;
+}
+.help-list-footer a{
+	color: gray;
+	font-size: 0.8rem;
+}
+
+/* 검색결과 리스트 */
+.result-box{
+	display: flex;
+	cursor: pointer;
+}
+
+
+
+/* 카테고리 더보기 */
+.one-category{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.one-category .help-title{
+	text-align: center;
+}
+.one-category .write-help-btn-wrap{
+	text-align: right;
+	width: 700px;
+	margin-bottom: 10px;
+}
+
+.one-category .help-list-main{
+	width: 700px;
+}
+
+.one-category .list-group-item{
+	padding: 5px;
+}
+
+.one-category .help-span-info{
+	float: right;
+}
+
+.one-category .help-list-footer{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.back-to-catagory{
+	width: 700px;
+	text-align: left;
+}

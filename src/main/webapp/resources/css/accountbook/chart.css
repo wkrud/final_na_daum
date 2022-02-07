@@ -1,0 +1,111 @@
+@charset "UTF-8";
+
+* {
+	margin : 0;
+	padding : 0;
+	box-sizing: border-box;
+	position: relative;
+}
+
+/* 영역 확인용 박스 */
+.box {
+	border : 1px solid black;
+}
+
+/* 페이지 전체 감싸고 있는 div */
+.wrapper {
+	margin-top : 100px;
+	position : relative;
+}
+
+.yearly_total{
+	text-align : center;	
+}
+
+.yearly_total div{
+	display : inline-flex;
+	margin : 5px 30px;
+	font-size : 20px;
+}
+
+
+#monthly_chart{
+	width : 800px;
+	height : 300px;
+	margin :  50px auto;
+	text-align : center;
+}
+
+.category-chart {
+	width : 500px;
+	height : 300px;
+	display : inline-flex;
+	position : relative;
+}
+
+.category-income {
+	left : 15%;
+}
+
+.category-expense {
+	left : 20%;
+}
+
+
+
+
+
+/* 디테일 차트 */
+.analyze-ac {
+	width : 60%;
+	height : 1800px;
+	margin : auto;
+}
+
+.analyze-header {
+	text-align : center;
+	font-size : 30px;
+	letter-spacing : 5px;
+	margin-bottom : 120px;
+}
+
+.analyze-date{
+	text-align : right;
+	padding : 10px;	
+	font-size : 20px;
+}
+
+.analyze-income::after {
+	border : 2px solid lightgray;
+}
+
+.analyze-income h3, .analyze-expense h3, .analyze-monthly h3 {
+	margin : 30px;
+}
+
+.analyze-income table, .analyze-expense table {
+	margin : 20px;
+}
+
+.analyze-income td, .analyze-expense td {
+ 	border : 1px solid black;
+	width : 150px;
+	height : 50px;
+	font-size : 20px;
+	text-align : center;
+}
+
+.incomeChartArea, .incomeAnalyzeArea, .expenseChartArea, .expenseAnalyzeArea {
+	width : 400px;
+	height : 300px;
+	margin : 50px 21px;
+	display : inline-flex;
+}
+
+.analyze-expense h3{
+	text-align : right;
+}
+
+.analyze-monthly h3 {
+	text-align : center;
+}

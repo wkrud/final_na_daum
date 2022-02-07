@@ -1,0 +1,18 @@
+.find-friend-search{
+	display: flex;
+	flex-direction: column;
+}
+
+.find-friend-title{
+	padding: 10px;
+	background-color: #0A1F33;
+}
+.find-friend-title span{
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #E4E2E2;
+}
+
+.find-friend-search .list-group{
+	align-items: center;
+}

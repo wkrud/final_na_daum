@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+* {
+	margin : 0;
+	padding : 0;
+	box-sizing: border-box;
+	position: relative;
+}
+
+body {
+	height : 100%;
+}
+
+/* 영역 확인용 박스 */
+.box {
+	border : 1px solid black;
+}
+
+/* 메인 섹션 */
+.mainSection {
+  width : 90%;
+  height: 100%;
+  display: block;
+  margin: auto;
+  margin-bottom : 50px;
+  top: 30px;
+/*   background-color: #F5F5F5;
+ */  border-radius : 10px;
+}
+
+/* 위젯 */
+.widget_form {
+  width : 350px;
+  height: 200px;
+  position: relative;
+  background : white;
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+  border : 1px solid rgba(225, 225, 225, 0.5);
+  border-radius: 10px;
+  top : 30px;
+  left : 50px;
+  padding : 20px;
+  margin : 30px;
+  backdrop-filter: blur(25px);
+  float : left;
+}

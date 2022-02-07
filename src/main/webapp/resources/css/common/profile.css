@@ -1,0 +1,99 @@
+.profile-wrap{
+	top:-15px;
+}
+#profile{
+	background-color:transparent;
+	border: 0;
+	outline: 0;
+	border-radius: 50%;
+}
+#profile:hover .thumbnail-wrap{
+	box-shadow: 1px 1px 3px #AAAAAA;
+	transition: .5s;
+}
+
+.bedge-wrap{
+	position: absolute;
+	padding: 0;
+}
+#bg-alarm{
+	position: absolute;
+	top: -5px;
+	right: -53px;
+}
+
+#alarmList{
+	position:absolute;
+	top: 50px;
+	right: -80px;
+	width: 200px;
+}
+
+.alarmContent{
+	padding: 5px;
+}
+
+/* 도움말 */
+#infowrap{
+	position: absolute;
+	z-index: 9;
+	text-align: center;
+	top: 300px;	
+	left: 300px; 
+}
+#infowrapheader{
+	cursor: move;
+	border: 1px solid gainsboro;
+	border-radius: 10px;
+	overflow: hidden;
+}
+.info-title{
+	padding-top: 10px;
+	background-color: #FFF;
+}
+.info-title h1{
+	display: inline-block;
+	font-size: 1.8rem;
+}
+.info-title button{
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+.info-header .info-search .info-head-wrap{
+	border-radius: 20px;
+	overflow: hidden;
+}
+.info-header .info-search .info-head-wrap button{
+	border: 0;
+	background-color: ghostwhite;
+}
+.info-header .info-search .info-head-wrap input{
+	border: 0;
+	background-color: ghostwhite;
+}
+.info-body-title{
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+#infowrapheader iframe{
+	display:block;
+	width: 300px;
+	height: 450px;
+	border: 0;
+}
+.info-footer{
+	width: 100%;
+	text-align: center;
+	position: fixed;
+	transform: translate(-50%);
+	left: 50%;
+	bottom: 0;
+	z-index: 99;
+}
+.info-footer button{
+	width: 100%;
+}

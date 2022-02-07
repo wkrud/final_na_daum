@@ -1,0 +1,173 @@
+*{
+	font-family: 'SUIT-Medium';
+}
+.chat-wrap{
+	width: 450px;
+	height: 619px;
+}
+#msgArea{
+	width: 450px;
+	height: 581px;
+	overflow: scroll;
+	overflow-x:hidden;
+	padding: 0;
+	background-color: #212529ed;
+}
+#msgArea::-webkit-scrollbar{
+	width: 10px;
+}
+#msgArea::-webkit-scrollbar-thumb{
+	background-color: #2f3542;
+}
+#msgArea::-webkit-scrollbar-track{
+	background-color: grey;
+}
+
+
+.greeting-msg-wrap{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	
+}
+.greeting-body{
+	border-radius: 20px;
+	background-color: gray;
+	width: 250px;
+	text-align: center;
+	font-size: .8rem;
+	margin-top: 5px;
+}
+.greeting-msg span{
+	color: gainsboro;
+}
+.greeting-time{
+	font-size: .8rem;
+	color: gainsboro;
+}
+
+.host-msg{
+	display: flex;
+	justify-content: flex-end;
+	margin: 10px;
+}
+
+.guest-msg{
+	margin: 10px;
+}
+
+.profile-wrapper{
+	display: flex;
+	align-items:center;
+}
+.chat-profile-wrap{
+	width: 35px;
+	height: 35px;
+	border-radius: 40%;
+	overflow: hidden;
+	border: 0;
+}
+.chat-profile{
+	width: 35px;
+	height: 35px;
+	border: 0;
+}
+
+.profile-nickname{
+	margin: 5px;
+}
+.profile-nickname span{
+	color: gainsboro;
+	font-size: .9rem;
+}
+
+.chat-msg-wrap{
+	margin: 5px;
+	max-width: 180px;
+	word-break: break-all;
+	background: #f0dc2b;
+	padding:5px;	
+	border-radius: 5px;
+}
+.me{
+	background: #f0dc2b;
+}
+.guest{
+	background: #36362f;
+	color: gainsboro;
+}
+
+.chat-time-wrap{
+	display:flex;
+	align-items: flex-end;
+}
+.chat-time{
+	font-size: .7rem;
+	color: gainsboro;
+}
+
+.guest-chat-wrap{
+	display: flex;
+}
+
+
+.emotion-wrap{
+	width: 100%;
+	height: 200px;
+	position: fixed;
+	background: #212529ed;
+	bottom: 38px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.emotion-img-wrap{
+	width: 120px;
+	height: 95px;
+}
+
+.blanket{
+	background: url("../../../images/diary/emotion/blanket.png") no-repeat 0 0;
+	background-size: 100% 100%;	
+}
+.daechoong{
+	background: url("../../../images/diary/emotion/daechoong.png") no-repeat 0 0;
+	background-size: 100% 100%;	
+}
+.gogo{
+	background: url("../../../images/diary/emotion/gogo.png") no-repeat 0 0;
+	background-size: 100% 100%;	
+}
+.happy{
+	background: url("../../../images/diary/emotion/happy.png") no-repeat 0 0;
+	background-size: 100% 100%;	
+}
+.trash{
+	background: url("../../../images/diary/emotion/trash.png") no-repeat 0 0;
+	background-size: 100% 100%;	
+}
+.eat{
+	background: url("../../../images/diary/emotion/eat.png") no-repeat 0 0;
+	background-size: 100% 100%;	
+}
+
+
+.emotion-img-chat{
+	width: 150px;
+	height: 100px;
+}
+
+#chat-msg-input{
+	border: 0;
+	background-color:#0c061647;
+}
+
+
+.invite-again-btn{
+	height: 37.5px;
+	width: 100%;
+	border: 1.1px;
+	border-radius: 0;
+}
