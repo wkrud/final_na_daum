@@ -109,27 +109,36 @@ public class AccountBookController {
 	}
 	
 	//차트 더보기 페이지
-	@RequestMapping(value="/detailChart.do")
-	public void detailChart(@RequestParam(defaultValue="0") int monthly, @AuthenticationPrincipal Member member, Model model) {
-		
+	@RequestMapping(value="/accountAnalyze.do")
+	public void detailChart(@RequestParam(defaultValue="0") int monthly,
+							@AuthenticationPrincipal Member member, Model model) {
+	//수입
 		Map<String, Object> param = new HashMap<>();
 		param.put("monthly", monthly);
 		param.put("id", member.getId());
 		param.put("incomeExpense", "I");
-		log.debug("param={}",param);
-		List<Map<String, Object>> list_I = accountBookService.categoryChart(param);
-		log.debug("list_I={}", list_I);
+		//수입 카테고리 베스트3
+		List<Map<String, Object>> categoryList_I = accountBookService.categoryChart(param);
+		//현금/카드 건수
+		List<Map<String, Object>> paymentList_I = accountBookService.paymentList(param);
 		
+		
+	//지출
 		Map<String, Object> param2 = new HashMap<>();
 		param2.put("monthly", monthly);
 		param2.put("id", member.getId());
 		param2.put("incomeExpense", "E");
-		log.debug("param2={}",param2);
-		List<Map<String, Object>> list_E = accountBookService.categoryChart(param2);
-		log.debug("list_E={}", list_E);
+		//지출 카테고리 베스트3
+		List<Map<String, Object>> categoryList_E = accountBookService.categoryChart(param2);
+		//현금, 카드 건수
+		List<Map<String, Object>> paymentList_E = accountBookService.paymentList(param2);
+		log.debug("list_E={}", paymentList_E);
 		
-		model.addAttribute("list_I", list_I);
-		model.addAttribute("list_E", list_E);	
+		
+		model.addAttribute("categoryList_I", categoryList_I);
+		model.addAttribute("categoryList_E", categoryList_E);	
+		model.addAttribute("paymentList_I", paymentList_I);	
+		model.addAttribute("paymentList_E", paymentList_E);	
 	}
 	
 	 //전체 리스트 출력
