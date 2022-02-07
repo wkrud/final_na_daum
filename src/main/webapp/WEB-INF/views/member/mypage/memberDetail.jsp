@@ -174,6 +174,7 @@
 						</div>
 					</div>
 				</div>		
+				
 				<script>
 				/* $(".modify-hobby-wrap").hide(); */
 				
@@ -256,7 +257,6 @@
 	  			</div>
 			</c:if>
 		</div>
-		
 	</div>
 </div>
 <script>

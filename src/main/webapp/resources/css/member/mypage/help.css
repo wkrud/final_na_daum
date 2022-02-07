@@ -38,6 +38,13 @@
 	margin-bottom: 10px; 
 }
 
+.help-list-main li {
+	background-color: inherit;
+}
+.help-list-main li a{
+	background-color: inherit;
+}
+
 .question-list-body > div{
 	display:flex;
 	flex-direction: column;
