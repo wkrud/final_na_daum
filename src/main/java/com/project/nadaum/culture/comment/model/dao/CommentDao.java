@@ -15,4 +15,7 @@ public interface CommentDao {
 
 	int updateCultureComment(Map<String, Object> map);
 
+	//영화댓글
+	List<Comment> selectMovieCommentList(String apiCode);
+
 }

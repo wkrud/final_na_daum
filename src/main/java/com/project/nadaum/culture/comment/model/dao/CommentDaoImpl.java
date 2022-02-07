@@ -38,5 +38,11 @@ public class CommentDaoImpl implements CommentDao {
 		return session.delete("comment.deleteCultureComment", code);
 	}
 
+	//영화댓글
+	@Override
+	public List<Comment> selectMovieCommentList(String apiCode) {
+		return session.selectList("comment.selectMovieCommentList",apiCode);
+	}
+
 
 }

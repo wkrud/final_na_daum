@@ -74,7 +74,7 @@ $(() => {
 						<a class="movetodetail" href="${pageContext.request.contextPath}/board/boardDetail.do?code=${board.code}">${board.title} </a>
 						<c:if test="${board.commentCount gt 0 }">{board.commentCount}</c:if>
 					</td>
-					<td><c:out value="${board.nickname}"></c:out></td>
+					<td><c:out value="${board.id}"></c:out></td>
 					<td><fmt:formatDate value="${board.regDate}" pattern="yy/MM/dd" /></td>
 					<td>${board.readCount}</td>
 				</tr>

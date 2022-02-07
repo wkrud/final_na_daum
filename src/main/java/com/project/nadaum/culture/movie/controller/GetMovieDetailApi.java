@@ -8,15 +8,20 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.project.nadaum.culture.comment.model.service.CommentService;
+import com.project.nadaum.culture.comment.model.vo.Comment;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/movie")
 public class GetMovieDetailApi {
 	
+	@Autowired
+	private CommentService commentService;
 	
 	/**
 	 * elem 하위의 len개의 tagName을 찾아서 textContent를 문자열로 리턴
@@ -57,8 +64,8 @@ public class GetMovieDetailApi {
 	
 	// 영화 상세정보API
 	@GetMapping("/movieDetail.do")
-	public void getMovieDetailApi(@RequestParam String movieCd, Model model) {
-		log.debug("movieCd = {} ", movieCd);
+	public ModelAndView getMovieDetailApi(@RequestParam String apiCode, Model model) {
+		log.debug("movieCd = {} ", apiCode);
 		
 		List<Object> list = new ArrayList<>();
 		
@@ -68,10 +75,10 @@ public class GetMovieDetailApi {
 			// 영화상세api
 			String url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.xml"
 					+ "?key=2707c14a032dacdea9d8b690c3f99d19" 
-					+ "&movieCd="+ movieCd;
+					+ "&movieCd="+ apiCode;
 			
 			
-			log.debug(movieCd);
+			log.debug(apiCode);
 			
 			DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
@@ -95,7 +102,7 @@ public class GetMovieDetailApi {
 				Element movieInfoElem = (Element) movieInfoNode;
 //				String movieCd = getTagValues("movieCd", movieInfoElem);
 				String movieNm = getTagValues("movieNm", movieInfoElem);
-				String openDt = getTagValues("openDt", movieInfoElem);
+//				String openDt = getTagValues("openDt", movieInfoElem);
 				String nationNm = getTagValues("nationNm", movieInfoElem);
 				String genreNm = getTagValues("genreNm", movieInfoElem);
 				
@@ -104,7 +111,7 @@ public class GetMovieDetailApi {
 
 //				map.put("movieCd", movieCd);
 				map.put("movieNm", movieNm);
-				map.put("openDt", openDt);
+//				map.put("openDt", openDt);
 				map.put("nation", nationNm);
 				map.put("genreNm", genreNm);
 				
@@ -129,14 +136,15 @@ public class GetMovieDetailApi {
 				log.debug("map = {}" ,map);
 				
 				list.add(map);
-				log.debug("list = {}" , list);
-				model.addAttribute("list",list);
 			}
-
+			List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
+			model.addAttribute("list",list);
+			log.debug("list = {}" , list);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return new ModelAndView("/movie/movieDetail","list",list);
 	}
 
 

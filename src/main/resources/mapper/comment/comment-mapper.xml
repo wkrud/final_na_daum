@@ -46,5 +46,15 @@
 			code = #{code}
 	</update>
 	
+	<select id="selectMovieCommentList" resultType="comment">
+		select
+			*
+		from
+			comments
+		where
+			api_code = #{api_code}
+		order by 
+		    reg_date desc
+	</select>
 </mapper>
 
