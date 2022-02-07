@@ -14,7 +14,7 @@
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
 <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <sec:authentication property="principal" var="loginMember"/>
-<link href='${pageContext.request.contextPath}/resources/css/accountbook/main2.css' rel='stylesheet' />
+<link href='${pageContext.request.contextPath}/resources/css/accountbook/main.css' rel='stylesheet' />
 <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <%
@@ -104,7 +104,7 @@
 <input type="hidden" name="incomeExpense" id="expense" value="E" /> 
 <!-- 차트 부분 -->
 <section class="chartSection">
-	<a href="${pageContext.request.contextPath}/accountbook/detailChart.do" id="detailChartLink">더 보기</a>
+	<a href="${pageContext.request.contextPath}/accountbook/accountAnalyze.do" id="detailChartLink">더 보기</a>
 	<div id="incomeChart"></div>
 	<div id="expenseChart"></div>
 </section>
@@ -124,9 +124,10 @@
 				<select name="category" id="subCategory">
 					<option value="">소분류</option>
 				</select>
+				<div class="searchBox">
 				<input type="text" name="detail" id="search"/>
-				<%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
  				<button id="searchBtn" class="defaultBtn"><i class="fas fa-search"></i></button>
+				</div>
 			</form>
 		</div>
 		<!-- 필터링 -->
@@ -146,7 +147,6 @@
 						<td rowspan="2" class="accountPrice">
 							<c:choose>
 								<c:when test="${accountList eq null}">
-									
 								</c:when>
 								<c:when test="${account.incomeExpense eq 'I' }">
 									<span class="income"><fmt:formatNumber value="${account.price}" type="number"/></span>
@@ -166,7 +166,9 @@
 					<button class="deleteBtn" onclick="deleteDetail('${account.code}')">삭제</button>
 				</div>
 			</c:forEach>
-			<div class="accountPage">${pagebar}</div>
+			<c:if test="${totalAccountList gt 5}">
+				<div class="accountPage">${pagebar}</div>
+			</c:if>
 		</div>
 	</section>
 	<!-- 사용자별 가계부 월별 금액 -->
@@ -188,10 +190,10 @@
 				</tr>
 				<tr class="user_income_expense">
 					<td>
-						<span class="income"><fmt:formatNumber value="${incomeExpenseList.income}" type="number"/></span>
+						<span class="income">+ <fmt:formatNumber value="${incomeExpenseList.income}" type="number"/></span>
 					</td>
 					<td>
-						<span class="expense"><fmt:formatNumber value="${incomeExpenseList.expense}" type="number"/></span>
+						<span class="expense">- <fmt:formatNumber value="${incomeExpenseList.expense}" type="number"/></span>
 					</td>
 				</tr>
 			</table>

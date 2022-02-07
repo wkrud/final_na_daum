@@ -57,8 +57,7 @@
 .wrapper {
   width : 100%;
   height : 100vh;
-   background-color: #F2F2E6; 
-  /* background-color: #fffff7; */
+  background-color: #FFFBF5;
   position : relative;
 }
 
@@ -179,7 +178,7 @@
 
 #sign-out {
 	font-size : 30px;
-	background : #F2F2E6;
+	background-color: #FFFBF5;
 	border : none;
 	top : -10px;
 	color : #0A1F33;
@@ -216,7 +215,7 @@
 }
  
 .contentWrapper::-webkit-scrollbar-track {
-    background-color: #F2F2E6; /*스크롤바 트랙 색상*/
+    background-color: #FFFBF5; /*스크롤바 트랙 색상*/
 }
 
 
@@ -225,7 +224,7 @@
 .footer {
 	clear : both;
 	width : 100%;
-	background-color: #F2F2E6;
+	background-color: #FFFBF5;
 	position : relative;
 	bottom : 0;
 	padding : 50px;

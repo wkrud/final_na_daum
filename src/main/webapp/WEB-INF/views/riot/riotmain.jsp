@@ -3,10 +3,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<jsp:useBean id="dateValue" class="java.util.Date" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Dev등록" name="title" />
 </jsp:include>
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
+<sec:authentication property="principal" var="loginMember"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/riot/riotmain.css" />
+
+
 <br>
+
 <style type="text/css">
 @font-face {
 	font-family: 'CookieRun-Regular';
@@ -16,57 +28,12 @@
 	font-weight: normal;
 	font-style: normal;
 }
-
-#nadaumgg {
-	text-align: center;
-}
-
-#nadaumgg h1 {
-	font-family: 'CookieRun-Regular';
-	color: #00f0f7
-}
-
-#aaa {
-	text-align: center;
-}
-
-#bbb {
-	width: 500px;
-	height: 500px;
-	position: absolute;
-	right: 5%;
-}
-
-input[type="text"] {
-	width: 70%;
-	height: 100%;
-	font-size: 1em;
-	padding-left: 5px;
-	font-style: oblique;
-	display: inline;
-	box-sizing: border-box;
-	color: black;
-}
-
-input[type=button] {
-	width: 30%;
-	height: 100%;
-	background-color: lightgray;
-	border: none;
-	background-color: white;
-	font-size: 1em;
-	color: #042AaC;
-	outline: none;
-	display: inline;
-	margin-left: -10px;
-	box-sizing: border-box;
-}
-
-input[type=button]:hover {
-	background-color: lightgray;
-}
 </style>
 
+
+<input type="hidden" id="id" value="${loginMember.id}" />
+<input type="hidden" id="nickName" value="${loginMember.nickname}" />
+<input type="hidden" id="summonerId" value="${summoner.id}" />
 <div id="nadaumgg">
 	<h1>Nadaum.gg</h1>
 </div>
@@ -78,8 +45,10 @@ input[type=button]:hover {
 				placeholder="소환사명을 입력하세요" class="form-control"
 				aria-label="Sizing example input"
 				aria-describedby="inputGroup-sizing-lg" />
+
 			<button type="button" onclick="submit('riot1')"
 				class="btn btn-sm btn-outline-secondary">전적검색</button>
+
 
 		</form>
 
@@ -89,8 +58,11 @@ input[type=button]:hover {
 <br>
 
 <div class="jumbotron p-3 p-md-3 text-white rounded bg-blue">
-	<div class="col-md-6 px-0">
+	<div class="col-md-6 px-0 main-div">
 		<img alt="아이콘" src=${ img} style="width: 200px">
+		<div class="fav-button-wrap">
+			<button type="button" class="btn btn-lg btn-outline-warning fav-btn">즐겨찾기</button>
+		</div>
 	</div>
 	<div class="col-md-6 px-0">
 		<h1 class="display-4 font-italic">${summoner.name}</h1>
@@ -161,21 +133,6407 @@ input[type=button]:hover {
 <main role="main" class="container">
 	<div
 		class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-		<div class="col-md-6 blog-main">
+		<div class="col-md-12 blog-main">
+
+
 			<c:forEach items="${test}" var="list" begin="0" end="0">
-				<c:forEach items="${list}" var="map" begin="0" end="0">
-				<c:forEach  var="j" begin="0" end="9">
-					<p>${map.value.get(0).getInfo().getParticipants().get(j).getSummonerName()}</p>
+				<c:forEach items="${list}" var="map" begin="0" end="19">
+					<c:forEach items="${map.value}" var="mapvalue" begin="0" end="0">
+						<c:forEach var="j" begin="0" end="9">
+							<div id="recentgame">
+								<c:if
+									test="${summoner.name eq mapvalue.getInfo().getParticipants().get(j).getSummonerName()}">
+									<c:set var="count" value="${count + 1}" />
+									<c:if
+										test="${mapvalue.getInfo().getParticipants().get(j).isWin() eq true}">
+										<c:choose>
+											<c:when
+												test="${mapvalue.getInfo().getParticipants().get(j).getSummonerName() eq summoner.name}">
+												<div class="col-auto d-flex position-static"
+													style="background: #c6dbe9; margin-bottom: 10px">
+													<div
+														class="col-auto pt-2 d-flex flex-column position-static">
+														<h4 style="color: #00bfff;">
+															<strong>승리</strong>
+														</h4>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '420'}">
+															<h3>
+																<strong>솔로 랭크</strong>
+															</h3>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '440'}">
+															<h4>
+																<strong>자유 랭크</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '430'}">
+															<h4>
+																<strong>일반 게임</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '450'}">
+															<h4>
+																<strong>칼바람 나락</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '850'}">
+															<h4>
+																<strong>봇전</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '900'}">
+															<h4>
+																<strong>U.R.F</strong>
+															</h4>
+														</c:if>
+														<jsp:setProperty name="dateValue" property="time"
+															value="${mapvalue.getInfo().getGameDuration() * 1000}" />
+														<fmt:formatDate value="${dateValue}" pattern="mm분 ss초" />
+														<br>
+														<jsp:setProperty name="dateValue" property="time"
+															value="${mapvalue.getInfo().getGameCreation()}" />
+														<fmt:formatDate value="${dateValue}" pattern=" MM-dd " />
+														<c:set var="check" value="true" />
+													</div>
+													<div class="col p-4">
+														<div class="recentgameinfo">
+															<div class="recentchamp">
+																<img class="recent-champ-img" alt="챔피언"
+																	src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																<div class="recent-champ-lev">
+																	<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																</div>
+															</div>
+															<div class="runespellwrap">
+
+																<div class="recent-rune">
+																	<img class="recent-main-rune" alt="룬"
+																		src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																	<img class="recent-sub-rune" alt="룬"
+																		src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																</div>
+																<div class="recent-spellwrap">
+																	<img class="recent-spell" alt="스펠"
+																		src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																	<img class="recent-spell" alt="스펠"
+																		src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																</div>
+
+															</div>
+															<div class="recent-kda">
+																<img class="sword" alt=""
+																	src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+															</div>
+															<div class="recent-items-wrap">
+																<div class="recent-item">
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+
+
+																</div>
+															</div>
+															<div class="recent-button-wrap">
+																<button type="button"
+																	class="btn btn-sm btn-outline-light recent-btn">상세보기</button>
+															</div>
+
+														</div>
+
+													</div>
+
+
+
+												</div>
+											</c:when>
+											<c:otherwise>
+
+
+											</c:otherwise>
+										</c:choose>
+									</c:if>
+
+									<c:if
+										test="${mapvalue.getInfo().getParticipants().get(j).isWin() eq false}">
+										<c:choose>
+											<c:when
+												test="${mapvalue.getInfo().getParticipants().get(j).getSummonerName() eq summoner.name}">
+												<div class="col-auto d-flex position-static"
+													style="background: #e1d1d0; margin-bottom: 10px">
+													<div
+														class="col-auto pt-2 d-flex flex-column position-static">
+														<h4 style="color: #cd5c5c;">
+															<strong>패배</strong>
+														</h4>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '420'}">
+															<h3>
+																<strong>솔로 랭크</strong>
+															</h3>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '440'}">
+															<h4>
+																<strong>자유 랭크</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '430'}">
+															<h4>
+																<strong>일반 게임</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '450'}">
+															<h4>
+																<strong>칼바람 나락</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '850'}">
+															<h4>
+																<strong>봇전</strong>
+															</h4>
+														</c:if>
+														<c:if test="${mapvalue.getInfo().getQueueId() eq '900'}">
+															<h4>
+																<strong>U.R.F</strong>
+															</h4>
+														</c:if>
+														<jsp:setProperty name="dateValue" property="time"
+															value="${mapvalue.getInfo().getGameDuration() * 1000}" />
+														<fmt:formatDate value="${dateValue}" pattern="mm분 ss초" />
+														<br>
+														<jsp:setProperty name="dateValue" property="time"
+															value="${mapvalue.getInfo().getGameCreation()}" />
+														<fmt:formatDate value="${dateValue}" pattern=" MM-dd " />
+														<c:set var="check" value="false" />
+													</div>
+													<div class="col p-4">
+														<div class="recentgameinfo">
+															<div class="recentchamp">
+																<img class="recent-champ-img" alt="챔피언"
+																	src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																<div class="recent-champ-lev">
+																	<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																</div>
+															</div>
+															<div class="runespellwrap">
+
+																<div class="recent-rune">
+																	<img class="recent-main-rune" alt="룬"
+																		src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																	<img class="recent-sub-rune" alt="룬"
+																		src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																</div>
+																<div class="recent-spellwrap">
+																	<img class="recent-spell" alt="스펠"
+																		src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																	<img class="recent-spell" alt="스펠"
+																		src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																</div>
+
+															</div>
+															<div class="recent-kda">
+																<img class="sword" alt=""
+																	src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+															</div>
+															<div class="recent-items-wrap">
+																<div class="recent-item">
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+																	<c:choose>
+																		<c:when
+																			test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																				class="recent-item06">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt=""
+																				src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																				class="recent-item06">
+
+																		</c:otherwise>
+																	</c:choose>
+
+
+																</div>
+															</div>
+															<div class="recent-button-wrap">
+																<button type="button"
+																	class="btn btn-sm btn-outline-light recent-btn">상세보기</button>
+															</div>
+
+
+														</div>
+
+													</div>
+
+
+
+												</div>
+											</c:when>
+											<c:otherwise>
+
+
+											</c:otherwise>
+										</c:choose>
+									</c:if>
+									<div class="testdiv">
+										<div class="col-auto d-flex position-static"
+											style="background: #f5f5dc; margin-bottom: 10px">
+											<div class="col-auto pt-2 d-flex flex-column position-static">
+
+
+												<c:if test="${count eq 1}">
+													<div class="detailgamewrap d-gameclass">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 2}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 3}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 4}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 5}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 6}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 7}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 8}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 9}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 10}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 11}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 12}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 13}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 14}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 15}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 16}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 17}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 18}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 19}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+												<c:if test="${count eq 20}">
+													<div class="detailgamewrap">
+														<c:forEach items="${test}" var="list2" begin="0" end="0">
+															<c:forEach items="${list2}" var="map2" begin="0" end="0">
+																<c:forEach items="${map2.value}" var="map2value"
+																	begin="0" end="0">
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+																		<c:forEach var="j" begin="0" end="4">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+																	</div>
+
+																	<div>
+																		<br> <br> <br> <br> <br> <br>
+																		<br> <br> <br> <br> <span>vs</span>
+																	</div>
+
+																	<div
+																		class="col-auto pt-2 pl-1 pr-1 d-flex flex-column position-static">
+
+
+																		<c:forEach var="j" begin="5" end="9">
+
+																			<div class="detailgameinfo">
+																				<div class="detailname">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getSummonerName()}</span>
+
+																				</div>
+																				<div class="detailchamp">
+																					<img class="detail-champ-img" alt="챔피언"
+																						src="${pageContext.request.contextPath}/resources/images/riot/champion/${mapvalue.getInfo().getParticipants().get(j).getChampionName()}.png">
+																					<div class="detail-champ-lev">
+																						<span style="color: white;">${mapvalue.getInfo().getParticipants().get(j).getChampLevel()}</span>
+																					</div>
+																				</div>
+																				<div class="detailrunespellwrap">
+
+																					<div class="detail-rune">
+																						<img class="detail-main-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(0).getSelections().get(0).getPerk()}.png">
+																						<img class="detail-sub-rune" alt="룬"
+																							src="${pageContext.request.contextPath}/resources/images/riot/perk-images/Styles/${mapvalue.getInfo().getParticipants().get(j).getPerks().getStyles().get(1).getStyle()}.png">
+																					</div>
+																					<div class="detail-spellwrap">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner1Id()}.png">
+																						<img class="detail-spell" alt="스펠"
+																							src="${pageContext.request.contextPath}/resources/images/riot/spell/${mapvalue.getInfo().getParticipants().get(j).getSummoner2Id()}.png">
+																					</div>
+
+																				</div>
+																				<div class="detail-kda">
+																					<img class="detailsword" alt=""
+																						src="${pageContext.request.contextPath}/resources/images/riot/sword.png">
+																					<span>${mapvalue.getInfo().getParticipants().get(j).getKills()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getDeaths()}</span>
+																					<span>/</span> <span>${mapvalue.getInfo().getParticipants().get(j).getAssists()}</span>
+
+																				</div>
+																				<div class="detail-items-wrap">
+																					<div class="detail-item">
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem0() != null && mapvalue.getInfo().getParticipants().get(j).getItem0() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem0()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem1() != null && mapvalue.getInfo().getParticipants().get(j).getItem1() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem1()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem2() != null && mapvalue.getInfo().getParticipants().get(j).getItem2() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem2()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem3() != null && mapvalue.getInfo().getParticipants().get(j).getItem3() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem3()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem4() != null && mapvalue.getInfo().getParticipants().get(j).getItem4() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem4()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+																						<c:choose>
+																							<c:when
+																								test="${mapvalue.getInfo().getParticipants().get(j).getItem5() != null && mapvalue.getInfo().getParticipants().get(j).getItem5() != 0}">
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/item/${mapvalue.getInfo().getParticipants().get(j).getItem5()}.png"
+																									class="detail-item06">
+																							</c:when>
+																							<c:otherwise>
+																								<img alt=""
+																									src="${pageContext.request.contextPath}/resources/images/riot/blank.png"
+																									class="detail-item06">
+
+																							</c:otherwise>
+																						</c:choose>
+
+
+																					</div>
+																				</div>
+
+
+																			</div>
+
+																		</c:forEach>
+
+
+																	</div>
+
+
+
+																</c:forEach>
+															</c:forEach>
+														</c:forEach>
+													</div>
+												</c:if>
+
+
+											</div>
+										</div>
+									</div>
+								</c:if>
+
+
+
+
+
+							</div>
+						</c:forEach>
 					</c:forEach>
 				</c:forEach>
 			</c:forEach>
-			<br><br><br><br>
-			<p>${summoner.name}</p>
-			<img alt="아이콘" src=${ img}>
-			<p>${leagueentry.tier}${leagueentry.rank}</p>
-			<img alt="랭크"
-				src="${pageContext.request.contextPath}/resources/images/riot/${leagueentry.tier}.png">
-			<p>${matchDtolist.get(0).getInfo().getParticipants().get(0).getAssists()}</p>
+			<br> <br> <br> <br>
+
 
 		</div>
 	</div>
@@ -186,7 +6544,7 @@ input[type=button]:hover {
 
 
 <script>
-const submit => {
+const submit = () => {
 	$(riotnick)
 		.attr("action", `${pageContext.request.contextPath}/riot/\${name}.do`)
 		.submit();
@@ -195,10 +6553,23 @@ const submit => {
 
 };
 
+$(".testdiv").hide();
+
+
+
+$(".recent-btn").click((e) => {
+	$(e.currentTarget).parent().parent().parent().parent().parent().find('div.testdiv').toggle("fold", 550);
+	
+});
+
+
+
+
+
 
 
 </script>
-
+  <script src="${pageContext.request.contextPath}/resources/js/riot/riotfav.js"></script>
 
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

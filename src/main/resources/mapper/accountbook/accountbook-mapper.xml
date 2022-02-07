@@ -54,11 +54,11 @@
 	                from
 	                    account_book
 	                where
-	                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+	                   	to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
           		)
 	    where
 	        id = #{id}
-	    group by rollup(income_expense)
+	    group by income_expense
 	    )
 	</select>
 	
@@ -78,7 +78,7 @@
 				    from
 				        account_book
 				    where
-				        to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+				        to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
 				        and
 				        id = #{id}
 				    order by
@@ -135,7 +135,7 @@
 		    from
 		        account_book
 		    where
-		        to_char(reg_date, 'mm') = to_char((sysdate), 'mm')
+		        to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
 		        and
 		        id = #{id}
 		        and
@@ -190,14 +190,20 @@
 		)
 	</select>
 	
+	<!-- 최애 카테고리 리스트 -->
 	<select id="categoryChart" resultMap="monthlyCountList">
 		select
+		    *
+		from
+		(select
 		    category,
-		    count(category) as count
+		    count(category) as count,
+		    sum(price) as sum
 		from
 		    (select
 		        to_char(add_months(sysdate, #{monthly}), 'yyyy-mm') as monthly,
-		        category
+		        category,
+		        price
 		    from
 		        account_book
 		    where
@@ -205,16 +211,38 @@
 		        and
 		        id = #{id}
 		        and
-		        income_expense=#{incomeExpense}
+		        income_expense= #{incomeExpense}
 		    )
-		group by monthly, category
+		group by monthly, category)
+		where rownum <![CDATA[<=]]> 3
+		order by sum desc
 	</select>
 	
+	<!-- 현금,카드 건수 -->
+	<select id="paymentList" resultMap="monthlyCountList">
+		select
+		  nvl(payment, 'blank') as payment,
+		  count(payment) as count
+		 from ( 
+		select  
+		    payment
+		from
+		    account_book
+		where
+		    id=#{id}
+		    and
+		     to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, #{monthly}), 'yyyy-mm')
+		    and
+		    income_expense = #{incomeExpense}
+		) group by payment
+	</select>
 	
 	<resultMap type="Map" id="monthlyCountList">
 		<result column="sum" property="sum"/>
 		<result column="count" property="count"/>
 		<result column="category" property="category"/>
+		<result column="payment" property="payment"/>
+		<result column="price" property="price"/>
 	</resultMap>
 		
 	<resultMap type="Map" id="monthlyChart">
