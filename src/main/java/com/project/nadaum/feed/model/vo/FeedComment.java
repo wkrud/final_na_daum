@@ -10,15 +10,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeedEntity implements Serializable {/**
+public class FeedComment implements Serializable {
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String code;
-	private String writer;
+	private int no;
+	private String fCode;
+	private String commentWriter;
 	private String content;
 	private Date regDate;
-	private String nickname;
 
 }

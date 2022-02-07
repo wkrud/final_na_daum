@@ -54,20 +54,6 @@
 	padding-top: 10px;
 }
 
-/* 피드 관리 */
-.my-feed-wrap{
-	width: 1000px;
-	border: 1px solid black;
-}
-.feed-article{
-	width: 300px;
-	height: 300px;
-	border: 1px solid red;
-}
-
-
-
-
 
 /* helpDetail */
 .help-detail-wrap{
