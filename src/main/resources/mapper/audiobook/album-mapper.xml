@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="album">
+
+
+	<select id="selectTotalContent" resultType="_int">
+		select 
+			count(*)
+		from 
+			album_info
+	</select>
+
+	<select id="selectListAlbumInfo" resultType="albumInfo">
+		select
+			*
+		from 
+			album_info
+		order by
+			code desc
+	</select>
+
+	<insert id="insertAlbumInfo" parameterType="albumInfo">
+		insert into 
+			album_info(code,title,provider,content,creator,kind)
+		values(
+			#{code},
+			#{title},
+			#{provider},
+			#{content},
+			#{creator},
+			#{kind}
+		)
+	</insert>
+	<update id="updateAlbumInfo" parameterType="albumInfo">
+		update album_info
+		set 
+		 code=#{code},
+		 kind=#{kind},
+		 title=#{title},
+		 provider=#{provider},
+		 content=#{content},
+		 creator=#{creator},
+		 status=#{status}
+		where code=#{code}
+	</update>
+	
+	<select id="selectOneAlbumInfo" resultType="albumInfo">
+		select 
+			*
+		from 
+			album_info
+		where code = #{code}
+	</select>
+	
+	<select id="selectOneAlbumCollection" resultMap="albumCollectionMap">
+		select
+			a.*,
+			t.*,
+			i.*,
+			a.code code
+		from
+			album_info a
+				left join album_track t
+					on a.code= t.album_code
+				left join album_img i
+					on a.code= i.album_code
+		where
+			a.code=#{code}
+	</select>
+	
+	<select id="selectOneAlbum" resultType="albumInfo">
+		select
+			*
+		from
+			album_info
+		where
+			code=#{code}
+	
+	</select>
+	
+	<delete id="deleteAlbumInfo">
+		delete album_info where code=#{code}
+		<!-- update album_info set status='N' where code=#{code}
+		update album_img set status='N' where code=#{code}
+		update album_track set status='N' where code=#{code} -->
+	</delete>
+	
+	<!--트랙-->
+	<insert id="insertAlbumTrack" parameterType="albumTrack">
+		insert into
+			album_track(no, album_code, original_filename, renamed_filename, time_stamp)
+		values(
+			seq_album_track_no.nextval,
+			#{albumCode},
+			#{originalFilename},
+			#{renamedFilename},
+			#{timeStamp}
+		)
+	</insert>
+	
+	<!--배치 -->
+	<insert id="insertAlbumTracks">
+		insert into
+			album_track(no,album_code,original_filename,renamed_filename, time_stamp)
+		<foreach collection="list" item="track" separator=",">
+			values(seq_album_track_no.nextval,#{track.albumCode},#{track.originalFilename},#{track.renamedFilename},#{track.timeStamp})
+		</foreach>;
+	</insert>
+	
+	<update id="updateAlbumTrack">
+		update album_track set
+		 album_code=#{albumCode},
+		 original_filename=#{originalFilename},
+		 renamed_filename=#{renamedFilename},
+		 time_stamp=#{timeStamp},
+		 status=#{status}
+		where no=#{no}
+	</update>
+	
+	<delete id="deleteAlbumTrack">
+		delete from 
+			album_track 
+		where
+			 no = #{no}
+	</delete>
+	
+	<delete id="deleteAlbumTracks">
+		delete from 
+			album_track 
+		<where>
+			<foreach collection="delArray" item="no" separator=",">
+			 no = #{no}
+			</foreach>
+		</where> 
+	</delete>
+	
+	<select id= "selectOneAlbumTrack" resultType="albumTrack">
+	 	 select
+	 	 	* 
+	 	 from 
+	 	 	album_track
+	 	 where
+	 	 	album_code=#{code} and
+	 	 	no=#{no}
+	</select>
+	
+	<select id="selectListAlbumTrack" resultType="albumTrack">
+		select
+			*
+		from 
+		   album_track
+		where 
+			album_code=#{code}
+	</select>
+	
+	<!-- 이미지 -->
+	<insert id="insertAlbumImg">
+		insert into album_img (no,album_code, original_filename, renamed_filename)
+		values(
+				seq_album_img_no.nextval,
+				#{albumCode},
+				#{originalFilename},
+				#{renamedFilename}
+			)
+	</insert>
+	
+	<!--# problem 배치 -->
+	<insert id="insertAlbumImgs">
+		insert into album_img (no,album_code, original_filename, renamed_filename)
+		values
+		<foreach collection="list" item="img" separator=",">
+			(seq_album_img_no.nextval,#{img.albumCode},#{img.originalFilename},#{img.renamedFilename})
+		</foreach>;
+	</insert>
+	
+	<update id="updateAlbumImg" parameterType="albumImg">
+		update 
+			album_img 
+		set 
+			album_code=#{albumCode},
+		 	original_filename=#{originalFilename},
+		 	renamed_filename=#{renamedFilename},
+		 	time_stamp=#{timeStamp},
+		 	status=#{status}
+			where no=#{no}
+	</update>
+	
+	<update id="updateAlbumImgs">
+		update album_img 
+		set
+		<foreach collection="list" item="albumImg" separator=",">
+			album_code=#{albumCode},
+		 	original_filename=#{originalFilename},
+		 	renamed_filename=#{renamedFilename},
+		 	time_stamp=#{timeStamp},
+		 	status=#{status}
+			where no=#{no}
+		</foreach>
+	</update>
+	
+	<delete id="deleteAlbumImg">
+		delete from 
+			album_img
+		where
+		 no=#{no}
+	</delete>
+	
+	<delete id="deleteAlbumImgs">
+		delete from
+			album_img
+		<where>
+		<foreach collection="list" open="(" close=")" separator="," item="img">
+			no=#{img.no}		
+		</foreach>
+		</where>
+	</delete>
+	
+	<select id="selectOneAlbumImg" parameterType="albumImg">
+		select
+			*	
+		from
+			album_img
+		where
+			no=#{no} and 
+			album_code=#{albumCode}
+	</select>
+	
+	<select id="selectListAlbumImg" resultType="albumImg">
+		select
+			*
+		from
+			album_img
+		where
+			album_code=#{albumCode}
+	</select>	
+	
+	<!--#a4.댓글 -->
+	<insert id="insertAlbumComment" parameterType="albumComment">
+		insert into
+			album_comment(no,album_code,writer,comments,reg_date,status)
+		values
+			(#{no},#{album_code},#{writer},#{comments},#{reg_date},#{status})
+	</insert>
+	
+	<update id="updateAlbumComment" parameterType="albumComment">
+		update album_comment
+		set 
+			writer=#{writer},
+			comments=#{comments},
+			status=#{status}
+		where
+			no =#{no}
+	</update>
+	
+	<delete id="deleteAlbumComment" parameterType="albumComment">
+		delete from album_comment
+		where no= #{no}
+	</delete>
+	
+	<select id="selectOneAlbumComment" resultType="albumComment">
+		select 
+			*
+		from 
+			album_comment
+		where 
+			no=#{no} and album_code=#{albumCode}
+	</select>
+	
+	<select id ="selectListAlbumComment" resultType="albumComment">
+		select
+			*
+		from 
+			album_comment
+		where 
+			album_code=#{albumCode}
+	</select>
+	
+	<!--페이징 처리하기 참고자료 https://programmer93.tistory.com/4-->
+	<!-- <select id="selectListAlbumCommentByPage" parameterType="map">
+		select
+			*
+		from 
+			album_comment
+		where 
+			album_code=#{albumCode}
+		order by desc 
+	</select> -->
+	<!--resultType="albumInfo"  -->
+	
+	<select id="selectListAlbumInfoByWord" resultMap="searchList">
+		select
+			a.code as code,
+			a.title as title,
+			i.renamed_filename as renamed_filename 
+		from 
+			album_info a
+				left join album_img i
+					on a.code= i.album_code
+		where
+			a.${searchType} like '%' || ${searchKeyword} || '%'
+		order by
+			reg_date desc
+	</select>
+	
+	<!-- <select id="selectListAlbumInfoByWord" parameterType="map" resultType="albumInfo">
+		select
+			* 
+		from 
+			album_info
+		<where>
+		<foreach collection="search" item="keyword" separator=",">
+			content in #{keyword}
+		</foreach>
+		</where>
+	</select>
+	
+	<select id="selectListAlbumInfoByKind" parameterType="string" resultType="albumInfo">
+		select
+			*
+		from 
+			album_info
+		where
+			kind=#{kind}	
+	</select>
+	
+	<select id="selectListAlbumInfoByProvider">
+		select
+			*
+		from
+			album_info
+		where
+			provider=#{provider}
+	</select>
+	
+	<select id="selectListAlbumInfoByCreator">
+		select
+			*
+		from
+			album_info
+		where 
+			creator=#{creator}
+	</select>
+	
+	<select id="selectListAlbumInfoByType" parameterType="map" resultType="albumInfo">
+		select
+			*
+		from
+			album_info	
+		<where>
+		<foreach collection="map" >
+			<if test ="kind !=null and kind!=''"/>
+				kind=#{kind}  
+			<if test ="creator !=null and creator!=''"/>
+				creator=#{creator}
+			<if test ="provider !=null and provider!=''"/>
+				provider=#{provider}  
+		</foreach>
+		</where>	
+	</select> -->
+	
+	<select id="selectListAlbumInfoRecentMain" resultMap="searchList">
+		select
+			a.code as code,
+			a.title as title,
+			i.renamed_filename as renamed_filename
+		from
+			(select * from album_info order by reg_date desc) a
+				left join album_img i
+					on a.code= i.album_code	
+		where rownum <![CDATA[ < ]]> 5
+	</select>
+	
+	
+	<select id="selectListAlbumInfoByKindMain" resultMap="searchList">
+		select
+			a.code as code,
+			a.title as title,
+			i.renamed_filename as renamed_filename
+		from
+			album_info a
+				left join album_img i
+					on a.code= i.album_code
+		where kind=#{kind} and 
+			rownum <![CDATA[ < ]]> 5	
+	</select>
+	
+	
+	<select id="selectListAlbum" resultMap="searchList">
+		select
+			code,
+			title,
+			renamed_filename
+		from
+			album_info a
+				left join album_img i
+					on a.code= i.album_code
+	</select>
+	
+	<resultMap type="map" id="searchList">
+		<id column="code" property="code"/>
+		<result column="title" property="title"/>
+		<result column="renamed_filename" property="renamedFilename"/>
+	</resultMap>
+	
+	<resultMap type="album" id="albumCollectionMap">
+		<id column="code" property="code"/>
+		<result column="kind" property="kind"/>
+		<result column="title" property="title"/>
+		<result column="provider" property="provider"/>
+		<result column="content" property="content"/>
+		<result column="creator" property="creator"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="play_time" property="playTime"/>
+		<result column="play_count" property="playCount"/>
+		<result column="status" property="status"/>
+		<collection property ="albumImgs" ofType="albumImg">
+			<id column="no" property="no"/>
+			<result column="album_code" property="albumCode"/>
+			<result column="orginal_filename" property="originalFilename"/>
+			<result column="renamed_filename" property="renamedFilename"/>
+			<result column="reg_date" property="regDate"/>
+			<result column="chg_date" property="chgDate"/>		
+			<result column="status" property="status"/>
+		</collection>
+		<collection property="albumTracks" ofType="albumTrack">
+			<id column="no" property="no"/>
+			<result column="album_code" property="albumCode"/>
+			<result column="original_filename" property="originalFilename"/>
+			<result column="renamed_filename" property="renamedFilename"/>
+			<result column="reg_date" property="regDate"/>
+			<result column="chg_date" property="chgDate"/>
+			<result column="time_stamp" property="timeStamp"/>
+			<result column="play_count" property="playCount"/>
+			<result column="status" property="status"/>
+		</collection>
+		
+	</resultMap>
+	
+</mapper>
