@@ -124,9 +124,10 @@
 				<select name="category" id="subCategory">
 					<option value="">소분류</option>
 				</select>
+				<div class="searchBox">
 				<input type="text" name="detail" id="search"/>
-				<%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
  				<button id="searchBtn" class="defaultBtn"><i class="fas fa-search"></i></button>
+				</div>
 			</form>
 		</div>
 		<!-- 필터링 -->
@@ -188,10 +189,10 @@
 				</tr>
 				<tr class="user_income_expense">
 					<td>
-						<span class="income"><fmt:formatNumber value="${incomeExpenseList.income}" type="number"/></span>
+						<span class="income">+ <fmt:formatNumber value="${incomeExpenseList.income}" type="number"/></span>
 					</td>
 					<td>
-						<span class="expense"><fmt:formatNumber value="${incomeExpenseList.expense}" type="number"/></span>
+						<span class="expense">- <fmt:formatNumber value="${incomeExpenseList.expense}" type="number"/></span>
 					</td>
 				</tr>
 			</table>
