@@ -72,20 +72,26 @@ public class AccountBookController {
 		
 		//수입, 지출 계산한 값
 		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+		log.debug("incomeList={}",incomeList);
 			//필요한 값만 맵 객체로 변환
 			Map<String, Object> incomeExpenseList = new HashMap<>();
 			
-			if(incomeList.get(0) == null) {
-				incomeExpenseList.put("expense", "0");
+			if(incomeList.size() == 0) {
+				incomeExpenseList.put("income", 0);
+				incomeExpenseList.put("expense", 0);
+			} else if(incomeList.size() == 1) {
+				if((incomeList.get(0).get("incomeExpense")).equals("I")) {
+					incomeExpenseList.put("income", incomeList.get(0).get("total"));
+					incomeExpenseList.put("expense", 0);
+				} else {
+					incomeExpenseList.put("income", 0);
+					incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+				}
 			} else {
-				incomeExpenseList.put("expense", incomeList.get(0).get("total"));				
+				incomeExpenseList.put("income", incomeList.get(1).get("total"));
+				incomeExpenseList.put("expense", incomeList.get(0).get("total"));
 			}
 			
-			if(incomeList.get(1) == null) {
-				incomeExpenseList.put("income", "0");				
-			} else {
-				incomeExpenseList.put("income", incomeList.get(1).get("total"));				
-			}
 			log.info("incomeExpenseList={}", incomeExpenseList);
 		
 		//월간 총 합계 금액
@@ -99,59 +105,69 @@ public class AccountBookController {
 		model.addAttribute("accountList",accountList);
 		model.addAttribute("incomeExpenseList", incomeExpenseList);
 		model.addAttribute("monthlyAccount", monthlyAccount);
+		model.addAttribute("totalAccountList", totalAccountList);
 	}
 	
 	//차트 더보기 페이지
-	@RequestMapping(value="/detailChart.do")
-	public void detailChart(@RequestParam(defaultValue="0") int monthly, @AuthenticationPrincipal Member member, Model model) {
-		
+	@RequestMapping(value="/accountAnalyze.do")
+	public void detailChart(@RequestParam(defaultValue="0") int monthly,
+							@AuthenticationPrincipal Member member, Model model) {
+	//수입
 		Map<String, Object> param = new HashMap<>();
 		param.put("monthly", monthly);
 		param.put("id", member.getId());
 		param.put("incomeExpense", "I");
-		log.debug("param={}",param);
-		List<Map<String, Object>> list_I = accountBookService.categoryChart(param);
-		log.debug("list_I={}", list_I);
+		//수입 카테고리 베스트3
+		List<Map<String, Object>> categoryList_I = accountBookService.categoryChart(param);
+		//현금/카드 건수
+		List<Map<String, Object>> paymentList_I = accountBookService.paymentList(param);
 		
+		
+	//지출
 		Map<String, Object> param2 = new HashMap<>();
 		param2.put("monthly", monthly);
 		param2.put("id", member.getId());
 		param2.put("incomeExpense", "E");
-		log.debug("param2={}",param2);
-		List<Map<String, Object>> list_E = accountBookService.categoryChart(param2);
-		log.debug("list_E={}", list_E);
+		//지출 카테고리 베스트3
+		List<Map<String, Object>> categoryList_E = accountBookService.categoryChart(param2);
+		//현금, 카드 건수
+		List<Map<String, Object>> paymentList_E = accountBookService.paymentList(param2);
+		log.debug("list_E={}", paymentList_E);
 		
-		model.addAttribute("list_I", list_I);
-		model.addAttribute("list_E", list_E);	
+		
+		model.addAttribute("categoryList_I", categoryList_I);
+		model.addAttribute("categoryList_E", categoryList_E);	
+		model.addAttribute("paymentList_I", paymentList_I);	
+		model.addAttribute("paymentList_E", paymentList_E);	
 	}
 	
 	 //전체 리스트 출력
-	 @RequestMapping(value="/selectAllAccountList.do") 
-	 public String selectAllAccountList (@RequestParam(defaultValue = "1") int cPage, 
-				@AuthenticationPrincipal Member member, Model model, HttpServletRequest request) {
-		int limit = 4;
-		int offset = (cPage-1) * limit;
-		String id = member.getId(); 
-		
-		Map<String, Object> param = new HashMap<>();
-		param.put("offset", offset);
-		param.put("limit", limit);
-		param.put("id", id);
-		//로그인한 아이디로 등록된 가계부 전체 목록
-		List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
-		
-		//전체리스트 개수
-		int totalAccountList = accountBookService.countAccountList(param);
-		
-		String category = "all";
-		String url = request.getRequestURI();
-		String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
-			
-		model.addAttribute("pagebar", pagebar);
-		model.addAttribute("accountList",accountList);
-	 
-		return "redirect:/accountbook/accountbook.do";
-	 }
+	 @RequestMapping(value="/selectAllAccountList.do") public String selectAllAccountList (@RequestParam(defaultValue = "1") int cPage,
+		  @AuthenticationPrincipal Member member, Model model, HttpServletRequest request) {
+		 int limit = 4; 
+		 int offset = (cPage-1) * limit; 
+		 String id = member.getId();
+		 
+		  Map<String, Object> param = new HashMap<>(); 
+		  param.put("offset", offset);
+		  param.put("limit", limit); 
+		  param.put("id", id); 
+		 
+		  //로그인한 아이디로 등록된 가계부 전체 목록
+		 List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
+		  
+		 //전체리스트 개수 
+		 int totalAccountList = accountBookService.countAccountList(param);
+		  
+		  String category = "all"; 
+		  String url = request.getRequestURI(); 
+		  String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
+		  
+		 model.addAttribute("pagebar", pagebar);
+		 model.addAttribute("accountList",accountList);
+		 
+		 return "redirect:/accountbook/accountbook.do"; }
+		 
 	
 	 // 가계부 추가
 	@RequestMapping(value="/accountInsert.do", method=RequestMethod.POST)
@@ -219,16 +235,20 @@ public class AccountBookController {
 		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
 			//필요한 값만 맵 객체로 변환
 			Map<String, Object> incomeExpenseList = new HashMap<>();
-			if(incomeList.get(0) == null) {
-				incomeExpenseList.put("expense", "0");
+			if(incomeList.size() == 0) {
+				incomeExpenseList.put("income", 0);
+				incomeExpenseList.put("expense", 0);
+			} else if(incomeList.size() == 1) {
+				if((incomeList.get(0).get("incomeExpense")).equals("I")) {
+					incomeExpenseList.put("income", incomeList.get(0).get("total"));
+					incomeExpenseList.put("expense", 0);
+				} else {
+					incomeExpenseList.put("income", 0);
+					incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+				}
 			} else {
-				incomeExpenseList.put("expense", incomeList.get(0).get("total"));				
-			}
-			
-			if(incomeList.get(1) == null) {
-				incomeExpenseList.put("income", "0");				
-			} else {
-				incomeExpenseList.put("income", incomeList.get(1).get("total"));				
+				incomeExpenseList.put("income", incomeList.get(1).get("total"));
+				incomeExpenseList.put("expense", incomeList.get(0).get("total"));
 			}
 			log.info("incomeExpenseList={}", incomeExpenseList);
 				

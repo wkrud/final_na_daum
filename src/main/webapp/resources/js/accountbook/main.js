@@ -233,7 +233,7 @@
 			 width : 400,
 			 height : 300,
 			 pieHole : 0.4,
-			 backgroundColor : '#F2F2E6',
+			 backgroundColor : '#FFFBF5',
 			};
 			var chart = new google.visualization.PieChart(document.getElementById('expenseChart'));
 			chart.draw(chartData, options);
@@ -272,7 +272,7 @@
 			 width : 400,
 			 height : 300,
 			 pieHole : 0.4,
-			 backgroundColor : '#F2F2E6',
+			 backgroundColor : '#FFFBF5',
 			};
 			var chart = new google.visualization.PieChart(document.getElementById('incomeChart'));
 			chart.draw(chartData, options);
