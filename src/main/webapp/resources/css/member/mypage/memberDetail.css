@@ -2,6 +2,7 @@
 	display: flex;
 	justify-content: center;
 	width: 100%;
+	flex-wrap: wrap;
 }
 .absolute-left{
 	width: 250px;
@@ -52,6 +53,20 @@
 .profile-div-wrap .nickname-wrap{
 	padding-top: 10px;
 }
+
+/* 피드 관리 */
+.my-feed-wrap{
+	width: 1000px;
+	border: 1px solid black;
+}
+.feed-article{
+	width: 300px;
+	height: 300px;
+	border: 1px solid red;
+}
+
+
+
 
 
 /* helpDetail */
@@ -118,6 +133,7 @@
 .help-footer{
 	margin-top: 50px;
 }
+
 
 
 /* 공지사항 */
