@@ -60,6 +60,10 @@
 		    reg_date desc
 	</select>
 	
+	<select  id="selectOneComment" resultMap="CommentMap">
+		select * from comments where code = #{code}
+	</select>
+	
 	<insert id="insertMovieComment" >
 		insert into
 				comments(code, comment_level, content, reg_date, comment_ref, id, api_code, star)
@@ -85,6 +89,17 @@
 		where
 			code = #{code}
 	</update>
+	
+	<resultMap type="Comment" id="CommentMap">
+		<id column="code" property="code"/>
+		<result column="comment_level" property="commentLevel"/>
+		<result column="content" property="content"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="comment_ref" property="commentRef"/>
+		<result column="id" property="id"/>
+		<result column="api_code" property="apiCode"/>
+		<result column="star" property="star"/>
+	</resultMap>
 	
 </mapper>
 

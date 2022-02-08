@@ -6,9 +6,12 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@page
-	import="com.project.nadaum.culture.movie.controller.GetMovieDetailApi"%>
-<sec:authentication property="principal" var="loginMember" />
+<%@page import="com.project.nadaum.culture.movie.controller.GetMovieDetailApi"%>
+
+<sec:authentication property="principal" var="loginMember"/>
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
+
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 영화상세보기 " name="movieDetail" />
 </jsp:include>
@@ -216,17 +219,15 @@ div#board-container label.custom-file-label {
 									<!-- api 코드 -->
 									<input type="hidden" name="apiCode" value="${apiCode}" />
 									<%-- <input type="hidden" name="id" value="${loginMember.id}" /> --%>
-									<input type="hidden" name="id"
-										value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
+									<input type="hidden" name="id" value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
 									<!-- 댓글인 경우 1 -->
 									<input type="hidden" name="commentLevel" value="1" />
 									<!-- 대댓글인 경우 써여져야함 -->
-									<input type="hidden" name="commentRef" value="" /> <label
-										for="star" class="col-sm-2 col-form-label">평점</label>
+									<input type="hidden" name="commentRef" value="" /> 
+									<label for="star" class="col-sm-2 col-form-label">평점</label>
 									<div class="col-sm-10">
-										<input type="hidden" class="form-control" name="star">
-										<select id="category-select" class="form-control" name="star"
-											aria-label="Default select example">
+										<input type="hidden" class="form-control" name="">
+										<select id="category-select" class="form-control" name="star" aria-label="Default select example">
 											<option selected>0</option>
 											<option value="1">1</option>
 											<option value="2">2</option>
@@ -235,14 +236,10 @@ div#board-container label.custom-file-label {
 											<option value="5">5</option>
 										</select>
 									</div>
-									<textarea name="content" cols="60" rows="3" id="content"
-										class="form-control"></textarea>
+									<textarea name="content" cols="60" rows="3" id="content" class="form-control"></textarea>
 
-									<button type="submit" id="btn-comment-enroll1"
-										class="btn btn-outline-primary"
-										onClick="fn_comment('${apiCode}')">등록</button>
-									<input type="hidden" name="${_csrf.parameterName}"
-										value="${_csrf.token}" />
+									<button type="submit" id="btn-comment-enroll1" class="btn btn-outline-primary" onClick="fn_comment('${apiCode}')">등록</button>
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								</form>
 
 							</li>
@@ -280,8 +277,8 @@ div#board-container label.custom-file-label {
 												aria-label="Default select example">
 												<option selected>${comment.star}</option>
 											</select>
-										</div> <textarea class="form-control"
-											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+										</div> 
+										<textarea class="form-control"	id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
 
 										<%-- 회원일때만 답글 버튼이 나타남 --%>
 										<div class="row float-right">
@@ -297,10 +294,26 @@ div#board-container label.custom-file-label {
 												</form>
 											&nbsp;
 											
-												<!-- 댓글 수정 -->												
-												<button type="button" class="btn btn-outline-dark"data-toggle="modal" data-target="#updateComment">수정</button>
+												<!-- 댓글 수정 -->	
+												<form id="findUpdateComment">			
+													<input type="hidden" name="code" value="${comment.code}" />								
+													<button type="button" class="btn btn-outline-dark updateCommmentBtn"data-toggle="modal" data-target="#updateComment" value="${comment.code}">수정</button>
+												</form>
+												</c:if>
 
-												<!-- 댓글 수정 Modal -->
+											
+										</div>
+
+									</li>
+								</ul>
+							</c:if>
+						</c:forEach>
+			</c:if>
+		</div>
+	</div>
+	<!-- 댓글 목록 끝 -->
+
+	<!-- 댓글 수정 Modal -->
 												<div class="modal fade" id="updateComment" tabindex="-1" role="dialog" aria-labelledby="updateCommentTitle" aria-hidden="true">
 													<div class="modal-dialog modal-dialog-centered" role="document">
 														<div class="modal-content">
@@ -316,8 +329,9 @@ div#board-container label.custom-file-label {
 															<div class="form-group row">
 															<label for="star" class="col-sm-2 col-form-label">평점</label>
 															<div class="col-sm-10">
-															<input type="hidden" class="form-control" name="star" >
-															<select id="category-select" class="form-control" aria-label="Default select example" selected="${comment.star}">
+															<input type="hidden" class="form-control"  >
+															<select id="category-select" class="form-control" name="star" aria-label="Default select example" >
+																<option value="">평점</option>
 																<option value="1">1</option>
 																<option value="2">2</option>
 																<option value="3">3</option>
@@ -327,16 +341,21 @@ div#board-container label.custom-file-label {
 															</div>
 															</div>
 															
-															
 															<div class="form-group row" >
-																<label for="title" class="col-sm-2 col-form-label">제목</label>
+																<label for="title" class="col-sm-2 col-form-label">내용</label>
 																<div class="col-sm-10">
 																	<input type="text" class="form-control" id="content" name="content" value="${comment.content}" >
 																</div>
 															</div>
 															
-															<input type="hidden" name="star" value="${comment.star}" />
 															<input type="hidden" name="code" value="${comment.code}" />
+															<input type="hidden" name="apiCode" value="${apiCode}" />
+															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+															<input type="hidden" name="id" value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
+															<!-- 댓글인 경우 1 -->
+															<input type="hidden" name="commentLevel" value="1" />
+															<!-- 대댓글인 경우 써여져야함 -->
+															<input type="hidden" name="commentRef" value="" /> 
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary"	data-dismiss="modal">취소</button>
@@ -346,19 +365,7 @@ div#board-container label.custom-file-label {
 														</div>
 													</div>
 												</div>
-
-											</c:if>
-										</div>
-
-									</li>
-								</ul>
-							</c:if>
-						</c:forEach>
-			</c:if>
-		</div>
-	</div>
-	<!-- 댓글 목록 끝 -->
-
+	
 	<hr class="featurette-divider" />
 
 </div>
@@ -425,24 +432,38 @@ $(insertCommentFrm).submit((e) => {
  	/* 댓글 수정  */
  $(updateCommentFrm).submit((e) => {	
  		e.preventDefault();
+ 		/* 수정에는 where절에 사용하는 pk값이(식별자) 있어야함. */
 		const code = $(e.target).find("[name=code]").val();
 		console.log(code);
-		const code = $(e.target).find("[name=star]").val();
-		console.log(code);
-		const code = $(e.target).find("[name=content]").val();
-		console.log(code);
+		const star = $(e.target).find("[name=star]").val();
+		console.log(star);
+		const content = $(e.target).find("[name=content]").val();
+		console.log(content);
+		
+		const obj = {
+			id : $("[name=id]", e.target).val(),
+			code : $("[name=code]", e.target).val(),
+			star : $("[name=star]", e.target).val(),
+			content : $("[name=content]", e.target).val(),
+			apiCode : $("[name=apiCode]", e.target).val(),
+			commentLevel : $("[name=commentLevel]", e.target).val(),
+			commentRef : $("[name=commentRef]", e.target).val(),
+		};
 		
 		const csrfHeader = "${_csrf.headerName}";
-    	 const csrfToken = "${_csrf.token}";
-    	 const headers = {};
+    	const csrfToken = "${_csrf.token}";
+    	const headers = {};
      	headers[csrfHeader] = csrfToken;
      	
-     	var data = {"code" : code};
+     	//var data = {"code": code, "star": star, "content": content};
+     	const jsonStr = JSON.stringify(obj);
+     	
 		$.ajax({
-			headers : headers,
-			url: `${pageContext.request.contextPath}/movie/movieDetail/${apiCode}/\${code}`,
+			url: `${pageContext.request.contextPath}/movie/movieDetail/${apiCode}`,
 			method: "PUT",
-			data: $(updateCommentFrm).serialize(),
+			headers : headers,
+			data: jsonStr,
+			contentType: 'application/json; charset=utf-8',
 			success(resp){
 				console.log(resp)
 				location.reload();
@@ -452,6 +473,58 @@ $(insertCommentFrm).submit((e) => {
 		});
 		
 	});
+ 	
+ 	$(".updateCommmentBtn").click((e)=> {
+ 		const code = $(e.target).val();
+ 		console.log(e.target);
+ 		console.log(code);
+ 		
+ 		$.ajax({
+ 			url : `${pageContext.request.contextPath}/movie/movieDetail/${apiCode}/\${code}`,
+ 			method: "GET",
+ 			success(resp){
+ 				console.log(resp);
+ 				const {content} = resp;
+ 				const $frm = $(updateCommentFrm);
+ 				$frm.find("[name=content]").val(content);
+ 				$frm.find("[name=star]").val(star);
+ 			},
+ 			error(xhr, textStatus, err) {
+ 				if(xhr.status == 404)
+ 					alert("수정할 댓글을 조회하지 못했습니다.");
+ 				else
+ 					console.log(xhr, textStatus, err);
+ 			}
+ 		});
+ 	});
+ 	
+/* function updateCommentBtn(code, star, content){
+	console.log("댓글창 화면 바뀌나요~?")
+	
+	var commentView += ;
+	
+	<div class="form-inline mb-2">
+	<label for="replyId"> 
+	<i class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
+	</label> &nbsp;&nbsp;
+	<fmt:formatDate value="${comment.regDate}" pattern="yyyy-MM-dd HH:mm" />
+	</div>
+
+	<div class="col-sm-10">
+	<input type="hidden" class="form-control" name="star">
+	<select id="category-select" class="form-control" aria-label="Default select example">
+		<option selected>${comment.star}</option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+	</select>
+	</div> 
+ 	<textarea class="form-control"	id="exampleFormControlTextarea1" rows="1" >${comment.content}</textarea>
+ 	<button type="submit" class="btn btn-outline-dark" id="updateComment-btn" value="${comment.code}">수정제출</button>
+ 	<input type="hidden" name="apiCode" value="${apiCode}" />
+} */
 </script>
 
 

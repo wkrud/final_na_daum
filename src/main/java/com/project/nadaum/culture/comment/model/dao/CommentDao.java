@@ -20,6 +20,10 @@ public interface CommentDao {
 
 	int insertMovieComment(Map<String, Object> map);
 
-	int updateMovieComment(String code);
+//	int updateMovieComment(String code);
+
+	int updateMovieComment(Comment comment);
+
+	Comment selectOneComment(String code);
 
 }
