@@ -160,6 +160,14 @@
 			and 
 			income_expense = #{incomeExpense}
 		</if>
+		<if test="category != null and category != ''">
+			and 
+			category = #{category}
+		</if>
+		<if test="detail != null and detail != ''">
+			and 
+			detail = #{detail}
+		</if>
 	</select>
 	
 	<select id="detailMonthlyChart" resultMap="monthlyChart">
