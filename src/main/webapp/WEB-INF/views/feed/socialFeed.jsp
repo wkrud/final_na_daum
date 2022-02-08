@@ -11,6 +11,7 @@
 </jsp:include>
 <sec:authentication property="principal" var="loginMember"/>
 <script src="${pageContext.request.contextPath}/resources/js/feed/socialFeed.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeed.css" />
 <div class="feed-section-wrap">
 	<div class="one-person-feed-wrap">
@@ -31,23 +32,53 @@
 				</div>
 			</div>
 			<div class="profile-info-area">
-			
+				<div class="host-nickname-area">
+					<div class="host-nickname"><span>${member.nickname}</span></div>
+				</div>
+				<div class="host-friends-area">
+					<div class="friends-count"><span>친구 : ${socialCount.FRIEND}</span></div>
+					<div class="following-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
+				</div>
+				<div class="host-introduce-area"></div>
 			</div>
 		</div>
 		<div class="one-person-feed-area">
 			<div class="feed-limit-area">
-				<div class="one-feed">123</div>
 				<c:forEach items="${feed}" var="f">
 					<!-- 사진이 있다면 -->
 					<c:if test="${not empty f.attachments}">
 						<div class="one-feed">
-							<img class="change-profile" src="${pageContext.request.contextPath}/resources/${f.attachments[0].renamedFilename}" alt="" />
+							<div class="hidden-likes-comment">
+								<div class="likes-count">
+									<i class="bi bi-suit-heart-fill"></i>
+									${f.likes}
+								</div>
+								<div class="comments-count">
+									<i class="bi bi-chat"></i>
+									${f.commentCount}
+								</div>
+							</div>
+							<div class="feed-area">
+								<img class="change-profile" src="${pageContext.request.contextPath}/resources/${f.attachments[0].renamedFilename}" alt="" />
+							</div>
 						</div>
 					</c:if>
 					<!-- 사진이 없다면 -->
 					<c:if test="${empty f.attachments}">
 						<div class="one-feed">
-							<div class="feed-content-hidden">${f.content}</div>
+							<div class="hidden-likes-comment">
+								<div class="likes-count">
+									<i class="bi bi-suit-heart-fill"></i>
+									${f.likes}
+								</div>
+								<div class="comments-count">
+									<i class="bi bi-chat"></i>
+									${f.commentCount}
+								</div>
+							</div>
+							<div class="feed-area">
+								<div class="feed-content-hidden">${f.content}</div>
+							</div>
 						</div>
 					</c:if>
 				</c:forEach>
@@ -70,8 +101,9 @@
 <script>
 const $detailBody = $(".feed-detail-modal-body");
 $(".one-feed").click((e) => {
-	selectedFeed($(e.target).text());
-	
+	selectedFeed($(e.target).text());	
 });
+
+$(".one-feed")
 </script>	
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
