@@ -25,10 +25,7 @@ public class AccountBookDaoImpl implements AccountBookDao {
 
 	@Override
 	public List<AccountBook> selectAllAccountList(Map<String, Object> param) {
-		int offset = (int) param.get("offset");
-		int limit = (int) param.get("limit");
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		return session.selectList("accountbook.selectAllAccountList", param, rowBounds);
+		return session.selectList("accountbook.selectAllAccountList", param);
 	}
 
 	@Override

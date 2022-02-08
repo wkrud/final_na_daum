@@ -142,31 +142,16 @@ public class AccountBookController {
 	}
 	
 	 //전체 리스트 출력
-	 @RequestMapping(value="/selectAllAccountList.do") public String selectAllAccountList (@RequestParam(defaultValue = "1") int cPage,
-		  @AuthenticationPrincipal Member member, Model model, HttpServletRequest request) {
-		 int limit = 4; 
-		 int offset = (cPage-1) * limit; 
+	 @RequestMapping(value="/selectAllAccountList.do") 
+	 public void selectAllAccountList (@AuthenticationPrincipal Member member, Model model, HttpServletRequest request) {
 		 String id = member.getId();
-		 
-		  Map<String, Object> param = new HashMap<>(); 
-		  param.put("offset", offset);
-		  param.put("limit", limit); 
-		  param.put("id", id); 
-		 
+		 Map<String, Object> param = new HashMap<>(); 
+		 param.put("id", id);
 		  //로그인한 아이디로 등록된 가계부 전체 목록
 		 List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
-		  
-		 //전체리스트 개수 
-		 int totalAccountList = accountBookService.countAccountList(param);
-		  
-		  String category = "all"; 
-		  String url = request.getRequestURI(); 
-		  String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
-		  
-		 model.addAttribute("pagebar", pagebar);
+
 		 model.addAttribute("accountList",accountList);
-		 
-		 return "redirect:/accountbook/accountbook.do"; }
+		}
 		 
 	
 	 // 가계부 추가
@@ -405,7 +390,11 @@ public class AccountBookController {
 				for(AccountBook accountbook : list) {
 					Row row = sheet.createRow(rowNo++);
 					row.createCell(0).setCellValue(format.format(accountbook.getRegDate()));
-					row.createCell(1).setCellValue(accountbook.getPayment().equals("card") ? "카드" : "현금");
+					if(accountbook.getPayment() == null) {
+						row.createCell(1).setCellValue("null");
+					} else {
+						row.createCell(1).setCellValue(accountbook.getPayment().equals("card") ? "카드" : "현금");						
+					}
 					row.createCell(2).setCellValue(accountbook.getIncomeExpense().equals("I") ? "수입" : "지출");
 					row.createCell(3).setCellValue(accountbook.getCategory());
 					row.createCell(4).setCellValue(accountbook.getDetail());

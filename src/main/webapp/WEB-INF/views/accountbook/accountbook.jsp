@@ -133,7 +133,7 @@
 		<!-- 필터링 -->
 		<div class="fillterSection">
 			<button id="AllListBtn" class="defaultBtn" onclick="location href='${pageContext.request.contextPath}/accountbook/selectAllAccountList.do';">전체보기</button>
-			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=">전체조회</a>
+			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=">전체보기</a>
 			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=I">수입</a>
 			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=E">지출</a>
 			<a href="${pageContext.request.contextPath}/accountbook/excel">엑셀 다운로드</a>
