@@ -36,7 +36,7 @@ public class MovieCommentController{
 	public ResponseEntity<?> insertCultureComment(@RequestParam Map<String,Object> map) {
 		log.debug("map = {}", map);
 		try {
-			int result = commentService.insertCultureComment(map);
+			int result = commentService.insertMovieComment(map);
 			
 			
 			
@@ -85,16 +85,23 @@ public class MovieCommentController{
 		
 	//수정
 	@PutMapping("/movieDetail.do/{apiCode}/{code}")
-	public ResponseEntity<?> updateMenu(@RequestParam Map<String,Object> map){
-		log.debug("map = {}", map);
+	public ResponseEntity<?> updateMenu(@PathVariable String code, @RequestParam Map<String,Object> map){
+		log.debug("updateComment map = {}", map);
 		try {
 			int result = commentService.updateCultureComment(map);
-			log.debug("result = {}", result);
+			log.debug("updateComment result = {}", result);
 			
-			Map<String, Object> resultMap = new HashMap<>();
-			resultMap.put("msg", "댓글 수정 성공!");
-			resultMap.put("result", result);
-			return ResponseEntity.ok(map);
+//			Map<String, Object> resultMap = new HashMap<>();
+			
+			map.put("msg", "댓글 수정 성공!");
+			map.put("result", result);
+			
+			if(result == 1) {
+                return ResponseEntity.ok(map);
+            } 
+            else {
+            	return ResponseEntity.status(404).build();
+            }
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return ResponseEntity.badRequest().build();

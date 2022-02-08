@@ -18,4 +18,8 @@ public interface CommentService {
 	//영화댓글
 	List<Comment> selectMovieCommentList(String apiCode);
 
+	int insertMovieComment(Map<String, Object> map);
+
+	int updateMovieComment(String code);
+
 }

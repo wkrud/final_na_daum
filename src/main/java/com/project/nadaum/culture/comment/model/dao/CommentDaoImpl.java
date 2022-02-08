@@ -44,5 +44,15 @@ public class CommentDaoImpl implements CommentDao {
 		return session.selectList("comment.selectMovieCommentList",apiCode);
 	}
 
+	@Override
+	public int insertMovieComment(Map<String, Object> map) {
+		return session.insert("comment.insertMovieComment",map);
+	}
+
+	@Override
+	public int updateMovieComment(String code) {
+		return session.update("comment.updateMovieComment", code);
+	}
+
 
 }

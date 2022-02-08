@@ -43,4 +43,14 @@ public class CommentServiceImpl implements CommentService {
 		return commentDao.selectMovieCommentList(apiCode);
 	}
 
+	@Override
+	public int insertMovieComment(Map<String, Object> map) {
+		return commentDao.insertMovieComment(map);
+	}
+
+	@Override
+	public int updateMovieComment(String code) {
+		return commentDao.updateMovieComment(code);
+	}
+
 }
