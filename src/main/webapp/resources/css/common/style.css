@@ -123,16 +123,18 @@
 
 .nadaum-nav ul li a .nav-icon, .contain-li .nav-icon {
   position : relative;
-  display : block;
   min-width : 60px;
   height : 60px;
   line-height: 70px;
-  text-align: center;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }
 
 .nadaum-nav ul li a .nav-icon i, .contain-li .nav-icon i {
   font-size : 1.75em;
 }
+
 
 .nadaum-nav ul li a .nav-title, .contain-li .nav-title {
   position : relative;
