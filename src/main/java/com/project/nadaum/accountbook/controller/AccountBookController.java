@@ -188,17 +188,32 @@ public class AccountBookController {
 	}
 	
 	// 수입, 지출별 정렬
-	 @PostMapping(value="/incomeExpenseFilter.do") 
-	 public String incomeExpenseFilter(@RequestBody Map<String, Object> param,  Model model) {
-		 Map<String, Object> map = new HashMap<>();
-		 map.put("id", param.get("id"));
-		 map.put("incomeExpense", param.get("incomeExpense"));
-		 log.debug("map= {}",map);
+	 @GetMapping(value="/incomeExpenseFilter.do") 
+	 public String incomeExpenseFilter(@RequestParam(defaultValue = "1") int cPage,@AuthenticationPrincipal Member member, String incomeExpense,  
+			 					Model model, HttpServletRequest request) {
+		 int limit = 4;
+		 int offset = (cPage-1) * limit;
 		 
+		 Map<String, Object> map = new HashMap<>();
+		 map.put("id", member.getId());
+		 map.put("incomeExpense", incomeExpense);
+		 map.put("offset", offset);
+		 map.put("limit", limit);
+		 //조회한 목록
 		 List<AccountBook> accountList = accountBookService.incomeExpenseFilter(map); 
+		 log.debug("incomeExpense={}", incomeExpense);
+		 //조회한 목록 전체 개수
+		 int totalAccountList = accountBookService.countAccountList(map);
+		 //페이지바
+		 String category = "incomeExpense"; 
+		 String url = request.getRequestURI(); 
+		 String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
+		 
+		 model.addAttribute("totalAccountList", totalAccountList);
+		 model.addAttribute("pagebar", pagebar);
 		 model.addAttribute("accountList", accountList);	  
 		 
-		 return "/accountbook/accountList";
+		return "/accountbook/accountbook";
 	  }
 	
 	 
