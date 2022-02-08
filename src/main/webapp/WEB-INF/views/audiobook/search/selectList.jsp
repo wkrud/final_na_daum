@@ -118,4 +118,4 @@ img{border:0px;}
 }); */
 </script>
 
-<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/audiobook/common/audioBookFooter.jsp"></jsp:include>

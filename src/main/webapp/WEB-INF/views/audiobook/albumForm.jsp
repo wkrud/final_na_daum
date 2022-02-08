@@ -36,7 +36,7 @@ $(document).ready(function() {
         
         //트랙이름
         /* <span class=\"input-group-text\">음원파일</span> */
-        var tName = $("<div class=\"input-group-prepend\" style=\"padding:0px;\"><input type=\"text\" name=class=\"form-control\" placeholder=\"트랙이름\"></div>");
+        //var tName = $("<div class=\"input-group-prepend\" style=\"padding:0px;\"><input type=\"text\" name=class=\"form-control\" placeholder=\"트랙이름\"></div>");
         
         // file
         var tFile = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\" name=\"trkFile\" id=\"trkFile"+intId+"\"><label for=\"trkFile"+intId+"\" class=\"custom-file-label\">파일을 선택하세요</label></div>");
@@ -50,7 +50,7 @@ $(document).ready(function() {
         });
         let lastLen=$(".trk-input").length;
         if(lastLen<11){
-        	fileWrapper.append(tName);
+        	//fileWrapper.append(tName);
         	fileWrapper.append(tFile);
         	fileWrapper.append(removeButton);
         	$(".trk-bg").append(fileWrapper);
@@ -104,7 +104,7 @@ $(document).ready(function() {
 			</div>
 			<div class="custom-file">
 				<input type="file" class="custom-file-input" name="imgFile"
-					id="imgFile"> <label class="custom-file-label"
+					id="imgFile" required> <label class="custom-file-label"
 					for="imgFile">파일을 선택하세요</label>
 			</div>
 		</div>
@@ -258,4 +258,4 @@ $(() => {
 /* ${_csrf.parameterName}=${_csrf.token} */
 </script>
 
-<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/audiobook/common/audioBookFooter.jsp"></jsp:include>

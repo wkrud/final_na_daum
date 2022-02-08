@@ -1,8 +1,18 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<%
+    Date now = new Date();
+    SimpleDateFormat date = new SimpleDateFormat("yyyy-MM");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -116,13 +126,14 @@ input[id="switch"] {
                    	data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                        <!-- 각자페이지 링크거시면 됩니다 -->
-                           <a class="dropdown-item" href="https://www.naver.com">메인</a> 
-                           <a class="dropdown-item" href="${pageContext.request.contextPath}/accountbook/accountbook.do">가계부</a> 
-                           <a class="dropdown-item" href="${pageContext.request.contextPath}/culture/cultureBoardList.do">문화생활</a>
-                           <a class="dropdown-item" href="${pageContext.request.contextPath}/movie/movieList.do">영화</a> 
-                           <a class="dropdown-item" href="${pageContext.request.contextPath}/audiobook/">오디오북</a> 
-                           <a class="dropdown-item" href="${pageContext.request.contextPath}/riot/riotheader.do">롤전적</a>
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/main/main.do">메인</a> 
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/diary/diaryMain.do?date=<%= date.format(now) %>-01">일기</a> 
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/accountbook/accountbook.do">가계부</a>
                            <a class="dropdown-item" href="${pageContext.request.contextPath}/calendar/calendarView.do">캘린더</a>
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/culture/board/1">전시정보</a> 
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/movie/movieList.do">영화</a> 
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/riot/riotheader.do">롤전적</a>
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/audiobook/">오디오북</a> 
                        </div></li>
                </ul>
 				<ul class="navbar-nav justify-content-end">

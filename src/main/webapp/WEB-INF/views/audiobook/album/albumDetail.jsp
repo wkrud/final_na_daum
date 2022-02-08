@@ -88,7 +88,16 @@
 					<td><a href="" style="text-decoration:none; color:black;">찜하기</a></td>
 				</tr>
 				<tr>
-					<td style="vertical-align: middle;">1분 미리듣기 &nbsp; &nbsp;
+					<td style="vertical-align: middle;">
+					<c:choose>
+						<c:when test="${empty loginMember.id}">
+							1분 미리듣기중입니다
+						</c:when>
+						<c:otherwise>
+							<a href="">미공개 뮤직비디오</a>
+						</c:otherwise>
+					</c:choose>
+					 &nbsp; &nbsp;
 						&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span
 						style="display: inline-block; text-align: right"><img
 							class="play-icon" style="width: 100px;"
@@ -110,7 +119,7 @@
 				<tr>
 					<th scope="col"></th>
 					<th scope="col">수록곡</th>
-					<th scope="col">리뷰</th>
+					<!-- <th scope="col">리뷰</th> -->
 					<th scope="col"></th>
 					<th scope="col"></th>
 				</tr>

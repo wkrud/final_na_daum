@@ -301,7 +301,7 @@
 		where
 			a.${searchType} like '%' || #{searchKeyword} || '%'
 		order by
-			reg_date desc
+			a.reg_date desc
 	</select>
 	
 	<!-- <select id="selectListAlbumInfoByWord" parameterType="map" resultType="albumInfo">
