@@ -241,10 +241,6 @@ public class CultureController {
 			
 			List<Map<String, Object>> perforList = null;
 			
-			if(searchArea != "") {
-				 
-			}
-			else {
 				perforList = (List<Map<String, Object>>) msgBody.get("perforList");
 				log.debug("perforList = {}", perforList);
 				
@@ -287,7 +283,7 @@ public class CultureController {
 				
 				model.addAttribute("searchlist", searchList);
 				System.out.println(searchList);
-			}
+			
 			
 
 			System.out.println("page number : "+page);

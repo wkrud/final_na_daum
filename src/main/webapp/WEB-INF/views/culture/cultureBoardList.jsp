@@ -150,16 +150,6 @@ padding-left: 20px;
  $(searchFrm).submit((e) => {
 	e.preventDefault();
 	
-	
-/* 	const startDate = $(e.target).find("[id=startDate]").val();
-	console.log(startDate); */
-	
-/* 	var area_opt = document.getElementById("search-area");
-	var area = area_opt.options[area_opt.selectedIndex].value;
-	
-	console.log(area); */
-
-	
 	const csrfHeader = "${_csrf.headerName}";
     const csrfToken = "${_csrf.token}";
     const headers = {};
