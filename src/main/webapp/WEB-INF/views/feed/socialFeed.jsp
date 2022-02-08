@@ -37,8 +37,8 @@
 					<div class="host-nickname"><span>${member.nickname}</span></div>
 				</div>
 				<div class="host-friends-area">
-					<div class="friends-count"><span>친구 : ${socialCount.FRIEND}</span></div>
-					<div class="following-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
+					<div class="friends-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
+					<div class="following-count"><span>팔로워 : ${socialCount.FOLLOWER}</span></div>
 				</div>				
 				<div class="host-introduce-area"></div>
 			</div>
