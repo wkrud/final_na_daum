@@ -43,22 +43,20 @@
 		)
 	</insert>
 	
-	<select id="selectOneAccount" resultType="riotFav">
-	select 
+	<select id="selectOneAccount" resultType="riotFavo">
+		select 
 			*
 		from
 			riot_myaccount
 		where
-			member_id = #{member_id}
+			member_id = #{member_Id} 
 	
 	</select>
 	
-	<resultMap type="map" id="riotFav">
-		<id column="no" property="no"/>
-		<result column="member_id" property="member_Id"/>
-		<result column="sm_id" property="sm_Id"/>
-		<result column="fav_accept" property="fav_accept"/>		
-	</resultMap>
+	<delete id="deleteFav">
+		delete from riot_myaccount where member_id = #{member_Id} 
+	</delete>
+	
 	
 	
 
