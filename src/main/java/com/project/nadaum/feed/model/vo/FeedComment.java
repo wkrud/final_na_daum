@@ -22,5 +22,8 @@ public class FeedComment implements Serializable {
 	private String commentWriter;
 	private String content;
 	private Date regDate;
+	private String nickname;
+	private String loginType;
+	private String profile;
 
 }
