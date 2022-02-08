@@ -66,8 +66,11 @@
 		<where>
 			id = #{id} and content like '%' || #{content} || '%' or title like '%' || #{content}||'%'
 		</where>
+		order by reg_date desc
 	</select>
-	
+	<select id="searchCount" resultType="_int">
+		select count(*) from(select * from diary where id = #{id} and content like '%' || #{content} || '%' or title like '%' || #{content}||'%')
+	</select>
 	<resultMap type="map" id="diaryMap">
 		<id column="code" property="code"/>
 		<result column="id" property="id"/>

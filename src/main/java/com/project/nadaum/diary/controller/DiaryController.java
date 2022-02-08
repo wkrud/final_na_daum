@@ -2,8 +2,6 @@ package com.project.nadaum.diary.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.JsonObject;
 import com.project.nadaum.common.NadaumUtils;
@@ -49,13 +46,14 @@ public class DiaryController {
 	public String diaryEnroll(@AuthenticationPrincipal Member member, @RequestParam Map<String, Object> map) {
 		String emotion = (String)map.get("emotion");
 		int emotionNo = diaryService.emotionNo(emotion);	
-		
 		map.put("emotionNo", emotionNo);
 		map.put("id", member.getId());
 		log.debug("map = {}", map);
 		
 		int result = diaryService.insertDiary(map);
-		return "redirect:/diary/diaryMain.do";
+		String date = (String) map.get("regDate");
+		System.out.println(date);
+		return "redirect:/diary/diaryMain.do?date=" + date;
 	}
 	
 	@RequestMapping(value="/uploadSummernoteImageFile.do", produces = "application/json; charset=utf8")
@@ -109,11 +107,11 @@ public class DiaryController {
 		String id = member.getId();	
 		map.put("date", date);
 		map.put("id", id);	
-		
+		log.debug("date = {}", date);
 		List<Diary> diaryList = diaryService.recentlyDiary(map);
-		log.debug("diaryList = {}", diaryList);
-		model.addAttribute("diaryList", diaryList);
 		
+		log.debug("diaryList = {}", diaryList);
+		model.addAttribute("diaryList", diaryList);				
 	}
 	
 	@GetMapping("/diaryDetail.do")
@@ -163,9 +161,12 @@ public class DiaryController {
 		String id = member.getId();	
 		map.put("content", content);
 		map.put("id", id);	
+		int searchCount = diaryService.searchCount(map);
 		
 		List<Diary> searchList = diaryService.diarySearch(map);
 		log.debug("searchList = {}", searchList);
+		log.debug("searchCount = {}", searchCount);
+		model.addAttribute("searchCount", searchCount);
 		model.addAttribute("searchList", searchList);
 	}
 	
