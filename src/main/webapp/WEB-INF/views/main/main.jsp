@@ -15,7 +15,7 @@
 <sec:authentication property="principal" var="loginMember"/>
 
 <article class="mainWrapper">
-	<section class="mainSection box" id="dragZone" droppable="true">
+	<section class="mainSection2 box" id="dragZone" droppable="true">
 	
 	</section>
 </article>
@@ -95,4 +95,11 @@ function dragEnd() {
 }
 	
 </script>
+
+
+
+
+
+
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
