@@ -33,7 +33,7 @@ public class FeedController {
 	@GetMapping("/socialFeed.do")
 	public void socialFeed(@RequestParam Map<String, Object> param, Model model) {
 		log.debug("id param = {}", param);
-		
+		param.put("id", "admin");
 		Member member = memberService.selectOneMember(param);
 		
 		// feed
@@ -44,6 +44,7 @@ public class FeedController {
 		// 친구, 팔로잉
 		Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
 		
+		model.addAttribute("member", member);
 		model.addAttribute("feed", feed);
 		model.addAttribute("socialCount", socialCount);
 	}
