@@ -34,8 +34,8 @@
 
 	<select id="selectAllHostSocialCount" resultType="map">
 		select a.*, b.* from
-		(select count(my_id) friend from friend where my_id = #{id})a,
-		(select count(follower_id) following from request_friend where is_friend = 'F' and follower_id = #{id})b
+		(select count(my_id) friend from following where my_id = #{id})a,
+		(select count(follower_id) follower from request_friend where is_friend = 'F' and my_id = #{id})b
 	</select>
 	
 	<select id="countOneFeedComment" resultType="int">
