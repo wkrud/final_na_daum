@@ -60,4 +60,9 @@ public class DiaryDaoImpl implements DiaryDao {
 		return session.selectList("diary.diarySearch", map);
 	}
 
+	@Override
+	public int searchCount(Map<String, Object> map) {
+		return session.selectOne("diary.searchCount", map);
+	}
+
 }
