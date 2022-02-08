@@ -1,0 +1,80 @@
+.one-person-feed-wrap{
+	display:flex;
+	flex-direction: column;
+	border: 1px solid black;
+}
+
+/* 상단 정보역역 */
+.one-person-profile-area{
+	border: 1px solid red;
+	height: 300px;
+	width: 100%;
+}
+
+.one-person-profile-area{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	border: 1px solid black;
+}
+.profile-img-area{
+	border: 1px solid red;
+}
+.profile-info-area{
+	width: 400px;
+	border: 1px solid green;
+}
+
+
+
+
+
+
+
+
+/* 하단 피드영역 */
+.one-person-feed-area{
+	border: 1px solid red;
+	width: 100%;
+	height: 500px;
+}
+.feed-limit-area{
+	display: flex;
+	justify-content: space-around;
+}
+.one-feed{
+	width: 300px;
+	height: 300px;
+	border: 1px solid black;
+}
+
+
+
+/* 피드 상세보기 모달 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.feed-textarea{
+	resize: none;
+}
+
+
+
+
+
+
+
+
+
