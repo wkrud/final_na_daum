@@ -22,6 +22,11 @@
   font-family: 'SUIT-Medium';
 }
 
+:root {
+	--navy : #0A1F33;
+	--yellow : #FFFBF5;
+}
+
 .body {
 	height : 100%;
 }
@@ -34,7 +39,7 @@
 .wrapper {
   width : 100%;
   height : 100vh;
-  background-color: #FFFBF5;
+  background-color: var(--yellow);
   position : relative;
 }
 
@@ -44,14 +49,16 @@
 }
 
 /* 사이드 nav */
-.nadaum_header{
+.nadaum_nav{
   width : 13%;
   height : 100vh;
-  background-color: #0A1F33; 
+  background-color: var(--navy); 
   overflow: auto;
   float : left;
   z-index : 50;
   letter-spacing : 2px;
+  border-left : 10px solid var(--navy);
+  transition : 0.5s;
 }
 
 /* 로고 */
@@ -65,17 +72,17 @@
   
 }
 
-.nadaum_header a, .nadaum_header li {
+.nadaum_nav a, .nadaum_nav li {
   color : rgb(228, 226, 226);
   text-decoration: none;
   padding : 5px;
 }
 
-.nadaum_header i {
+.nadaum_nav i {
 	padding-right : 5px;
 }
 
-.nadaum_header ul {
+.nadaum_nav ul {
   list-style-type: none;
   margin : 10px 0px;
 }

@@ -15,7 +15,7 @@
 <sec:authentication property="principal" var="loginMember"/>
 
 <article class="mainWrapper">
-	<section class="mainSection box" id="dragZone" droppable="true">
+	<section class="mainSection" id="dragZone" droppable="true">
 	
 	</section>
 </article>

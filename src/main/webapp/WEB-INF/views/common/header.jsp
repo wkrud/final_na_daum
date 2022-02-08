@@ -46,8 +46,6 @@
 
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 
-
-
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/style.css" /> 
 <!-- member -->
@@ -76,7 +74,7 @@
  <!-- 전체 영역 -->
   <div class="wrapper">
     <!-- 내비게이션 영역 -->
-      <nav class="nadaum_header">
+      <nav class="nadaum_nav">
         <a href="${pageContext.request.contextPath}/main/main.do" class="logo">나:다움</a>
         <!-- 메뉴 -->
           <!-- 개인 메뉴 -->
@@ -316,9 +314,20 @@
     	$(".culture-sub").slideToggle();
     });
     
-    
     /* iframe 드래그 */
     dragElement(document.getElementById("infowrap"));
+    
+    //선택한 메뉴에 hoverd 클래스 추가
+    let list = document.querySelectorAll('.nav-list');
+    function activeLink() {
+      list.forEach((item) => 
+        item.classList.remove('hovered'));
+        this.classList.add('hovered');
+      }
+
+    list.forEach((item) => {
+      item.addEventListener('mouseover', activeLink )
+    });
 </script>
 </sec:authorize>
 
