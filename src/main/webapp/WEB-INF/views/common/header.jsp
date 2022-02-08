@@ -151,7 +151,7 @@
               </a>
             </li>
             <li class="nav-list">
-              <a href="https://audioclip.naver.com">
+              <a href="${pageContext.request.contextPath}/audiobook/">
                 <i class="far fa-play-circle"></i>
                 <span>오디오북</span>
               </a>

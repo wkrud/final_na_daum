@@ -1,0 +1,83 @@
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="/WEB-INF/views/audiobook/common/audioBookHeader.jsp">
+	<jsp:param value="게시판" name="title" />
+</jsp:include>
+<style>
+/*글쓰기버튼*/
+input#btn-add {
+	float: right;
+	margin: 0 0 15px;
+}
+
+tr[data-no] {
+	cursor: pointer;
+}
+</style>
+<script>
+function goAlbumForm(){
+	location.href = "${pageContext.request.contextPath}/audiobook/albumForm";
+}
+
+$(() => {
+	$("tr[data-no]").click((e) => {
+		// console.log(e.target); // td
+		const $tr = $(e.target).parent();
+		const code = $tr.data("code");
+		location.href = `${pageContext.request.contextPath}/audiobook/albumDetail?code=\${code}`;
+	});
+});
+</script>
+<section id="board-container" class="container">
+	<input type="button" value="앨범등록하기" id="btn-add"
+		class="btn btn-outline-success" onclick="goAlbumForm();" />
+	<table id="tbl-board" class="table table-striped table-hover">
+		<tr>
+			<th>코드</th>
+			<th>제목</th>
+			<th>장르</th>
+			<th>창작자</th>
+			<th>플레이타임</th>
+			<th>제작사</th>
+			<th>작성일</th>
+			<th>상태</th>
+			<!-- 상태에 따라 /resources/images/ok.png 또는 bad.png 표시 width: 16px-->
+		</tr>
+		<c:forEach items="${list}" var="album" varStatus="status">
+			<tr data-no="${status.index}">
+				<td>${album.code}</td>
+				<td>${album.title}</td>
+				<td>${album.kind}</td>
+				<td>${album.creator}</td>
+				<td><fmt:formatDate value="${album.regDate}"
+						pattern="yy/MM/dd HH:mm" /></td>
+				<td>${album.playTime}</td>
+				<td>
+					<c:if test="${not empty album.provider}">
+						${album.provider}
+					</c:if>
+				</td>
+				<td>
+					<c:if test="${not empty album.provider}">
+						${album.provider}
+					</c:if>
+				</td>
+				<td><c:choose>
+					<c:when test="${'N'==album.status}">
+						R
+					</c:when>
+					<c:otherwise>
+						G
+					</c:otherwise>
+					</c:choose>
+				</td>
+			</tr>
+		</c:forEach>
+	</table>
+	${pagebar}
+</section>
+
+<jsp:include page="/WEB-INF/views/audiobook/common/audioBookFooter.jsp"></jsp:include>
