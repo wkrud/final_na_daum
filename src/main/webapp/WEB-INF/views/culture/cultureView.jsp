@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <sec:authentication property="principal" var="loginMember"/>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
@@ -182,8 +183,8 @@ $(() => {
 						<option value="4">4</option>
 						<option value="5">5</option>
 					</select>
-				<textarea name="content"class="form-control col-sm-6" rows="3" ></textarea>
-	            <button type="submit" class="btn btn-light">등록</button>
+				<textarea name="content"class="form-control col-sm-6" rows="3" id="comment-area"></textarea>
+	            <button type="submit" class="btn btn-light" id="comment-enroll-btn">등록</button>
 			</form>
 		</div>
 		<table id="comment-table">
@@ -209,7 +210,9 @@ $(() => {
 					<td id="comment-delete">
 						<form id="deleteCommentFrm">
 							<input type="hidden" name="code" value="${comment.code}"></input>
+							<c:if test="${comment.id eq loginMember.id}">
 							<button type="submit" class="btn btn-outline-danger" id="deleteComment-btn">삭제</button>
+				    		</c:if>
 				    	</form>
 					</td>
 				</tr>
@@ -217,11 +220,18 @@ $(() => {
 				</c:forEach>
 				</table>
 				</div>
-				</div>
 			</body>
 	<script>
+	$("#comment-enroll-btn").click((e) => {
+		if($("#comment-area").val() == ''){
+			alert('댓글을 작성해 주세요');
+			return false;
+		}
+		return true;
+	});
 			//댓글 등록
 			$(insertCommentFrm).submit((e) => {
+				
 				e.preventDefault();
 				
 				const csrfHeader = "${_csrf.headerName}";
@@ -322,6 +332,7 @@ $(() => {
 				});
 				
 			}); */
+			
 			</script>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=457ac91e7faa203823d1c0761486f8d7&libraries=services"></script>

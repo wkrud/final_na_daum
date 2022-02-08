@@ -42,7 +42,7 @@ padding-left: 20px;
 </style>
 <script>
 //cultureDetail
-/* $(() => {
+ $(() => {
 		
 		//날짜 넣기
 		 const value = new Date();
@@ -59,7 +59,7 @@ padding-left: 20px;
 		console.log(after_month);
 		end = document.getElementById("endDate");
 		end.value = after_month; 
-}); */
+}); 
 
 
 
@@ -72,6 +72,32 @@ padding-left: 20px;
 			<h1 class="title">Culture</h1>
 			<form class="form-inline" id="searchFrm">
 				 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
+				 
+				 	
+				  <div class="form-group" id="period">
+				    <label for="Date" class="control-label">기간</label>
+				    <input type="date" class="form-control" id="startDate" name="startDate">
+				    <input type="date" class="form-control" id="endDate" name="endDate">
+				  </div>
+				  <div class="form-group" id="area">
+				    <label for="area" class="control-label">지역</label>
+				      <select class="form-control" name="searchArea" id="searchArea">
+				        <option value="">모두</option>
+				        <option value="서울">서울</option>
+				        <option value="경기">경기</option>
+				      </select>
+				  </div>
+				  <div class="form-group" id="genre">
+				    <label for="genre" class="control-label">장르</label>
+				      <select class="form-control" name="searchGenre" id="searchGenre">
+				      	<option value="">모두</option>
+				        <option value="A000">연극</option><!-- A연극 -->
+				        <option value="B000">음악</option><!-- B 음악  -->
+				        <option value="C000">무용</option><!-- C 무용-->
+				        <option value="D000">미술</option><!-- D 미술  -->
+				        
+				      </select>
+				  </div>
 				  <button type="submit" class="btn orange btn-default">Search</button>
 					<button type="button" class="btn btn-dark">나다운 찜 목록</button>
 			</form>
@@ -142,7 +168,7 @@ padding-left: 20px;
     
 	$.ajax({
 		headers : headers, 
-		url: `${pageContext.request.contextPath}/culture/board/${page}`,
+		url: `${pageContext.request.contextPath}/culture/board/${page}/search`,
 		method: "POST",
 		data : $(searchFrm).serialize(),
 		success(resp){
