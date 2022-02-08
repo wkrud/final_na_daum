@@ -9,7 +9,7 @@
 
 body {
 	height : 100%;
-}
+} 
 
 /* 영역 확인용 박스 */
 .box {
@@ -17,7 +17,7 @@ body {
 }
 
 /* 메인 섹션 */
-.mainSection {
+.mainSection2 {
   width : 90%;
   height: 100%;
   display: block;

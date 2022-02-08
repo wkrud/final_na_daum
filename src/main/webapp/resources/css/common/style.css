@@ -1,12 +1,3 @@
-@charset "UTF-8";
-
-@font-face {
-  font-family: 'Pretendard-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-
 @font-face {
   font-family: 'SUIT-Medium';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Medium.woff2') format('woff2');
@@ -23,8 +14,10 @@
 }
 
 :root {
-	--navy : #0A1F33;
-	--yellow : #FFFBF5;
+  --navy : #0A1F33;
+  --yellow : #FFFBF5;
+  --lightgray : rgb(228, 226, 226);
+  --black : #222;
 }
 
 .body {
@@ -43,17 +36,33 @@
   position : relative;
 }
 
-/* 스크롤바 none */
+/* 스크롤바 */
 ::-webkit-scrollbar {
   display: none;
 }
+.mainSection::-webkit-scrollbar {
+  	width : 20px;
+  	display : block;
+}
 
-/* 사이드 nav */
-.nadaum_nav{
-  width : 13%;
+.mainSection::-webkit-scrollbar-thumb {
+  background-color: var(--navy); /*스크롤바의 색상*/
+    background-clip: padding-box;
+    border: 4px solid transparent;
+    border-top-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+ 
+.mainSection::-webkit-scrollbar-track {
+    background-color: var(--yellow); /*스크롤바 트랙 색상*/
+}
+
+.nadaum-nav {
+  width : 220px;
   height : 100vh;
   background-color: var(--navy); 
   overflow: auto;
+  overflow-x : hidden;
   float : left;
   z-index : 50;
   letter-spacing : 2px;
@@ -61,128 +70,176 @@
   transition : 0.5s;
 }
 
-/* 로고 */
-.logo {
-  font-size: 2rem;
-  display: inline-flex;
-  text-align: center;
-  margin : 25px;
-  margin-top: 50px;
-  letter-spacing: 5px;
-  
-}
-
-.nadaum_nav a, .nadaum_nav li {
-  color : rgb(228, 226, 226);
-  text-decoration: none;
-  padding : 5px;
-}
-
-.nadaum_nav i {
-	padding-right : 5px;
-}
-
-.nadaum_nav ul {
-  list-style-type: none;
-  margin : 10px 0px;
-}
-
-.main-nav li, .help-nav li, .menu-nav li{
-  padding : 12px;
-  font-size : 20px;
-}
-
-.personal-main:hover, .culture-main:hover {
-	cursor : pointer;
-}
-
-.personal-main i, .culture-main i {
-	padding : 5px;
-}
-
-.personal-sub, .culture-sub{
-	display : none;
-	font-size : 15px;
-}
-
-.personal-sub li, .culture-sub li {
-	font-size : 15px;
-	margin-left : 40px;
-}
-
-.help-nav li {
- 	float : right; 
-	padding : 3px;
-	list-style-type: none
+.nadaum-nav.activation {
+  width : 80px;
+  transition : 0.5s;
 } 
 
-.help-nav a {
-	font-size : 20px;
-	height: 35px;
+.nadaum-nav ul {
+  position: relative;
+  top : 0;
+  left : 0;
+  width : 100%;
 }
 
-.help-nav-wrap{
-	margin-top : 30px;
+.nadaum-nav
+{ 
+ padding-top : 100px;
 }
 
-.activeOn {
-/*   background-color: #f2f2e65e;
- */  background-color: white;
-  border-radius: 20px;
+.nadaum-nav ul li {
+  position: relative;
+  width : 100%;
+  list-style-type: none;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
 }
 
-.activeOn a {
-  /* color : rgb(248, 239, 160); */
-   color : #38383b; 
+
+.nadaum-nav ul li:hover,
+.nadaum-nav ul li.hovered {
+  background-color: var(--yellow);
+}
+
+.nadaum-logo {
+  margin-bottom : 40px;
+  pointer-events: none;
+  display : none;
+}
+
+.nadaum-nav ul li a, .contain-li {
+  position : relative;
+  display : block;
+  width : 100%;
+  display : flex;
+  text-decoration: none;
+  color : var(--yellow);
+}
+
+.nadaum-nav ul li:hover a, .contain-li:hover,
+.nadaum-nav ul li.hovered a, .contain-li.hovered {
+  color : var(--navy);
+}
+
+.nadaum-nav ul li a .nav-icon, .contain-li .nav-icon {
+  position : relative;
+  display : block;
+  min-width : 60px;
+  height : 60px;
+  line-height: 70px;
+  text-align: center;
+}
+
+.nadaum-nav ul li a .nav-icon i, .contain-li .nav-icon i {
+  font-size : 1.75em;
+}
+
+.nadaum-nav ul li a .nav-title, .contain-li .nav-title {
+  position : relative;
+  display: block;
+  padding : 0 10px;
+  height : 60px;
+  line-height: 60px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.nadaum-nav ul li:hover a::before, .contain-li:hover::before,
+.nadaum-nav ul li.hovered a::before, .contain-li.hovered::before{
+  content : '';
+  position : absolute;
+  right: 0;
+  top : -50px;
+  width: 50px;
+  height : 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px 35px 0 10px var(--yellow);
+}
+
+.nadaum-nav ul li:hover a::after, .contain-li:hover::after,
+.nadaum-nav ul li.hovered a::after, .contain-li.hovered::after {
+  content : '';
+  position : absolute;
+  right: 0;
+  bottom : -50px;
+  width: 50px;
+  height : 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px -35px 0 10px var(--yellow);
+}
+
+.personal-sub, .culture-sub {
+  display: none;
+}
+
+.factors, .factors a {
+  color : var(--yellow);
+}
+
+.factors {
+	display : flex;
+	margin : 30px 20px;
+}
+
+#sign-out{
+	color : var(--yellow);
+	background-color : var(--navy);
+	border : none;
 }
 
 
 /* 상단 헤더 - 프로필부분 */
+.mainSection {
+  position : absolute;
+  width : calc(100% - 220px);
+  left : 220px;
+  min-height: 100vh;
+  background-color: var(--yellow);
+  transition: 0.5s;
+}
+
+.mainSection.activation {
+  width : calc(100% - 80px);
+  left : 80px;
+}
+
 .nadaum-header {
-	width : 87%;
-	height : 80px;
-	display : inline-block;
-	clear : both;
-	text-align : right;
-	padding : 20px;
- 	position : sticky; 
- 	top : 0;
- 	z-index:10;
+  width : 100%;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
 }
 
-.nadaum-header i{
-	cursor: pointer;
-}
-
-.user-factors {
-	display : inline-flex;
- 	margin : 0px 10px; 
- 	position : relative;
-}
-
-#sign-out {
-	font-size : 30px;
-	background-color: #FFFBF5;
-	border : none;
-	top : -10px;
-	color : #0A1F33;
+.nav-toggle {
+  position: relative;
+  width : 60px;
+  height : 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  cursor : pointer;
 }
 
 .head-nickname-span a {
-	color : #0A1F33;
-	font-size : 20px;
-	text-decoration : none;
+  font-size : 1.5em;
+  text-decoration: none;
+  color : var(--navy);
 }
 
 .profile-wrap {
-	top : -15px;
+	margin-top : 30px;
 }
 
 /* 사이드바, 헤더 제외한 본문 영역 */
 .contentWrapper {
-	width : 87%;
+	width : 100%;
 	height : 89vh;
-    overflow : auto;
+  overflow : auto;
 }
 
 .contentWrapper::-webkit-scrollbar {
@@ -191,7 +248,7 @@
 }
 
 .contentWrapper::-webkit-scrollbar-thumb {
-  background-color: #0A1F33; /*스크롤바의 색상*/
+  background-color: var(--navy); /*스크롤바의 색상*/
     background-clip: padding-box;
     border: 4px solid transparent;
     border-top-left-radius: 50px;
@@ -199,16 +256,15 @@
 }
  
 .contentWrapper::-webkit-scrollbar-track {
-    background-color: #FFFBF5; /*스크롤바 트랙 색상*/
+    background-color: var(--yellow); /*스크롤바 트랙 색상*/
 }
-
 
 /* footer */
 
 .footer {
 	clear : both;
 	width : 100%;
-	background-color: #FFFBF5;
+	background-color: var(--yellow);
 	position : relative;
 	bottom : 0;
 	padding : 50px;
@@ -228,5 +284,5 @@
 
 .footer span {
 	font-size : 17px;
-	color : #0A1F33;
+	color : --var(navy);
 }

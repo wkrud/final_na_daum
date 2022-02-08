@@ -74,154 +74,150 @@
  <!-- 전체 영역 -->
   <div class="wrapper">
     <!-- 내비게이션 영역 -->
-      <nav class="nadaum_nav">
-        <a href="${pageContext.request.contextPath}/main/main.do" class="logo">나:다움</a>
-        <!-- 메뉴 -->
-          <!-- 개인 메뉴 -->
-        <div>
-          <ul class="main-nav">
-            <li class="nav-list activeOn">
-              <a href="${pageContext.request.contextPath}/main/main.do">
-                <i class="fas fa-home"></i>
-                <span>홈</span>
-              </a>
-            </li>
-            <li class="nav-list accept-drag">
-              <a href="">
-                <i class="fas fa-comment-dots"></i>
-                <span>피드</span>
-              </a>
-            </li>
-            <li class="nav-list accept-drag">
-              <a href="${pageContext.request.contextPath}/calendar/calendarView.do">
-                <i class="far fa-calendar-alt"></i>
-                <span>캘린더</span>
+      <nav class="nadaum-nav">
+    <ul>
+      <li class="nadaum-logo">
+        <a href="${pageContext.request.contextPath}">
+          <span class="nav-icon"></span>
+          <span class="nav-title">나:다움</span>
+        </a>
+      </li>
+      <li class="nav-list">
+        <a href="${pageContext.request.contextPath}/main/main.do">
+          <span class="nav-icon"><i class="fas fa-home header-icon"></i></span>
+          <span class="nav-title">홈</span>
+        </a>
+      </li>
+      <li class="nav-list">
+        <a href="#">
+          <span class="nav-icon"><i class="fas fa-comment-dots header-icon"></i></span>
+          <span class="nav-title">피드</span>
+        </a>
+      </li>
+      <li class="nav-list">
+        <a href="${pageContext.request.contextPath}/calendar/calendarView.do">
+          <span class="nav-icon"><i class="far fa-calendar-alt header-icon"></i></span>
+          <span class="nav-title">캘린더</span>
+        </a>
+      </li>
+      <li class="nav-list">
+        <a href="${pageContext.request.contextPath}/board/boardList.do">
+          <span class="nav-icon"><i class="fas fa-book-open header-icon"></i></span>
+          <span class="nav-title">게시판</span>
+        </a>
+      </li>
+      <li class="nav-list personal-main contain-li">
+          <span class="nav-icon"><i class="far fa-address-book header-icon"></i></span>
+          <span class="nav-title">퍼스널</span>
+      </li>
+        <div class="personal-sub">
+          <ul>
+            <li class="nav-list">
+              <a href="${pageContext.request.contextPath}/diary/diaryMain.do?date=<%= date.format(now) %>-01">      
+                <span class="nav-icon"></span>
+                <span class="nav-title">다이어리</span>
               </a>
             </li>
             <li class="nav-list">
-              <a href="${pageContext.request.contextPath}/board/boardList.do">
-                <i class="fas fa-book-open"></i>
-                <span>게시판</span>
+              <a href="${pageContext.request.contextPath}/accountbook/accountbook.do">      
+                <span class="nav-icon"></span>
+                <span class="nav-title">가계부</span>
               </a>
             </li>
           </ul>
           </div>
-          <hr style="width: 100%; border-top: 1px solid #4b4b4b;" />
-          <!-- 메뉴 -->
-          <div>
-          <ul class="menu-nav">
-            <li class="nav-list personal-main">
-                <i class="far fa-address-book"></i>
-                <span>퍼스널</span>
-            </li>
-              <div class="personal-sub">
-                <ul>
-                  <li class="nav-list" id="diary">
-                  	<a href="${pageContext.request.contextPath}/diary/diaryMain.do?date=<%= date.format(now) %>-01" class="accept-drag"><span>일기</span></a>
-                  </li>
-                  <li class="nav-list" id="accountBook">
-                  	<a href="${pageContext.request.contextPath}/accountbook/accountbook.do" class="accept-drag"><span>가계부</span></a>
-                  </li>
-                  <li class="nav-list" id="memo">
-                  	<a href="${pageContext.request.contextPath}/accountbook/accountbook.do" class="accept-drag"><span>메모</span></a>
-                  </li>
-                  <li class="nav-list" id="todoList">
-                  	<a href="${pageContext.request.contextPath}/accountbook/accountbook.do" class="accept-drag"><span>투두리스트</span></a>
-                  </li>
-                </ul>
-              </div>
-            <li class="nav-list culture-main">
-                <i class="fas fa-user-friends"></i>
-                <span>문화</span>
-            </li>
-            <div class="culture-sub">
-              <ul>
-                <li class="nav-list">
-                	<a href="${pageContext.request.contextPath}/culture/board/1"><span>전시</span></a>
-                </li>
-                <li class="nav-list">
-                	<a href="${pageContext.request.contextPath}/movie/movieList.do"><span>영화</span></a>
-                </li>
-              </ul>
-            </div>
-            <li class="nav-list accept-drag" id="game">
-              <a href="${pageContext.request.contextPath}/riot/riotheader.do">
-                <i class="fas fa-gamepad"></i>
-                <span>게임</span>
+      <li class="nav-list culture-main contain-li">
+          <span class="nav-icon"><i class="fas fa-user-friends header-icon"></i></span>
+          <span class="nav-title">문화</span>
+      </li>
+        <div class="culture-sub">
+          <ul>
+            <li class="nav-list">
+              <a href="${pageContext.request.contextPath}/culture/board/1">      
+                <span class="nav-icon"></span>
+                <span class="nav-title">전시</span>
               </a>
             </li>
             <li class="nav-list">
-              <a href="${pageContext.request.contextPath}/audiobook/">
-                <i class="far fa-play-circle"></i>
-                <span>오디오북</span>
+              <a href="${pageContext.request.contextPath}/movie/movieList.do">      
+                <span class="nav-icon"></span>
+                <span class="nav-title">영화</span>
               </a>
             </li>
           </ul>
         </div>
-        <!-- 도움말 -->
-        <div class="help-nav-wrap">
-        <ul class="help-nav">
-         <li class="nav-list">
-          <a class="nav-link" href="${pageContext.request.contextPath}/member/mypage/memberDetail.do?tPage=myPage">
-         	<i class="fas fa-cog"></i>
+      <li class="nav-list">
+        <a href="${pageContext.request.contextPath}/riot/riotheader.do">
+          <span class="nav-icon"><i class="fas fa-gamepad header-icon"></i></span>
+          <span class="nav-title">게임</span>
+        </a>
+      </li>
+      <li class="nav-list">
+        <a href="${pageContext.request.contextPath}/audiobook/">
+          <span class="nav-icon"><i class="far fa-play-circle header-icon"></i></span>
+          <span class="nav-title">오디오북</span>
+        </a>
+      </li>
+    </ul>
+    <div class="factors">
+      <div>
+        <a class="nav-link" href="${pageContext.request.contextPath}/member/mypage/memberDetail.do?tPage=myPage">
+          <i class="fas fa-cog"></i>
+        </a>
+      </div>
+      <div>
+        <a id="help" class="nav-link">
+          <i class="far fa-question-circle"></i>
+        </a>
+      </div>
+      <div>
+          <form
+            name="logoutFrm"
+            method="POST"
+            action="${pageContext.request.contextPath}/member/memberLogout.do">
+            <button id="sign-out" class="nav-link" type="submit">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+          </form>	
+      </div>
+    </div>
+  </nav>
+  <!-- 헤더 -->
+  <section class="mainSection">
+    <div class="nadaum-header">
+      <div class="nav-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="user-factors">
+        <span class="head-nickname-span">
+          <a href="${pageContext.request.contextPath}/member/mypage/memberDetail.do?tPage=myPage">
+            <sec:authentication property="principal.nickname"/>님의 나:다움
           </a>
-         </li>
-          <li class="nav-list">
-            <a id="help" class="nav-link">
-              <i class="far fa-question-circle"></i>
-              <!-- <span>도움말</span> -->
-             </a>
-          </li>
-        </ul>
-        </div>
-      </nav>
-        <!-- 헤더 -->
-      <header class="nadaum-header">
-        <!-- 뱃지생성완료, 클릭시 알람 영역 숨기기 완료 비동기 통신후 알람이 있을경우 다시 표기.-->
-		<!-- 프로필 사진으로 보일시 크기에 맞게 이미지를 넣어야됨, 썸네일용 이미지 따로 저장하는 방법도 좋으나 일이 많아짐.-->
-		<!-- 아래 span에서 동적으로 메시지 갯수다르게 처리하기 필요 -->
-		<!-- 클릭하면 알림창이 나오게 하는 ui는 답이없음. -->
-		<div class="user-factors">
-			<span class="head-nickname-span">
-				<a href="${pageContext.request.contextPath}/member/mypage/memberDetail.do?tPage=myPage">
-					<sec:authentication property="principal.nickname"/>님의 나:다움
-				</a>
-			</span>
-		</div>
-		<div class="profile-wrap user-factors">
-			<button id="profile" type="button"
-				data-toggle="collapse" data-target="#alarmList" aria-expanded="false" aria-controls="alarmList">
-				<div class="bedge-wrap"></div>
-				<div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
-					<c:if test="${loginMember.loginType eq 'K'}">
-						<img src="${loginMember.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />
-					</c:if>	
-					<c:if test="${loginMember.loginType eq 'D'}">
-						<c:if test="${loginMember.profileStatus eq 'N'}">							 		
-							<img src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" style="width:45px; height:45px; object-fit:cover;" />
-						</c:if>						
-						<c:if test="${loginMember.profileStatus eq 'Y'}">		
-							<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
-						</c:if>								
-					</c:if>								
-				</div>						    
-			</button>
-			<div class="collapse" id="alarmList"></div>
-		</div>
-		<!--로그아웃  -->
-		<div class="user-factors">
-			<form
-	    		name="logoutFrm"
-	    		method="POST"
-	    		action="${pageContext.request.contextPath}/member/memberLogout.do">
-		    	<button id="sign-out" class="nav-link" type="submit">
-					<i class="fas fa-sign-out-alt"></i>
-				</button>
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	    	</form>						
-		</div>
-      </header>
-      <!-- 도움말 창 -->
+        </span>
+      </div>
+      <div class="profile-wrap user-factors">
+        <button id="profile" type="button"
+          data-toggle="collapse" data-target="#alarmList" aria-expanded="false" aria-controls="alarmList">
+          <div class="bedge-wrap"></div>
+          <div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+            <c:if test="${loginMember.loginType eq 'K'}">
+              <img src="${loginMember.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />
+            </c:if>	
+            <c:if test="${loginMember.loginType eq 'D'}">
+              <c:if test="${loginMember.profileStatus eq 'N'}">							 		
+                <img src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" style="width:45px; height:45px; object-fit:cover;" />
+              </c:if>						
+              <c:if test="${loginMember.profileStatus eq 'Y'}">		
+                <img src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
+              </c:if>								
+            </c:if>								
+          </div>						    
+        </button>
+        <div class="collapse" id="alarmList"></div>
+      </div>
+    </div>
+    <!-- 도움말 창 -->
       <div id="infowrap" style="display:none;">
 		<div id="infowrapheader">
 			<div class="info-title">			
@@ -234,9 +230,39 @@
 			</iframe>
 		</div>
 	</div>
-	
-<script>			
-	$(() => {	
+  <script>
+    //메뉴 토글
+    let toggle = document.querySelector('.nav-toggle');
+    let nav = document.querySelector('.nadaum-nav');
+    let main = document.querySelector('.mainSection');
+
+    toggle.onclick = function() {
+      nav.classList.toggle('activation');
+      main.classList.toggle('activation');
+    }
+
+    //선택한 메뉴에 hoverd 클래스 추가
+    let list = document.querySelectorAll('.nav-list');
+    function activeLink() {
+      list.forEach((item) => 
+        item.classList.remove('hovered'));
+        this.classList.add('hovered');
+      }
+
+    list.forEach((item) => {
+      item.addEventListener('mouseover', activeLink )
+    });
+
+    $(".personal-main").click((e) => {
+    	$(".personal-sub").slideToggle();
+    });
+    
+    $(".culture-main").click((e) => {
+    	$(".culture-sub").slideToggle();
+    });
+    
+    //알림
+    $(() => {	
 		connect();
 		countBedge();
 	});
@@ -305,31 +331,10 @@
     $("#closeInfo").click((e) => {
     	$("#infowrap").css("display","none");
 	});
-    
-    $(".personal-main").click((e) => {
-    	$(".personal-sub").slideToggle();
-    });
-    
-    $(".culture-main").click((e) => {
-    	$(".culture-sub").slideToggle();
-    });
-    
     /* iframe 드래그 */
     dragElement(document.getElementById("infowrap"));
-    
-    //선택한 메뉴에 hoverd 클래스 추가
-    let list = document.querySelectorAll('.nav-list');
-    function activeLink() {
-      list.forEach((item) => 
-        item.classList.remove('hovered'));
-        this.classList.add('hovered');
-      }
-
-    list.forEach((item) => {
-      item.addEventListener('mouseover', activeLink )
-    });
-</script>
-</sec:authorize>
+  </script>
+  </sec:authorize>
 
 <!-- 각자 페이지 영역 -->
 <section class="contentWrapper">
