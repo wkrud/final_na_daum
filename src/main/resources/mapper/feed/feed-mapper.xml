@@ -9,7 +9,11 @@
 	</select>
 	
 	<select id="selectOnePersonFeed" resultType="feed">
-		select * from feed where writer = #{id}
+		select * from feed where writer = #{id} and code = #{code}
+	</select>
+	
+	<select id="selectOnePersonFeedOnebyOne" resultType="feed">
+		select d.* from (select rownum as roww, f.* from feed f order by f.reg_date desc)d where d.roww = #{rownum}
 	</select>
 	
 	<select id="selectAllOneFeedAttachments" resultType="attachment">
@@ -18,6 +22,10 @@
 	
 	<select id="selectAllOneFeedComments" resultType="feedComment">
 		select * from feed_comment f join member m on f.comment_writer = m.id where f_code = #{code}
+	</select>
+	
+	<select id="selectOneFeedComment" resultType="feedComment">
+		select * from feed_comment f join member m on f.comment_writer = m.id where no = #{no} and f_code = #{code} and comment_writer = #{id}
 	</select>
 	
 	<select id="countAllHostFeedLikes" resultType="int">
@@ -33,6 +41,23 @@
 	<select id="countOneFeedComment" resultType="int">
 		select count(*) from feed_comment where f_code = #{code}
 	</select>
+	
+	<select id="selectFeedLikesCheck" resultType="int">
+		select count(*) from likes where code = #{code} and id = #{id}
+	</select>
+	
+	<insert id="insertFeedComment">
+		insert into feed_comment values(seq_feed_comment_no.nextval, #{code}, #{id}, #{content}, default)
+	</insert>
+	
+	<select id="selectCommentNo" resultType="int">
+		select seq_feed_comment_no.currval from dual
+	</select>
+	
+	<delete id="deleteComment">
+		delete from feed_comment where no = #{no} and comment_writer = #{id} and f_code = #{code}
+	</delete>
+	
 
 </mapper>
 

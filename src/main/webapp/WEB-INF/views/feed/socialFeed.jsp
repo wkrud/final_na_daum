@@ -9,9 +9,10 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 내 피드" name="title"/>
 </jsp:include>
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <sec:authentication property="principal" var="loginMember"/>
 <script src="${pageContext.request.contextPath}/resources/js/feed/socialFeed.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeed.css" />
 <div class="feed-section-wrap">
 	<div class="one-person-feed-wrap">
@@ -28,7 +29,7 @@
 						<c:if test="${member.profileStatus eq 'Y'}">
 							<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/${member.profile}" alt="" />
 						</c:if>
-					</c:if>
+					</c:if>					
 				</div>
 			</div>
 			<div class="profile-info-area">
@@ -38,7 +39,7 @@
 				<div class="host-friends-area">
 					<div class="friends-count"><span>친구 : ${socialCount.FRIEND}</span></div>
 					<div class="following-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
-				</div>
+				</div>				
 				<div class="host-introduce-area"></div>
 			</div>
 		</div>
@@ -49,12 +50,13 @@
 					<c:if test="${not empty f.attachments}">
 						<div class="one-feed">
 							<div class="hidden-likes-comment">
+								<input type="hidden" class="code" value="${f.code}"/>
 								<div class="likes-count">
-									<i class="bi bi-suit-heart-fill"></i>
+									<i class="fas fa-heart"></i>
 									${f.likes}
 								</div>
 								<div class="comments-count">
-									<i class="bi bi-chat"></i>
+									<i class="far fa-comment"></i>
 									${f.commentCount}
 								</div>
 							</div>
@@ -67,12 +69,13 @@
 					<c:if test="${empty f.attachments}">
 						<div class="one-feed">
 							<div class="hidden-likes-comment">
+								<input type="hidden" class="code" value="${f.code}"/>
 								<div class="likes-count">
-									<i class="bi bi-suit-heart-fill"></i>
+									<i class="fas fa-heart"></i>
 									${f.likes}
 								</div>
 								<div class="comments-count">
-									<i class="bi bi-chat"></i>
+									<i class="far fa-comment"></i>
 									${f.commentCount}
 								</div>
 							</div>
@@ -101,9 +104,10 @@
 <script>
 const $detailBody = $(".feed-detail-modal-body");
 $(".one-feed").click((e) => {
-	selectedFeed($(e.target).text());	
+	let code = $(".one-feed").find("input.code").val();
+	console.log(code);
+	console.log('${member.id}' + " " + code);
+	selectedFeed('${member.id}',code);
 });
-
-$(".one-feed")
 </script>	
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

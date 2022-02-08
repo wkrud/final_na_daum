@@ -95,7 +95,7 @@
 	top: 15%;
 }
 .feed-section-wrap .modal-content{
-	width: 750px;
+	width: 720px;
 	height: 600px;
 }
 
@@ -159,6 +159,7 @@ article.one-feed-detail-area{
 
 article.one-feed-comment-area-wrap{
 	height: 568px;
+	width: 260px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -169,6 +170,7 @@ article.one-feed-comment-area-wrap{
 .feed-comment-area{
 	border: 1px solid black;
 	height: 400px;
+	overflow: scroll;
 }
 .feed-comment-write-area{
 	display: flex;
@@ -181,7 +183,7 @@ article.one-feed-comment-area-wrap{
 	
 }
 .like-btn-area input{
-	
+	display: none;
 }
 .feed-comment-write-area .input-group{
 	
@@ -197,7 +199,11 @@ article.one-feed-comment-area-wrap{
 
 /* 상세보기 댓글 영역 */
 .commenter-area-wrap{
-	
+	margin: 5px 0;
+}
+.commenter-profile-area-wrap{
+	display: flex;
+	justify-content: space-between;
 }
 .commenter-profile-area{
 	display: flex;
@@ -215,6 +221,16 @@ article.one-feed-comment-area-wrap{
 }
 .commenter-nickname-area span{
 	
+}
+.comment-setting-btn-wrap{
+	margin-right: 10px;
+}
+.comment-setting-btn{
+	cursor:pointer;
+}
+.delete-btn-wrap{
+	position: absolute;
+	right: -200px;
 }
 
 .commenter-comment-area{

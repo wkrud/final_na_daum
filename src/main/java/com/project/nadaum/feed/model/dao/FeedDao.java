@@ -23,4 +23,16 @@ public interface FeedDao {
 
 	int countOneFeedComment(Feed feed);
 
+	int selectFeedLikesCheck(Map<String, Object> guestInfo);
+
+	FeedComment selectOneFeedComment(Map<String, Object> map);
+
+	int insertFeedComment(Map<String, Object> map);
+
+	int selectCommentNo(Map<String, Object> map);
+
+	int deleteComment(Map<String, Object> map);
+
+	Feed selectOnePersonFeedOnebyOne(Map<String, Object> param);
+
 }

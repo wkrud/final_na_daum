@@ -95,6 +95,19 @@
 		delete from likes where id = #{id} and code = #{code}
 	</delete>
 	
+	<select id="selectLikesCheck" resultMap="likesMap">
+		select 
+			* 
+		from 
+			likes 
+		<where>
+			id = #{id}
+			and
+			code = #{code}
+			<if test="aCode != null">or code = #{aCode}</if>
+		</where>
+	</select>
+	
 	<!-- 좋아요 끝 -->
 	
 	<!-- 회원정보 찾기 시작 -->
@@ -250,20 +263,7 @@
 	<select id="countHelpOneCategoryCount" resultType="int">
 		select count(*) from help where category = #{category}
 	</select>
-	
-	<select id="selectLikesCheck" resultMap="likesMap">
-		select 
-			* 
-		from 
-			likes 
-		<where>
-			id = #{id}
-			and
-			code = #{code}
-			<if test="aCode != null">or code = #{aCode}</if>
-		</where>
-	</select>
-	
+		
 	<update id="updateHelpReadCount">
 		update help set read_count = read_count + 1 where code = #{code}
 	</update>
