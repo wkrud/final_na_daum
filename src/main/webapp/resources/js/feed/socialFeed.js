@@ -1,5 +1,9 @@
+const csrfToken = $("meta[name='_csrf']").attr("content");
+const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+const headers = {};
+headers[csrfHeader] = csrfToken;
 
-
+const f = n => n < 10 ? "0" + n : n;
 
 const selectedFeed = (id) => {
 	$.ajax({
@@ -12,8 +16,8 @@ const selectedFeed = (id) => {
 			var commentDiv = '';
 			let commenterProfileImg = '';
 			let commentDate = '';
-			let likes = '';
-			const f = n => n < 10 ? "0" + n : n;
+			let likes = '';		
+			
 			
 			if(resp.likeCheck > 0){
 				likes = `
@@ -27,40 +31,6 @@ const selectedFeed = (id) => {
 				`;				
 			}
 			
-			$(resp.feed.comments).each((i, v) => {
-				console.log(i, v);
-				
-				let rd = new Date(v.regDate);
-				commentDate = `${rd.getFullYear()}.${f(rd.getMonth() + 1)}.${f(rd.getDate())}`;
-				
-				if(v.profile != '' && v.loginType == 'D'){
-					commenterProfileImg = '/nadaum/resources/upload/member/profile/default_profile_cat.png';
-				}else if(v.profile == '' && v.loginType == 'D'){
-					commenterProfileImg = `/nadaum/resources/upload/member/profile/${v.profile}`;
-				}else if(v.loginType == 'K'){
-					commenterProfileImg = v.profile;							
-				}
-				
-				
-				commentDiv = `
-				<div class="commenter-area-wrap">
-					<div class="commenter-profile-area">
-						<div class="commenter-profile-img">
-							<img src="${commenterProfileImg}" alt="" />
-						</div>
-						<div class="commenter-nickname-area">
-							<span>${v.nickname}</span>
-						</div>
-					</div>
-					<div class="commenter-comment-area">
-						<span>${v.content}</span>
-					</div>
-					<div class="comment-date-area">
-						<span>${commentDate}</span>
-					</div>
-				</div>
-				`;
-			});
 			
 			if(resp.member.profile != '' && resp.member.loginType == 'D'){
 				hostProfile = '/nadaum/resources/upload/member/profile/default_profile_cat.png';
@@ -105,7 +75,7 @@ const selectedFeed = (id) => {
 							<div class="input-group mb-3" style="margin-bottom: 0!important;">
 								<textarea class="form-control feed-textarea" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
 								<div class="input-group-append">
-									<button class="btn btn-outline-secondary" type="button">Button</button>
+									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">Button</button>
 								</div>
 							</div>
 						</div>
@@ -148,7 +118,7 @@ const selectedFeed = (id) => {
 							<div class="input-group mb-3" style="margin-bottom: 0!important;">
 								<textarea class="form-control feed-textarea" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
 								<div class="input-group-append">
-									<button class="btn btn-outline-secondary" type="button">Button</button>
+									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">Button</button>
 								</div>
 							</div>
 						</div>
@@ -158,7 +128,44 @@ const selectedFeed = (id) => {
 			}
 						
 			$detailBody.append(feedDiv);
-										
+			
+			let $commetArea = $(".feed-comment-area");		
+			console.log($commetArea.html());
+			
+			$(resp.feed.comments).each((i, v) => {
+				
+				let rd = new Date(v.regDate);
+				commentDate = `${rd.getFullYear()}.${f(rd.getMonth() + 1)}.${f(rd.getDate())}`;
+				
+				if(v.profile != '' && v.loginType == 'D'){
+					commenterProfileImg = '/nadaum/resources/upload/member/profile/default_profile_cat.png';
+				}else if(v.profile == '' && v.loginType == 'D'){
+					commenterProfileImg = `/nadaum/resources/upload/member/profile/${v.profile}`;
+				}else if(v.loginType == 'K'){
+					commenterProfileImg = v.profile;							
+				}
+				
+				commentDiv = `
+				<div class="commenter-area-wrap">
+					<div class="commenter-profile-area">
+						<div class="commenter-profile-img">
+							<img src="${commenterProfileImg}" alt="" />
+						</div>
+						<div class="commenter-nickname-area">
+							<span>${v.nickname}</span>
+						</div>
+					</div>
+					<div class="commenter-comment-area">
+						<span>${v.content}</span>
+					</div>
+					<div class="comment-date-area">
+						<span>${commentDate}</span>
+					</div>
+				</div>
+				`;
+				$commetArea.append(commentDiv);
+			});
+							
 			$(feedViewModal)
 				.modal()
 				.on("hide.bs.modal", (e) => {
@@ -166,11 +173,72 @@ const selectedFeed = (id) => {
 			});
 			
 			likeHtml(resp.feed.code);
-											
+			
+			
+			$("#write-comment-btn").on('click',function(){	
+				let $content = $(".feed-textarea");
+				if($content.val() == ''){
+					alert('내용을 입력하세요');
+				}else{
+					writeComment($content.val(), resp.feed.code);
+					$content.val('');										
+				}
+			});				
+					
 		},
 		error: console.log
 	});
 };
+
+const writeComment = (content, code) => {
+	console.log(content);
+	
+	$.ajax({
+		url: '/nadaum/feed/writeComment.do',
+		data: {content, code},
+		type: "POST",
+		headers: headers,
+		success(resp){
+			console.log(resp);
+			
+			let rd = new Date(resp.regDate);
+			let newCommentDate = `${rd.getFullYear()}.${f(rd.getMonth() + 1)}.${f(rd.getDate())}`;
+			let newcommenterProfileImg = '';
+			
+			if(resp.profile != '' && resp.loginType == 'D'){
+				newcommenterProfileImg = '/nadaum/resources/upload/member/profile/default_profile_cat.png';
+			}else if(resp.profile == '' && resp.loginType == 'D'){
+				newcommenterProfileImg = `/nadaum/resources/upload/member/profile/${resp.profile}`;
+			}else if(resp.loginType == 'K'){
+				newcommenterProfileImg = resp.profile;							
+			}
+			
+			let newComment = `
+			<div class="commenter-area-wrap">
+				<div class="commenter-profile-area">
+					<div class="commenter-profile-img">
+						<img src="${newcommenterProfileImg}" alt="" />
+					</div>
+					<div class="commenter-nickname-area">
+						<span>${resp.nickname}</span>
+					</div>
+				</div>
+				<div class="commenter-comment-area">
+					<span>${resp.content}</span>
+				</div>
+				<div class="comment-date-area">
+					<span>${newCommentDate}</span>
+				</div>
+			</div>
+			`;
+			$(".feed-comment-area")
+				.append(newComment)
+				.scrollTop($(".feed-comment-area")[0].scrollHeight);
+		},
+		error: console.log
+	});
+};
+
 
 const likeHtml = (code) => {
 	$("#like").on('change',function(){
@@ -194,11 +262,6 @@ const likeHtml = (code) => {
 };
 
 const feedLikeChange = (check, code) => {
-	
-	const csrfToken = $("meta[name='_csrf']").attr("content");
-	const csrfHeader = $("meta[name='_csrf_header']").attr("content");
-	const headers = {};
-	headers[csrfHeader] = csrfToken;
 	
 	$.ajax({
 		url: '/nadaum/feed/feedLikeChange.do',		

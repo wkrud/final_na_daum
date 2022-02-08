@@ -56,6 +56,21 @@ public class FeedDaoImpl implements FeedDao {
 	public int selectFeedLikesCheck(Map<String, Object> guestInfo) {
 		return session.selectOne("feed.selectFeedLikesCheck", guestInfo);
 	}
+
+	@Override
+	public FeedComment selectOneFeedComment(Map<String, Object> map) {
+		return session.selectOne("feed.selectOneFeedComment",map);
+	}
+
+	@Override
+	public int insertFeedComment(Map<String, Object> map) {
+		return session.insert("feed.insertFeedComment", map);
+	}
+
+	@Override
+	public int selectCommentNo(Map<String, Object> map) {
+		return session.selectOne("feed.selectCommentNo", map);
+	}
 	
 	
 	

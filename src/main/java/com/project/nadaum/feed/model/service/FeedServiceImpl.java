@@ -73,6 +73,20 @@ public class FeedServiceImpl implements FeedService {
 		return feedDao.selectFeedLikesCheck(guestInfo);
 	}
 
+	@Override
+	public FeedComment selectOneFeedComment(Map<String, Object> map) {
+		return feedDao.selectOneFeedComment(map);
+	}
+
+	@Override
+	public FeedComment insertFeedComment(Map<String, Object> map) {
+		int no = feedDao.insertFeedComment(map);
+		no = feedDao.selectCommentNo(map);
+		map.put("no", no);
+		FeedComment feedComment = feedDao.selectOneFeedComment(map);
+		return feedComment;
+	}
+
 	
 	
 	

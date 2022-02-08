@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.nadaum.feed.model.service.FeedService;
 import com.project.nadaum.feed.model.vo.Feed;
+import com.project.nadaum.feed.model.vo.FeedComment;
 import com.project.nadaum.member.model.service.MemberService;
 import com.project.nadaum.member.model.vo.Member;
 
@@ -34,62 +35,92 @@ public class FeedController {
 	
 	@GetMapping("/socialFeed.do")
 	public void socialFeed(@RequestParam Map<String, Object> param, Model model) {
-		log.debug("id param = {}", param);
-		param.put("id", "admin");
-		Member member = memberService.selectOneMember(param);
-		
-		// feed
-		int totalCount = feedService.countAllHostFeed(param);
-		param.put("totalCount", totalCount);
-		List<Feed> feed = feedService.selectOnePersonFeed(param);
-				
-		// 친구, 팔로잉
-		Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
-		
-		model.addAttribute("member", member);
-		model.addAttribute("feed", feed);
-		model.addAttribute("socialCount", socialCount);
+		try {
+			log.debug("id param = {}", param);
+			param.put("id", "admin");
+			Member member = memberService.selectOneMember(param);
+			
+			// feed
+			int totalCount = feedService.countAllHostFeed(param);
+			param.put("totalCount", totalCount);
+			List<Feed> feed = feedService.selectOnePersonFeed(param);
+					
+			// 친구, 팔로잉
+			Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
+			
+			model.addAttribute("member", member);
+			model.addAttribute("feed", feed);
+			model.addAttribute("socialCount", socialCount);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}
 	}
 	
 	@GetMapping("/selectedFeed.do")
 	public ResponseEntity<?> selectedFeed(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member guest){
-		log.debug("map = {}", map);
-		map.put("id", "admin");
-		String profile = "";
-		Member member = memberService.selectOneMember(map);
-		if(member.getLoginType().equals("K"))
-			profile = member.getProfile();
-		else if(member.getLoginType().equals("D") && member.getProfileStatus().equals("N")) 
-			profile = "/nadaum/resources/upload/member/profile/default_profile_cat.png";
-		else if(member.getLoginType().equals("D") && member.getProfileStatus().equals("Y"))
-			profile = "/nadaum/resources/upload/member/profile/" + member.getProfile();
-		member.setProfile(profile);
-		Feed feed = feedService.selectOneFeed(map);
-		
-		Map<String, Object> guestInfo = new HashMap<>();
-		guestInfo.put("id", guest.getId());
-		guestInfo.put("code", feed.getCode());
-		int likeCheck = feedService.selectFeedLikesCheck(guestInfo);
-		
 		Map<String, Object> param = new HashMap<>();
-		param.put("likeCheck", likeCheck);
-		param.put("member", member);
-		param.put("feed", feed);
+		try {
+			log.debug("map = {}", map);
+			map.put("id", "admin");
+			String profile = "";
+			Member member = memberService.selectOneMember(map);
+			if(member.getLoginType().equals("K"))
+				profile = member.getProfile();
+			else if(member.getLoginType().equals("D") && member.getProfileStatus().equals("N")) 
+				profile = "/nadaum/resources/upload/member/profile/default_profile_cat.png";
+			else if(member.getLoginType().equals("D") && member.getProfileStatus().equals("Y"))
+				profile = "/nadaum/resources/upload/member/profile/" + member.getProfile();
+			member.setProfile(profile);
+			Feed feed = feedService.selectOneFeed(map);
+			
+			Map<String, Object> guestInfo = new HashMap<>();
+			guestInfo.put("id", guest.getId());
+			guestInfo.put("code", feed.getCode());
+			int likeCheck = feedService.selectFeedLikesCheck(guestInfo);
+			
+			param.put("likeCheck", likeCheck);
+			param.put("member", member);
+			param.put("feed", feed);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}
 		return ResponseEntity.ok(param);
 	}
 	
 	@PostMapping("/feedLikeChange.do")
 	public ResponseEntity<?> feedLikeChange(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member guest){
-		log.debug("map = {}", map);
-		map.put("id", guest.getId());
 		int result = 0;
-		String check = (String) map.get("check");
-		if("1".equals(check)) {
-			result = memberService.insertHelpLike(map);
-		}else {
-			result = memberService.deleteHelpLike(map);
+		try {
+			log.debug("map = {}", map);
+			map.put("id", guest.getId());
+			String check = (String) map.get("check");
+			if("1".equals(check)) {
+				result = memberService.insertHelpLike(map);
+			}else {
+				result = memberService.deleteHelpLike(map);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
 		}
 		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping("/writeComment.do")
+	public ResponseEntity<?> writeComment(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member guest){
+		FeedComment feedComment = new FeedComment();
+		try {
+			log.debug("map = {}", map);
+			map.put("id", guest.getId());
+			feedComment = feedService.insertFeedComment(map);
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}		
+		return ResponseEntity.ok(feedComment);
 	}
 
 }
