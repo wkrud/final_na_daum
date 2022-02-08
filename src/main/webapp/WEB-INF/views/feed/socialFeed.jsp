@@ -29,7 +29,7 @@
 						<c:if test="${member.profileStatus eq 'Y'}">
 							<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/${member.profile}" alt="" />
 						</c:if>
-					</c:if>
+					</c:if>					
 				</div>
 			</div>
 			<div class="profile-info-area">
@@ -50,6 +50,7 @@
 					<c:if test="${not empty f.attachments}">
 						<div class="one-feed">
 							<div class="hidden-likes-comment">
+								<input type="hidden" class="code" value="${f.code}"/>
 								<div class="likes-count">
 									<i class="fas fa-heart"></i>
 									${f.likes}
@@ -68,6 +69,7 @@
 					<c:if test="${empty f.attachments}">
 						<div class="one-feed">
 							<div class="hidden-likes-comment">
+								<input type="hidden" class="code" value="${f.code}"/>
 								<div class="likes-count">
 									<i class="fas fa-heart"></i>
 									${f.likes}
@@ -102,9 +104,10 @@
 <script>
 const $detailBody = $(".feed-detail-modal-body");
 $(".one-feed").click((e) => {
-	selectedFeed($(e.target).text());	
+	let code = $(".one-feed").find("input.code").val();
+	console.log(code);
+	console.log('${member.id}' + " " + code);
+	selectedFeed('${member.id}',code);
 });
-
-$(".one-feed")
 </script>	
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

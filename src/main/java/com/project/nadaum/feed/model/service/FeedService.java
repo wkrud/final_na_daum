@@ -22,6 +22,8 @@ public interface FeedService {
 
 	FeedComment insertFeedComment(Map<String, Object> map);
 
+	int deleteComment(Map<String, Object> map);
+
 	
 
 }

@@ -5,10 +5,10 @@ headers[csrfHeader] = csrfToken;
 
 const f = n => n < 10 ? "0" + n : n;
 
-const selectedFeed = (id) => {
+const selectedFeed = (id, code) => {
 	$.ajax({
 		url: '/nadaum/feed/selectedFeed.do',
-		data: {id},
+		data: {id, code},
 		success(resp){
 			
 			$detailBody.empty();
@@ -73,7 +73,7 @@ const selectedFeed = (id) => {
 								${likes}
 							</div>
 							<div class="input-group mb-3" style="margin-bottom: 0!important;">
-								<textarea class="form-control feed-textarea" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
+								<textarea class="form-control feed-textarea" placeholder="댓글을 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
 								<div class="input-group-append">
 									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">Button</button>
 								</div>
@@ -116,7 +116,7 @@ const selectedFeed = (id) => {
 								${likes}
 							</div>
 							<div class="input-group mb-3" style="margin-bottom: 0!important;">
-								<textarea class="form-control feed-textarea" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
+								<textarea class="form-control feed-textarea" placeholder="댓글을 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
 								<div class="input-group-append">
 									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">Button</button>
 								</div>
@@ -130,7 +130,7 @@ const selectedFeed = (id) => {
 			$detailBody.append(feedDiv);
 			
 			let $commetArea = $(".feed-comment-area");		
-			console.log($commetArea.html());
+			let deleteBtn = '';
 			
 			$(resp.feed.comments).each((i, v) => {
 				
@@ -145,14 +145,24 @@ const selectedFeed = (id) => {
 					commenterProfileImg = v.profile;							
 				}
 				
+				if(v.commentWriter == resp.guest.id){
+					deleteBtn = `<input type="hidden" class="comment-no" value="${v.no}"/><button class="dropdown-item delete-btn">댓글 삭제</button>`;
+				}
+				
 				commentDiv = `
 				<div class="commenter-area-wrap">
-					<div class="commenter-profile-area">
-						<div class="commenter-profile-img">
-							<img src="${commenterProfileImg}" alt="" />
+					<div class="commenter-profile-area-wrap">
+						<div class="commenter-profile-area">
+							<div class="commenter-profile-img">
+								<img src="${commenterProfileImg}" alt="" />
+							</div>
+							<div class="commenter-nickname-area">
+								<span>${v.nickname}</span>
+							</div>
 						</div>
-						<div class="commenter-nickname-area">
-							<span>${v.nickname}</span>
+						<div class="dropdown comment-setting-btn-wrap">
+							<i data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fas fa-ellipsis-v comment-setting-btn"></i>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">${deleteBtn}</div>
 						</div>
 					</div>
 					<div class="commenter-comment-area">
@@ -169,11 +179,10 @@ const selectedFeed = (id) => {
 			$(feedViewModal)
 				.modal()
 				.on("hide.bs.modal", (e) => {
-				location.href='/nadaum/feed/socialFeed.do';
+				location.href=`/nadaum/feed/socialFeed.do?id=${resp.feed.writer}`;
 			});
 			
-			likeHtml(resp.feed.code);
-			
+			likeHtml(resp.feed.code);			
 			
 			$("#write-comment-btn").on('click',function(){	
 				let $content = $(".feed-textarea");
@@ -183,8 +192,28 @@ const selectedFeed = (id) => {
 					writeComment($content.val(), resp.feed.code);
 					$content.val('');										
 				}
-			});				
+			});		
+			
+			$(".delete-btn").on('click',function(e){
+				let val = $(e.target).parent().find('input').val();
+				deleteComment(val, resp.guest.id, resp.feed.code);
+			});	
 					
+		},
+		error: console.log
+	});
+};
+
+const deleteComment = (no, id, code) => {
+	
+	$.ajax({
+		url: '/nadaum/feed/deleteComment.do',
+		data: {no, id, code},
+		type: "POST",
+		headers: headers,
+		success(resp){
+			console.log(resp);
+			location.reload();
 		},
 		error: console.log
 	});
@@ -213,14 +242,22 @@ const writeComment = (content, code) => {
 				newcommenterProfileImg = resp.profile;							
 			}
 			
-			let newComment = `
+			let newDeleteBtn = `<input type="hidden" class="comment-no" value="${resp.no}"/><button class="dropdown-item delete-btn">댓글 삭제</button>`;
+						
+			let newComment = `			
 			<div class="commenter-area-wrap">
-				<div class="commenter-profile-area">
-					<div class="commenter-profile-img">
-						<img src="${newcommenterProfileImg}" alt="" />
+				<div class="commenter-profile-area-wrap">
+					<div class="commenter-profile-area">
+						<div class="commenter-profile-img">
+							<img src="${newcommenterProfileImg}" alt="" />
+						</div>
+						<div class="commenter-nickname-area">
+							<span>${resp.nickname}</span>
+						</div>
 					</div>
-					<div class="commenter-nickname-area">
-						<span>${resp.nickname}</span>
+					<div class="dropdown comment-setting-btn-wrap">
+						<i data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fas fa-ellipsis-v comment-setting-btn"></i>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">${newDeleteBtn}</div>
 					</div>
 				</div>
 				<div class="commenter-comment-area">
@@ -234,6 +271,11 @@ const writeComment = (content, code) => {
 			$(".feed-comment-area")
 				.append(newComment)
 				.scrollTop($(".feed-comment-area")[0].scrollHeight);
+				
+			$(".delete-btn").on('click',function(e){
+				let val = $(e.target).parent().find('input').val();
+				deleteComment(val, resp.commentWriter, resp.fcode);
+			});	
 		},
 		error: console.log
 	});

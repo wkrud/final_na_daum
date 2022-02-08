@@ -201,6 +201,10 @@ article.one-feed-comment-area-wrap{
 .commenter-area-wrap{
 	margin: 5px 0;
 }
+.commenter-profile-area-wrap{
+	display: flex;
+	justify-content: space-between;
+}
 .commenter-profile-area{
 	display: flex;
 }
@@ -217,6 +221,16 @@ article.one-feed-comment-area-wrap{
 }
 .commenter-nickname-area span{
 	
+}
+.comment-setting-btn-wrap{
+	margin-right: 10px;
+}
+.comment-setting-btn{
+	cursor:pointer;
+}
+.delete-btn-wrap{
+	position: absolute;
+	right: -200px;
 }
 
 .commenter-comment-area{

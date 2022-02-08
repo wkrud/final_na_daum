@@ -9,7 +9,11 @@
 	</select>
 	
 	<select id="selectOnePersonFeed" resultType="feed">
-		select * from feed where writer = #{id}
+		select * from feed where writer = #{id} and code = #{code}
+	</select>
+	
+	<select id="selectOnePersonFeedOnebyOne" resultType="feed">
+		select d.* from (select rownum as roww, f.* from feed f order by f.reg_date desc)d where d.roww = #{rownum}
 	</select>
 	
 	<select id="selectAllOneFeedAttachments" resultType="attachment">
@@ -49,6 +53,10 @@
 	<select id="selectCommentNo" resultType="int">
 		select seq_feed_comment_no.currval from dual
 	</select>
+	
+	<delete id="deleteComment">
+		delete from feed_comment where no = #{no} and comment_writer = #{id} and f_code = #{code}
+	</delete>
 	
 
 </mapper>

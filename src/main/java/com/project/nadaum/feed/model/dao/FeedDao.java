@@ -31,4 +31,8 @@ public interface FeedDao {
 
 	int selectCommentNo(Map<String, Object> map);
 
+	int deleteComment(Map<String, Object> map);
+
+	Feed selectOnePersonFeedOnebyOne(Map<String, Object> param);
+
 }

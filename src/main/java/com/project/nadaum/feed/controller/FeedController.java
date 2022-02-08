@@ -34,10 +34,11 @@ public class FeedController {
 	private MemberService memberService;
 	
 	@GetMapping("/socialFeed.do")
-	public void socialFeed(@RequestParam Map<String, Object> param, Model model) {
+	public void socialFeed(@RequestParam String id, Model model) {
 		try {
+			Map<String, Object> param = new HashMap<>();
+			param.put("id", id);
 			log.debug("id param = {}", param);
-			param.put("id", "admin");
 			Member member = memberService.selectOneMember(param);
 			
 			// feed
@@ -62,7 +63,6 @@ public class FeedController {
 		Map<String, Object> param = new HashMap<>();
 		try {
 			log.debug("map = {}", map);
-			map.put("id", "admin");
 			String profile = "";
 			Member member = memberService.selectOneMember(map);
 			if(member.getLoginType().equals("K"))
@@ -82,6 +82,7 @@ public class FeedController {
 			param.put("likeCheck", likeCheck);
 			param.put("member", member);
 			param.put("feed", feed);
+			param.put("guest", guest);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw e;
@@ -121,6 +122,13 @@ public class FeedController {
 			throw e;
 		}		
 		return ResponseEntity.ok(feedComment);
+	}
+	
+	@PostMapping("/deleteComment.do")
+	public ResponseEntity<?> deleteComment(@RequestParam Map<String, Object> map){
+		log.debug("map = {}", map);
+		int result = feedService.deleteComment(map);
+		return ResponseEntity.ok(1);
 	}
 
 }

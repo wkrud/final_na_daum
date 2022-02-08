@@ -71,6 +71,16 @@ public class FeedDaoImpl implements FeedDao {
 	public int selectCommentNo(Map<String, Object> map) {
 		return session.selectOne("feed.selectCommentNo", map);
 	}
+
+	@Override
+	public int deleteComment(Map<String, Object> map) {
+		return session.delete("feed.deleteComment", map);
+	}
+
+	@Override
+	public Feed selectOnePersonFeedOnebyOne(Map<String, Object> param) {
+		return session.selectOne("feed.selectOnePersonFeedOnebyOne", param);
+	}
 	
 	
 	

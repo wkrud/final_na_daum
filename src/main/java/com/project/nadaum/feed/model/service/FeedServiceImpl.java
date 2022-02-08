@@ -30,7 +30,8 @@ public class FeedServiceImpl implements FeedService {
 		List<Feed> list = new ArrayList<>();
 		int limit = (int) param.get("totalCount");
 		for(int i = 0; i < limit; i++) {
-			Feed feed = feedDao.selectOnePersonFeed(param);
+			param.put("rownum", i+1);
+			Feed feed = feedDao.selectOnePersonFeedOnebyOne(param);
 			List<Attachment> attach = feedDao.selectAllOneFeedAttachments(feed);
 			int comment = feedDao.countOneFeedComment(feed);
 			int likes = feedDao.countAllHostFeedLikes(feed);			
@@ -85,6 +86,11 @@ public class FeedServiceImpl implements FeedService {
 		map.put("no", no);
 		FeedComment feedComment = feedDao.selectOneFeedComment(map);
 		return feedComment;
+	}
+
+	@Override
+	public int deleteComment(Map<String, Object> map) {
+		return feedDao.deleteComment(map);
 	}
 
 	
