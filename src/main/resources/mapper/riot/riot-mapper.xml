@@ -43,6 +43,23 @@
 		)
 	</insert>
 	
+	<select id="selectOneAccount" resultType="riotFav">
+	select 
+			*
+		from
+			riot_myaccount
+		where
+			member_id = #{member_id}
+	
+	</select>
+	
+	<resultMap type="map" id="riotFav">
+		<id column="no" property="no"/>
+		<result column="member_id" property="member_Id"/>
+		<result column="sm_id" property="sm_Id"/>
+		<result column="fav_accept" property="fav_accept"/>		
+	</resultMap>
+	
 	
 
 </mapper>
