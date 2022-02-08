@@ -299,7 +299,7 @@
 				left join album_img i
 					on a.code= i.album_code
 		where
-			a.${searchType} like '%' || ${searchKeyword} || '%'
+			a.${searchType} like '%' || #{searchKeyword} || '%'
 		order by
 			reg_date desc
 	</select>
