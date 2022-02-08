@@ -9,6 +9,8 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 내 피드" name="title"/>
 </jsp:include>
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <sec:authentication property="principal" var="loginMember"/>
 <script src="${pageContext.request.contextPath}/resources/js/feed/socialFeed.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeed.css" />
@@ -27,27 +29,59 @@
 						<c:if test="${member.profileStatus eq 'Y'}">
 							<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/${member.profile}" alt="" />
 						</c:if>
-					</c:if>
+					</c:if>					
 				</div>
 			</div>
 			<div class="profile-info-area">
-			
+				<div class="host-nickname-area">
+					<div class="host-nickname"><span>${member.nickname}</span></div>
+				</div>
+				<div class="host-friends-area">
+					<div class="friends-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
+					<div class="following-count"><span>팔로워 : ${socialCount.FOLLOWER}</span></div>
+				</div>				
+				<div class="host-introduce-area"></div>
 			</div>
 		</div>
 		<div class="one-person-feed-area">
 			<div class="feed-limit-area">
-				<div class="one-feed">123</div>
 				<c:forEach items="${feed}" var="f">
 					<!-- 사진이 있다면 -->
 					<c:if test="${not empty f.attachments}">
 						<div class="one-feed">
-							<img class="change-profile" src="${pageContext.request.contextPath}/resources/${f.attachments[0].renamedFilename}" alt="" />
+							<div class="hidden-likes-comment">
+								<input type="hidden" class="code" value="${f.code}"/>
+								<div class="likes-count">
+									<i class="fas fa-heart"></i>
+									${f.likes}
+								</div>
+								<div class="comments-count">
+									<i class="far fa-comment"></i>
+									${f.commentCount}
+								</div>
+							</div>
+							<div class="feed-area">
+								<img class="change-profile" src="${pageContext.request.contextPath}/resources/${f.attachments[0].renamedFilename}" alt="" />
+							</div>
 						</div>
 					</c:if>
 					<!-- 사진이 없다면 -->
 					<c:if test="${empty f.attachments}">
 						<div class="one-feed">
-							<div class="feed-content-hidden">${f.content}</div>
+							<div class="hidden-likes-comment">
+								<input type="hidden" class="code" value="${f.code}"/>
+								<div class="likes-count">
+									<i class="fas fa-heart"></i>
+									${f.likes}
+								</div>
+								<div class="comments-count">
+									<i class="far fa-comment"></i>
+									${f.commentCount}
+								</div>
+							</div>
+							<div class="feed-area">
+								<div class="feed-content-hidden">${f.content}</div>
+							</div>
 						</div>
 					</c:if>
 				</c:forEach>
@@ -70,8 +104,10 @@
 <script>
 const $detailBody = $(".feed-detail-modal-body");
 $(".one-feed").click((e) => {
-	selectedFeed($(e.target).text());
-	
+	let code = $(".one-feed").find("input.code").val();
+	console.log(code);
+	console.log('${member.id}' + " " + code);
+	selectedFeed('${member.id}',code);
 });
 </script>	
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

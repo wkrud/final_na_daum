@@ -37,7 +37,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
-<!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
@@ -154,7 +153,7 @@
               </a>
             </li>
             <li class="nav-list">
-              <a href="https://audioclip.naver.com">
+              <a href="${pageContext.request.contextPath}/audiobook/">
                 <i class="far fa-play-circle"></i>
                 <span>오디오북</span>
               </a>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.project.nadaum.feed.model.vo.Feed;
+import com.project.nadaum.feed.model.vo.FeedComment;
 
 public interface FeedService {
 
@@ -15,6 +16,14 @@ public interface FeedService {
 
 	Feed selectOneFeed(Map<String, Object> map);
 
+	int selectFeedLikesCheck(Map<String, Object> guestInfo);
 
+	FeedComment selectOneFeedComment(Map<String, Object> map);
+
+	FeedComment insertFeedComment(Map<String, Object> map);
+
+	int deleteComment(Map<String, Object> map);
+
+	
 
 }
