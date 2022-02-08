@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feed">
+
+	<select id="countAllHostFeed" resultType="int">
+		select count(*) from feed where writer = #{id}
+	</select>
+	
+	<select id="selectOnePersonFeed" resultType="feed">
+		select * from feed where writer = #{id}
+	</select>
+	
+	<select id="selectAllOneFeedAttachments" resultType="attachment">
+		select * from attachment where code = #{code}
+	</select>
+	
+	<select id="selectAllOneFeedComments" resultType="feedComment">
+		select * from feed_comment where f_code = #{code}
+	</select>
+	
+	<select id="countAllHostFeedLikes" resultType="int">
+		select count(*) from likes where code = #{code}
+	</select>
+
+	<select id="selectAllHostSocialCount" resultType="map">
+		select a.*, b.* from
+		(select count(my_id) friend from friend where my_id = #{id})a,
+		(select count(follower_id) following from request_friend where is_friend = 'F' and follower_id = #{id})b
+	</select>
+	
+	<select id="countOneFeedComment" resultType="int">
+		select count(*) from feed_comment where f_code = ${code}
+	</select>
+
+</mapper>
+
