@@ -58,4 +58,9 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	public List<Diary> diarySearch(Map<String, Object> map) {
 		return diaryDao.diarySearch(map);
+	}
+
+	@Override
+	public int searchCount(Map<String, Object> map) {
+		return diaryDao.searchCount(map);
 	}}
