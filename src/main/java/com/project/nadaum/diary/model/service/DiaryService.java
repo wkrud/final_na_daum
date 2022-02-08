@@ -25,4 +25,6 @@ public interface DiaryService {
 
 	List<Diary> diarySearch(Map<String, Object> map);
 
+	int searchCount(Map<String, Object> map);
+
 }

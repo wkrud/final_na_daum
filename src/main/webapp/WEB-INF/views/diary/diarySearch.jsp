@@ -8,7 +8,10 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%
+	Date now = new Date();
+	SimpleDateFormat sf = new SimpleDateFormat("yyyy");
 	String nowDate = request.getParameter("date");
+	String search = request.getParameter("content");
 %>
 <fmt:requestEncoding value="utf-8" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
@@ -19,7 +22,7 @@
 <div id="diaryMain-container">
 	<div id="diaryYear">
 		<i class="fas fa-angle-left" onclick='yearMinus()'></i>	
-		<h2 id="year"><c:set var="TextValue" value="<%= nowDate %>"/>${fn:substring(TextValue,0,4)}</h2>
+		<h2 id="year"><c:set var="now" value="<%= new java.util.Date()%>" /><fmt:formatDate value="${now}" pattern="yyyy" /></h2>
 		<i class="fas fa-angle-right" onclick='yearPlus()'></i>
 	</div>
 	<div id="diaryMonth">	
@@ -45,7 +48,7 @@
 					<div class="search-box">
 					    <input type="text" class="input-search" placeholder="Search...">
 					    <button class="btn-search"><i class="fas fa-search"></i></button>
-					</div> 	
+					</div> 				
 				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">+</button>
 				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog">
@@ -76,24 +79,27 @@
 					      </div>
 				        </form>
 				      </div>
-				      
 				    </div>
 				  </div>
 				</div>
+			      <div class="search-view"><h3>"<%=search %>" 검색 결과는 ${searchCount}건 입니다.</h3></div>	
 			</div>			
 			<!-- 일기 목록 -->
 			<div class="row">
+				<div class="listAnchor">
+					<i class="fas fa-angle-up" id="upAnchor"></i>
+				</div>
 			  <div class="col-4">
 			    <div class="list-group" id="list-tab" role="tablist">
 			    <c:forEach items="${searchList}" var="diary" varStatus="vs">
 			    	<c:choose>
 			    		<c:when test="${vs.first}">
 					      <a class="list-group-item list-group-item-action active" id="${diary.code}-list" data-toggle="list" href="#${diary.code}" role="tab" aria-controls="${diary.code}">
-					      <h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 mm월 dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
+					      <h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 MM월 dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
 			    		</c:when>
 			    		<c:otherwise>
 					      <a class="list-group-item list-group-item-action" id="${diary.code}-list" data-toggle="list" href="#${diary.code}" role="tab" aria-controls="${diary.code}">
-					      <h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 mm월 dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
+					      <h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 MM월 dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
 			    		</c:otherwise>
 			    	</c:choose>
 				   </c:forEach>
@@ -106,7 +112,7 @@
 				    		<c:when test="${vs.first}">
 						      <div class="tab-pane fade show active" id="${diary.code}" role="tabpanel" aria-labelledby="${diary.code}-list">
 						      	<div class="diaryContentTitle" onclick="location.href=`${pageContext.request.contextPath}/diary/diaryDetail.do?code=${diary.code}`">
-							      	<div><h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 mm월 dd일 E"/>요일</h4></div>
+							      	<div><h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 MM월 dd일 E"/>요일</h4></div>
 							      	<div>
 							      		<c:choose>
 										    <c:when test="${diary.isPublic eq 'Y'}">공개</c:when>
@@ -121,7 +127,7 @@
 				    		<c:otherwise>
 						      <div class="tab-pane fade show" id="${diary.code}" role="tabpanel" aria-labelledby="${diary.code}-list">
 						      	<div class="diaryContentTitle" onclick="location.href=`${pageContext.request.contextPath}/diary/diaryDetail.do?code=${diary.code}`">
-							      	<div><h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 mm월 dd일 E"/>요일</h4></div>
+							      	<div><h4><fmt:formatDate value="${diary.regDate}" pattern="yy년 MM월 dd일 E"/>요일</h4></div>
 							      	<div>
 							      		<c:choose>
 										    <c:when test="${diary.isPublic eq 'Y'}">공개</c:when>
@@ -153,8 +159,8 @@ $('#monthUl').children('li').off().on('click', function(e) {
     // 월 2자리수 변환 
     var month = Rmonth.padStart(2, '0');
     var date = year + '-' + month + '-01';
-    console.log(date);
-    location.href = `${pageContext.request.contextPath}/diary/diaryMain.do?date=\${date}`;
+
+    location.href=`${pageContext.request.contextPath}/diary/diaryMain.do?date=\${date}`;
 });
 
 // 검색 창
@@ -183,7 +189,7 @@ function resetCounter() {
 	year = 0;
 	updateYear(year);
 }
-// 년도 별 조회
+//년도 별 조회
 function updateYear(val) {
     document.getElementById("year").innerHTML = val;
     let today = new Date();
@@ -192,6 +198,36 @@ function updateYear(val) {
 
 	location.href = `${pageContext.request.contextPath}/diary/diaryMain.do?date=\${date}`;
 }
+
+// 검색 클릭 이벤트
+$(".btn-search").click(() => {
+	var content = $(".input-search").val();
+	if(content == ''){
+		alert("검색어를 입력해주세요.");
+		return false;
+	}
+	console.log(content);
+	location.href = `${pageContext.request.contextPath}/diary/diarySearch.do?content=\${content}`;
+});
+
+// 검색 엔터 이벤트
+$(".input-search").keydown(function (key) { 
+	var content = $(".input-search").val();
+	
+    if(key.keyCode == 13){
+		if(content == ''){
+			alert("검색어를 입력해주세요.");
+			return false;
+		}
+		location.href = `${pageContext.request.contextPath}/diary/diarySearch.do?content=\${content}`;
+    }
+});
+// upAnchor 이벤트
+$(document).ready(function () {
+	$('#upAnchor').click(function(){
+		$('#list-tab').animate({scrollTop:0}, '100');
+	});
+});
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
