@@ -39,6 +39,7 @@
 }
 #diarySearch-container { 
 	padding-bottom: 15px;
+	padding-left: 7px;
     display: flex;
 }
 [type=radio] { 
@@ -60,35 +61,57 @@
     justify-content: center;
 }
 .blanket{
-    content:url("nadaum/resources/images/diary/emotion/blanket.png");
+    content:url("/nadaum/resources/images/diary/emotion/blanket.png");
     height:130px;
 }
 .daechoong{
-    content:url("nadaum/resources/images/diary/emotion/daechoong.png");
+    content:url("/nadaum/resources/images/diary/emotion/daechoong.png");
     height:130px;
 }
 .gogo{
-    content:url("nadaum/resources/images/diary/emotion/gogo.png");
+    content:url("/nadaum/resources/images/diary/emotion/gogo.png");
     height:130px;
 }
 .happy{
-    content:url("nadaum/resources/images/diary/emotion/happy.png");
+    content:url("/nadaum/resources/images/diary/emotion/happy.png");
     height:130px;
 }
 .trash{
-    content:url("nadaum/resources/images/diary/emotion/trash.png");
+    content:url("/nadaum/resources/images/diary/emotion/trash.png");
     height:130px;
 }
 .eat{
-    content:url("nadaum/resources/images/diary/emotion/eat.png");
+    content:url("/nadaum/resources/images/diary/emotion/eat.png");
     height:130px;
 }
-.col-8 {width: 600px; /* place-self: center; 일기내용 중앙정렬*/}
+.col-8 {
+	width: 600px; 
+	overflow: auto;
+}
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: nowrap;
+    margin-right: -15px;
+    width: 1016px;
+    height: 660px;
+    margin-left: -15px;
+    flex-direction: row;
+    align-content: flex-start;
+    justify-content: center;
+}
+.listAnchor{
+	display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 20px;
+    cursor: pointer;
+}
 #list-tab {
 	width: 287px;
-    height: 376px;
+    height: 657px;
     overflow: auto;
-    scroll-snap-type: y proximity;
 }
 
 .list-group-item.active {
@@ -101,6 +124,7 @@
 	cursor: pointer;
 	display: flex;
     justify-content: space-between;
+    padding-bottom: 6px;
 }
 
 .diaryContentTitle :hover { 
@@ -126,9 +150,9 @@
   height: fit-content;
   position: relative;
 }
-.input-search{
+.input-search {
   height: 50px;
-  width: 50px;
+  width: 258px;
   border-style: none;
   padding: 10px;
   font-size: 18px;
@@ -168,6 +192,10 @@
   border-bottom:1px solid rgba(255,255,255,.5);
   transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
 } 
+.search-view{    
+	padding-left: 23px;
+    padding-top: 7px;
+}
 .input-search{
   width: 250px;
   border-radius: 0px;

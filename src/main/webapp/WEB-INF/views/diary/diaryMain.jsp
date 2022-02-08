@@ -16,6 +16,9 @@
 	<jsp:param value="나:다움 Diary" name="title"/>
 </jsp:include>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/diary/diaryMain.css"/> 
+<style>
+
+</style>
 <div id="diaryMain-container">
 	<div id="diaryYear">
 		<i class="fas fa-angle-left" onclick='yearMinus()'></i>	
@@ -82,20 +85,23 @@
 				</div>
 			</div>			
 			<!-- 일기 목록 -->
-			<div class="row">
+			<div class="row" id="row">
+				<div class="listAnchor">
+					<i class="fas fa-angle-up" id="upAnchor"></i>
+				</div>
 			  <div class="col-4">
 			    <div class="list-group" id="list-tab" role="tablist">
-			    <c:forEach items="${diaryList}" var="diary" varStatus="vs">
-			    	<c:choose>
-			    		<c:when test="${vs.first}">
-					      <a class="list-group-item list-group-item-action active" id="${diary.code}-list" data-toggle="list" href="#${diary.code}" role="tab" aria-controls="${diary.code}">
-					      <h4><fmt:formatDate value="${diary.regDate}" pattern="dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
-			    		</c:when>
-			    		<c:otherwise>
-					      <a class="list-group-item list-group-item-action" id="${diary.code}-list" data-toggle="list" href="#${diary.code}" role="tab" aria-controls="${diary.code}">
-					      <h4><fmt:formatDate value="${diary.regDate}" pattern="dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
-			    		</c:otherwise>
-			    	</c:choose>
+				    <c:forEach items="${diaryList}" var="diary" varStatus="vs">
+				    	<c:choose>
+				    		<c:when test="${vs.first}">
+						      <a class="list-group-item list-group-item-action active" id="anchor" data-toggle="list" href="#${diary.code}" role="tab" aria-controls="${diary.code}">
+						      <h4><fmt:formatDate value="${diary.regDate}" pattern="dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
+				    		</c:when>
+				    		<c:otherwise>
+						      <a class="list-group-item list-group-item-action" id="${diary.code}-list" data-toggle="list" href="#${diary.code}" role="tab" aria-controls="${diary.code}">
+						      <h4><fmt:formatDate value="${diary.regDate}" pattern="dd일 E"/>요일</h4><h5>${diary.title}</h5></a>
+				    		</c:otherwise>
+				    	</c:choose>
 				   </c:forEach>
 			    </div>
 			  </div>
@@ -196,14 +202,30 @@ function updateYear(val) {
 // 검색 클릭 이벤트
 $(".btn-search").click(() => {
 	var content = $(".input-search").val();
+	if(content == ''){
+		alert("검색어를 입력해주세요.");
+		return false;
+	}
 	location.href = `${pageContext.request.contextPath}/diary/diarySearch.do?content=\${content}`;
 });
 
 // 검색 엔터 이벤트
 function searchEvt(){
 	var content = $(".input-search").val();
+	$(".btn-search").trigger("click");
+	if(content == ''){
+		alert("검색어를 입력해주세요.");
+		return false;
+	}
 	location.href = `${pageContext.request.contextPath}/diary/diarySearch.do?content=\${content}`;
 }
+// upAnchor 이벤트
+$(document).ready(function () {
+	$('#upAnchor').click(function(){
+		$('#list-tab').animate({scrollTop:0}, '100');
+	});
+});
+
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
