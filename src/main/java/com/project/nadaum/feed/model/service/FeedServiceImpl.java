@@ -68,6 +68,11 @@ public class FeedServiceImpl implements FeedService {
 		return feed;
 	}
 
+	@Override
+	public int selectFeedLikesCheck(Map<String, Object> guestInfo) {
+		return feedDao.selectFeedLikesCheck(guestInfo);
+	}
+
 	
 	
 	

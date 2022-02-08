@@ -23,4 +23,6 @@ public interface FeedDao {
 
 	int countOneFeedComment(Feed feed);
 
+	int selectFeedLikesCheck(Map<String, Object> guestInfo);
+
 }

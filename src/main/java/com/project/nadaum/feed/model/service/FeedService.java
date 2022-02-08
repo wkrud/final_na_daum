@@ -15,6 +15,8 @@ public interface FeedService {
 
 	Feed selectOneFeed(Map<String, Object> map);
 
+	int selectFeedLikesCheck(Map<String, Object> guestInfo);
 
+	
 
 }

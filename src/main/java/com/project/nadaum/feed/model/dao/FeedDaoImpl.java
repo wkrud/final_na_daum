@@ -51,6 +51,11 @@ public class FeedDaoImpl implements FeedDao {
 	public int countOneFeedComment(Feed feed) {
 		return session.selectOne("feed.countOneFeedComment", feed);
 	}
+
+	@Override
+	public int selectFeedLikesCheck(Map<String, Object> guestInfo) {
+		return session.selectOne("feed.selectFeedLikesCheck", guestInfo);
+	}
 	
 	
 	

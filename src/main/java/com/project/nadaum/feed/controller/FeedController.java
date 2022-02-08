@@ -6,9 +6,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,7 +52,7 @@ public class FeedController {
 	}
 	
 	@GetMapping("/selectedFeed.do")
-	public ResponseEntity<?> selectedFeed(@RequestParam Map<String, Object> map){
+	public ResponseEntity<?> selectedFeed(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member guest){
 		log.debug("map = {}", map);
 		map.put("id", "admin");
 		String profile = "";
@@ -63,10 +65,31 @@ public class FeedController {
 			profile = "/nadaum/resources/upload/member/profile/" + member.getProfile();
 		member.setProfile(profile);
 		Feed feed = feedService.selectOneFeed(map);
+		
+		Map<String, Object> guestInfo = new HashMap<>();
+		guestInfo.put("id", guest.getId());
+		guestInfo.put("code", feed.getCode());
+		int likeCheck = feedService.selectFeedLikesCheck(guestInfo);
+		
 		Map<String, Object> param = new HashMap<>();
+		param.put("likeCheck", likeCheck);
 		param.put("member", member);
 		param.put("feed", feed);
 		return ResponseEntity.ok(param);
+	}
+	
+	@PostMapping("/feedLikeChange.do")
+	public ResponseEntity<?> feedLikeChange(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member guest){
+		log.debug("map = {}", map);
+		map.put("id", guest.getId());
+		int result = 0;
+		String check = (String) map.get("check");
+		if("1".equals(check)) {
+			result = memberService.insertHelpLike(map);
+		}else {
+			result = memberService.deleteHelpLike(map);
+		}
+		return ResponseEntity.ok(result);
 	}
 
 }

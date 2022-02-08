@@ -33,6 +33,11 @@
 	<select id="countOneFeedComment" resultType="int">
 		select count(*) from feed_comment where f_code = #{code}
 	</select>
+	
+	<select id="selectFeedLikesCheck" resultType="int">
+		select count(*) from likes where code = #{code} and id = #{id}
+	</select>
+	
 
 </mapper>
 

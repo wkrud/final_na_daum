@@ -9,9 +9,10 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 내 피드" name="title"/>
 </jsp:include>
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <sec:authentication property="principal" var="loginMember"/>
 <script src="${pageContext.request.contextPath}/resources/js/feed/socialFeed.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeed.css" />
 <div class="feed-section-wrap">
 	<div class="one-person-feed-wrap">
@@ -38,7 +39,7 @@
 				<div class="host-friends-area">
 					<div class="friends-count"><span>친구 : ${socialCount.FRIEND}</span></div>
 					<div class="following-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
-				</div>
+				</div>				
 				<div class="host-introduce-area"></div>
 			</div>
 		</div>
@@ -50,11 +51,11 @@
 						<div class="one-feed">
 							<div class="hidden-likes-comment">
 								<div class="likes-count">
-									<i class="bi bi-suit-heart-fill"></i>
+									<i class="fas fa-heart"></i>
 									${f.likes}
 								</div>
 								<div class="comments-count">
-									<i class="bi bi-chat"></i>
+									<i class="far fa-comment"></i>
 									${f.commentCount}
 								</div>
 							</div>
@@ -68,11 +69,11 @@
 						<div class="one-feed">
 							<div class="hidden-likes-comment">
 								<div class="likes-count">
-									<i class="bi bi-suit-heart-fill"></i>
+									<i class="fas fa-heart"></i>
 									${f.likes}
 								</div>
 								<div class="comments-count">
-									<i class="bi bi-chat"></i>
+									<i class="far fa-comment"></i>
 									${f.commentCount}
 								</div>
 							</div>

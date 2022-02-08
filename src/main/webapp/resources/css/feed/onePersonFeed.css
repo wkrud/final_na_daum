@@ -181,7 +181,7 @@ article.one-feed-comment-area-wrap{
 	
 }
 .like-btn-area input{
-	
+	display: none;
 }
 .feed-comment-write-area .input-group{
 	
