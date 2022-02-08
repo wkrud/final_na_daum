@@ -431,7 +431,36 @@ public class AccountBookController {
 				e.printStackTrace();
 			
 			}
+		}
 		
+		//메인 위젯 ajax
+		@ResponseBody
+		@GetMapping("/widget")
+		public Map<String, Object> accountWidget(@AuthenticationPrincipal Member member) {
+			String id = member.getId();
+			List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+			log.debug("incomeList={}",incomeList);
+
+			//필요한 값만 맵 객체로 변환
+			Map<String, Object> incomeExpenseList = new HashMap<>();
+				
+			if(incomeList.size() == 0) {
+				incomeExpenseList.put("income", 0);
+				incomeExpenseList.put("expense", 0);
+			} else if(incomeList.size() == 1) {
+				if((incomeList.get(0).get("incomeExpense")).equals("I")) {
+					incomeExpenseList.put("income", incomeList.get(0).get("total"));
+					incomeExpenseList.put("expense", 0);
+				} else {
+					incomeExpenseList.put("income", 0);
+					incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+				}
+			} else {
+				incomeExpenseList.put("income", incomeList.get(1).get("total"));
+				incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+			}
+			
+			return incomeExpenseList;
 		}
 	
 
