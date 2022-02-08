@@ -36,6 +36,10 @@
     		account_book
     	where
     		id = #{id}
+    	<if test="incomeExpense != null and incomeExpense != ''">
+			and 
+			income_expense = #{incomeExpense}
+		</if>
     	order by
     		reg_date desc
 	</select>
@@ -94,8 +98,10 @@
 	    	account_book
 		where
 	    	id = #{id}
+	    	<if test="incomeExpense != null and incomeExpense != ''">
 			and 
 			income_expense = #{incomeExpense}
+			</if>
 		order by
 			reg_date desc
 	</select>
@@ -150,6 +156,18 @@
 		from 
 			account_book 
 		where id=#{id}
+		<if test="incomeExpense != null and incomeExpense != ''">
+			and 
+			income_expense = #{incomeExpense}
+		</if>
+		<if test="category != null and category != ''">
+			and 
+			category = #{category}
+		</if>
+		<if test="detail != null and detail != ''">
+			and 
+			detail = #{detail}
+		</if>
 	</select>
 	
 	<select id="detailMonthlyChart" resultMap="monthlyChart">

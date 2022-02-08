@@ -31,7 +31,7 @@
 		<!-- 헤더 -->
 		<div class="analyze-account-header">
 			<button class="defaultBtn" onclick="count('minus')"><i class="fas fa-arrow-left"></i></button>
-			<p><%=today_m%>의 나:다운 가계부</p>
+			<p>월의 나:다운 가계부</p>
 			<button class="defaultBtn" onclick="count('plus')"><i class="fas fa-arrow-right"></i></button>
 		</div>
 		<!-- 수입 -->
@@ -50,7 +50,7 @@
 							<li>카드 : ${payment_I.count}건</li>
 						</c:when>
 						<c:when test="${payment_I.payment eq 'blank'}">
-							<li>미입력 : ${payment_I.count}건</li>
+							<li>미등록 : ${payment_I.count}건</li>
 						</c:when>
 					</c:choose>
 				</c:forEach>
