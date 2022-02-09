@@ -29,8 +29,6 @@ public class Movie implements Serializable{/**
 	private Double userRating;
 	private String imgUrl;
 	
-	private Double rating;
-	
 	public Movie(JSONObject itemJson) {
 		this.title = itemJson.getString("title");
 //		this.pubDate = itemJson.getDate("pubDate");

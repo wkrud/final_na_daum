@@ -5,15 +5,11 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-<%@ page import="com.project.nadaum.member.model.vo.MemberEntity" %>
 <sec:authentication property="principal" var="loginMember"/>
-<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판상세보기" name="title" />
 </jsp:include>
-
+<sec:authentication property="principal" var="loginMember"/>
 <style>
 div#board-container {
 	
@@ -40,7 +36,6 @@ border-right:0px;
  background-color:transparent;
  display:inline-block;
 margin : 0px;
-pointer-events: none; 
 }
 .id-detail{border:none;
 border-right:0px;
@@ -51,7 +46,6 @@ border-right:0px;
  display:inline-block;
 margin : 0px;
 font-size:20px;
-pointer-events: none; 
 }
 
 .detailcontent{
@@ -75,8 +69,8 @@ padding : 10px;
 			
 			<div class="container">
  			<div class="row row-cols-4">
-    		<div class="col">작성자 : <input type="text" class="detail" id="nickname" name="nickname" value="${board.nickname}" readonly></div>
-    		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd HH:mm"/></div>
+    		<div class="col">작성자 : <input type="text" class="detail" id="writer" name="id" value="${board.id}" readonly></div>
+    		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd'T'HH:mm"/></div>
     		<div class="col">조회수 : <input type="number" class="detail" id="readCount" name="readCount" title="조회수" value="${board.readCount}" readonly></div>
   			</div>
 			</div>			
@@ -135,7 +129,7 @@ padding : 10px;
 							<div class="form-inline mb-2">
 								<label for="replyId"><i
 									class="fa fa-user-circle-o fa-2x">
-									<input type="text" class="id-detail" name="id" id="id" value="${loginMember.nickname}" /></i>
+									<input type="text" class="id-detail" name="id" id="id" value="${loginMember.id}" /></i>
 									</label>
 							</div>
 							<form
@@ -184,7 +178,7 @@ padding : 10px;
 									<li class="list-group-item" id="commentList">
 										<div class="form-inline mb-2">
 											<label for="replyId"> <i
-												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.nickname}</strong>
+												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
 											</label> &nbsp;&nbsp;
 											<fmt:formatDate value="${comment.regDate}"	pattern="yyyy-MM-dd HH:mm" />
 										</div> <textarea class="form-control"
@@ -260,9 +254,9 @@ padding : 10px;
 	action="${pageContext.request.contextPath}/board/boardCommentDelete.do"
 	name="boardCommentDelFrm" method="POST">
 	<input type="hidden" name="commentCode" value="${comment.commentCode}" />
-	<input type="hidden" name="code" value="${board.code}" /> 
-	<input type="hidden" name="id" id="id" value="${loginMember.id}" /> 
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<input type="hidden" name="code" value="${board.code}" /> <input
+		type="hidden" name="id" id="id" value="${loginMember.id}" /> <input
+		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 <script>
 	//회원아이디와 글쓴이 아이디와 같은때 보임.
@@ -421,9 +415,9 @@ $(".btn-reply").click((e) => {
 	}
 });
 
-/* $("#likeButton").click((e) => {
+$("#likeButton").click((e) => {
 	
-}); */
+});
 /* ajax 비동기로 처리 */
 /*  $(insertCommentFrm).submit((e) => {
 				e.preventDefault();

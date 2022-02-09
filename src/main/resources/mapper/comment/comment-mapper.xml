@@ -3,8 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="comment">
-	
-	
 	<select id="selectCultureCommentList" resultType="comment">
 		select
 			*
@@ -29,7 +27,7 @@
 				#{apiCode},
 				#{star}
 			)
-	</insert>	
+	</insert>
 	
 	<delete id="deleteCultureComment">
 		delete 
@@ -47,59 +45,6 @@
 		where
 			code = #{code}
 	</update>
-	
-	<!-- 영화 댓글 -->
-	<select id="selectMovieCommentList" resultType="comment">
-		select
-			*
-		from
-			comments
-		where
-			api_code = #{apiCode}
-		order by 
-		    reg_date desc
-	</select>
-	
-	<select  id="selectOneComment" resultMap="CommentMap">
-		select * from comments where code = #{code}
-	</select>
-	
-	<insert id="insertMovieComment" >
-		insert into
-				comments(code, comment_level, content, reg_date, comment_ref, id, api_code, star)
-			values(
-				concat('co-',seq_comments_no.nextval),
-				#{commentLevel},
-				#{content},
-				default,
-				<choose>
-					<when test="commentRef == ''">null,</when>
-			 		<when test="commentRef != ''">#{commentRef},</when>
-				</choose>
-				#{id},
-				#{apiCode},
-				#{star}
-			)
-	</insert>	
-	<update id="updateMovieComment">
-		update comments
-		set
-			content = #{content},
-			star = #{star}
-		where
-			code = #{code}
-	</update>
-	
-	<resultMap type="Comment" id="CommentMap">
-		<id column="code" property="code"/>
-		<result column="comment_level" property="commentLevel"/>
-		<result column="content" property="content"/>
-		<result column="reg_date" property="regDate"/>
-		<result column="comment_ref" property="commentRef"/>
-		<result column="id" property="id"/>
-		<result column="api_code" property="apiCode"/>
-		<result column="star" property="star"/>
-	</resultMap>
 	
 </mapper>
 

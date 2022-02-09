@@ -65,11 +65,9 @@
 		select
 			*
 		from
-			board b
-				join member m
-					on b.id = m.id
+			board
 		where
-			b.code = #{code}
+			code = #{code}
 	</select>
 	
 	<!-- <select id="selectAttachmentListByBoardCode" resultType="attachment">
@@ -114,10 +112,18 @@
 	
 	<!-- 게시글 댓글조회 -->
 	<select id="selectBoardCommentList" resultMap="boardCommentMap">
-		select bc.*, m.*,
-		(select m.nickname from board_comment bc1 join member m on bc1.id = m.id where bc1.code = bc.comment_ref) upper_comment_writer
-		from board_comment bc join member m on bc.id = m.id where bc.code = #{code}     
-		start with comment_level = 1 connect by prior comment_code = comment_ref order siblings by comment_code
+		select
+			 * 
+		from
+			board_comment
+			inner join member using (id)
+		where 
+			code = #{code} 
+			start with 
+				comment_level = 1 
+			connect by prior 
+				comment_code = comment_ref
+			order siblings by comment_code	
 	</select>
 	
 	<insert id="insertBoardComment">
