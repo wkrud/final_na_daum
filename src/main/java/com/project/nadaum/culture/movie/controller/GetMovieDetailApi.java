@@ -53,6 +53,10 @@ public class GetMovieDetailApi {
 		
 		if(len == 0) return null; //NodeList의 글자수가 0개일시 null을 리턴.
 		
+		
+		
+		
+		
 		String[] tagArr = new String[len]; //태그 글자를 배열에 담음
 		for(int i = 0; i < len; i++) {
 			Node tagNameNode = nodeList.item(i); // tagName에 해당하는 node객체
