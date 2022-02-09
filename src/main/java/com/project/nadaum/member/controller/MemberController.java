@@ -917,7 +917,7 @@ public class MemberController {
 	@PostMapping("/mypage/sendAndInsertAlarm.do")
 	public ResponseEntity<?> sendAndInsertAlarm(@RequestParam Map<String, Object> map){
 		log.debug("map = {}", map);
-		if("N".equals(map.get("id"))) {
+		if("N".equals((String)map.get("type"))) {
 			Member member = memberService.selectOneMemberNickname((String) map.get("id"));
 			map.put("id", member.getId());
 		}

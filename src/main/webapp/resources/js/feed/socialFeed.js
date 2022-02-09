@@ -177,7 +177,7 @@ const selectedFeed = (id, code) => {
 				location.href=`/nadaum/feed/socialFeed.do?id=${resp.feed.writer}`;
 			});
 			
-			likeHtml(resp.feed.code);			
+			likeHtml(resp.feed.code, resp.feed.writer, resp.guest.nickname);			
 			
 			$("#write-comment-btn").on('click',function(){	
 				let $content = $(".feed-textarea");
@@ -273,7 +273,8 @@ const writeComment = (content, code, id) => {
 			});	
 			
 			let content = `<a href='/nadaum/feed/socialFeed.do?id=${id}&code=${resp.fcode}&type=alarmMessage'>${resp.nickname}님이 회원님의 피드에 댓글을 작성했습니다.</a>`;
-			let alarmCode = 'fecomment-' + resp.no;
+			let ranNo = Math.floor(Math.random() * 10000);
+			let alarmCode = 'fecomment-' + resp.no + ranNo;
 			sendAndInsertAlarm('I',id, alarmCode, content);
 			
 		},
@@ -282,23 +283,29 @@ const writeComment = (content, code, id) => {
 };
 
 
-const likeHtml = (code) => {
+const likeHtml = (code, writer, guestNickname) => {
 	$("#like").on('change',function(){
 	
 		console.log('hi');
-						
+		let ranNo = Math.floor(Math.random() * 10000);
+		let alarmCode = 'felike-' + ranNo;
+		let content = '';
+		
 		let check = '';
 		if($("#like").is(':checked')){
 			console.log($("#like").is(':checked'));
 			check = '1';
 			$("label[for='like']").html('좋아요<i class="fas fa-heart"></i>');
 			$("#like").prop("checked", true);
+			
+			content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>${guestNickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
+			sendAndInsertAlarm('I',writer,alarmCode,content);
 		}else {
 			console.log($("#like").is(':checked'));
 			check = '0';
 			$("label[for='like']").html('좋아요<i class="far fa-heart"></i>');
 			$("#like").prop("checked", false);
-		}				
+		}		
 		feedLikeChange(check,code);		
 	});
 };

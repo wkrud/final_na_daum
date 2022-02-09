@@ -301,9 +301,7 @@
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />
 						
 						\${content}</div>`;
-					}else if(code.substring(0,4) == 'chat'){
-						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
-					}else if(code.substring(0,4) == 'feco'){
+					}else if(code.substring(0,4) == 'chat' || code.substring(0,4) == 'feco' || code.substring(0,4) == 'feli'){
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
