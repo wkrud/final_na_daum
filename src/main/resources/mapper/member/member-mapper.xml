@@ -48,6 +48,10 @@
 		update member set nickname = #{nickname} where id = #{id}
 	</update>
 	
+	<update id="updateMemberIntroduce">
+		update member set introduce = #{intro} where id = #{id}
+	</update>
+	
 	<delete id="deleteMember">
 		delete from member where id = #{id}
 	</delete>
@@ -214,12 +218,11 @@
 				* 
 			from 
 				help
-			where
+			<where>
 				<if test="category != 'all'">
 					category = #{category}
-					and
 				</if>
-				status = 'T'
+			</where>
 			order by
 				reg_date desc
 		)
@@ -272,6 +275,17 @@
 	
 	<!-- 도움말 시작 -->
 	
+	<select id="selectHelpCategoyCount" resultType="map">
+		select
+			(SELECT count(category) FROM help WHERE category = 'dy') dy,
+			(SELECT count(category) FROM help WHERE category = 'ab') ab,
+			(SELECT count(category) FROM help WHERE category = 'fr') fr
+		from
+			help
+		where
+			rownum = 1
+	</select>
+	
 	<select id="selectMostHelp" resultType="map">
 		select
 			*
@@ -303,7 +317,7 @@
 	</insert>
 	
 	<update id="updateMember">
-		update member set nickname = #{nickname} where id = #{id}
+		update member set birthday = #{birthday} where id = #{id}
 	</update>
 	
 	<select id="selectAllAlarm" resultMap="alarm">

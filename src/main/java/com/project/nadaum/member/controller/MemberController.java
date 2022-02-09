@@ -591,6 +591,7 @@ public class MemberController {
 	@GetMapping("/mypage/memberHelp.do")
 	public void memberHelp(Model model){
 		// 다이어리 dy, 가계부 ab, 문화생활 cu, 오디오북, 롤전적, 캘린더 , 친구 fr, 메모 me
+		Map<String, Object> checkHelp = memberService.selectHelpCategoyCount();
 		Map<String, Object> map = new HashMap<>();
 		map.put("category", "dy");
 		List<Help> helpDyList = memberService.selectAllMembersDyQuestions(map);
@@ -600,6 +601,7 @@ public class MemberController {
 		List<Help> helpFrList = memberService.selectAllMembersFrQuestions(map);
 		log.debug("helpList = {}", helpDyList);
 		
+		model.addAttribute("checkHelp", checkHelp);
 		model.addAttribute("helpDyList", helpDyList);		
 		model.addAttribute("helpAbList", helpAbList);		
 		model.addAttribute("helpFrList", helpFrList);			
@@ -850,7 +852,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberUpdate.do")
-	public ResponseEntity<?> memberUpdate(Member member, @AuthenticationPrincipal Member oldMember){
+	public String memberUpdate(Member member, @AuthenticationPrincipal Member oldMember){
 		int result = 0;
 		try {
 			log.debug("member = {}", member);
@@ -858,13 +860,9 @@ public class MemberController {
 			
 			result = memberService.updateMember(member);
 			
-			oldMember.setName(member.getName());
 			oldMember.setEmail(member.getEmail());
 			oldMember.setAddress(member.getAddress());
-			oldMember.setPhone(member.getPhone());
-			oldMember.setHobby(member.getHobby());
 			oldMember.setSearch(member.getSearch());
-			oldMember.setIntroduce(member.getIntroduce());
 			oldMember.setBirthday(member.getBirthday());
 			
 			Authentication newAuthentication = new UsernamePasswordAuthenticationToken(oldMember, oldMember.getPassword(), oldMember.getAuthorities());		
@@ -873,7 +871,7 @@ public class MemberController {
 			log.error(e.getMessage(), e);
 			throw e;
 		}		
-		return ResponseEntity.ok(result);
+		return "redirect:/member/mypage/memberDetail.do?tPage=myPage";
 		
 	}
 	
@@ -897,6 +895,16 @@ public class MemberController {
 		int result = memberService.updateMemberHobby(member);
 		log.debug("result = {}", result);
 		oldMember.setHobby(member.getHobby());
+		Authentication newAuthentication = new UsernamePasswordAuthenticationToken(oldMember, oldMember.getPassword(), oldMember.getAuthorities());		
+		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+		return ResponseEntity.ok(1);
+	}
+	
+	@PostMapping("/mypage/modifyMemberIntroduce.do")
+	public ResponseEntity<?> modifyMemberIntroduce(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member oldMember){
+		log.debug("map = {}", map);
+		int result = memberService.updateMemberIntroduce(map);
+		oldMember.setIntroduce((String)map.get("intro"));
 		Authentication newAuthentication = new UsernamePasswordAuthenticationToken(oldMember, oldMember.getPassword(), oldMember.getAuthorities());		
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 		return ResponseEntity.ok(1);

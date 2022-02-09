@@ -31,7 +31,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/profile.css" />
 </head>
-<body>
+<body style="background-color:#FFFBF5;">
 	<header class="info-header">		
 		<div class="info-search">
 			<div class="input-group mb-3 info-head-wrap">
@@ -63,6 +63,13 @@
 	
 	
 	<script>
+	$("#infosearchHelp").on('keyup', function(e) {
+		if(e.keyCode === 13 || e.key === 'Enter'){
+			$("#info-search-help-start").trigger('click');
+			$("#infosearchHelp").val('');
+		}
+	});
+	
 	$("#info-search-help-start").click((e) => {
 		if($("#infosearchHelp").val() == ''){
 			alert("질문을 입력해 주세요.");
