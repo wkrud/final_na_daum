@@ -259,6 +259,14 @@ padding : 10px;
 		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 <script>
+
+$(()=>{
+	alert('${board}');
+	
+})
+
+
+
 	//회원아이디와 글쓴이 아이디와 같은때 보임.
 	//삭제 버튼을 눌렀을 때 처리
 const deleteBoard = () => {

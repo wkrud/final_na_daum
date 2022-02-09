@@ -194,6 +194,8 @@ public class BoardController {
 //			@CookieValue(value="boardCount", required=false, defaultValue="0") String value,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+			log.debug("code={}",code);
 		try {
 			// 상세보기를 요청하면, 해당글에 대한 boardCookie가 존재하지 않을때 조회수를 1증가한다. 
 			// a.검사
@@ -235,23 +237,23 @@ public class BoardController {
 			
 			//댓글목록 조회
 			List<BoardComment> commentList = boardService.selectBoardCommentList(code);
-			log.debug("commentList = {} ", commentList);
-			log.debug("commentList = {} ", commentList.get(0));
+		//	log.debug("commentList = {} ", commentList);
+			
 			
 //			String nickname = boardService.boardGetNickname()
 			
-			int selectCountLikes = boardService.selectCountLikes(code); 
-			
-			model.addAttribute("selectCountLikes",selectCountLikes);
+			//int selectCountLikes = boardService.selectCountLikes(code); 
+			log.debug("boardDetail board ={}", board);
+			//model.addAttribute("selectCountLikes",selectCountLikes);
 			model.addAttribute("board", board);
 			model.addAttribute("commentList", commentList);
-			return "board/boardDetail";
+			
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return "redirect:error.do" ;
+			
 		}
-		
+		return "board/boardDetail";
 	}
 	
 	
