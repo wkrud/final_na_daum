@@ -15,15 +15,4 @@ public interface CommentService {
 
 	int updateCultureComment(Map<String, Object> map);
 
-	//영화댓글
-	List<Comment> selectMovieCommentList(String apiCode);
-
-	int insertMovieComment(Map<String, Object> map);
-
-//	int updateMovieComment(String code);
-
-	int updateMovieComment(Comment comment);
-
-	Comment selectOneComment(String code);
-
 }
