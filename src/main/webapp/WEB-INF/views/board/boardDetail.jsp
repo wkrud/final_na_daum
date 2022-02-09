@@ -69,8 +69,8 @@ padding : 10px;
 			
 			<div class="container">
  			<div class="row row-cols-4">
-    		<div class="col">작성자 : <input type="text" class="detail" id="writer" name="id" value="${board.id}" readonly></div>
-    		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd'T'HH:mm"/></div>
+    		<div class="col">작성자 : <input type="text" class="detail" id="nickname" name="id" value="${board.nickname}" readonly></div>
+    		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd HH:mm"/></div>
     		<div class="col">조회수 : <input type="number" class="detail" id="readCount" name="readCount" title="조회수" value="${board.readCount}" readonly></div>
   			</div>
 			</div>			
@@ -178,7 +178,7 @@ padding : 10px;
 									<li class="list-group-item" id="commentList">
 										<div class="form-inline mb-2">
 											<label for="replyId"> <i
-												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
+												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.nickname}</strong>
 											</label> &nbsp;&nbsp;
 											<fmt:formatDate value="${comment.regDate}"	pattern="yyyy-MM-dd HH:mm" />
 										</div> <textarea class="form-control"
@@ -210,7 +210,7 @@ padding : 10px;
 										style="padding-left: 100px;">
 										<div class="form-inline mb-2">
 											<label for="replyId"> <i
-												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
+												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.nickname}</strong>
 											</label> &nbsp;&nbsp;
 											<fmt:formatDate value="${comment.regDate}"
 												pattern="yyyy-MM-dd HH:mm" />
