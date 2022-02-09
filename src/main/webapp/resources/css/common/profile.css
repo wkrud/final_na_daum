@@ -26,12 +26,31 @@
 	position:absolute;
 	top: 80px;
 	right: 20px;
-	width: 200px;
+	max-width: 350px;
+	max-height: 80px;
+	overflow: hidden;
 	z-index: 9;
 }
 
+.my-feed{
+	padding:5px;
+}
+.my-feed a{
+	text-decoration: none;
+	color: #0A1F33;
+}
+.my-feed a:hover{
+	color: #6baeed;
+}
 .alarmContent{
 	padding: 5px;
+}
+.alarmContent a{
+	text-decoration: none;
+	color: #0A1F33;
+}
+.alarmContent a:hover{
+	color: #6baeed;
 }
 
 /* 도움말 */

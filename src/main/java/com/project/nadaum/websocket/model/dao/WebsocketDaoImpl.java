@@ -21,8 +21,8 @@ public class WebsocketDaoImpl implements WebsocketDao {
 	}
 
 	@Override
-	public int updateAlarm(Member member) {
-		return session.update("ws.updateAlarm", member);
+	public int updateAlarm(Map<String, Object> map) {
+		return session.update("ws.updateAlarm", map);
 	}
 
 	@Override
