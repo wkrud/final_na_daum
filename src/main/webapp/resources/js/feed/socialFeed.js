@@ -1,8 +1,3 @@
-const csrfToken = $("meta[name='_csrf']").attr("content");
-const csrfHeader = $("meta[name='_csrf_header']").attr("content");
-const headers = {};
-headers[csrfHeader] = csrfToken;
-
 const f = n => n < 10 ? "0" + n : n;
 
 const selectedFeed = (id, code) => {
@@ -189,7 +184,7 @@ const selectedFeed = (id, code) => {
 				if($content.val() == ''){
 					alert('내용을 입력하세요');
 				}else{
-					writeComment($content.val(), resp.feed.code);
+					writeComment($content.val(), resp.feed.code, resp.feed.writer);
 					$content.val('');										
 				}
 			});		
@@ -219,7 +214,7 @@ const deleteComment = (no, id, code) => {
 	});
 };
 
-const writeComment = (content, code) => {
+const writeComment = (content, code, id) => {
 	console.log(content);
 	
 	$.ajax({
@@ -276,6 +271,11 @@ const writeComment = (content, code) => {
 				let val = $(e.target).parent().find('input').val();
 				deleteComment(val, resp.commentWriter, resp.fcode);
 			});	
+			/*
+			let code = 'fecomment-' + resp.no;
+			let content = `<a href='/nadaum/feed/selectedFeed.do?id=${id}'>${resp.nickname}님이 회원님의 피드에 댓글을 작성했습니다.</a>`;
+			sendInviteChatRoom(code, );
+			*/
 		},
 		error: console.log
 	});

@@ -122,6 +122,14 @@
 	</div>
 </div>
 <script>
+/* $(() => {
+	$(feedViewModal)
+	.modal()
+	.on("hide.bs.modal", (e) => {
+	location.href=`/nadaum/feed/socialFeed.do?id=${resp.feed.writer}`;
+});
+}); */
+
 const $chatRoom = $("#make-chat-room");
 $chatRoom.click((e) => {
 	console.log(1);
@@ -142,9 +150,14 @@ $chatRoom.click((e) => {
 });
 
 const $detailBody = $(".feed-detail-modal-body");
+let $hidden = $(".hidden-likes-comment");
 $(".one-feed").click((e) => {
-	let code = $(".one-feed").find("input.code").val();
-	console.log(code);
+	let code = '';
+	if($(e.target).attr('class') != 'hidden-likes-comment'){
+		code = $(e.target).parent().parent().find("input.code").val();
+	}else{
+		code = $(e.target).find("input.code").val();
+	}
 	console.log('${member.id}' + " " + code);
 	selectedFeed('${member.id}',code);
 });

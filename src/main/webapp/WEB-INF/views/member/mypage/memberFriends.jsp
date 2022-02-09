@@ -40,7 +40,7 @@
 									<span class="friend-name">${ml.nickname}</span>								
 								</div>
 								<div class="friend-btn">
-									<button type="button" id="end-friend" class="btn btn-outline-danger">친구삭제</button>
+									<button type="button" class="btn btn-outline-danger end-friend">친구삭제</button>
 								</div>							
 							</div>
 						</c:if>
@@ -74,7 +74,7 @@
 									<span class="follower-name">${ml.nickname}</span>
 								</div>		
 								<div class="follower-btn">
-									<button type="button" id="friend-with-follower" class="btn btn-outline-warning">친구추가</button>
+									<button type="button" class="btn btn-outline-warning friend-with-follower">친구추가</button>
 								</div>					
 							</div>
 						</c:if>
@@ -138,14 +138,14 @@ $(searchFriendBtn).click((e) => {
 	const popup = open('${pageContext.request.contextPath}/member/mypage/memberFindFriend.do', '친구찾기', spec);
 });
 
-$("#friend-with-follower").click((e) => {
-	let nickname = $(".follower-name").text();
+$(".friend-with-follower").click((e) => {
+	let nickname = $(e.target).parent().parent().find('span').text();
 	friendAlarm('friend', 'follower', '${loginMember.nickname}', nickname);
 	updateFriend('follower', nickname);
 });
 
-$("#end-friend").click((e) => {
-	let nickname = $(".friend-name").text();
+$(".end-friend").click((e) => {
+	let nickname = $(e.target).parent().parent().find('span').text();
 	friendAlarm('friend', 'friend', '${loginMember.nickname}', nickname);
 	updateFriend('friend', nickname);
 });

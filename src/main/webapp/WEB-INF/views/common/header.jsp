@@ -270,11 +270,6 @@
 	});
 	var dest = '${loginMember.nickname}';
 	
-	$("#profile").click(function(){
-		if($("#alarmList").hasClass("show")){
-			console.log($("#alarmList").hasClass("show"));			
-		}
-	});
 	/* 샘플코드 */
 	$("#sign-out").click(function(){
 		alert("로그아웃되었습니다.");
@@ -303,9 +298,11 @@
 						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=\${code}">\${content}</a>								
 						</div>`;
 					}else if(code == 'fr'){
-						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />
+						
+						\${content}</div>`;
 					}else if(code.substring(0,4) == 'chat'){
-						alarmDiv = `<div class="card card-body alarmContent">\${content}</div>`;
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
 				});
