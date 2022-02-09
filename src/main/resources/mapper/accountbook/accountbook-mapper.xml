@@ -36,10 +36,6 @@
     		account_book
     	where
     		id = #{id}
-    	<if test="incomeExpense != null and incomeExpense != ''">
-			and 
-			income_expense = #{incomeExpense}
-		</if>
     	order by
     		reg_date desc
 	</select>
