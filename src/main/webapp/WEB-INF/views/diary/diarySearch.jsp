@@ -82,7 +82,7 @@
 				    </div>
 				  </div>
 				</div>
-			      <div class="search-view"><h3>"<%=search %>" 검색 결과는 ${searchCount}건 입니다.</h3></div>	
+			      <div class="search-view"><h3>"<%=search %>"에 대한 검색 결과 (${searchCount})</h3></div>	
 			</div>			
 			<!-- 일기 목록 -->
 			<div class="row">
