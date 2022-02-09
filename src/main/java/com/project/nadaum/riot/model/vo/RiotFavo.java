@@ -19,9 +19,9 @@ public class RiotFavo implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	
-	private String member_Id;
-	private String sm_Id;
-	
+	private String memberId;
+	private String smId;
+	private boolean favAccept;
 
 	
 	
