@@ -59,6 +59,8 @@ padding-left: 20px;
 		console.log(after_month);
 		end = document.getElementById("endDate");
 		end.value = after_month; 
+		
+		
 }); 
 
 
@@ -70,9 +72,9 @@ padding-left: 20px;
 			<!-- 썸네일 그림, 타이틀  -->
 			<img src="${pageContext.request.contextPath}/resources/images/culture/festival.jpg" alt="문화썸네일" />
 			<h1 class="title">Culture</h1>
-			<form class="form-inline" id="searchFrm">
+			<form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}" method="post">
+			<%-- <form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do" method="post"> --%>
 				 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
-				 
 				 	
 				  <div class="form-group" id="period">
 				    <label for="Date" class="control-label">기간</label>
@@ -95,20 +97,18 @@ padding-left: 20px;
 				        <option value="B000">음악</option><!-- B 음악  -->
 				        <option value="C000">무용</option><!-- C 무용-->
 				        <option value="D000">미술</option><!-- D 미술  -->
-				        
 				      </select>
 				  </div>
-				  <button type="submit" class="btn orange btn-default">Search</button>
+				  <button type="submit" class="btn orange btn-default" id="search-btn" >Search</button>
 					<button type="button" class="btn btn-dark">나다운 찜 목록</button>
 			</form>
 		</div>
 	<div id="culture-container">
 	    <br />
-	    
 	     <div class="py-5">
 	    <div class="container">
-	      <div class="row hidden-md-up">
-	       
+	      <div class="row hidden-md-up" id="result">
+	      
 	     <c:forEach var="culture" items="${list}">
 	    	<div class="col-md-4" style="padding: 15px;">
 	         <div class="card"> 
@@ -146,29 +146,6 @@ padding-left: 20px;
 		</div>
 	</div>
 </body>
-<script>
- $(searchFrm).submit((e) => {
-	e.preventDefault();
-	
-	const csrfHeader = "${_csrf.headerName}";
-    const csrfToken = "${_csrf.token}";
-    const headers = {};
-    headers[csrfHeader] = csrfToken;
-    
-    
-	$.ajax({
-		headers : headers, 
-		url: `${pageContext.request.contextPath}/culture/board/${page}/search`,
-		method: "POST",
-		data : $(searchFrm).serialize(),
-		success(resp){
-			console.log(resp);
-		},
-		error: console.log
-	});
-	
-}); 
-</script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
   <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>

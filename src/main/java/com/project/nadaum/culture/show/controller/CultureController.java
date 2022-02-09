@@ -154,9 +154,8 @@ public class CultureController {
 		return "/culture/cultureBoardList";
 	}
 	
-
-	@RequestMapping("/board/{page}/search")
-	public String SearchKeyword(@PathVariable int page, 
+	@PostMapping("/search.do")
+	public List<Map<String, Object>> Search(
 			@RequestParam (value="keyword", defaultValue="") String keyword, 
 			@DateTimeFormat(pattern="yyyy-MM-dd") Date startDate, @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate, 
 			@RequestParam (value="searchArea", defaultValue="") String searchArea, 
@@ -170,6 +169,8 @@ public class CultureController {
 		System.out.println(searchArea);
 		System.out.println(searchGenre);
 		 
+
+		List<Map<String, Object>> perforList = null;
 		try {
 			StringBuilder urlBuilder = new StringBuilder();
 			
@@ -193,7 +194,7 @@ public class CultureController {
 			urlBuilder.append("&" + URLEncoder.encode("to", "UTF-8") + "=" + URLEncoder.encode(to, "UTF-8"));
 			urlBuilder.append("&" + URLEncoder.encode("realmCode", "UTF-8") + "=" + URLEncoder.encode(searchGenre, "UTF-8"));
 			urlBuilder.append("&" + URLEncoder.encode("sido", "UTF-8") + "=" + URLEncoder.encode(searchArea, "UTF-8"));
-			urlBuilder.append("&" + URLEncoder.encode("cPage", "UTF-8") + "=" + page); 
+			//urlBuilder.append("&" + URLEncoder.encode("cPage", "UTF-8") + "=" + page); 
 
 			URL url = new URL(urlBuilder.toString());
 			
@@ -239,7 +240,6 @@ public class CultureController {
 			log.debug("response={}", response);
 			log.debug("msgBody={}", msgBody);
 			
-			List<Map<String, Object>> perforList = null;
 			
 				perforList = (List<Map<String, Object>>) msgBody.get("perforList");
 				log.debug("perforList = {}", perforList);
@@ -257,15 +257,6 @@ public class CultureController {
 					String end = perforList.get(i).get("endDate").toString();
 					String realmName = perforList.get(i).get("realmName").toString();
 					
-					System.out.println(seq);
-					System.out.println(title);
-					System.out.println(area);
-					System.out.println(place);
-					System.out.println(thumbnail);
-					System.out.println(start);
-					System.out.println(end);
-					System.out.println(realmName);
-					
 					  Map<String, Object> map2 = new HashMap<>();
 						map2.put("seq", seq);
 						map2.put("title", title);
@@ -281,20 +272,15 @@ public class CultureController {
 					  System.out.println(map2);
 					}
 				
-				model.addAttribute("searchlist", searchList);
-				System.out.println(searchList);
+				model.addAttribute("perforList", perforList);
+				System.out.println(perforList);
 			
-			
-
-			System.out.println("page number : "+page);
-			model.addAttribute("page",page);
-
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
-	    return "/culture/test";
+		return perforList;
 	}
-		
+	
     // tag값의 정보를 가져오는 메소드
 	private static String getTagValue(String tag, Element eElement) {
 		//
