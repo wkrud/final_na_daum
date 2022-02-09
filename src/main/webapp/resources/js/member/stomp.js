@@ -23,7 +23,7 @@ function connect(){
 				
 				let message = `<a href="javascript:void(window.open('${url}', '${name}','${spec}'))">${resp.host}님이 채팅방에 초대하셨습니다.</a>`;
 				let code = resp.type + Math.floor(Math.random() * 10000);
-				sendInviteChatRoom(code,message);
+				sendAndInsertAlarm('N',resp.guest,code,message);
 				/*
 				if(confirm(resp.host + '님이 채팅을 신청하셨습니다.')){
 					window.open(url, name, spec);
@@ -67,12 +67,12 @@ function answerAlarm(type, code, guest, title){
 	stompClient.send("/nadaum/chat/answerAlarm/" + guest,{},JSON.stringify(sendData));
 };
 
-const sendInviteChatRoom = (code,content) => {
+const sendAndInsertAlarm = (type,id,code,content) => {
 	$.ajax({
-		url: '/nadaum/member/mypage/insertChatAlarm.do',
+		url: '/nadaum/member/mypage/sendAndInsertAlarm.do',
 		headers: headers,
 		method:"POST",
-		data:{code,content},
+		data:{type,id,code,content},
 		success(resp){
 			console.log(resp);
 		},

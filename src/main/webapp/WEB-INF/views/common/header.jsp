@@ -303,6 +303,8 @@
 						\${content}</div>`;
 					}else if(code.substring(0,4) == 'chat'){
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
+					}else if(code.substring(0,4) == 'feco'){
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
 				});

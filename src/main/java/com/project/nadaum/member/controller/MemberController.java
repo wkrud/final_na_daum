@@ -914,10 +914,13 @@ public class MemberController {
 		return ResponseEntity.ok(1);
 	}
 	
-	@PostMapping("/mypage/insertChatAlarm.do")
-	public ResponseEntity<?> insertChatAlarm(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member member){
+	@PostMapping("/mypage/sendAndInsertAlarm.do")
+	public ResponseEntity<?> sendAndInsertAlarm(@RequestParam Map<String, Object> map){
 		log.debug("map = {}", map);
-		map.put("id", member.getId());
+		if("N".equals(map.get("id"))) {
+			Member member = memberService.selectOneMemberNickname((String) map.get("id"));
+			map.put("id", member.getId());
+		}
 		int result = memberService.insertAlarm(map);
 		return ResponseEntity.ok(1);
 	}

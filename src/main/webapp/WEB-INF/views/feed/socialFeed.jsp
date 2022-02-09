@@ -122,13 +122,11 @@
 	</div>
 </div>
 <script>
-/* $(() => {
-	$(feedViewModal)
-	.modal()
-	.on("hide.bs.modal", (e) => {
-	location.href=`/nadaum/feed/socialFeed.do?id=${resp.feed.writer}`;
+$(() => {
+ 	<c:if test="${check.type eq 'alarmMessage'}">
+		selectedFeed('${loginMember.id}','${check.code}');
+	</c:if>
 });
-}); */
 
 const $chatRoom = $("#make-chat-room");
 $chatRoom.click((e) => {

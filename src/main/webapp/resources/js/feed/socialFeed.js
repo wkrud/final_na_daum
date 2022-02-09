@@ -271,11 +271,11 @@ const writeComment = (content, code, id) => {
 				let val = $(e.target).parent().find('input').val();
 				deleteComment(val, resp.commentWriter, resp.fcode);
 			});	
-			/*
-			let code = 'fecomment-' + resp.no;
-			let content = `<a href='/nadaum/feed/selectedFeed.do?id=${id}'>${resp.nickname}님이 회원님의 피드에 댓글을 작성했습니다.</a>`;
-			sendInviteChatRoom(code, );
-			*/
+			
+			let content = `<a href='/nadaum/feed/socialFeed.do?id=${id}&code=${resp.fcode}&type=alarmMessage'>${resp.nickname}님이 회원님의 피드에 댓글을 작성했습니다.</a>`;
+			let alarmCode = 'fecomment-' + resp.no;
+			sendAndInsertAlarm('I',id, alarmCode, content);
+			
 		},
 		error: console.log
 	});
