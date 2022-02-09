@@ -122,14 +122,14 @@ public class BoardController {
 			@RequestParam String id,
 			@RequestParam String content,
 //			HttpSession session,
-			BoardComment commentList) throws Exception{
+			BoardComment bc) throws Exception{
 		try {
 //		id = (String) session.getAttribute("");
-		BoardComment bc = new BoardComment("", id, code, content, commentLevel, commentRef, null);
+		
 		log.debug("bc = {}", bc);
 		
 		int result = boardService.insertBoardComment(bc);
-		log.debug("commentList = {}", commentList);
+		log.debug("commentList = {}", bc);
 		
 		return "redirect:/board/boardDetail.do?code="+code;
 		
