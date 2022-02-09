@@ -3,51 +3,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
-<%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/movie/movieList.css" />
- --%>
-<body>
-	<style>
-#container {
-	padding: 0;
-}
+<%@page import="com.project.nadaum.culture.movie.controller.GetMovieApi"%>
 
-.container {
-	padding: 0;
-}
+	<sec:authentication property="principal" var="loginMember"/>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="나:다움 영화리스트 " name="movieList" />
+</jsp:include>
 
-section {
-	background-color: #FFFBF5;
-}
-
-body {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 100vh;
-	background-color: #EEEEEE;
-}
+<style>
 
 /* 썸네일 이미지 설정*/
-.movie-thumnail {
-	position: relative;
+.movie-banner {
+	top:50px;
 	padding: 0;
 }
 
-.movie-thumnail img {
-	height: 450px;
-	width: 100%;
-	opacity: 0.75;
-}
-
-.title {
-	position: absolute;
-	top: 30%;
-	left: 60%;
-}
 /*검색 폼 */
 .search-form {
 	/* position: absolute; */
@@ -63,7 +35,7 @@ body {
 }
 
 /* 오렌지색 버튼*/
-.btn {
+.btn-default {
 	border-radius: 10px;
 	text-decoration: none;
 	color: #fff;
@@ -71,7 +43,7 @@ body {
 	display: inline-block;
 }
 
-.btn:active {
+.btn-default:active {
 	transform: translate(0px, 5px);
 	-webkit-transform: translate(0px, 5px);
 	box-shadow: 0px 1px 0px 0px;
@@ -85,74 +57,135 @@ body {
 .orange:hover {
 	background-color: #FF983C;
 }
+
+.movieapi-container{
+padding : 100px;
+}
 </style>
 	<div class="movie-container">
-
 		<!-- 썸네일 그림, 타이틀  -->
-		<div class="culture-thumnail"></div>
-
-
-		<!-- 검색창 -->
-		<form class="form-inline search-form">
-			<div class="form-group">
-				<label for="Date" class="control-label">검색</label> <input
-					type="text" class="form-control" id="keyword"
-					placeholder="검색어를 입력하세요.">
-			</div>
-			<button type="submit" class="btn orange btn-default" id="search-btn">검색</button>
-		</form>
-	</div>
-
-
-	<!-- 영화정보진흥원 api -->
-	<div id="movie-container">
-		<div class="py-5">
-			<div class="container">
-				<div class="row hidden-md-up">
-
-				<c:forEach var="movie" items="${list}">
-							
-							<div class="col-md-4">
-									<div data-no = "${movie.movieCd}">
-									<div class="card-block">
-										<h4 class="card-title">${movie.movieCd}</h4>
-										<p class="card-text p-y-1">${movie.movieNm}</p>
-										<h6 class="card-subtitle text-muted">${movie.prdtYear}</h6>
-										<p class="card-text p-y-1">${movie.typeNm}</p>
-										<p class="card-text p-y-1">${movie.nationAlt}</p>
-										<p class="card-trfext p-y-1">${movie.genreAlt}</p>
-										<p class="card-trfext p-y-1">${movie.peopleNm}</p>
-										<h6 class="card-subtitle text-muted">
-											<a href="#" class="card-link"> 
-												<img 
-													class="thumnail"
-													src="${movie.imgUrl}" 
-													alt="영화사진" />
-											</a>
-										</h6>
-										<button 
-											type="submit" 
-											class="goDetail"
-										 	value="${movie.movieCd}">+More</button>
-									</div>
-									</div>
+		<div class="movie-banner">
+			<!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
+				<ol class="carousel-indicators">
+					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					<li data-target="#myCarousel" data-slide-to="1"></li>
+					<li data-target="#myCarousel" data-slide-to="2"></li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="carousel-item active">
+						<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+							<rect width="100%" height="100%" fill="#777" /></svg>
+						<div class="container">
+							<div class="carousel-caption text-left">
+								<h1>Example headline.</h1>
+								<p>Cras justo odio,</p>
+								<p>
+									<a class="btn btn-lg btn-primary" href="#" role="button">Sign
+										up today</a>
+								</p>
 							</div>
-					</c:forEach>
+						</div>
+					</div>
+					<div class="carousel-item">
+						<svg class="bd-placeholder-img" width="100%" height="100%"
+							xmlns="http://www.w3.org/2000/svg"
+							preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+							<rect width="100%" height="100%" fill="#777" /></svg>
+						<div class="container">
+							<div class="carousel-caption">
+								<h1>Another example headline.</h1>
+								<p>Cras justo odio,</p>
+								<p>
+									<a class="btn btn-lg btn-primary" href="#" role="button">Learn
+										more</a>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="carousel-item">
+						<svg class="bd-placeholder-img" width="100%" height="100%"
+							xmlns="http://www.w3.org/2000/svg"
+							preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+							<rect width="100%" height="100%" fill="#777" /></svg>
+						<div class="container">
+							<div class="carousel-caption text-right">
+								<h1>One more for good measure.</h1>
+								<p>Cras justo odio, dapibus ac facilisis in,</p>
+								<p>
+									<a class="btn btn-lg btn-primary" href="#" role="button">Browse
+										gallery</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<a class="carousel-control-prev" href="#myCarousel" role="button"
+					data-slide="prev"> <span class="carousel-control-prev-icon"
+					aria-hidden="true"></span> <span class="sr-only">Previous</span>
+				</a> <a class="carousel-control-next" href="#myCarousel" role="button"
+					data-slide="next"> <span class="carousel-control-next-icon"
+					aria-hidden="true"></span> <span class="sr-only">Next</span>
+				</a>
+			</div> -->
+
+
+			<!-- 검색창 -->
+			<form class="form-inline search-form">
+				<div class="form-group">
+					<label for="Date" class="control-label">검색</label> <input
+						type="text" class="form-control" id="keyword"
+						placeholder="검색어를 입력하세요.">
+				</div>
+				<button type="submit" class="btn orange btn-default" id="search-btn">검색</button>
+			</form>
+			
+			<a href="${pageContext.request.contextPath}/scrap/scrapList.do">스크랩</a>
+		</div>
+
+		<!-- 영화정보진흥원 api -->
+		<div id="movieapi-container">
+			<div class="py-5">
+				<div class="container">
+					<div class="row hidden-md-up">
+						<!-- api 꺼내기 위한 반복문 시작 -->
+						<c:forEach var="movie" items="${list}">
+							<div class="col-md-4">
+								<div class="card mb-4 shadow-sm">
+									<svg class="bd-placeholder-img card-img-top" width="100%"
+										height="225" xmlns="http://www.w3.org/2000/svg"
+										preserveAspectRatio="xMidYMid slice" focusable="false"
+										role="img" aria-label="Placeholder: Thumbnail">
+            						<title>Placeholder</title>
+            						<rect width="100%" height="100%" fill="#55595c" />
+            						<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+           		 					</svg>		
+            						<input type="hidden" name="movieCode" value="{}"/>
+									<div class="card-body">
+										<p class="card-text">${movie.movieCd}</p>
+										<p class="card-text">${movie.movieNm}</p>
+										<p class="card-text">${movie.prdYear}</p>
+										<p class="card-text">${movie.typeNm}</p>
+										<%-- <p class="card-text">${movie.genreAlt}</p> --%>
+										<p class="card-text">${movie.peopleNm}</p>
+										<p class="card-text"></p>
+										<div class="d-flex justify-content-between align-items-center">
+											<small class="text-muted">${movie.nationAlt}</small>
+											<div class="btn-group">
+												
+												<button type="button" class="btn btn-sm btn-outline-secondary goDetail" name="apiCode" value="${movie.movieCd }">+More</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					</div>
 
 				</div>
-
 			</div>
 		</div>
-	</div>
 
-
-	
-
-	<!-- themovie fav movie -->
-	<h1 class="title">Movies</h1>
-	<ul id="top_rated">
-	</ul>
-
+		
 </body>
 <script>
 /* the movie api 에서 top_rated  불러오기*/
@@ -162,37 +195,14 @@ body {
 
  
  /*  버튼 누를 시 영화 상세보기로 이동 */
-/* $(() =>{
-	$("div[data-no]").click((e) => {
-		const $div = $(e.target).parent();
-		const no = $div.data("movieCd");
-		const movieCd = $(e.target).val();
-		console.log($div);
-		console.log(movieCd);
-		location.href = `${pageContext.request.contextPath}/movie/movieDetail.do?movieCd=\${MovieCd}`;
-	});
-}); */
-
-	
 $(".goDetail").click((e) => {
-	const movieCd = $(e.target).val();
+	const apiCode = $(e.target).val();
 	console.log(e.target);
-	console.log(movieCd);
+	console.log(apiCode);
 	
- 	/* location.href = `${pageContext.request.contextPath}/movie/movieDetail.do?movieCd=\${MovieCd}`; */
-	$.ajax({
-		url : `${pageContext.request.contextPath}/movie/movieDetail.do?movieCd=\${movieCd}`,
-		
-		
-	})
+ 	location.href = `${pageContext.request.contextPath}/movie/movieDetail/\${apiCode}`;
 	
  });
+ 
 </script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-<script
-	src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
-
-</html>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
