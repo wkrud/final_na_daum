@@ -132,15 +132,16 @@
 		</div>
 		<!-- 필터링 -->
 		<div class="fillterSection">
-			<button id="AllListBtn" class="defaultBtn" onclick="location href=' ${pageContext.request.contextPath}/accountbook/selectAllAccountList.do'">전체보기</button>
-			<button class="FilterBtn defaultBtn" id="incomeFilterBtn">수입</button>
-			<button class="FilterBtn defaultBtn" id="expenseFilterBtn">지출</button>
+			<button id="AllListBtn" class="defaultBtn" onclick="location href='${pageContext.request.contextPath}/accountbook/selectAllAccountList.do';">전체보기</button>
+			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=">전체보기</a>
+			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=I">수입</a>
+			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=E">지출</a>
 			<a href="${pageContext.request.contextPath}/accountbook/excel">엑셀 다운로드</a>
 		</div>
 		<!-- 가계부 리스트 -->
 		<div id="account_list">
 			<c:forEach items="${accountList}" var = "account">
-				<div class="accountListDiv">
+				<div class="accountListDiv ${account.code}">
 				<table class="accountTable">
 					<tr class="account_side_column">
 						<td><span class="accountRegDate"><fmt:formatDate value="${account.regDate}" pattern="yyyy/MM/dd"/></span></td>
@@ -162,11 +163,11 @@
 					</tr>
 					</table>
 				</div>
-				<div class="accountUpdate">
+				<div class="accountUpdate" id="${account.code}">
 					<button class="deleteBtn" onclick="deleteDetail('${account.code}')">삭제</button>
 				</div>
 			</c:forEach>
-			<c:if test="${totalAccountList gt 5}">
+			<c:if test="${totalAccountList gt 4}">
 				<div class="accountPage">${pagebar}</div>
 			</c:if>
 		</div>

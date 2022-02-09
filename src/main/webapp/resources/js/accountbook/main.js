@@ -159,7 +159,7 @@
 	
 	
 	//지출
-	$('#expenseFilterBtn').click(function() {
+/*	$('#expenseFilterBtn').click(function() {
 		var data = {"id" : $id, "incomeExpense" : $expense};
 		$.ajax({
 			url : '/nadaum/accountbook/incomeExpenseFilter.do',
@@ -175,7 +175,7 @@
 				alert("조회에 실패했습니다.");
 			}
 		});
-	});
+	});*/
 	
 	//검색
 /*	$('#searchBtn').click(function() {
@@ -279,6 +279,12 @@
 			}
 		});
 	};
+		
+		$('.accountListDiv').click(function() {
+			const code = this.className.split(" ")[1];
+			$('#code').show();
+			console.log(code);
+		});
 	
 	
 	

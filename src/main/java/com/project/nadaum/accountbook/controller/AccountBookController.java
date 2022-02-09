@@ -142,31 +142,16 @@ public class AccountBookController {
 	}
 	
 	 //전체 리스트 출력
-	 @RequestMapping(value="/selectAllAccountList.do") public String selectAllAccountList (@RequestParam(defaultValue = "1") int cPage,
-		  @AuthenticationPrincipal Member member, Model model, HttpServletRequest request) {
-		 int limit = 4; 
-		 int offset = (cPage-1) * limit; 
+	 @RequestMapping(value="/selectAllAccountList.do") 
+	 public void selectAllAccountList (@AuthenticationPrincipal Member member, Model model, HttpServletRequest request) {
 		 String id = member.getId();
-		 
-		  Map<String, Object> param = new HashMap<>(); 
-		  param.put("offset", offset);
-		  param.put("limit", limit); 
-		  param.put("id", id); 
-		 
+		 Map<String, Object> param = new HashMap<>(); 
+		 param.put("id", id);
 		  //로그인한 아이디로 등록된 가계부 전체 목록
 		 List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
-		  
-		 //전체리스트 개수 
-		 int totalAccountList = accountBookService.countAccountList(param);
-		  
-		  String category = "all"; 
-		  String url = request.getRequestURI(); 
-		  String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
-		  
-		 model.addAttribute("pagebar", pagebar);
+
 		 model.addAttribute("accountList",accountList);
-		 
-		 return "redirect:/accountbook/accountbook.do"; }
+		}
 		 
 	
 	 // 가계부 추가
@@ -188,23 +173,70 @@ public class AccountBookController {
 	}
 	
 	// 수입, 지출별 정렬
-	 @PostMapping(value="/incomeExpenseFilter.do") 
-	 public String incomeExpenseFilter(@RequestBody Map<String, Object> param,  Model model) {
+	 @GetMapping(value="/incomeExpenseFilter.do") 
+	 public String incomeExpenseFilter(@RequestParam(defaultValue = "1") int cPage,@AuthenticationPrincipal Member member, String incomeExpense,  
+			 					Model model, HttpServletRequest request) {
+		 int limit = 4;
+		 int offset = (cPage-1) * limit;
+		 String id = member.getId();
+		 
 		 Map<String, Object> map = new HashMap<>();
-		 map.put("id", param.get("id"));
-		 map.put("incomeExpense", param.get("incomeExpense"));
-		 log.debug("map= {}",map);
-		 
+		 map.put("id", id);
+		 map.put("incomeExpense", incomeExpense);
+		 map.put("offset", offset);
+		 map.put("limit", limit);
+		 //조회한 목록
 		 List<AccountBook> accountList = accountBookService.incomeExpenseFilter(map); 
-		 model.addAttribute("accountList", accountList);	  
+		 log.debug("incomeExpense={}", incomeExpense);
+		 //조회한 목록 전체 개수
+		 int totalAccountList = accountBookService.countAccountList(map);
+		 //페이지바
+		 String category = "incomeExpense"; 
+		 String url = request.getRequestURI(); 
+		 String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
 		 
-		 return "/accountbook/accountList";
+		//수입, 지출 계산한 값
+			List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+				//필요한 값만 맵 객체로 변환
+				Map<String, Object> incomeExpenseList = new HashMap<>();
+				if(incomeList.size() == 0) {
+					incomeExpenseList.put("income", 0);
+					incomeExpenseList.put("expense", 0);
+				} else if(incomeList.size() == 1) {
+					if((incomeList.get(0).get("incomeExpense")).equals("I")) {
+						incomeExpenseList.put("income", incomeList.get(0).get("total"));
+						incomeExpenseList.put("expense", 0);
+					} else {
+						incomeExpenseList.put("income", 0);
+						incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+					}
+				} else {
+					incomeExpenseList.put("income", incomeList.get(1).get("total"));
+					incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+				}
+				log.info("incomeExpenseList={}", incomeExpenseList);
+					
+				//월간 총 합계 금액
+				String monthlyAccount = accountBookService.monthlyAccount(id);
+				log.info("monthlyAccount={}", monthlyAccount);
+				//만약 사용자 입력값이 없어서 monthlyAccount합계가 null값이 넘어온다면 해당 변수에 0 대입
+				if (monthlyAccount == null) {
+					monthlyAccount = "0";
+				}
+		 
+		 model.addAttribute("totalAccountList", totalAccountList);
+		 model.addAttribute("pagebar", pagebar);
+		 model.addAttribute("accountList", accountList);
+		 model.addAttribute("incomeExpenseList", incomeExpenseList);
+		 model.addAttribute("monthlyAccount", monthlyAccount);
+		 
+		return "/accountbook/accountbook";
 	  }
 	
 	 
 	//검색
 	 @GetMapping(value="/searchList.do")
-	 public void searchList(@RequestParam(defaultValue = "1") int cPage, @AuthenticationPrincipal Member member, 
+	 public String searchList(@RequestParam(defaultValue = "1") int cPage, @AuthenticationPrincipal Member member, 
 			 @RequestParam Map<String, Object> param, Model model, HttpServletRequest request) {
 		 int limit = 4;
 		 int offset = (cPage-1) * limit;
@@ -214,7 +246,7 @@ public class AccountBookController {
 		 map.put("incomeExpense", param.get("incomeExpense"));
 		 map.put("category", param.get("category"));
 		 map.put("detail", param.get("detail"));
-		 map.put("id", param.get("id"));
+		 map.put("id", member.getId());
 		 map.put("limit", limit);
 		 map.put("offset", offset);
 		 log.info("map={}", map);
@@ -259,11 +291,14 @@ public class AccountBookController {
 			if (monthlyAccount == null) {
 				monthlyAccount = "0";
 			}
-				
+			
+			model.addAttribute("totalAccountList", totalAccountList);
 			model.addAttribute("incomeExpenseList", incomeExpenseList);
 			model.addAttribute("monthlyAccount", monthlyAccount);
 			model.addAttribute("accountList", accountList); 
-		 }
+			
+			return "/accountbook/accountbook";
+	 }
 	 	
 	 	//차트
 		@ResponseBody
@@ -355,7 +390,11 @@ public class AccountBookController {
 				for(AccountBook accountbook : list) {
 					Row row = sheet.createRow(rowNo++);
 					row.createCell(0).setCellValue(format.format(accountbook.getRegDate()));
-					row.createCell(1).setCellValue(accountbook.getPayment().equals("card") ? "카드" : "현금");
+					if(accountbook.getPayment() == null) {
+						row.createCell(1).setCellValue("null");
+					} else {
+						row.createCell(1).setCellValue(accountbook.getPayment().equals("card") ? "카드" : "현금");						
+					}
 					row.createCell(2).setCellValue(accountbook.getIncomeExpense().equals("I") ? "수입" : "지출");
 					row.createCell(3).setCellValue(accountbook.getCategory());
 					row.createCell(4).setCellValue(accountbook.getDetail());
@@ -381,7 +420,36 @@ public class AccountBookController {
 				e.printStackTrace();
 			
 			}
+		}
 		
+		//메인 위젯 ajax
+		@ResponseBody
+		@GetMapping("/widget")
+		public Map<String, Object> accountWidget(@AuthenticationPrincipal Member member) {
+			String id = member.getId();
+			List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+			log.debug("incomeList={}",incomeList);
+
+			//필요한 값만 맵 객체로 변환
+			Map<String, Object> incomeExpenseList = new HashMap<>();
+				
+			if(incomeList.size() == 0) {
+				incomeExpenseList.put("income", 0);
+				incomeExpenseList.put("expense", 0);
+			} else if(incomeList.size() == 1) {
+				if((incomeList.get(0).get("incomeExpense")).equals("I")) {
+					incomeExpenseList.put("income", incomeList.get(0).get("total"));
+					incomeExpenseList.put("expense", 0);
+				} else {
+					incomeExpenseList.put("income", 0);
+					incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+				}
+			} else {
+				incomeExpenseList.put("income", incomeList.get(1).get("total"));
+				incomeExpenseList.put("expense", incomeList.get(0).get("total"));
+			}
+			
+			return incomeExpenseList;
 		}
 	
 

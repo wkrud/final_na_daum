@@ -68,7 +68,7 @@ public class NadaumUtils {
 					+ "<script>"
 					+ "const paging = (pageNo) => {location.href=`" + url + "${pageNo}`;};"
 					+ "</script>"
-					);			
+					);				
 		}else {
 			pagebar.append(" </ul>\r\n"
 					+ "</nav>"
