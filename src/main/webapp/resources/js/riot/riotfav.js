@@ -33,7 +33,7 @@ $(".fav-btn").click((e) => {
 			favData
 		),
 		success: function(response) {
-				console.log();
+				console.log(response.oneaccount.favAccept);
 		
 		},
 		error: function(response) {
