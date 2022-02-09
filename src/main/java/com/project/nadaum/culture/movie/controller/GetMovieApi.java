@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,7 +26,7 @@ public class GetMovieApi {
 
     // tag값의 정보를 가져오는 메소드
 	private static String getTagValue(String tag, Element eElement) {
-
+		//
 	    NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
 	    Node nValue = (Node) nlList.item(0);
 	    if(nValue == null) 
@@ -38,7 +37,7 @@ public class GetMovieApi {
 	
 	//영화API
 	@GetMapping("/movieList.do")
-	public ModelAndView getMovieApi(Model model) {
+	public void getMovieApi(Model model) {
 		int page = 1;
 
 		List<Map<String, Object>> list = new ArrayList<>();
@@ -51,7 +50,7 @@ public class GetMovieApi {
 				String url = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.xml"
 						+ "?key=2707c14a032dacdea9d8b690c3f99d19"
 						+ "&itemPerPage"
-						+ "&curPage="+page ;
+						+ "&curPage="+page;
 				
 								
 				DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
@@ -115,6 +114,7 @@ public class GetMovieApi {
 				}
 			}	// while end
 			
+			model.addAttribute("list",list);
 			
 			for(Map<String, Object> map : list) {
 				System.out.println(map);
@@ -123,7 +123,6 @@ public class GetMovieApi {
 			} catch (Exception e){	
 			e.printStackTrace();
 		}	// try~catch end
-			return new ModelAndView("/movie/movieList","list",list);
 	}
 	
 

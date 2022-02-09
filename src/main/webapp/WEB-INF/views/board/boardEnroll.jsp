@@ -7,10 +7,6 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <fmt:requestEncoding value="utf-8" />
-<sec:authentication property="principal" var="loginMember"/>
-<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
-
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 질문 등록" name="title" />
 </jsp:include>
