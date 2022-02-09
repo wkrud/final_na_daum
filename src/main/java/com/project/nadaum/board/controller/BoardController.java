@@ -10,7 +10,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,9 @@ import com.google.gson.JsonObject;
 import com.project.nadaum.board.model.service.BoardService;
 import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
-import com.project.nadaum.board.model.vo.Likes;
 import com.project.nadaum.common.BoardUtils;
 import com.project.nadaum.common.NadaumUtils;
+import com.project.nadaum.member.model.service.MemberService;
 import com.project.nadaum.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +43,33 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+	private MemberService memberService;
+	
 	@Autowired
 	private ServletContext application;
 	
 	
 	
 	//추천수
+	@PostMapping("/feedLikeChange.do")
+	public ResponseEntity<?> feedLikeChange(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member guest){
+		int result = 0;
+		try {
+			log.debug("map = {}", map);
+			map.put("id", guest.getId());
+			String check = (String) map.get("check");
+			if("1".equals(check)) {
+				result = memberService.insertHelpLike(map);
+			}else {
+				result = memberService.deleteHelpLike(map);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}
+		return ResponseEntity.ok(result);
+	}
+	
 //	@RequestMapping("/boardLike")
 //	@ResponseBody
 //	public Map<String, Object> likesButton(HttpServletRequest request, @RequestParam String id) {

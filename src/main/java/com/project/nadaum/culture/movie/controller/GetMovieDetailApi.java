@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,6 +22,7 @@ import org.w3c.dom.NodeList;
 
 import com.project.nadaum.culture.comment.model.service.CommentService;
 import com.project.nadaum.culture.comment.model.vo.Comment;
+import com.project.nadaum.culture.movie.model.service.MovieService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +33,9 @@ public class GetMovieDetailApi {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private MovieService movieService;
 	
 	/**
 	 * elem 하위의 len개의 tagName을 찾아서 textContent를 문자열로 리턴
@@ -68,7 +71,9 @@ public class GetMovieDetailApi {
 	public ModelAndView getMovieDetailApi(@PathVariable String apiCode, Model model) {
 		log.debug("movieCd = {} ", apiCode);
 		
-		List<Object> list = new ArrayList<>();
+		List<Object> list = new ArrayList<>(); //api 내욜을 넘겨줄 리스트
+		
+		List<Object>  listStar = new ArrayList<>(); //펑점을 담을 리스트
 		
 		try {
 
@@ -143,6 +148,25 @@ public class GetMovieDetailApi {
 			model.addAttribute("list",list);
 			model.addAttribute("commentList",commentList);
 			log.debug("list = {}" , list);
+			
+			//평점 평균
+			
+			List<Integer> star = movieService.listStar(apiCode); //star 불어오기
+			log.debug("star{}", star);
+			
+			int sum = 0; // 평점 합계 구하는 변수 0으로 초기화
+			double avg = 0;
+			sum = star.stream().mapToInt(Integer::intValue).sum();
+			System.out.println("starSum : " + sum);
+			int arraysize = star.size();
+			avg = sum / arraysize;
+			System.out.println("avgStar : " + avg);
+			
+			List<Object> rating = movieService.avgRating(apiCode);
+			log.debug("rating{}", rating);
+			
+			log.debug("avg{}", avg);
+			model.addAttribute("avg", avg);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

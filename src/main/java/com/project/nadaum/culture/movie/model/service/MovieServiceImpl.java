@@ -19,6 +19,31 @@ public class MovieServiceImpl implements MovieService {
 
 	@Autowired
 	private MovieDao movieDao;
+
+	@Override
+	public int checkScrap(Map<String, Object> map) {
+		return movieDao.checkScrap(map);
+	}
+
+	@Override
+	public int insertScrap(Map<String, Object> map) {
+		return movieDao.insertScrap(map);
+	}
+
+	@Override
+	public int deleteScrap(Map<String, Object> map) {
+		return movieDao.deleteScrap(map);
+	}
+
+	@Override
+	public List<Object> avgRating(String apiCode) {
+		return movieDao.avgRating(apiCode);
+	}
+
+	@Override
+	public List<Integer> listStar(String apiCode) {
+		return movieDao.listStar(apiCode);
+	}
 	
 
 
