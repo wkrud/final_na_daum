@@ -28,7 +28,7 @@
 	right: 20px;
 	max-width: 350px;
 	max-height: 80px;
-	overflow: hidden;
+	overflow: scroll;
 	z-index: 9;
 }
 

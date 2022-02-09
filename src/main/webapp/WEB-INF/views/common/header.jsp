@@ -15,6 +15,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <title>${param.title}</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"
@@ -268,11 +270,6 @@
 	});
 	var dest = '${loginMember.nickname}';
 	
-	$("#profile").click(function(){
-		if($("#alarmList").hasClass("show")){
-			console.log($("#alarmList").hasClass("show"));			
-		}
-	});
 	/* 샘플코드 */
 	$("#sign-out").click(function(){
 		alert("로그아웃되었습니다.");
@@ -301,6 +298,10 @@
 						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=\${code}">\${content}</a>								
 						</div>`;
 					}else if(code == 'fr'){
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />
+						
+						\${content}</div>`;
+					}else if(code.substring(0,4) == 'chat' || code.substring(0,4) == 'feco' || code.substring(0,4) == 'feli'){
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
