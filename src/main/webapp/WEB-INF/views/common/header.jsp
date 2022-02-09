@@ -89,7 +89,7 @@
         </a>
       </li>
       <li class="nav-list">
-        <a href="">
+        <a href="${pageContext.request.contextPath}/feed/feedMain.do">
           <span class="nav-icon"><i class="fas fa-comment-dots header-icon"></i></span>
           <span class="nav-title">피드</span>
         </a>
