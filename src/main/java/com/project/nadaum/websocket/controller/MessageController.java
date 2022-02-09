@@ -49,9 +49,11 @@ public class MessageController {
 	private SimpMessagingTemplate template;
 	
 	@GetMapping("/member/mypage/chat.do")
-	public void chatMain(Model model, @RequestParam Map<String, Object> map) {
-		List<Map<String, Object>> emotion = websocketService.selectAllEmotion();
-		model.addAttribute("emotion", emotion);
+	public void chatMain(Model model, @RequestParam Map<String, Object> map, @AuthenticationPrincipal Member member) {
+		log.debug("map = {}", map);
+		log.debug("member = {}", member);
+		List<Map<String, Object>> friends = websocketService.selectAllFriendForInvite(member);
+		model.addAttribute("friends", friends);
 		model.addAttribute("room", (String)map.get("room"));
 		model.addAttribute("guest", (String) map.get("guest"));
 	}

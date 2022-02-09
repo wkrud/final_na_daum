@@ -309,7 +309,6 @@ public class MemberServiceImpl implements MemberService {
 	public Map<String, Object> selectHelpCategoyCount() {
 		return memberDao.selectHelpCategoyCount();
 	}
-
 	
 	
 	

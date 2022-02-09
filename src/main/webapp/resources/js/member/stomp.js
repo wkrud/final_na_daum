@@ -10,10 +10,10 @@ function connect(){
 	stompClient.connect({}, function(frame){
 		stompClient.subscribe("/topic/" + dest, function(response){
 			var resp = JSON.parse(response.body);
+			countBedge();
 			console.log('resp = ', resp);
-			
 			if(resp.type == 'friend'){
-				countBedge();
+				
 				console.log('count');
 			}else if(resp.type == 'chat'){
 				
@@ -24,13 +24,14 @@ function connect(){
 				let message = `<a href="javascript:void(window.open('${url}', '${name}','${spec}'))">${resp.host}님이 채팅방에 초대하셨습니다.</a>`;
 				let code = resp.type + Math.floor(Math.random() * 10000);
 				sendAndInsertAlarm('N',resp.guest,code,message);
+				
 				/*
 				if(confirm(resp.host + '님이 채팅을 신청하셨습니다.')){
 					window.open(url, name, spec);
 				}
 				*/
 			}else if(resp.type == 'help'){
-				countBedge();
+				
 				console.log('카운트배지실행됨');
 			}
 		});
