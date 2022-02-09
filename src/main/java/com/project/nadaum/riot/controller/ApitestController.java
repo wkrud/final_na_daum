@@ -294,7 +294,7 @@ public class ApitestController {
 	
 	@ResponseBody
 	@PostMapping("/riotFav.do")
-	public Map<String, Object> riotFav(@RequestBody Map<String, Object> favData , RiotFavo riotfavo) {
+	public Map<String, Object> riotFav(@RequestBody Map<String, Object> favData , RiotFavo riotfavo,Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> accountmap = new HashMap<String, Object>();
 		Map<String, Object> messagemap = new HashMap<String, Object>();
@@ -311,7 +311,7 @@ public class ApitestController {
 		
 		
 		RiotFavo oneaccount = riotService.selectOneAccount(accountmap);
-		
+		model.addAttribute("oneaccount", oneaccount);
 		
 		
 		 log.info("oneaccount = {}", oneaccount);

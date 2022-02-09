@@ -33,7 +33,7 @@ $(".fav-btn").click((e) => {
 			favData
 		),
 		success: function(response) {
-				alert("이 소환사가 계정에 즐겨찾기 되었습니다!");
+				console.log();
 		
 		},
 		error: function(response) {
