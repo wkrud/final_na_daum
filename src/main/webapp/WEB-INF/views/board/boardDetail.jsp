@@ -260,10 +260,6 @@ padding : 10px;
 </form>
 <script>
 
-$(()=>{
-	alert('${board}');
-	
-})
 
 
 

@@ -58,7 +58,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApitestController {
 
-	final static String API_KEY = "RGAPI-336b687c-cb14-452b-a5eb-74d8df5813b5";
+	final static String API_KEY = "RGAPI-7fb187de-1557-408c-8445-84143594181a";
 
 	
 
