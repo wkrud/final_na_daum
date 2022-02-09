@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="scrap">
+	<!-- 스크랩조회 -->
+	<select id="selectScrapList" resultMap="scrapMap">
+		select * from scrap
+		order by reg_date desc
+	</select>
+	
+	<select id="selectTotalContent" resultType="_int">
+		select count(*) from board
+	</select>
+
+
+	<resultMap type="scrap" id="scrapMap">
+		<id column="code" property="Code"/>
+		<result column="id" property="id"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="api_code" property="apiCode"/>
+	</resultMap>
+</mapper>
+

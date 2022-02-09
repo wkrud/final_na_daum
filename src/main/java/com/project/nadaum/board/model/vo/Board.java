@@ -5,13 +5,15 @@ import java.util.Date;
 
 import com.project.nadaum.member.model.vo.MemberEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@ToString(callSuper=true)
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
 public class Board extends BoardEntity implements Serializable {/**
 	 * 
 	 */

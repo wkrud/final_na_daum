@@ -30,6 +30,7 @@ import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
 import com.project.nadaum.common.BoardUtils;
 import com.project.nadaum.common.NadaumUtils;
+import com.project.nadaum.member.model.service.MemberService;
 import com.project.nadaum.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,54 +43,108 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+	private MemberService memberService;
+	
 	@Autowired
 	private ServletContext application;
 	
 	
 	
 	//추천수
-	@ResponseBody
-	@GetMapping("/boardLikeDelete.do")
-	public Map<String, Object> boardLikeDelete(@RequestParam String code, @RequestParam String id){
-		
-		Map<String, Object> param = new HashMap<>();
-		param.put("code", code);
-		param.put("id", id);
-		
-		int result = boardService.boardLikeDelete(param);
-		log.debug("좋아요 삭제 result = {}", result);
-		
-		// 좋아요 삭제하고 새로 추가된 좋아요 갯수 받아오기
-		int selectCountLikes = boardService.selectCountLikes(code);
-		log.debug("좋아요 수 삭제해서 0이어야함 = {}", selectCountLikes);
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("result", result);
-		map.put("selectCountLikes", selectCountLikes);
-		
-		return map;
+	@PostMapping("/feedLikeChange.do")
+	public ResponseEntity<?> feedLikeChange(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member guest){
+		int result = 0;
+		try {
+			log.debug("map = {}", map);
+			map.put("id", guest.getId());
+			String check = (String) map.get("check");
+			if("1".equals(check)) {
+				result = memberService.insertHelpLike(map);
+			}else {
+				result = memberService.deleteHelpLike(map);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}
+		return ResponseEntity.ok(result);
 	}
 	
-	@ResponseBody
-	@GetMapping("/boardLike.do")
-	public Map<String, Object> boardLikeAdd(@RequestParam String code, @RequestParam String id) {
-		
-		Map<String, Object> param = new HashMap<>();
-		param.put("code", code);
-		param.put("id", id);
-
-		int result = boardService.boardLikeAdd(param);
-		log.debug("좋아요 추가 result = {}", result);
-		
-		// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
-		int selectCountLikes = boardService.selectCountLikes(code); 
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("result", result);
-		map.put("selectCountLikes", selectCountLikes);
-		
-		return map;
-	}
+//	@RequestMapping("/boardLike")
+//	@ResponseBody
+//	public Map<String, Object> likesButton(HttpServletRequest request, @RequestParam String id) {
+//		
+//		HttpSession session = request.getSession();
+//		String user_id = (String) session.getAttribute("user_id");
+//		int x = id.indexOf("_");
+//		int review_id = Integer.parseInt(id.substring(0, x));
+//		
+//		Likes dto  = new Likes();
+//		dto.setId(id);
+//		dto.setId(user_id);
+//		
+//		Map<String, Object> data = new HashMap<String, Object>();
+//		String result = "";
+//		if(user_id == null) {
+//			result = "fail";
+//			data.put("result", result);
+//			return data; //로그인 후 추천해주세요
+//		} else {
+//			String already = boardService.selectLikes(dto);
+//			if(already == null) {
+//				boardService.insertLikes(dto);
+//				result = "like";
+//				} else {
+//				boardService.boardLikeDelete(dto);
+//				result = "unlike";	
+//			}
+//		}
+//		data.put("result", result);
+//		return data;  //좋아요 처리 완료 
+//	}
+	
+//	@ResponseBody
+//	@GetMapping("/boardLikeDelete.do")
+//	public Map<String, Object> boardLikeDelete(@RequestParam String code, @RequestParam String id){
+//		
+//		Map<String, Object> param = new HashMap<>();
+//		param.put("code", code);
+//		param.put("id", id);
+//		
+//		int result = boardService.boardLikeDelete(param);
+//		log.debug("좋아요 삭제 result = {}", result);
+//		
+//		// 좋아요 삭제하고 새로 추가된 좋아요 갯수 받아오기
+//		int selectCountLikes = boardService.selectCountLikes(code);
+//		log.debug("좋아요 수 삭제해서 0이어야함 = {}", selectCountLikes);
+//		
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("result", result);
+//		map.put("selectCountLikes", selectCountLikes);
+//		
+//		return map;
+//	}
+//	
+//	@ResponseBody
+//	@GetMapping("/boardLike.do")
+//	public Map<String, Object> boardLikeAdd(@RequestParam String code, @RequestParam String id) {
+//		
+//		Map<String, Object> param = new HashMap<>();
+//		param.put("code", code);
+//		param.put("id", id);
+//
+//		int result = boardService.boardLikeAdd(param);
+//		log.debug("좋아요 추가 result = {}", result);
+//		
+//		// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
+//		int selectCountLikes = boardService.selectCountLikes(code); 
+//		
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("result", result);
+//		map.put("selectCountLikes", selectCountLikes);
+//		
+//		return map;
+//	}
 	
 	//게시물 댓글삭제
 	@PostMapping("/boardCommentDelete.do")
@@ -118,14 +173,14 @@ public class BoardController {
 			@RequestParam String id,
 			@RequestParam String content,
 //			HttpSession session,
-			BoardComment commentList) throws Exception{
+			BoardComment bc) throws Exception{
 		try {
 //		id = (String) session.getAttribute("");
-		BoardComment bc = new BoardComment("", id, code, content, commentLevel, commentRef, null);
+		
 		log.debug("bc = {}", bc);
 		
 		int result = boardService.insertBoardComment(bc);
-		log.debug("commentList = {}", commentList);
+		log.debug("commentList result = {}", result);
 		
 		return "redirect:/board/boardDetail.do?code="+code;
 		
