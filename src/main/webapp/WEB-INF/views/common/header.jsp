@@ -293,8 +293,7 @@
 				let count = 0;
 				$(resp).each((i, v) => {
 					const {no, code, id, status, content, regDate} = v;
-					count++;
-					
+					count++;					
 					
 					if(code.substring(0,2) == 'he'){
 						alarmDiv = `<div class="card card-body alarmContent">
@@ -324,8 +323,6 @@
 			error: console.log
 		});		
     };
-    
-   
     
     const checkBedge = (no) => {
     	const csrfHeader = "${_csrf.headerName}";
