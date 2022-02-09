@@ -42,6 +42,23 @@
 			
 		)
 	</insert>
+	
+	<select id="selectOneAccount" resultType="riotFavo">
+		select 
+			*
+		from
+			riot_myaccount
+		where
+			member_id = #{member_Id} 
+	
+	</select>
+	
+	<delete id="deleteFav">
+		delete from riot_myaccount where member_id = #{member_Id} 
+	</delete>
+	
+	
+	
 
 </mapper>
 

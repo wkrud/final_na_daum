@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
 import com.project.nadaum.board.model.vo.BoardEntity;
+import com.project.nadaum.board.model.vo.Likes;
 
 @Repository
 public class BoardDaoImpl implements BoardDao {
@@ -103,14 +104,17 @@ public class BoardDaoImpl implements BoardDao {
 		return session.insert("board.boardLikeAdd", param);
 	}
 
-	@Override
-	public int selectCountLikes(String code) {
-		return session.selectOne("board.selectCountLikes", code);
-	}
+	
 
 	@Override
 	public int boardLikeDelete(Map<String, Object> param) {
 		return session.delete("board.boardLikeDelete", param);
+	}
+
+	@Override
+	public int selectCountLikes(String code) {
+		
+		return session.selectOne("board.selectCountLikes", code);
 	}
 
 	

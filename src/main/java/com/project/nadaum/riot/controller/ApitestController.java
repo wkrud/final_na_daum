@@ -47,6 +47,7 @@ import com.project.nadaum.riot.model.service.RiotService;
 import com.project.nadaum.riot.model.vo.LeagueEntries;
 import com.project.nadaum.riot.model.vo.LeagueEntry;
 import com.project.nadaum.riot.model.vo.MatchList;
+import com.project.nadaum.riot.model.vo.RiotFavo;
 import com.project.nadaum.riot.model.vo.Summoner;
 import com.project.nadaum.riot.model.vo.riotDto.MatchDto;
 
@@ -57,7 +58,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApitestController {
 
-	final static String API_KEY = "RGAPI-1b660533-671a-4974-9c07-0e235149d642";
+	final static String API_KEY = "RGAPI-7fb187de-1557-408c-8445-84143594181a";
 
 	
 
@@ -293,16 +294,66 @@ public class ApitestController {
 	
 	@ResponseBody
 	@PostMapping("/riotFav.do")
-	public Map<String, Object> riotFav(@RequestBody Map<String, Object> favData) {
+	public Map<String, Object> riotFav(@RequestBody Map<String, Object> favData , RiotFavo riotfavo,Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> accountmap = new HashMap<String, Object>();
+		Map<String, Object> messagemap = new HashMap<String, Object>();
+		
 		log.debug("favData = " + favData);
+		String member_Id = (String) favData.get("member_id");
+		String sm_Id = (String) favData.get("summoner_id");
+		 log.info("oneaccount = {}", member_Id);
+		 accountmap.put("member_Id", member_Id);
+		
 		map.put("member_Id", favData.get("member_id"));
 		map.put("sm_Id", favData.get("summoner_id"));
-		 log.info("map = {}", map);
-		 int result = riotService.insertRiotFavo(map);
-		 String msg = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
-			log.info("msg = {}", msg);
-		return map;
+		
+		
+		
+		RiotFavo oneaccount = riotService.selectOneAccount(accountmap);
+		model.addAttribute("oneaccount", oneaccount);
+		
+		
+		 log.info("oneaccount = {}", oneaccount);
+		 
+		 
+		 
+		 if(oneaccount == null) {
+			 
+			 int result = riotService.insertRiotFavo(map);
+			 String msg = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
+			 messagemap.put("insert", msg);
+			 log.info("msg = {}", msg);
+			 
+		 }
+		 else {
+			 		
+			 
+			 		if((oneaccount.getSmId()).equals(sm_Id) ) {
+			 			
+			 			 int resultdele = riotService.deleteFav(accountmap);
+			 			 int result = riotService.insertRiotFavo(map);
+			 			 String msg2 = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
+			 			 messagemap.put("delete", msg2);
+			 			
+			 			
+			 		}
+			 		else {
+			 			
+			 			 int resultdele = riotService.deleteFav(accountmap);
+			 			 int result = riotService.insertRiotFavo(map);
+			 			 String msg3 = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
+			 			 messagemap.put("delete", msg3);
+			 		        
+			 		}
+			 		
+			 
+			 
+		 }
+		 
+		 
+		 
+		return messagemap;
 		
 	}
 }

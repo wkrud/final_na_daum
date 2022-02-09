@@ -12,7 +12,10 @@ public interface RiotDao {
 	Summoner selectOneSummoner(String puuid);
 	
 	int insertRiotFavo(Map<String, Object> map);
+	
+	RiotFavo selectOneAccount(Map<String, Object> map);
 
+	int deleteFav(Map<String, Object> map);
 
 
 }
