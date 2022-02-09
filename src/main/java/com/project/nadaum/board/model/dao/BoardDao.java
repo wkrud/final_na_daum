@@ -6,6 +6,7 @@ import java.util.Map;
 import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
 import com.project.nadaum.board.model.vo.BoardEntity;
+import com.project.nadaum.board.model.vo.Likes;
 
 public interface BoardDao {
 

@@ -8,7 +8,7 @@
 	<select id="selectBoardList" resultType="board">
 		select * from board
 		inner join member using (id)
-		order by code desc
+		order by board.reg_date desc
 	</select>
 	
 	<select id="selectTotalContent" resultType="_int">
@@ -89,25 +89,25 @@
 			code = #{code}
 	</update>
 	<!-- 추천 -->
-	<select id="selectCountLikes">
+	<select id="selectCountLikes" resultType="int">
 		select 
-			*
+			count(*)
 		from
-			like
+			likes
 		where
 			code = #{code}
 	</select>
 	
 	<insert id="boardLikeAdd">
 	insert into
-		like
+		likes
 	values(
-		default, #{id}, #{code}
+		seq_likes_no.nextval, #{id}, #{code}
 	)
 	</insert>
 	
 	<delete id="boardLikeDelete">
-		delete from like where id = #{id} and code = #{code}
+		delete from likes where id = #{id} and code = #{code}
 	</delete>
 	
 	<!-- 게시글 댓글조회 -->
@@ -119,11 +119,7 @@
 			inner join member using (id)
 		where 
 			code = #{code} 
-			start with 
-				comment_level = 1 
-			connect by prior 
-				comment_code = comment_ref
-			order siblings by comment_code	
+			order by comment_code	
 	</select>
 	
 	<insert id="insertBoardComment">
@@ -168,11 +164,7 @@
 		</collection>
 	</resultMap>
 	
-	<resultMap type="map" id="likesMap">
-		<id column="no" property="no"/>
-		<result column="id" property="id"/>
-		<result column="code" property="code"/>
-	</resultMap>
+	
 	
 	<resultMap type="boardComment" id="boardCommentMap">
 		<id column="comment_code" property="commentCode"/>

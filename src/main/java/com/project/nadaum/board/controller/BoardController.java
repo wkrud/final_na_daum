@@ -28,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.project.nadaum.board.model.service.BoardService;
 import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
+import com.project.nadaum.board.model.vo.Likes;
 import com.project.nadaum.common.BoardUtils;
 import com.project.nadaum.common.NadaumUtils;
 import com.project.nadaum.member.model.vo.Member;
@@ -67,11 +68,12 @@ public class BoardController {
 		map.put("result", result);
 		map.put("selectCountLikes", selectCountLikes);
 		
+		
 		return map;
 	}
 	
 	@ResponseBody
-	@GetMapping("/boardLike.do")
+	@GetMapping("/boardLikeAdd.do")
 	public Map<String, Object> boardLikeAdd(@RequestParam String code, @RequestParam String id) {
 		
 		Map<String, Object> param = new HashMap<>();
@@ -87,6 +89,8 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", result);
 		map.put("selectCountLikes", selectCountLikes);
+		
+		
 		
 		return map;
 	}
@@ -232,9 +236,13 @@ public class BoardController {
 			//댓글목록 조회
 			List<BoardComment> commentList = boardService.selectBoardCommentList(code);
 			log.debug("commentList = {} ", commentList);
+			log.debug("commentList = {} ", commentList.get(0));
 			
 //			String nickname = boardService.boardGetNickname()
 			
+			int selectCountLikes = boardService.selectCountLikes(code); 
+			
+			model.addAttribute("selectCountLikes",selectCountLikes);
 			model.addAttribute("board", board);
 			model.addAttribute("commentList", commentList);
 			return "board/boardDetail";

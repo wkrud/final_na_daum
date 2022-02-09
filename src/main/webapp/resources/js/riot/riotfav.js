@@ -10,7 +10,7 @@ var summonerId = $('#summonerId').val();
 $(".fav-btn").click((e) => {
 
 	console.log(id);
-	
+
 
 	var favData = {
 		member_id: member_id,
@@ -33,8 +33,15 @@ $(".fav-btn").click((e) => {
 			favData
 		),
 		success: function(response) {
-				console.log(response.oneaccount);
+			if (response.insert != null) {
+				alert(response.insert);
+			}
+
+			if (response.delete != null) {
+				alert(response.delete);
+			}
 		
+
 		},
 		error: function(response) {
 			console.log("실패");

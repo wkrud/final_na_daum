@@ -333,16 +333,17 @@ public class ApitestController {
 			 			
 			 			 int resultdele = riotService.deleteFav(accountmap);
 			 			 int result = riotService.insertRiotFavo(map);
-			 			 String msg2 = resultdele > 0 ? "즐겨찾기 삭제 성공!" : "즐겨찾기 삭제 실패!";
+			 			 String msg2 = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
 			 			 messagemap.put("delete", msg2);
 			 			
 			 			
 			 		}
 			 		else {
 			 			
-			 			 int resultdele2 = riotService.deleteFav(accountmap);
+			 			 int resultdele = riotService.deleteFav(accountmap);
 			 			 int result = riotService.insertRiotFavo(map);
-			 			
+			 			 String msg3 = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
+			 			 messagemap.put("delete", msg3);
 			 		        
 			 		}
 			 		
