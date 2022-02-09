@@ -8,7 +8,7 @@
 	<select id="selectBoardList" resultType="board">
 		select * from board
 		inner join member using (id)
-		order by reg_date desc
+		order by code desc
 	</select>
 	
 	<select id="selectTotalContent" resultType="_int">
