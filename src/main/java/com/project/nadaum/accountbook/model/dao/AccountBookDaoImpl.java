@@ -48,7 +48,10 @@ public class AccountBookDaoImpl implements AccountBookDao {
 
 	@Override
 	public List<AccountBook> incomeExpenseFilter(Map<String, Object> map) {
-		return session.selectList("accountbook.incomeExpenseFilter", map);
+		int offset = (int) map.get("offset");
+		int limit = (int) map.get("limit");
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("accountbook.incomeExpenseFilter", map, rowBounds);
 	}
 
 	@Override

@@ -52,7 +52,6 @@ public class DiaryController {
 		
 		int result = diaryService.insertDiary(map);
 		String date = (String) map.get("regDate");
-		System.out.println(date);
 		return "redirect:/diary/diaryMain.do?date=" + date;
 	}
 	

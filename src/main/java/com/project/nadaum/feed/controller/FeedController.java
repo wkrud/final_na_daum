@@ -130,5 +130,8 @@ public class FeedController {
 		int result = feedService.deleteComment(map);
 		return ResponseEntity.ok(1);
 	}
+	
+	@GetMapping("/feedMain.do")
+	public void feedMain() {}
 
 }
