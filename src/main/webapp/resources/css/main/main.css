@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+* {
+	margin : 0;
+	padding : 0;
+	box-sizing: border-box;
+	position: relative;
+}
+
+body {
+	height : 100%;
+} 
+
+/* 영역 확인용 박스 */
+.box {
+	border : 1px solid black;
+}
+
+:root {
+  --navy : #0A1F33;
+  --yellow : #FFFBF5;
+  --lightgray : rgb(228, 226, 226);
+  --black : #222;
+}
+
+/* 메인 섹션 */
+.main {
+  width : 80%;
+  height : 100%;
+  display: block;
+  margin: auto;
+  margin-bottom : 50px;
+  top: 30px;
+  border-radius : 10px;
+}
+
+.add-widget {
+	position : absolute;
+	top : -5%;
+	left : -10%;
+	width : 70px;
+	height : 70px;
+	background : var(--yellow);
+	border-radius : 10px;
+	cursor : pointer;
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	transition : 0.5s;
+ 	transition-delay : 0.8s;
+ 	z-index : 999;
+}
+
+.add-widget.enlargement {
+	width : 200px;
+	height :200px;
+	transition-delay : 0s;
+}
+
+.add-widget span {
+	position : absolute;
+	width : 7px;
+	height : 7px;
+	background : var(--navy);
+	border-radius : 50%;
+	color : var(--navy);
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	transform : translate(calc(12px * var(--x)), calc(12px * var(--y)));
+	transition : transform 0.5s, width 0.5s, height 0.5s, background 0.5s;
+	transition-delay : calc(0.1s * var(--i));
+}
+
+.add-widget.enlargement span {
+	width : 45px;
+	height : 45px;
+	background : #333849;
+	transform : translate(calc(60px * var(--x)), calc(60px * var(--y)));
+}
+
+.add-widget span i {
+	transition : 0.5s;
+	font-size : 0em;
+}
+
+.add-widget.enlargement span i {
+	font-size : 1.35em;
+	color : var(--yellow);
+}
+
+/* 위젯 */
+.widget_form {
+  width : 350px;
+  height: 400px;
+  position: relative;
+  background : white;
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+  border : 1px solid rgba(225, 225, 225, 0.5);
+  border-radius: 10px;
+  top : 30px;
+  left : 50px;
+  padding : 10px;
+  margin : 20px;
+  backdrop-filter: blur(25px);
+  display : inline-block;
+}
+
+.account-widget {
+	width : 200px;
+	height : 80px;
+}
