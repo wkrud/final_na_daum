@@ -65,6 +65,9 @@ div#board-container label.custom-file-label {
 .inner-star {position: absolute;left: 0;top: 0;width: 0%;overflow: hidden;white-space: nowrap;}
 .outer-star::before, .inner-star::before {content: '\f005 \f005 \f005 \f005 \f005';font-family: 'Font Awesome 5 free';font-weight: 900;}
 
+
+
+
 .star {
     position: relative;
     font-size: 2rem;
