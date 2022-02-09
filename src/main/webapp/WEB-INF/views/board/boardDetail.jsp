@@ -95,7 +95,7 @@ padding : 10px;
 						data-id="${board.id}"
 						data-like-yes-no="${likeYesNo}">좋아요</button>
 						<br />
-						${board.likeCount}
+						<span class="countlikes">${selectCountLikes}</span>
 					</div>
 			<!-- 좋아요 -->	
 
@@ -259,6 +259,10 @@ padding : 10px;
 		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 <script>
+
+
+
+
 	//회원아이디와 글쓴이 아이디와 같은때 보임.
 	//삭제 버튼을 눌렀을 때 처리
 const deleteBoard = () => {
@@ -344,6 +348,11 @@ $(".btn-reply").click((e) => {
  $(document).on('click', '#likeButton', function(e) {
 	console.log("좋아요 나왕?");
 	
+	const csrfHeader = "${_csrf.headerName}";
+	const csrfToken = "${_csrf.token}";
+	const headers = {};
+	headers[csrfHeader] = csrfToken;
+	
 	const $code = $(e.target).data("boardCode");
 	const $id = $(e.target).data("id");
 	const likeYesNo = $(e.target).data("likeYesNo");
@@ -356,11 +365,11 @@ $(".btn-reply").click((e) => {
 	if(likeYesNo == 0){
 		
 		$.ajax({
-			url : "${pageContext.request.contextPath}/board/boardLikeAdd",
+			url : "${pageContext.request.contextPath}/board/boardLikeAdd.do",
 			method : "GET",
 			data : {
-				memberId : $memberId,
-				boardCode : $boardCode
+				id : $id,
+				code : $code
 			},
 			success(data){
 				const result = data["result"]
@@ -372,7 +381,7 @@ $(".btn-reply").click((e) => {
 					$(e.target).data("likeYesNo", 1);
 					console.log($(e.target).data("likeYesNo"));
 					
-					//$(e.target).text(newCountLikes);
+					$(".countlikes").text(selectCountLikes);
 					console.log("selectCountLikes = " + selectCountLikes);
 					console.log("좋아요 등록!");
 					alert("좋아요를 등록했습니다.");
@@ -388,11 +397,11 @@ $(".btn-reply").click((e) => {
 	}else{
 		
 		$.ajax({
-			url : "${pageContext.request.contextPath}/board/boardLikeDelete",
+			url : "${pageContext.request.contextPath}/board/boardLikeDelete.do",
 			method : "GET",
 			data : {
-				memberId : $memberId,
-				boardCode : $boardCode
+				id : $id,
+				code : $code
 			},
 			success(data){
 				const result = data["result"];
@@ -404,7 +413,7 @@ $(".btn-reply").click((e) => {
 					$(e.target).data("likeYesNo", 0);
 					console.log($(e.target).data("likeYesNo"));
 					
-					//$(e.target).text(newCountLikes);
+					$(".countlikes").text(selectCountLikes);
 					console.log("selectCountLikes = " + selectCountLikes);
 					console.log("좋아요 취소!");
 					alert("좋아요를 취소했습니다.");

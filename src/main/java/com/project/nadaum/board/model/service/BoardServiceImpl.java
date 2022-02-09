@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.nadaum.board.model.dao.BoardDao;
 import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
+import com.project.nadaum.board.model.vo.Likes;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -121,14 +122,17 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.boardLikeAdd(param);
 	}
 
-	@Override
-	public int selectCountLikes(String code) {
-		return boardDao.selectCountLikes(code);
-	}
+	
 
 	@Override
 	public int boardLikeDelete(Map<String, Object> param) {
 		return boardDao.boardLikeDelete(param);
+	}
+
+	@Override
+	public int selectCountLikes(String code) {
+		
+		return boardDao.selectCountLikes(code);
 	}
 
 	

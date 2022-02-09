@@ -35,4 +35,21 @@ public class RiotDaoImpl implements RiotDao {
 		return session.insert("riot.insertRiotFavo", map);
 	}
 
+
+	@Override
+	public RiotFavo selectOneAccount(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return session.selectOne("riot.selectOneAccount", map);
+	}
+
+
+	@Override
+	public int deleteFav(Map<String, Object> map) {
+		
+		return session.delete("riot.deleteFav", map);
+	}
+
+
+	
+
 }
