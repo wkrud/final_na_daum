@@ -44,10 +44,13 @@
 <script src="${pageContext.request.contextPath}/resources/js/member/stomp.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/member/info.js"></script>
 
-<script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
-
 <!-- 평점 css -->
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css'/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+<!-- <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script> -->
+
+
 
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/style2.css" /> 

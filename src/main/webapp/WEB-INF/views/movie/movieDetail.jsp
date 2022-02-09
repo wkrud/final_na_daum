@@ -12,7 +12,7 @@
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
 <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 
-<jsp:include page="/WEB-INF/views/common/header2.jsp">
+<jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 영화상세보기 " name="movieDetail" />
 </jsp:include>
 <style>
@@ -157,7 +157,6 @@ div#board-container label.custom-file-label {
 						&nbsp;<span class="rec_count"></span>
 					</button> 
 		</c:if>
-
 		
 		
 		<!-- Modal -->
