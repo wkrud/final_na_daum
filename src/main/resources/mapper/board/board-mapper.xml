@@ -65,9 +65,11 @@
 		select
 			*
 		from
-			board
+			board b
+				join member m
+					on b.id = m.id
 		where
-			code = #{code}
+			b.code = #{code}
 	</select>
 	
 	<!-- <select id="selectAttachmentListByBoardCode" resultType="attachment">
@@ -160,8 +162,6 @@
 		</collection>
 	</resultMap>
 	
-	
-	
 	<resultMap type="boardComment" id="boardCommentMap">
 		<id column="comment_code" property="commentCode"/>
 		<result column="id" property="id"/>
@@ -170,6 +170,12 @@
 		<result column="comment_level" property="commentLevel"/>
 		<result column="comment_ref" property="commentRef"/>
 		<result column="reg_date" property="regDate"/>
+	</resultMap>
+	
+	<resultMap type="map" id="likesMap">
+		<id column="no" property="no"/>
+		<result column="id" property="id"/>
+		<result column="code" property="code"/>
 	</resultMap>
 </mapper>
 
