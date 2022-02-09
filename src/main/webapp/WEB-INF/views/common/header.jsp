@@ -15,6 +15,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <title>${param.title}</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"
@@ -302,6 +304,8 @@
 						</div>`;
 					}else if(code == 'fr'){
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
+					}else if(code.substring(0,4) == 'chat'){
+						alarmDiv = `<div class="card card-body alarmContent">\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
 				});

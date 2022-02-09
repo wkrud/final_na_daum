@@ -1,5 +1,6 @@
 package com.project.nadaum.feed.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,13 @@ public class FeedController {
 			param.put("id", id);
 			log.debug("id param = {}", param);
 			Member member = memberService.selectOneMember(param);
-			
+			log.debug("member = {}", member);
+			List<String> hobby = new ArrayList<>();
+			if(member.getHobby() != null) {
+				for(int i = 0; i < member.getHobby().length; i++) {
+					hobby.add(member.getHobby()[i]);
+				}
+			}
 			// feed
 			int totalCount = feedService.countAllHostFeed(param);
 			param.put("totalCount", totalCount);
@@ -49,6 +56,7 @@ public class FeedController {
 			// 친구, 팔로잉
 			Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
 			
+			model.addAttribute("hobby", hobby);
 			model.addAttribute("member", member);
 			model.addAttribute("feed", feed);
 			model.addAttribute("socialCount", socialCount);

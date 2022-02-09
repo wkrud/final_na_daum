@@ -910,6 +910,14 @@ public class MemberController {
 		return ResponseEntity.ok(1);
 	}
 	
+	@PostMapping("/mypage/insertChatAlarm.do")
+	public ResponseEntity<?> insertChatAlarm(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member member){
+		log.debug("map = {}", map);
+		map.put("id", member.getId());
+		int result = memberService.insertAlarm(map);
+		return ResponseEntity.ok(1);
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		try {
