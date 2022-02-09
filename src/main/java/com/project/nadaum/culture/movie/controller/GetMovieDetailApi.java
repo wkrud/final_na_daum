@@ -155,18 +155,24 @@ public class GetMovieDetailApi {
 			log.debug("star{}", star);
 			
 			int sum = 0; // 평점 합계 구하는 변수 0으로 초기화
-			double avg = 0;
+			double avg = 0; // 평점 평균 구하는 변수 0으로 초기화
 			sum = star.stream().mapToInt(Integer::intValue).sum();
 			System.out.println("starSum : " + sum);
 			int arraysize = star.size();
 			avg = sum / arraysize;
 			System.out.println("avgStar : " + avg);
 			
-			List<Object> rating = movieService.avgRating(apiCode);
+			double rating = movieService.avgRating(apiCode);
+			int starCount1 = movieService.starCount1(apiCode);
+			int starCount2 = movieService.starCount2(apiCode);
+			int starCount3 = movieService.starCount3(apiCode);
+			int starCount4 = movieService.starCount4(apiCode);
+			int starCount5 = movieService.starCount5(apiCode);
 			log.debug("rating{}", rating);
 			
 			log.debug("avg{}", avg);
 			model.addAttribute("avg", avg);
+			model.addAttribute("rating", rating);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

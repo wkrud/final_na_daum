@@ -23,7 +23,13 @@ public interface MovieDao {
 
 	int deleteScrap(Map<String, Object> map);
 
-	List<Object> avgRating(String apiCode);
+	double avgRating(String apiCode);
 
 	List<Integer> listStar(String apiCode);
+
+	int starCount1(String apiCode);
+	int starCount2(String apiCode);
+	int starCount3(String apiCode);
+	int starCount4(String apiCode);
+	int starCount5(String apiCode);
 }

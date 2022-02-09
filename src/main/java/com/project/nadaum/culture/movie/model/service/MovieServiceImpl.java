@@ -36,13 +36,38 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	@Override
-	public List<Object> avgRating(String apiCode) {
+	public double avgRating(String apiCode) {
 		return movieDao.avgRating(apiCode);
 	}
 
 	@Override
 	public List<Integer> listStar(String apiCode) {
 		return movieDao.listStar(apiCode);
+	}
+
+	@Override
+	public int starCount1(String apiCode) {
+		return movieDao.starCount1(apiCode);
+	}
+
+	@Override
+	public int starCount2(String apiCode) {
+		return movieDao.starCount2(apiCode);
+	}
+
+	@Override
+	public int starCount3(String apiCode) {
+		return movieDao.starCount3(apiCode);
+	}
+
+	@Override
+	public int starCount4(String apiCode) {
+		return movieDao.starCount4(apiCode);
+	}
+
+	@Override
+	public int starCount5(String apiCode) {
+		return movieDao.starCount5(apiCode);
 	}
 	
 
