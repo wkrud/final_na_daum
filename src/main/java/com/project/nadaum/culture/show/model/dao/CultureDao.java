@@ -3,7 +3,7 @@ package com.project.nadaum.culture.show.model.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.project.nadaum.culture.show.model.vo.Culture;
+import com.project.nadaum.culture.show.model.vo.Scrap;
 
 public interface CultureDao {
 
@@ -11,4 +11,5 @@ public interface CultureDao {
 
 	int deleteCultureLike(String apiCode);
 
+	List<Scrap> selectCultureLikes(String id);
 }

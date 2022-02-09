@@ -144,6 +144,7 @@ $(() => {
 		    </div>
 		  </form>
 		</div>
+		<!-- scrap.api_code eq apiCode -->
 		<form id="likeFrm">
 			<input type="hidden" name="apiCode" value="${apiCode}" />
 			<input type="hidden" name="id" value="${loginMember.id}" />
@@ -349,16 +350,16 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 // 주소-좌표 변환 객체를 생성합니다
 var geocoder = new kakao.maps.services.Geocoder();
 
-var list = new Array();
+var placeList = new Array();
 
 <c:forEach var="culture" items="${list}">
-	list.push("${culture.place}");
-	list.push("${culture.placeAddr}");
+	placeList.push("${culture.place}");
+	placeList.push("${culture.placeAddr}");
 </c:forEach>
-console.log(list);
+console.log(placeList);
 
-var place = list[0];
-var placeAddr = list[1];
+var place = placeList[0];
+var placeAddr = placeList[1];
 console.log(place);
 console.log(placeAddr);
 

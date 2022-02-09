@@ -73,8 +73,7 @@ padding-left: 20px;
 			<img src="${pageContext.request.contextPath}/resources/images/culture/festival.jpg" alt="문화썸네일" />
 			<h1 class="title">Culture</h1>
 			<form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}" method="post">
-			<%-- <form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do" method="post"> --%>
-				 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
+			 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
 				 	
 				  <div class="form-group" id="period">
 				    <label for="Date" class="control-label">기간</label>
@@ -100,7 +99,10 @@ padding-left: 20px;
 				      </select>
 				  </div>
 				  <button type="submit" class="btn orange btn-default" id="search-btn" >Search</button>
-					<button type="button" class="btn btn-dark">나다운 찜 목록</button>
+			</form>
+			<form action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}" method="post">
+				<input type="hidden" name="id" value="${loginMember.id}" />
+					<button type="submit" class="btn btn-dark"  >나다운 찜 목록</button>			
 			</form>
 		</div>
 	<div id="culture-container">

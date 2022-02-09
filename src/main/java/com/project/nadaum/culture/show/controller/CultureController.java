@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -22,6 +21,7 @@ import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +41,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.nadaum.culture.comment.model.service.CommentService;
 import com.project.nadaum.culture.comment.model.vo.Comment;
 import com.project.nadaum.culture.show.model.service.CultureService;
+import com.project.nadaum.culture.show.model.vo.Scrap;
 import com.project.nadaum.member.model.service.MemberService;
+import com.project.nadaum.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -359,7 +361,17 @@ public class CultureController {
 		
 
 		//============================= 스크랩 ==========================================
+		@PostMapping("/likes.do")
+		public String selectLikes(@AuthenticationPrincipal Member member, Model model){
+			String id = member.getId();	
 			
+			List<Scrap> list = cultureService.selectCultureLikes(id);
+		     System.out.println(list);
+		     
+		     model.addAttribute("list", list);
+		     return "/culture/likes";
+		}
+		
 		@PostMapping("/board/view/{apiCode}/likes")
 		public ResponseEntity<?> insertLikes(@RequestParam Map<String,Object> map){
 			
