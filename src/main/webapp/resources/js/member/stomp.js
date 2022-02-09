@@ -15,7 +15,7 @@ function connect(){
 				const name = `chatRoom${resp.room}`;
 				const spec = "left=500px, top=500px, width=450px, height=620px";
 				const url = `http://localhost:9090/nadaum/member/mypage/chat.do?room=${resp.room}&guest=guest`;
-				let message = `<a onclick="window.open(${url},${name}, ${spec})">${resp.host}님이 채팅방에 초대하셨습니다.</a>`;
+				let message = `<a href='javascript:void(window.open(${url},${name}, ${spec}))'>${resp.host}님이 채팅방에 초대하셨습니다.</a>`;
 				let code = resp.type + Math.floor(Math.random() * 10000);
 				sendInviteChatRoom(code,message);
 				/*
