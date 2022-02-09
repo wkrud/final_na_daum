@@ -5,16 +5,17 @@
 	flex-wrap: wrap;
 }
 .absolute-left{
-	width: 250px;
-	
+	width: 250px;	
 }
 .absolute-left ul li{
 	padding: 0;
+	background-color: #FFFBF5;
 }
 .absolute-left ul li a{
 	padding: 0.75rem 1.25rem;
 	display: block;
-	color: black;
+	color: #0A1F33;
+	font-weight: 500;
 }
 .absolute-left .out a{
 	color: lightgray;
@@ -29,6 +30,11 @@
 .info-profile-wrap{
 	display: flex;
 	justify-content: space-between;
+}
+
+/* 정보수정 */
+.info-form input{
+	margin: 5px;
 }
 
 .info-update-btn{
@@ -54,6 +60,64 @@
 	padding-top: 10px;
 }
 
+/* 취미 */
+.my-hobby-wrap-title{
+	display: flex;
+}
+.hobby-edit-btn{
+	margin-left: 10px;
+}
+.hobby-edit-btn i{
+	cursor: pointer;
+}
+.write-hobby-self-wrap .self-btn{
+	cursor: pointer;
+}
+.my-hobby-wrap{
+	margin: 5px 0;
+	font-size: 1.2rem;
+	color: #0A1F33;
+	font-weight: bold;
+}
+.check-hobby input{
+	display:none;
+}
+.hobby-select-form label:hover{
+	font-size: 1.1rem;
+}
+
+/* 소개 */
+.member-introduce-wrap{
+	margin-top: 10px;
+}
+.introduce-title-wrap{
+	display: flex;
+}
+.introduce-edit-wrap{
+	margin-left: 10px;
+}
+.introduce-edit-wrap i{
+	cursor: pointer;
+}
+.introduce-content-wrap{
+	display: flex;
+}
+.member-introduce{
+	margin:5px 0;
+}
+
+.introduce-content textarea{
+	resize: none;
+	width: 400px;
+}
+
+.introduce-modify-btn-wrap{
+	margin: 15px 0 0 10px;
+	font-size: 1.5rem;
+}
+.introduce-modify-btn-wrap i{
+	cursor: pointer;
+}
 
 /* helpDetail */
 .help-detail-wrap{
@@ -141,6 +205,11 @@
 }
 .announcement-body table tbody .announce-title{
 	width: 500px;
+}
+.list-controller{
+	display: flex;
+	justify-content: center;
+	margin-top: 10px;
 }
 
 

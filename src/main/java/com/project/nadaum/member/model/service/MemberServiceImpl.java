@@ -300,6 +300,16 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.updateHelpReadCount(code);
 	}
 
+	@Override
+	public int updateMemberIntroduce(Map<String, Object> map) {
+		return memberDao.updateMemberIntroduce(map);
+	}
+
+	@Override
+	public Map<String, Object> selectHelpCategoyCount() {
+		return memberDao.selectHelpCategoyCount();
+	}
+
 	
 	
 	

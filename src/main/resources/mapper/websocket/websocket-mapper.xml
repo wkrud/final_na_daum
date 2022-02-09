@@ -8,7 +8,7 @@
 	</select>
 	
 	<update id="updateAlarm">
-		update alarm set status = 'T' where id = #{id}
+		update alarm set status = 'T' where id = #{id} and no = #{no}
 	</update>
 	
 	<select id="selectAllEmotion" resultMap="emotionMap">
