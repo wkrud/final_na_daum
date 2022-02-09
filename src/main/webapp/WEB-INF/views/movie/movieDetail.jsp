@@ -12,7 +12,7 @@
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
 <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 
-<jsp:include page="/WEB-INF/views/common/header2.jsp">
+<jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 영화상세보기 " name="movieDetail" />
 </jsp:include>
 <style>
@@ -64,6 +64,29 @@ div#board-container label.custom-file-label {
 .outer-star {position: relative;display: inline-block;color: #CCCCCC;}
 .inner-star {position: absolute;left: 0;top: 0;width: 0%;overflow: hidden;white-space: nowrap;}
 .outer-star::before, .inner-star::before {content: '\f005 \f005 \f005 \f005 \f005';font-family: 'Font Awesome 5 free';font-weight: 900;}
+
+.star {
+    position: relative;
+    font-size: 2rem;
+    color: #ddd;
+}
+.star input {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.star span {
+    width: 0;
+    position: absolute;
+    left: 0;
+    color: red;
+    overflow: hidden;
+    pointer-events: none;
+}
+
 
 /* .rating svg:nth-child(1){
 	color:#F05522; */
@@ -206,15 +229,53 @@ div#board-container label.custom-file-label {
 	<div class="movie-rating">
 		<h2 class="blog-post-title">영화 평점</h2>
 		<p class="blog-post-meta">
-			<input type="text" value="${avg}" />
+			참여자 평점 : 
 			<c:out value="${avg}"></c:out>
+			<c:out value="${rating}"></c:out>
 			${avg}
-			<div class='RatingStar'>
-  				<div class='RatingScore'>
-    				<div class='outer-star'><div class='inner-star'></div></div>
-  				</div>
+			
+			<div class="review">
+				<div class="rating" data-rate="${avg}">
+					<i class="fas fa-star"></i>
+					<i class="fas fa-star"></i>
+					<i class="fas fa-star"></i>
+					<i class="fas fa-star"></i>
+					<i class="fas fa-star"></i>	
+				</div>
 			</div>
 			
+			
+			<div>
+                        <span class="star-2"> ★★★★★ 
+                        <span style="width:calc(18.9%*${avg })">★★★★★</span>
+                        </span>
+                        <fmt:formatNumber value="${avg}" pattern="0.00"/> (62건)
+            </div>
+
+				<div id="section-rating">
+				<div id="rating">
+					<div id="rating-1">만족도</div>
+					<div id="rating-2">
+						<span class="star"> ★★★★★ <span>★★★★★</span> 
+						<input type="range" oninput="drawStar(this)" value="1" step="1" min="0"
+							max="10">
+						</span>
+					</div>
+					<div id="rating-3">${avg}</div>
+					<input type="hidden" name="rating"  id="rating-result" value="${avg }"/>
+				</div>
+			</div>
+
+			5점 : 
+			<br />
+			4점 :
+			<br />
+			3점 :
+			<br />
+			2점 :
+			<br />
+			1점 :
+			<br />
 			<a href="#">Mark</a>
 		</p>
 
@@ -389,36 +450,7 @@ div#board-container label.custom-file-label {
 															</div>	
 															</div>
 															</div>
-															
-															<!-- 별점 주기 -->
-															<h2>별점 표시하기</h2>
-<div class="review">
-	<div class="rating" data-rate="3">
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>	
-	</div>
-	<div class="rating" data-rate="5">
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>	
-	</div>
-	<div class="rating" data-rate="2">
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>
-		<i class="fas fa-star"></i>	
-	</div>		
-</div>
-
-<hr>
-															<!-- 별점 주기 끝 -->
-															
+														
 															<div class="form-group row" >
 																<label for="title" class="col-sm-2 col-form-label">내용</label>
 																<div class="col-sm-10">
@@ -449,6 +481,7 @@ div#board-container label.custom-file-label {
 </div>
 </div>
 <script>
+/* 별점 */
 $(function() {
 	var rating = $('.review .rating');
 
@@ -474,8 +507,42 @@ $(function() {
 	});
 });
 
-</script>
-<script>
+const drawStar = (target) => {
+	document.querySelector(`.star span`).style.width = `${target.value * 10}%`;
+	
+	if(document.querySelector(`.star span`).style.width == '10%'){
+		$("#section-rating #rating-3").text("0.5");
+		$("#section-rating #rating-result").val("0.5");
+	} else if(document.querySelector(`.star span`).style.width == '20%'){
+		$("#section-rating #rating-3").text("1.0");
+		$("#section-rating #rating-result").val("1.0");
+	} else if(document.querySelector(`.star span`).style.width == '30%'){
+		$("#section-rating #rating-3").text("1.5");
+		$("#section-rating #rating-result").val("1.5");
+	} else if(document.querySelector(`.star span`).style.width == '40%'){
+		$("#section-rating #rating-3").text("2.0");
+		$("#section-rating #rating-result").val("2.0");
+	} else if(document.querySelector(`.star span`).style.width == '50%'){
+		$("#section-rating #rating-3").text("2.5");
+		$("#section-rating #rating-result").val("2.5");
+	} else if(document.querySelector(`.star span`).style.width == '60%'){
+		$("#section-rating #rating-3").text("3.0");
+		$("#section-rating #rating-result").val("3.0");
+	} else if(document.querySelector(`.star span`).style.width == '70%'){
+		$("#section-rating #rating-3").text("3.5");
+		$("#section-rating #rating-result").val("3.5");
+	} else if(document.querySelector(`.star span`).style.width == '80%'){
+		$("#section-rating #rating-3").text("4.0");
+		$("#section-rating #rating-result").val("4.0");
+	} else if(document.querySelector(`.star span`).style.width == '90%'){
+		$("#section-rating #rating-3").text("4.5");
+		$("#section-rating #rating-result").val("4.5");
+	} else if(document.querySelector(`.star span`).style.width == '100%'){
+		$("#section-rating #rating-3").text("5.0");
+		$("#section-rating #rating-result").val("5.0");
+	}
+}
+
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
 	e.preventDefault();

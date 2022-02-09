@@ -33,13 +33,38 @@ public class MovieDaoImpl implements MovieDao {
 	}
 
 	@Override
-	public List<Object> avgRating(String apiCode) {
+	public double avgRating(String apiCode) {
 		return session.selectOne("movie.avgRating", apiCode);
 	}
 
 	@Override
 	public List<Integer> listStar(String apiCode) {
 		return session.selectList("movie.listStar", apiCode);
+	}
+
+	@Override
+	public int starCount1(String apiCode) {
+		return session.selectOne("movie.starCount1",apiCode);
+	}
+
+	@Override
+	public int starCount2(String apiCode) {
+		return session.selectOne("movie.starCount2",apiCode);
+	}
+
+	@Override
+	public int starCount3(String apiCode) {
+		return session.selectOne("movie.starCount2",apiCode);
+	}
+
+	@Override
+	public int starCount4(String apiCode) {
+		return session.selectOne("movie.starCount4",apiCode);
+	}
+
+	@Override
+	public int starCount5(String apiCode) {
+		return session.selectOne("movie.starCount5",apiCode);
 	}
 
 
