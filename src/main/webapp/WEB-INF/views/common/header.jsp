@@ -270,8 +270,7 @@
 	
 	$("#profile").click(function(){
 		if($("#alarmList").hasClass("show")){
-			console.log($("#alarmList").hasClass("show"));
-			checkBedge();
+			console.log($("#alarmList").hasClass("show"));			
 		}
 	});
 	/* 샘플코드 */
@@ -284,23 +283,28 @@
 			success(resp){
 				const $alarmList = $("#alarmList");
 				const $bedgeWrap = $(".bedge-wrap");
+				
 				$alarmList.empty();
 				$bedgeWrap.empty();
+				
+				let alarmDiv = `<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>`;
+				$alarmList.append(alarmDiv);
+				
 				let count = 0;
 				$(resp).each((i, v) => {
 					const {no, code, id, status, content, regDate} = v;
-					count++;
+					count++;					
 					
-					let alarmDiv = `<div class="card card-body alarmContent">\${content}</div>`;
 					if(code.substring(0,2) == 'he'){
 						alarmDiv = `<div class="card card-body alarmContent">
+						<input type="hidden" name="no" value="\${no}" />
 						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=\${code}">\${content}</a>								
 						</div>`;
-					}else{
-						alarmDiv = `<div class="card card-body alarmContent">\${content}</div>`;
+					}else if(code == 'fr'){
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
-				});						
+				});
 				
 				if(count > 0){
 					let bedge = `
@@ -308,15 +312,28 @@
 					`;
 					
 					$bedgeWrap.append(bedge);
-				}						
+				}		
+				
+				$(".alarmContent").click((e) => {
+			    	let no = $(".alarmContent").find('input').val();
+			    	checkBedge(no);
+			    });
+							
 			},
 			error: console.log
 		});		
     };
     
-    const checkBedge = () => {
+    const checkBedge = (no) => {
+    	const csrfHeader = "${_csrf.headerName}";
+		const csrfToken = "${_csrf.token}";
+		const headers = {};
+		headers[csrfHeader] = csrfToken;
     	$.ajax({
 			url: `${pageContext.request.contextPath}/websocket/checkAlarm.do`,
+			method:'POST',
+			data: {no},
+			headers:headers,
 			success(resp){
 				countBedge();
 			},

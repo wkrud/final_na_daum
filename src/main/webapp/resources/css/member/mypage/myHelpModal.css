@@ -1,0 +1,15 @@
+/*
+#FFFBF5
+#0A1F33
+*/
+
+.modal-header{
+	background-color: #0A1F33;
+	color: #FFFBF5;
+}
+.modal-pagebar{
+	height: 38px;
+	margin-top: 15px;
+	display: flex;
+	justify-content: center;
+}

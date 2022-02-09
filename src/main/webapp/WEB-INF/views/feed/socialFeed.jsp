@@ -40,7 +40,14 @@
 					<div class="friends-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
 					<div class="following-count"><span>팔로워 : ${socialCount.FOLLOWER}</span></div>
 				</div>				
-				<div class="host-introduce-area"></div>
+				<div class="host-introduce-area">
+					<div class="host-hobby-wrap">
+					
+					</div>
+					<div class="host-introduce-wrap">
+						
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="one-person-feed-area">

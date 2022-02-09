@@ -122,6 +122,10 @@ public interface MemberService {
 
 	int updateHelpReadCount(String code);
 
+	int updateMemberIntroduce(Map<String, Object> map);
+
+	Map<String, Object> selectHelpCategoyCount();
+
 
 
 }

@@ -315,6 +315,16 @@ public class MemberDaoImpl implements MemberDao {
 		return session.update("member.updateHelpReadCount", code);
 	}
 
+	@Override
+	public int updateMemberIntroduce(Map<String, Object> map) {
+		return session.update("member.updateMemberIntroduce", map);
+	}
+
+	@Override
+	public Map<String, Object> selectHelpCategoyCount() {
+		return session.selectOne("member.selectHelpCategoyCount");
+	}
+
 	
 	
 	
