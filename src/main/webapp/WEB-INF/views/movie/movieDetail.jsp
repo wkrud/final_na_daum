@@ -12,7 +12,7 @@
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
 <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 
-<jsp:include page="/WEB-INF/views/common/header.jsp">
+<jsp:include page="/WEB-INF/views/common/header2.jsp">
 	<jsp:param value="나:다움 영화상세보기 " name="movieDetail" />
 </jsp:include>
 <style>
@@ -58,6 +58,15 @@ button {
 /* 부트스트랩 : 파일라벨명 정렬*/
 div#board-container label.custom-file-label {
 	text-align: left;
+}
+
+.inner-star::before{color: #FF9600;}
+.outer-star {position: relative;display: inline-block;color: #CCCCCC;}
+.inner-star {position: absolute;left: 0;top: 0;width: 0%;overflow: hidden;white-space: nowrap;}
+.outer-star::before, .inner-star::before {content: '\f005 \f005 \f005 \f005 \f005';font-family: 'Font Awesome 5 free';font-weight: 900;}
+
+/* .rating svg:nth-child(1){
+	color:#F05522; */
 }
 </style>
 
@@ -138,7 +147,19 @@ div#board-container label.custom-file-label {
 		<!-- 캘린더 약속 버튼 -->
 		<button type="button" class="btn btn-secondary" data-toggle="modal"
 			data-target="#add-calander">캘린더&raquo;</button>
+			
+		<!-- 스크랩 버튼 -->
+		<button type="button" class="btn btn-success" onclick="scrap(); return false;" value="${apiCode}">스크랩<i class="fas fa-check-double ml-1"></i></button>
+		
+		<c:if test="${ loginMember.id != null }">
+					<button class="w3-button w3-black w3-round" id="rec_update">
+						<i class="fa fa-heart" style="font-size:16px;color:red"></i>
+						&nbsp;<span class="rec_count"></span>
+					</button> 
+		</c:if>
 
+		
+		
 		<!-- Modal -->
 		<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
 			aria-labelledby="add-calander" aria-hidden="true">
@@ -161,6 +182,7 @@ div#board-container label.custom-file-label {
 								data-dismiss="modal">취소</button>
 							<button type="button" class="btn btn-primary">추가</button>
 						</div>
+						
 					</div>
 				</div>
 			</form>
@@ -184,7 +206,16 @@ div#board-container label.custom-file-label {
 	<div class="movie-rating">
 		<h2 class="blog-post-title">영화 평점</h2>
 		<p class="blog-post-meta">
-			January 1, 2014 by <a href="#">Mark</a>
+			<input type="text" value="${avg}" />
+			<c:out value="${avg}"></c:out>
+			${avg}
+			<div class='RatingStar'>
+  				<div class='RatingScore'>
+    				<div class='outer-star'><div class='inner-star'></div></div>
+  				</div>
+			</div>
+			
+			<a href="#">Mark</a>
 		</p>
 
 		<p>This blog post shows a few different types of content that’s
@@ -227,6 +258,7 @@ div#board-container label.custom-file-label {
 									<label for="star" class="col-sm-2 col-form-label">평점</label>
 									<div class="col-sm-10">
 										<input type="hidden" class="form-control" name="">
+									<div class="make_star">	
 										<select id="category-select" class="form-control" name="star" aria-label="Default select example">
 											<option selected>0</option>
 											<option value="1">1</option>
@@ -235,6 +267,14 @@ div#board-container label.custom-file-label {
 											<option value="4">4</option>
 											<option value="5">5</option>
 										</select>
+										<div class="rating" data-rate="3">
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star"></i>	
+										</div>
+									</div>
 									</div>
 									<textarea name="content" cols="60" rows="3" id="content" class="form-control"></textarea>
 
@@ -330,16 +370,54 @@ div#board-container label.custom-file-label {
 															<label for="star" class="col-sm-2 col-form-label">평점</label>
 															<div class="col-sm-10">
 															<input type="hidden" class="form-control"  >
-															<select id="category-select" class="form-control" name="star" aria-label="Default select example" >
-																<option value="">평점</option>
-																<option value="1">1</option>
-																<option value="2">2</option>
-																<option value="3">3</option>
-																<option value="4">4</option>
-																<option value="5">5</option>
-															</select>
+															<div class="review  make_star">
+																<select id="category-select" class="form-control makeStar" name="star" aria-label="Default select example"  id="makeStar">
+																	<option value="">평점</option>
+																	<option value="1">1</option>
+																	<option value="2">2</option>
+																	<option value="3">3</option>
+																	<option value="4">4</option>
+																	<option value="5">5</option>
+																</select>
+																<div class="rating" data-rate="3">
+																	<i class="fas fa-star"></i>
+																	<i class="fas fa-star"></i>
+																	<i class="fas fa-star"></i>
+																	<i class="fas fa-star"></i>
+																	<i class="fas fa-star"></i>	
+																</div>
+															</div>	
 															</div>
 															</div>
+															
+															<!-- 별점 주기 -->
+															<h2>별점 표시하기</h2>
+<div class="review">
+	<div class="rating" data-rate="3">
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>	
+	</div>
+	<div class="rating" data-rate="5">
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>	
+	</div>
+	<div class="rating" data-rate="2">
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>
+		<i class="fas fa-star"></i>	
+	</div>		
+</div>
+
+<hr>
+															<!-- 별점 주기 끝 -->
 															
 															<div class="form-group row" >
 																<label for="title" class="col-sm-2 col-form-label">내용</label>
@@ -370,7 +448,33 @@ div#board-container label.custom-file-label {
 
 </div>
 </div>
+<script>
+$(function() {
+	var rating = $('.review .rating');
 
+	rating.each(function() {
+		var targetScore = $(this).attr('data-rate');
+		console.log(targetScore);
+		$(this).find('svg:nth-child(-n' + targetScore + ')').css({color:'#F05522'});
+	});
+	
+	var userScore = $('#makeStar');
+	userScore.change(function(){
+		var userScoreNum = $(this).val();
+		console.log(userScoreNum);
+		$('.make_star svg').css({color:'#000'});
+		$('.make_star svg:nth-child(-n+' + userScoreNum +')').css({color:'#F05522'});
+		
+	});
+	
+	$('.make_star svg').click(function() {
+		var targetNum = $(this).index() +1;
+		$('.make_star svg').css({color:'#000'});
+		$('.make_star svg:nth-child(-n+' + userScoreNum +')').css({color:'#F05522'});
+	});
+});
+
+</script>
 <script>
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
@@ -497,34 +601,7 @@ $(insertCommentFrm).submit((e) => {
  			}
  		});
  	});
- 	
-/* function updateCommentBtn(code, star, content){
-	console.log("댓글창 화면 바뀌나요~?")
-	
-	var commentView += ;
-	
-	<div class="form-inline mb-2">
-	<label for="replyId"> 
-	<i class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
-	</label> &nbsp;&nbsp;
-	<fmt:formatDate value="${comment.regDate}" pattern="yyyy-MM-dd HH:mm" />
-	</div>
-
-	<div class="col-sm-10">
-	<input type="hidden" class="form-control" name="star">
-	<select id="category-select" class="form-control" aria-label="Default select example">
-		<option selected>${comment.star}</option>
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-	</select>
-	</div> 
- 	<textarea class="form-control"	id="exampleFormControlTextarea1" rows="1" >${comment.content}</textarea>
- 	<button type="submit" class="btn btn-outline-dark" id="updateComment-btn" value="${comment.code}">수정제출</button>
- 	<input type="hidden" name="apiCode" value="${apiCode}" />
-} */
+ 
 </script>
 
 

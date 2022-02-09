@@ -51,7 +51,7 @@ public class GetMovieApi {
 				String url = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.xml"
 						+ "?key=2707c14a032dacdea9d8b690c3f99d19"
 						+ "&itemPerPage"
-						+ "&curPage="+page;
+						+ "&curPage="+page ;
 				
 								
 				DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
