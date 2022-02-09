@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page import="com.project.nadaum.member.model.vo.MemberEntity" %>
 <sec:authentication property="principal" var="loginMember"/>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판상세보기" name="title" />
@@ -69,7 +70,7 @@ padding : 10px;
 			
 			<div class="container">
  			<div class="row row-cols-4">
-    		<div class="col">작성자 : <input type="text" class="detail" id="nickname" name="id" value="${board.nickname}" readonly></div>
+    		<div class="col">작성자 : <input type="text" class="detail" id="nickname" name="nickname" value="${board.nickname}" readonly></div>
     		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd HH:mm"/></div>
     		<div class="col">조회수 : <input type="number" class="detail" id="readCount" name="readCount" title="조회수" value="${board.readCount}" readonly></div>
   			</div>
