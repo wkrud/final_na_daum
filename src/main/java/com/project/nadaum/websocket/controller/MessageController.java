@@ -54,6 +54,7 @@ public class MessageController {
 		log.debug("member = {}", member);
 		List<Map<String, Object>> friends = websocketService.selectAllFriendForInvite(member);
 		model.addAttribute("friends", friends);
+		model.addAttribute("member", member);
 		model.addAttribute("room", (String)map.get("room"));
 		model.addAttribute("guest", (String) map.get("guest"));
 	}
