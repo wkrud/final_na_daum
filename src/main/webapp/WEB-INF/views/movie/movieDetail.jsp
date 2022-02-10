@@ -443,7 +443,7 @@ div#board-container label.custom-file-label {
 															</div>
 															
 															
-															<input type="hidden" name="code" value="${comment.code}" />
+															<input type="hidden" name="code" value="${comment.code}" readonly/>
 															<input type="hidden" name="apiCode" value="${apiCode}" />
 															<input type="hidden" name="id" value="${loginMember.id}" />
 															<!-- 댓글인 경우 1 -->
@@ -453,7 +453,7 @@ div#board-container label.custom-file-label {
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary"	data-dismiss="modal">취소</button>
-																<button type="submit" class="btn btn-outline-dark" id="updateComment-btn" >수정</button>
+																<button type="submit" class="btn btn-outline-dark" id="updateComment-btn" value="${comment.code}">수정</button>
 															</div>
 															</form>
 															
@@ -576,10 +576,11 @@ $(insertCommentFrm).submit((e) => {
  			method: "GET",
  			success(resp){
  				console.log(resp);
- 				const {content, star} = resp;
+ 				const {content, star, code} = resp;
  				const $frm = $(updateCommentFrm);
  				$frm.find("[name=content]").val(content);
  				$frm.find("[name=star]").val(star);
+ 				$frm.find("[name=code]").val(code);
  			},
  			error(xhr, textStatus, err) {
  				if(xhr.status == 404)
