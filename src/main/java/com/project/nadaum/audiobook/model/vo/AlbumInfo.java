@@ -22,7 +22,7 @@ public class AlbumInfo implements Serializable{
 	private String content;
 	private String creator;
 	private Date regDate;
-	private String playTime;
+	private String mvLink;
 	private int playCount;
 	private String status;
 //	private int price;

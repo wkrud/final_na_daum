@@ -18,19 +18,20 @@
 		from 
 			album_info
 		order by
-			code desc
+			reg_date desc
 	</select>
 
 	<insert id="insertAlbumInfo" parameterType="albumInfo">
 		insert into 
-			album_info(code,title,provider,content,creator,kind)
+			album_info(code,title,provider,content,creator,kind,mv_link)
 		values(
 			#{code},
 			#{title},
 			#{provider},
 			#{content},
 			#{creator},
-			#{kind}
+			#{kind},
+			#{mvLink}
 		)
 	</insert>
 	<update id="updateAlbumInfo" parameterType="albumInfo">
@@ -40,6 +41,7 @@
 		 kind=#{kind},
 		 title=#{title},
 		 provider=#{provider},
+		 mv_link=#{mvLink},
 		 content=#{content},
 		 creator=#{creator},
 		 status=#{status}
