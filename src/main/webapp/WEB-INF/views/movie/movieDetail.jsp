@@ -30,8 +30,11 @@ input, button, textarea {
 	vertical-align: middle;
 	text-align: left;
 	padding: 0px;
+	display: inline-block;
 }
-
+.col-form-label {
+    width: 70px;
+}
 .movie-detail {
 	border: none;
 	border-right: 0px;
@@ -43,14 +46,11 @@ input, button, textarea {
 	background-color: transparent;
 	pointer-events: none;
 	height: 38px;
+	font-size:24px;
 }
 
 #movieCd-detail {
 	width: 300px;
-}
-
-#category-select {
-	width: 100px;
 }
 
 button {
@@ -74,7 +74,11 @@ div#board-container label.custom-file-label {
 	font-size : 22px;
 	
 }
-#category-select {
+#category-select{
+    width: 100px;
+  
+}
+#category-select-commentList {
     width: 100px;
     display: inline-block;
     pointer-events: none;
@@ -106,7 +110,7 @@ div#board-container label.custom-file-label {
 .star-count span {
     position: absolute;
     left: 0;
-    color: #68a5ff;
+    color: #ffc57d;
     overflow: hidden;
     pointer-events: none;
 }
@@ -192,6 +196,7 @@ div#board-container label.custom-file-label {
 			</div>
 		</c:forEach>
 		<!-- 캘린더 약속 버튼 -->
+		<br />
 		<button type="button" class="btn btn-secondary" data-toggle="modal"
 			data-target="#add-calander">캘린더&raquo;</button>
 			
@@ -335,7 +340,7 @@ div#board-container label.custom-file-label {
 									<input type="hidden" name="commentLevel" value="1" />
 									<!-- 대댓글인 경우 써여져야함 -->
 									<input type="hidden" name="commentRef" value="" /> 
-									<label for="star" class="col-sm-2 col-form-label">평점</label>
+									<label for="star" class="col-sm-2 col-form-label">평점 : </label>
 									<div class="col-sm-10">
 										<input type="hidden" class="form-control" name="">
 									
@@ -388,7 +393,7 @@ div#board-container label.custom-file-label {
 											<label for="star" class="col-sm-2 col-form-label">평점 :</label>
 											<input type="hidden" class="form-control" name="star">
 											          									
-											<select id="category-select" class="form-control"
+											<select id="category-select-commentList" class="form-control"
 												aria-label="Default select example">
 												<option selected>${comment.star}</option>
 											</select>
