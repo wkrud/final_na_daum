@@ -5,16 +5,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
 <sec:authentication property="principal" var="loginMember"/>
-
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판 상세보기" name="title"/>
 </jsp:include>
-
-<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/culture/cultureDetail.css" />
- -->
- 
  <script src="https://kit.fontawesome.com/4123702f4b.js" crossorigin="anonymous"></script>
 <style>
 .form-control{
@@ -38,11 +32,6 @@ font-size: 30px;
 margin: 0 auto;
 /* position: relative;
 z-index: 1; */
-}
-.wrap:after{
-/* /* background-image: url("${culture.imgUrl}"); 
-opacity: 0.4;
-z-index: -1; */
 }
 #insertCommentFrm{
 text-align: center;
@@ -82,9 +71,7 @@ $(() => {
 
 
 </script>
-	<c:forEach var="culture" items="${list}">
 	<div class="wrap" style="">
-	</c:forEach>
 	<div id="culture-container" class="mx-auto text-center">
 		<!-- 상세내용 -->
 		 <c:forEach var="culture" items="${list}">
@@ -117,7 +104,7 @@ $(() => {
 		<form id="likeFrm">
 			<input type="hidden" name="apiCode" value="${apiCode}" />
 			<input type="hidden" name="id" value="${loginMember.id}" />
-		 	<button type="submit" class="btn btn-danger" id="like-btn" data-like-yes-no="${likeYesNo}">스크랩 하기
+		 	<button type="submit" class="btn btn-danger" id="like-btn" >스크랩 하기
 		 	</button>
 		</form>
 		
@@ -331,8 +318,6 @@ $(() => {
 		        const headers = {};
 		        headers[csrfHeader] = csrfToken;
 		        
-		        const likeYesNo = $(e.target).data("likeYesNo");
-		        console.log(likeYesNo);
 		        
 				$.ajax({
 					url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
@@ -392,26 +377,6 @@ $(() => {
 						
 						$resultDiv.append(searched);
 						
-						$resultDiv.find("button").click((e) => {
-							e.preventDefault();
-							$resultDiv.empty();
-							if(resp.check == 'friend'){
-								searched = `<span>\${resp.nickname}</span>
-									<button type="button" class="btn btn-outline-warning btn-sm free">친구추가</button>`;
-							}else if(resp.check == 'follower'){
-								searched = `<span>\${resp.nickname}</span>
-									<button type="button" class="btn btn-success btn-sm friend">친구</button>`;
-							}else if(resp.check == 'following'){
-								searched = `<span>\${resp.nickname}</span>
-									<button type="button" class="btn btn-outline-warning btn-sm free">친구추가</button>`;
-							}else if(resp.check == 'free'){
-								searched = `<span>\${resp.nickname}</span>
-									<button type="button" class="btn btn-warning btn-sm following">친구신청중</button>`;
-							}
-							$resultDiv.append(searched);
-							friendAlarm('friend', resp.check, '${loginMember.nickname}', resp.nickname);
-							updateFriend(resp.check, resp.nickname);
-						});
 					},
 					error: console.log
 				});

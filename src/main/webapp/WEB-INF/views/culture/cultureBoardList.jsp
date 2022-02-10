@@ -18,7 +18,7 @@ div#culture-container{width:100%; margin:0 auto;text-align:center;}
 #culture_code{
 	display:none;
 }
-.card{
+.culture-card{
 height: 300px;
 padding: 15px;
 }
@@ -109,7 +109,7 @@ padding-left: 20px;
 	      
 	     <c:forEach var="culture" items="${list}">
 	    	<div class="col-md-4" style="padding: 15px;">
-	         <div class="card culture-list"> 
+	         <div class="card culture-card"> 
 	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
 	              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>

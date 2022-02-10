@@ -100,7 +100,11 @@ padding-left: 20px;
 				      </select>
 				  </div>
 				  <button type="submit" class="btn orange btn-default" id="search-btn" >Search</button>
-					<button type="button" class="btn btn-dark">나다운 찜 목록</button>
+					
+			</form>
+			<form action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}" method="post">
+				<input type="hidden" name="id" value="${loginMember.id}" />
+					<button type="submit" class="btn btn-dark"  >나다운 찜 목록</button>			
 			</form>
 		</div>
 	<div id="culture-container">
