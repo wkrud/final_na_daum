@@ -2,6 +2,15 @@
 	min-height: 500px;
 	margin-top: 100px;
 	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.go-admin-main-btn{
+	text-align: right;
+	width: 800px;
+	margin-bottom: 20px;
 }
 
 .admin-main-body{
@@ -25,3 +34,46 @@
 	justify-content: center;
 	width: 850px;
 }
+
+/* 질문 */
+.admin-section{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	width: 800px;
+}
+.admin-section td:nth-child(2){
+	text-align: left;
+}
+.admin-section table{
+	width: 800px;
+	border-spacing: 10px;
+	border-collapse: separate;
+}
+
+/* 공지 */
+.announcement-managing{
+	display: flex;
+	text-align: center;
+	align-items: center;
+	flex-direction: column;
+}
+.announcement-managing table{
+	width: 800px;
+	border-spacing: 10px;
+	border-collapse: separate;
+}
+
+/* 회원관리 */
+.managing-table-wrap{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+
+
+
+
