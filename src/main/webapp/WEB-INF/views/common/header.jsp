@@ -201,7 +201,7 @@
       <div class="profile-wrap user-factors">
         <button id="profile" type="button"
           data-toggle="collapse" data-target="#alarmList" aria-expanded="false" aria-controls="alarmList">
-          <div class="bedge-wrap"></div>
+          <div class="badge-wrap"></div>
           <div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
             <c:if test="${loginMember.loginType eq 'K'}">
               <img src="${loginMember.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />
@@ -279,10 +279,10 @@
 			url: `${pageContext.request.contextPath}/websocket/wsCountAlarm.do`,
 			success(resp){
 				const $alarmList = $("#alarmList");
-				const $bedgeWrap = $(".bedge-wrap");
+				const $badgeWrap = $(".badge-wrap");
 				
 				$alarmList.empty();
-				$bedgeWrap.empty();
+				$badgeWrap.empty();
 				
 				let alarmDiv = `<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>`;
 				$alarmList.append(alarmDiv);
@@ -309,11 +309,11 @@
 				});
 				
 				if(count > 0){
-					let bedge = `
+					let badge = `
 					<span id='bg-alarm' class='badge rounded-pill bg-danger'>\${count}</span>
 					`;
 					
-					$bedgeWrap.append(bedge);
+					$badgeWrap.append(badge);
 				}		
 				
 				$(".alarmContent").click((e) => {
