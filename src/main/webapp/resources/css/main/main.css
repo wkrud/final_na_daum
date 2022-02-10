@@ -90,9 +90,9 @@ body {
 }
 
 /* 위젯 */
-.widget_form {
-  width : 350px;
-  height: 400px;
+.widget_form, .test1, .test2, .test3 {
+/*   width : 350px;
+  height: 400px; */
   position: relative;
   background : white;
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);

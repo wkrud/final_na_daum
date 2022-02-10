@@ -1,5 +1,7 @@
 package com.project.nadaum.main.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.project.nadaum.accountbook.model.vo.AccountBook;
 import com.project.nadaum.main.model.service.MainService;
 import com.project.nadaum.main.model.vo.TodoList;
 import com.project.nadaum.member.model.vo.Member;
@@ -36,21 +40,48 @@ public class MainController {
 		
 	}
 	
-	@PostMapping(value="/insertTodoList.do")
-	public String insertTodoList(TodoList todoList, Model model) {
-		int insertTodoList = mainService.insertTodoList(todoList);
-		return "redirect:/main/main.do";
+	//투두리스트 생성
+	@ResponseBody
+	@GetMapping(value="/insertTodoList.do")
+	public int insertTodoList(@AuthenticationPrincipal Member member, Model model) {
+		String id = member.getId();
+		String content = "일정을 입력하세요.";
+		Map<String, Object> param = new HashMap<>(); 
+		param.put("id", id);
+		param.put("content", content);
+		
+		int insertTodoList = mainService.insertTodoList(param);
+		
+		return insertTodoList;
 	}
 	
-//	@RequestMapping(value="/userTodoList.do")
-//	public String userTodoList(@AuthenticationPrincipal Member member, Model model) {
-//		String id = member.getId();
-//		 Map<String, Object> param = new HashMap<>(); 
-//		 param.put("id", id);
-//		  //로그인한 아이디로 등록된 가계부 전체 목록
-//		 List<TodoList> allTodoList = mainService.userTodoList(param);
-//
-//		 model.addAttribute("allTodoList",allTodoList);
-//	}
+	//투두리스트 목록 조회
+	@ResponseBody
+	@RequestMapping(value="/userTodoList.do")
+	public List<TodoList> userTodoList(@AuthenticationPrincipal Member member, Model model) {
+		String id = member.getId();
+		SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd");
+		Date date = new Date();
+		String title = format.format(date);
+		
+		Map<String, Object> param = new HashMap<>(); 
+		param.put("id", id);
+		param.put("title", title);
+		//로그인한 아이디로 등록된 투두리스트 중 title이 사용자 입력값인 리스트
+		List<TodoList> allTodoList = mainService.userTodoList(param);
+		log.debug("allTodoList={}",allTodoList);
 
+		return allTodoList;
+	}
+	
+	//투두리스트 삭제
+	@ResponseBody
+	@PostMapping(value="/deleteTodoList.do")
+	public Map<String, Object> deleteTodoList (@AuthenticationPrincipal Member member, int no) {
+		log.info("no={}",no);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("no", no);
+		int result = mainService.deleteTodoList(map);
+		return map;
+	}
 }

@@ -1,10 +1,10 @@
 	var $contextPath = $("#contextPath").val(); //contextPath jsp에서 가져온 값(js파일에서 el을 못 씀)
 	
 	//csfr토큰 headers (post 전송시 필요)
-	const csrfToken = $("meta[name='_csrf']").attr("content");
+/*	const csrfToken = $("meta[name='_csrf']").attr("content");
 	const csrfHeader = $("meta[name='_csrf_header']").attr("content");
 	const headers = {};
-	headers[csrfHeader] = csrfToken;
+	headers[csrfHeader] = csrfToken;*/
 	
 	//차트 로딩하는 메소드
 	google.charts.load('visualization', '1', {'packages':['corechart']});
