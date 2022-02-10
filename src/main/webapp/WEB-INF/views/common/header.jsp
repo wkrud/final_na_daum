@@ -322,6 +322,7 @@
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
+					
 				});
 				
 				if(count > 0){
@@ -336,17 +337,17 @@
 			    	let no = $(".alarmContent").find('input').val();
 			    	checkBedge(no);
 			    });
-							
+																			
 			},
 			error: console.log
 		});		
     };
     
+    const alarmReload = () => {
+    	$("#alarmList").load(window.location.href + ' #alarmList');
+    };
+    
     const checkBedge = (no) => {
-    	const csrfHeader = "${_csrf.headerName}";
-		const csrfToken = "${_csrf.token}";
-		const headers = {};
-		headers[csrfHeader] = csrfToken;
     	$.ajax({
 			url: `${pageContext.request.contextPath}/websocket/checkAlarm.do`,
 			method:'POST',

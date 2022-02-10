@@ -109,7 +109,55 @@
 .guest-chat-wrap{
 	display: flex;
 }
+.option-wrap{
+	width: 100%;
+	height: 80px;
+	position: fixed;
+	background: #fff;
+	bottom: 38px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+	font-size: 2rem;
+}
+.option-wrap i{
+	cursor: pointer;
+}
 
+.invite-friend{
+	width: 100%;
+	height: 150px;
+	position: fixed;
+	background: #525e64d1;
+	bottom: 38px;
+	display: flex;
+	justify-content: space-around;
+	overflow: scroll;
+	overflow-x:hidden;
+	-ms-overflow-style:none;
+}
+.invite-friend::-webkit-scrollbar{
+	display: none;
+}
+.invite-friend-options{
+	display: flex;
+	margin: 5px 0;
+	height: 45px;
+}
+.invite-friend-options:hover .invite-friend-nickname{
+	color: #fff;
+}
+.invite-friend-nickname{
+	margin-top: 15px;
+	margin-left: 8px;
+	color: #d1cccc;
+}
+.invite-friend-profile img{
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+}
 
 .emotion-wrap{
 	width: 100%;
