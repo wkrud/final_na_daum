@@ -101,14 +101,51 @@
 	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
 
 			$.ajax({
-		    	url : "${pageContext.request.contextPath}/todoList/widget",
+		    	url : "${pageContext.request.contextPath}/main/insertTodoList.do",
 		     	method : 'GET',
 		     	contentType : "application/json; charset=UTF-8",
 		     	dataType : "json",
-		     	success(data) { `  
-	     		`
-		     	}
-		        
+		     	success(data) {
+		     		console.log(data);
+		     		if(data == 1) {
+		     			$.ajax({
+		     				url : "${pageContext.request.contextPath}/main/userTodoList.do",
+		     				method : 'GET',
+		    		     	contentType : "application/json; charset=UTF-8",
+		    		     	dataType : "json",
+		    		     	success(resp) {
+		    		     		console.log(resp);
+		    		     		console.log(resp.length);
+
+		    		     		let todoList = "";
+				    		   	todoList = `<ul class="todoListRoom">
+				    		   					<li><input type="text" name="title" id="title" value="`+resp[0].title+`" /></li>
+				    		   					<li><input type="text" name="regDate" value="`+timeConvert(resp[0].regDate)+`" /></li>
+				    		   				</ul>
+				    		   					`
+				    		   				$(".widget_form").append(todoList);
+		    		     		//for문으로 투두리스트 목록
+	    		   				for(let i = 0; i < resp.length; i++) {		    		     			
+		    		     		todoList = `
+		    		     			<li>
+		    		     				<input type="checkbox" name="no" id="" value="`+resp[i].no+`" />
+		    		     				<input type="text" name="content" id="" value="`+resp[i].content+`" />
+		    		     				<button onclick="delTodoList(`+resp[i].no+`)">삭제하기</button>
+		    		     			</li>
+		    		     		`
+   		     					$(".todoListRoom").append(todoList);
+   		     					}
+	    		   				//버튼 추가
+	    		   				todoList = `<button class="`+resp[0].title+`">+ 일정을 추가하세요</button>`
+	    		   				$(".todoListRoom").append(todoList);
+		    		     	},error(xhr, testStatus, err) {
+		    					console.log("error", xhr, testStatus, err);
+		    					alert("위젯 로딩에 실패했습니다.");
+		    				}
+		     			});
+		     		} else {
+		     			alert("위젯 등록에 실패했습니다.");
+		     		} //success 끝
 		     	},error(xhr, testStatus, err) {
 					console.log("error", xhr, testStatus, err);
 					alert("조회에 실패했습니다.");
@@ -207,8 +244,27 @@
  //위젯 이름으로 지우기
  function delWidget(name) {
 	 console.log("외않데 ㅠㅠ");
-	 div.remove('.'+name+'');
  }
+ 
+ //투두리스트 삭제
+ function delTodoList(no) {
+	 let no = {"no" : no};
+	 $.ajax({
+    	url : "${pageContext.request.contextPath}/main/deleteTodoList.do",
+     	method : 'POST',
+     	data : JSON.stringify(no),
+     	contentType : "application/json; charset=UTF-8",
+     	dataType : "json",
+		headers : headers,
+     	success(data) {
+				location.reload();
+		}, 
+		error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	 });
+	};
  
 //수입 지출 변환 함수
 function IE(x) {
@@ -221,6 +277,16 @@ function IE(x) {
 //원화표시 정규식
 function numberWithCommas(n) {
 	return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+//시간 변환
+function timeConvert(t){
+	var unixTime = Math.floor(t / 1000);
+    var date = new Date(unixTime*1000);
+    var year = date.getFullYear();
+    var month = "0" + (date.getMonth()+1);
+    var day = "0" + date.getDate();
+    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
 }
  
 </script>
