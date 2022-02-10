@@ -214,14 +214,10 @@
 					/* db에서 불러온 소개에서 <br/>을 \r\n으로 변경하여 코드가 보이지 않도록 수정 */
 					$intro.val($intro.val().split('<br/>').join('\r\n'));
 					/* 소개 사이즈 체크 */
-					$sizeCheck.text($intro.val().length + '/20');
+					$sizeCheck.text($intro.val().length + '/100');
 					$(".modify-introduce-wrap").hide();
 					$(".modify-hobby-wrap").hide();
 				});
-				const csrfHeader = "${_csrf.headerName}";
-				const csrfToken = "${_csrf.token}";
-				const headers = {};
-				headers[csrfHeader] = csrfToken;
 				
 				$(".hobby-edit").on('click',function(e) {
 					$(".modify-hobby-wrap").slideToggle();
@@ -235,13 +231,13 @@
 				const $intro = $("#member-self-introduce");
 				const $sizeCheck = $(".size-check");
 				$intro.on('keyup', function(e) {
-					$sizeCheck.text($intro.val().length + '/20');
-					if($intro.val().length > 20){
+					$sizeCheck.text($intro.val().length + '/100');
+					if($intro.val().length > 100){
 						$sizeCheck.css("color","red");						
 					}else{
 						$sizeCheck.css("color","black");
 					}
-					if($intro.val().length < 22 && $intro.val().length > 1 && ((e.keyCode === 13 || e.key === 'Enter') && !e.shiftKey)){
+					if($intro.val().length < 102 && $intro.val().length > 1 && ((e.keyCode === 13 || e.key === 'Enter') && !e.shiftKey)){
 						/* 엔터시에 개행 제거 */
 						$intro.val($intro.val().replace(/\r|\n$/g,''));
 						modifyIntroduce($intro.val().replace(/(?:\r\n|\r|\n)/g, '<br/>'), '${loginMember.id}');

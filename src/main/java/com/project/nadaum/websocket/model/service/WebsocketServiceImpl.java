@@ -26,8 +26,8 @@ public class WebsocketServiceImpl implements WebsocketService {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectAllEmotion() {
-		return websocketDao.selectAllEmotion();
+	public List<Map<String, Object>> selectAllFriendForInvite(Member member) {
+		return websocketDao.selectAllFriendForInvite(member);
 	}
 
 	

@@ -26,8 +26,8 @@ public class WebsocketDaoImpl implements WebsocketDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectAllEmotion() {
-		return session.selectList("ws.selectAllEmotion");
+	public List<Map<String, Object>> selectAllFriendForInvite(Member member) {
+		return session.selectList("ws.selectAllFriendForInvite", member);
 	}
 	
 	
