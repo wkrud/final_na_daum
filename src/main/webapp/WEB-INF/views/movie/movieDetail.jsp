@@ -17,8 +17,9 @@
 </jsp:include>
 <style>
 .movie-detail-container {
-	left: 300px;
-	width: 1400px;
+	width: 80%;
+	padding-right: 15px;
+    padding-left: 80px;
 }
 
 input, button, textarea {
@@ -60,29 +61,31 @@ div#board-container label.custom-file-label {
 	text-align: left;
 }
 
-.inner-star::before{color: #FF9600;}
-.outer-star {position: relative;display: inline-block;color: #CCCCCC;}
-.inner-star {position: absolute;left: 0;top: 0;width: 0%;overflow: hidden;white-space: nowrap;}
-.outer-star::before, .inner-star::before {content: '\f005 \f005 \f005 \f005 \f005';font-family: 'Font Awesome 5 free';font-weight: 900;}
-
-.star {
+.star-2 {
     position: relative;
-    font-size: 2rem;
+    font-size: 4rem;
     color: #ddd;
 }
-.star input {
-    width: 100%;
-    height: 100%;
+
+.star-2 span {
+ 
     position: absolute;
     left: 0;
-    opacity: 0;
-    cursor: pointer;
+    color: #ffd400;
+    overflow: hidden;
+    pointer-events: none;
 }
-.star span {
-    width: 0;
+
+.star-count {
+    position: relative;
+    font-size: 1.5rem;
+    color: #ddd;
+}
+
+.star-count span {
     position: absolute;
     left: 0;
-    color: red;
+    color: #68a5ff;
     overflow: hidden;
     pointer-events: none;
 }
@@ -172,13 +175,10 @@ div#board-container label.custom-file-label {
 			data-target="#add-calander">캘린더&raquo;</button>
 			
 		<!-- 스크랩 버튼 -->
-		<button type="button" class="btn btn-success" onclick="scrap(); return false;" value="${apiCode}">스크랩<i class="fas fa-check-double ml-1"></i></button>
 		
 		<c:if test="${ loginMember.id != null }">
-					<button class="w3-button w3-black w3-round" id="rec_update">
-						<i class="fa fa-heart" style="font-size:16px;color:red"></i>
-						&nbsp;<span class="rec_count"></span>
-					</button> 
+			<button type="button" class="btn btn-success" onclick="scrap(); return false;" value="${apiCode}">스크랩<i class="fas fa-check-double ml-1"></i></button>
+					
 		</c:if>
 
 		
@@ -230,59 +230,57 @@ div#board-container label.custom-file-label {
 		<h2 class="blog-post-title">영화 평점</h2>
 		<p class="blog-post-meta">
 			참여자 평점 : 
-			<c:out value="${avg}"></c:out>
-			<c:out value="${rating}"></c:out>
-			${avg}
-			
-			<div class="review">
-				<div class="rating" data-rate="${avg}">
-					<i class="fas fa-star"></i>
-					<i class="fas fa-star"></i>
-					<i class="fas fa-star"></i>
-					<i class="fas fa-star"></i>
-					<i class="fas fa-star"></i>	
-				</div>
-			</div>
-			
-			
 			<div>
-                        <span class="star-2"> ★★★★★ 
-                        <span style="width:calc(18.9%*${avg })">★★★★★</span>
-                        </span>
-                        <fmt:formatNumber value="${avg}" pattern="0.00"/> (62건)
+                <span class="star-2"> ★★★★★ 
+                <c:if test="${rating ne null}">
+                	<span style="width:calc(18.9%*${rating })">★★★★★</span>
+                </c:if>
+                </span>
+                 <fmt:formatNumber value="${rating}" pattern="0.00"/> (${totalStartComment}건)
             </div>
 
-				<div id="section-rating">
-				<div id="rating">
-					<div id="rating-1">만족도</div>
-					<div id="rating-2">
-						<span class="star"> ★★★★★ <span>★★★★★</span> 
-						<input type="range" oninput="drawStar(this)" value="1" step="1" min="0"
-							max="10">
-						</span>
-					</div>
-					<div id="rating-3">${avg}</div>
-					<input type="hidden" name="rating"  id="rating-result" value="${avg }"/>
-				</div>
-			</div>
 
-			5점 : ${starCount5}
+			<div>
+				5점 : 
+              <span class="star-count"> ■■■■■■■■■■ 
+              <c:if test="${ starCount5 ne null}">
+              <span style="width:calc(5%*${starCount5})">■■■■■■■■■■</span>
+              </c:if>
+              </span> (<fmt:formatNumber value="${starCount5}" pattern="0"/>건)
+            </div>
+            <div>
+				4점 : 
+              <span class="star-count"> ■■■■■■■■■■ 
+              <c:if test="${ starCount5 ne null}">
+              <span style="width:calc(5%*${starCount4})">■■■■■■■■■■</span>
+              </c:if>
+              </span>(<fmt:formatNumber value="${starCount4}" pattern="0"/>건)
+            </div>
+            <div>
+				3점 : 
+              <span class="star-count"> ■■■■■■■■■■ 
+              <c:if test="${ starCount5 ne null}">
+              <span style="width:calc(5%*${starCount3})">■■■■■■■■■■</span>
+              </c:if>
+              </span>(<fmt:formatNumber value="${starCount3}" pattern="0"/>건)
+            </div>
+            <div>
+				2점 : 
+              <span class="star-count"> ■■■■■■■■■■ 
+              <c:if test="${ starCount5 ne null}">
+              <span style="width:calc(5%*${starCount2})">■■■■■■■■■■</span>
+              </c:if>
+              </span>(<fmt:formatNumber value="${starCount2}" pattern="0"/>건)
+            </div>
+            <div>
+				1점 : 
+              <span class="star-count"> ■■■■■■■■■■ 
+              <c:if test="${ starCount5 ne null}">
+              <span style="width:calc(5%*${starCount1})">■■■■■■■■■■</span>
+              </c:if>
+              </span>(<fmt:formatNumber value="${starCount1}" pattern="0"/>건)
+            </div>
 			<br />
-			4점 : ${starCount4}
-			<br />
-			3점 : ${starCount3}
-			<br />
-			2점 : ${starCount2}
-			<br />
-			1점 : ${starCount1}
-			<br />
-			<a href="#">Mark</a>
-		</p>
-
-		<p>This blog post shows a few different types of content that’s
-			supported and styled with Bootstrap. Basic typography, images, and
-			code are all supported.</p>
-
 	</div>
 
 	<hr class="featurette-divider" />
@@ -319,7 +317,7 @@ div#board-container label.custom-file-label {
 									<label for="star" class="col-sm-2 col-form-label">평점</label>
 									<div class="col-sm-10">
 										<input type="hidden" class="form-control" name="">
-									<div class="make_star">	
+									
 										<select id="category-select" class="form-control" name="star" aria-label="Default select example">
 											<option selected>0</option>
 											<option value="1">1</option>
@@ -328,14 +326,7 @@ div#board-container label.custom-file-label {
 											<option value="4">4</option>
 											<option value="5">5</option>
 										</select>
-										<div class="rating" data-rate="3">
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>	
-										</div>
-									</div>
+										
 									</div>
 									<textarea name="content" cols="60" rows="3" id="content" class="form-control"></textarea>
 
@@ -600,7 +591,45 @@ $(insertCommentFrm).submit((e) => {
  	});
  
 </script>
+<script>
+/* 별점 */
+const drawStar = (target) => {
+	document.querySelector(`.star span`).style.width = `${target.value * 10}%`;
+	
+	if(document.querySelector(`.star span`).style.width == '10%'){
+		$("#section-rating #rating-3").text("0.5");
+		$("#section-rating #rating-result").val("0.5");
+	} else if(document.querySelector(`.star span`).style.width == '20%'){
+		$("#section-rating #rating-3").text("1.0");
+		$("#section-rating #rating-result").val("1.0");
+	} else if(document.querySelector(`.star span`).style.width == '30%'){
+		$("#section-rating #rating-3").text("1.5");
+		$("#section-rating #rating-result").val("1.5");
+	} else if(document.querySelector(`.star span`).style.width == '40%'){
+		$("#section-rating #rating-3").text("2.0");
+		$("#section-rating #rating-result").val("2.0");
+	} else if(document.querySelector(`.star span`).style.width == '50%'){
+		$("#section-rating #rating-3").text("2.5");
+		$("#section-rating #rating-result").val("2.5");
+	} else if(document.querySelector(`.star span`).style.width == '60%'){
+		$("#section-rating #rating-3").text("3.0");
+		$("#section-rating #rating-result").val("3.0");
+	} else if(document.querySelector(`.star span`).style.width == '70%'){
+		$("#section-rating #rating-3").text("3.5");
+		$("#section-rating #rating-result").val("3.5");
+	} else if(document.querySelector(`.star span`).style.width == '80%'){
+		$("#section-rating #rating-3").text("4.0");
+		$("#section-rating #rating-result").val("4.0");
+	} else if(document.querySelector(`.star span`).style.width == '90%'){
+		$("#section-rating #rating-3").text("4.5");
+		$("#section-rating #rating-result").val("4.5");
+	} else if(document.querySelector(`.star span`).style.width == '100%'){
+		$("#section-rating #rating-3").text("5.0");
+		$("#section-rating #rating-result").val("5.0");
+	}
+}
 
+</script>
 
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

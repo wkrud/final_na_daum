@@ -62,6 +62,10 @@
 		select count(*) from comments where star = 5 and api_code = #{apiCode}
 	</select>
 	
+	<select id="totalStarCount" resultType = "_int">
+		select  count(star) from comments where api_code = #{apiCode}
+	</select>
+	
 	<resultMap type="Comment" id="CommentMap">
 		<id column="code" property="code"/>
 		<result column="comment_level" property="commentLevel"/>

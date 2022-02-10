@@ -23,6 +23,8 @@ public interface MovieService {
 	int starCount4(String apiCode);
 	int starCount5(String apiCode);
 
+	int totalStarCount(String apiCode);
+
 //	int selectTotalContent();
 //
 //	Movie selectOneMovieCollection(String code);

@@ -32,4 +32,6 @@ public interface MovieDao {
 	int starCount3(String apiCode);
 	int starCount4(String apiCode);
 	int starCount5(String apiCode);
+
+	int totalStarCount(String apiCode);
 }
