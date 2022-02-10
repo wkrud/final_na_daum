@@ -21,13 +21,13 @@ public class WebsocketServiceImpl implements WebsocketService {
 	}
 
 	@Override
-	public int updateAlarm(Member member) {
-		return websocketDao.updateAlarm(member);
+	public int updateAlarm(Map<String, Object> map) {
+		return websocketDao.updateAlarm(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectAllEmotion() {
-		return websocketDao.selectAllEmotion();
+	public List<Map<String, Object>> selectAllFriendForInvite(Member member) {
+		return websocketDao.selectAllFriendForInvite(member);
 	}
 
 	

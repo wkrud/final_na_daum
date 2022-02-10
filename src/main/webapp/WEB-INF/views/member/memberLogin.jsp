@@ -45,10 +45,14 @@ function onEnterLogin(){
 </script>
 <style>
 .modal-backdrop{
-	background-image: url("https://cdn.discordapp.com/attachments/925643543874244641/939559638326710313/Login_bg.jpg");
+	background-image: url("${pageContext.request.contextPath}/resources/images/member/city.jpg");
 	background-repeat : no-repeat;
-	background-size : cover;
+	background-size : 100% 100%;
 	opacity: 1 !important;
+}
+.modal-dialog{
+	position: relative;
+	top: 25%;
 }
 </style>
 </head>

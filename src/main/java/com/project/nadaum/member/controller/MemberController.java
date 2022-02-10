@@ -591,6 +591,7 @@ public class MemberController {
 	@GetMapping("/mypage/memberHelp.do")
 	public void memberHelp(Model model){
 		// 다이어리 dy, 가계부 ab, 문화생활 cu, 오디오북, 롤전적, 캘린더 , 친구 fr, 메모 me
+		Map<String, Object> checkHelp = memberService.selectHelpCategoyCount();
 		Map<String, Object> map = new HashMap<>();
 		map.put("category", "dy");
 		List<Help> helpDyList = memberService.selectAllMembersDyQuestions(map);
@@ -600,6 +601,7 @@ public class MemberController {
 		List<Help> helpFrList = memberService.selectAllMembersFrQuestions(map);
 		log.debug("helpList = {}", helpDyList);
 		
+		model.addAttribute("checkHelp", checkHelp);
 		model.addAttribute("helpDyList", helpDyList);		
 		model.addAttribute("helpAbList", helpAbList);		
 		model.addAttribute("helpFrList", helpFrList);			
@@ -671,7 +673,7 @@ public class MemberController {
 			Map<String, Object> param = new HashMap<>();
 			Map<String, Object> reverse = new HashMap<>();
 			Map<String, Object> alarm = new HashMap<>();
-			
+			String content = "<a href='" + "/nadaum/feed/socialFeed.do?id=" + member.getId() + "'" + ">";
 			param.put("friendId", friendInfo.getId());
 			param.put("friendNickname", friendNickname);
 			param.put("id", member.getId());
@@ -688,7 +690,8 @@ public class MemberController {
 				// -> friend
 				Map<String, Object> isFollower = memberService.selectFollower(param);
 				if(isFollower != null) {
-					alarm.put("content", member.getNickname() + "님과 친구가 되었습니다.");
+					content += member.getNickname() + "님과 친구가 되었습니다.</a>";
+					alarm.put("content", content);
 					result = memberService.updateRequestFriend(param);
 					result = memberService.insertFriend(param);
 					result = memberService.insertFriend(reverse);
@@ -701,7 +704,8 @@ public class MemberController {
 				// -> free
 				Map<String, Object> isFollowing = memberService.selectFollowing(param);
 				if(isFollowing != null) {
-					alarm.put("content", member.getNickname() + "님이 친구신청을 끊었습니다.");
+					content += member.getNickname() + "님이 친구신청을 끊었습니다.</a>";
+					alarm.put("content", content);
 					result = memberService.deleteRequestFriend(reverse);
 					result = memberService.insertAlarm(alarm);
 					return ResponseEntity.ok(1);
@@ -711,7 +715,8 @@ public class MemberController {
 				// -> free
 				Map<String, Object> isFriend = memberService.selectFriend(param);
 				if(isFriend != null) {
-					alarm.put("content", member.getNickname() + "님과 더이상 친구가 아니에요");
+					content += member.getNickname() + "님과 더이상 친구가 아니에요</a>";
+					alarm.put("content", content);
 					result = memberService.deleteRequestFriend(param);
 					result = memberService.deleteRequestFriend(reverse);
 					result = memberService.deleteFriend(param);
@@ -725,7 +730,8 @@ public class MemberController {
 				Map<String, Object> isFollower = memberService.selectFollower(reverse);
 				log.debug("isFollower = {}", isFollower);
 				if(isFollower == null) {
-					alarm.put("content", member.getNickname() + "님이 회원님을 팔로우하기 시작했습니다.");
+					content += member.getNickname() + "님이 회원님을 팔로우하기 시작했습니다.</a>";
+					alarm.put("content", content);
 					result = memberService.insertRequestFriend(param);
 					result = memberService.insertAlarm(alarm);
 					return ResponseEntity.ok(1);
@@ -850,7 +856,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberUpdate.do")
-	public ResponseEntity<?> memberUpdate(Member member, @AuthenticationPrincipal Member oldMember){
+	public String memberUpdate(Member member, @AuthenticationPrincipal Member oldMember){
 		int result = 0;
 		try {
 			log.debug("member = {}", member);
@@ -858,13 +864,9 @@ public class MemberController {
 			
 			result = memberService.updateMember(member);
 			
-			oldMember.setName(member.getName());
 			oldMember.setEmail(member.getEmail());
 			oldMember.setAddress(member.getAddress());
-			oldMember.setPhone(member.getPhone());
-			oldMember.setHobby(member.getHobby());
 			oldMember.setSearch(member.getSearch());
-			oldMember.setIntroduce(member.getIntroduce());
 			oldMember.setBirthday(member.getBirthday());
 			
 			Authentication newAuthentication = new UsernamePasswordAuthenticationToken(oldMember, oldMember.getPassword(), oldMember.getAuthorities());		
@@ -873,7 +875,7 @@ public class MemberController {
 			log.error(e.getMessage(), e);
 			throw e;
 		}		
-		return ResponseEntity.ok(result);
+		return "redirect:/member/mypage/memberDetail.do?tPage=myPage";
 		
 	}
 	
@@ -899,6 +901,27 @@ public class MemberController {
 		oldMember.setHobby(member.getHobby());
 		Authentication newAuthentication = new UsernamePasswordAuthenticationToken(oldMember, oldMember.getPassword(), oldMember.getAuthorities());		
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+		return ResponseEntity.ok(1);
+	}
+	
+	@PostMapping("/mypage/modifyMemberIntroduce.do")
+	public ResponseEntity<?> modifyMemberIntroduce(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member oldMember){
+		log.debug("map = {}", map);
+		int result = memberService.updateMemberIntroduce(map);
+		oldMember.setIntroduce((String)map.get("intro"));
+		Authentication newAuthentication = new UsernamePasswordAuthenticationToken(oldMember, oldMember.getPassword(), oldMember.getAuthorities());		
+		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+		return ResponseEntity.ok(1);
+	}
+	
+	@PostMapping("/mypage/sendAndInsertAlarm.do")
+	public ResponseEntity<?> sendAndInsertAlarm(@RequestParam Map<String, Object> map){
+		log.debug("map = {}", map);
+		if("N".equals((String)map.get("type"))) {
+			Member member = memberService.selectOneMemberNickname((String) map.get("id"));
+			map.put("id", member.getId());
+		}
+		int result = memberService.insertAlarm(map);
 		return ResponseEntity.ok(1);
 	}
 	

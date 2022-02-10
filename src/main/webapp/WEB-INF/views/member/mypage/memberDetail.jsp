@@ -91,7 +91,8 @@
 							<input type="text" class="form-control" placeholder="이메일" name="email" id="email" value="${loginMember.email}" readonly required/>
 							<input type="text" class="form-control" placeholder="주소" name="address" id="address" value="${loginMember.address}" readonly required/>
 							<input type="text" class="form-control" placeholder="전화번호" name="phone" id="phone" value="${loginMember.phone}" readonly required/>
-												
+							<label for="birthday">생일</label>
+							<input type="date" name="birthday" id="birthday" value='<fmt:formatDate value="${loginMember.birthday}" pattern="yyyy-MM-dd"/>' />
 							
 							<div class="info-update-btn">
 								<input type="submit" class="btn btn-outline-success" value="수정" >
@@ -101,15 +102,18 @@
 						
 					</div>				
 				</div>
+				<hr />
 				<div class="hobby-wrap">
 					<div class="selected-hobby-wrap">
 						<div class="my-hobby-wrap-title">
 							<span>내 취미</span>
+							<div class="hobby-edit-btn">
+								<i class="far fa-edit hobby-edit"></i>
+							</div>
 						</div>
 						<div class="my-hobby-wrap">							
 							<c:forEach items="${hobbyList}" var="hobby">
-								<c:if test="${hobby eq '롤'}">
-								
+								<c:if test="${hobby eq '롤'}">								
 									${hobby}
 								</c:if>
 								<c:if test="${hobby eq '게임'}">
@@ -146,42 +150,122 @@
 						<div class="hobby-select-form">
 							<form id="modifyHobbyFrm" method="post" onsubmit="return false;">
 								<input type="hidden" name="id" value="${loginMember.id}" />
-								<label for="lol">롤</label>
-								<input type="checkbox" name="hobby" id="lol" value="롤" ${hobbyList.contains('롤') ? 'checked' : ''}/>
-								<label for="game">게임</label>
-								<input type="checkbox" name="hobby" id="game" value="게임" ${hobbyList.contains('게임') ? 'checked' : ''}/>
-								<label for="book">독서</label>
-								<input type="checkbox" name="hobby" id="book" value="독서" ${hobbyList.contains('독서') ? 'checked' : ''}/>
-								<label for="write">글쓰기</label>
-								<input type="checkbox" name="hobby" id="write" value="글쓰기" ${hobbyList.contains('글쓰기') ? 'checked' : ''}/>
-								<label for="coding">코딩</label>
-								<input type="checkbox" name="hobby" id="coding" value="코딩" ${hobbyList.contains('코딩') ? 'checked' : ''}/>
-								<label for="bowling">볼링</label>
-								<input type="checkbox" name="hobby" id="bowling" value="볼링" ${hobbyList.contains('볼링') ? 'checked' : ''}/>
-								<label for="basketball">농구</label>
-								<input type="checkbox" name="hobby" id="basketball" value="농구" ${hobbyList.contains('농구') ? 'checked' : ''}/>
-								<label for="goodrestaurant">맛집탐방</label>
-								<input type="checkbox" name="hobby" id="goodrestaurant" value="맛집탐방" ${hobbyList.contains('맛집탐방') ? 'checked' : ''}/>
+								<div class="check-hobby">
+									<label for="lol">롤</label>
+									<input type="checkbox" name="hobby" id="lol" value="롤" ${hobbyList.contains('롤') ? 'checked' : ''}/>
+									<label for="game">게임</label>
+									<input type="checkbox" name="hobby" id="game" value="게임" ${hobbyList.contains('게임') ? 'checked' : ''}/>
+									<label for="book">독서</label>
+									<input type="checkbox" name="hobby" id="book" value="독서" ${hobbyList.contains('독서') ? 'checked' : ''}/>
+									<label for="write">글쓰기</label>
+									<input type="checkbox" name="hobby" id="write" value="글쓰기" ${hobbyList.contains('글쓰기') ? 'checked' : ''}/>
+									<label for="coding">코딩</label>
+									<input type="checkbox" name="hobby" id="coding" value="코딩" ${hobbyList.contains('코딩') ? 'checked' : ''}/>
+									<label for="bowling">볼링</label>
+									<input type="checkbox" name="hobby" id="bowling" value="볼링" ${hobbyList.contains('볼링') ? 'checked' : ''}/>
+									<label for="basketball">농구</label>
+									<input type="checkbox" name="hobby" id="basketball" value="농구" ${hobbyList.contains('농구') ? 'checked' : ''}/>
+									<label for="goodrestaurant">맛집탐방</label>
+									<input type="checkbox" name="hobby" id="goodrestaurant" value="맛집탐방" ${hobbyList.contains('맛집탐방') ? 'checked' : ''}/>
 								<c:forEach items="${hobbyList}" var="hobby" varStatus="vs">
 									<c:if test="${hobby ne '' && hobby ne '맛집탐방' && hobby ne '롤' && hobby ne '게임' && hobby ne '독서' && hobby ne '글쓰기' && hobby ne '코딩' && hobby ne '볼링' && hobby ne '농구'}">
 										<label for="etc${vs.count}">${hobby}</label>
 										<input type="checkbox" name="hobby" id="etc${vs.count}" value="${hobby}" ${hobbyList.contains(hobby) ? 'checked' : ''}/>
 									</c:if>
 								</c:forEach>
-								<label for="etc">직접입력</label>
-								<input type="text" name="hobby" id="etc"/>							
+								</div>
+								<div class="write-hobby-self-wrap">
+									<label for="etc">직접입력</label>
+									<input type="text" name="hobby" id="etc"/>		
+									<i class="far fa-edit self-btn"></i>					
+								</div>
 							</form>
 						</div>
 					</div>
-				</div>		
+				</div>	
+				<hr />
+				<div class="member-introduce-wrap">
+					<div class="introduce-wrap">
+						<div class="introduce-title-wrap">
+							<span>소개</span>
+							<div class="introduce-edit-wrap">
+								<i class="far fa-edit intro-edit"></i>
+							</div>
+						</div>
+						<div class="member-introduce">${loginMember.introduce}</div>
+					</div>
+					<div class="modify-introduce-wrap">
+						<div class="introduce-content-wrap">
+							<div class="introduce-content">
+								<textarea name="" id="member-self-introduce" placeholder="소개를 해보세요" >${loginMember.introduce}</textarea>
+							</div>
+							<div class="introduce-modify-btn-wrap">
+								<i class="far fa-edit"></i>
+							</div>
+						</div>
+						<div class="introduce-size-check">
+							<span class="size-check"></span>
+						</div>
+					</div>
+				</div>	
 				
 				<script>
-				/* $(".modify-hobby-wrap").hide(); */
+				$(() => {
+					/* db에서 불러온 소개에서 <br/>을 \r\n으로 변경하여 코드가 보이지 않도록 수정 */
+					$intro.val($intro.val().split('<br/>').join('\r\n'));
+					/* 소개 사이즈 체크 */
+					$sizeCheck.text($intro.val().length + '/100');
+					$(".modify-introduce-wrap").hide();
+					$(".modify-hobby-wrap").hide();
+				});
 				
-				$("#etc").on('keyup', function(e) {					
-					if(e.keyCode === 13 || e.key === 'Enter'){
+				$(".hobby-edit").on('click',function(e) {
+					$(".modify-hobby-wrap").slideToggle();
+				});
+				
+				$(".intro-edit").on('click',function(e) {
+					$(".modify-introduce-wrap").slideToggle();
+				});
+				
+				/* $(".modify-hobby-wrap").hide(); */
+				const $intro = $("#member-self-introduce");
+				const $sizeCheck = $(".size-check");
+				$intro.on('keyup', function(e) {
+					$sizeCheck.text($intro.val().length + '/100');
+					if($intro.val().length > 100){
+						$sizeCheck.css("color","red");						
+					}else{
+						$sizeCheck.css("color","black");
+					}
+					if($intro.val().length < 102 && $intro.val().length > 1 && ((e.keyCode === 13 || e.key === 'Enter') && !e.shiftKey)){
+						/* 엔터시에 개행 제거 */
+						$intro.val($intro.val().replace(/\r|\n$/g,''));
+						modifyIntroduce($intro.val().replace(/(?:\r\n|\r|\n)/g, '<br/>'), '${loginMember.id}');
+					}else{
+						console.log('너무 크다');
+					}
+				});
+				
+								
+				const modifyIntroduce = (intro, id) => {
+					
+					$.ajax({
+						url: '${pageContext.request.contextPath}/member/mypage/modifyMemberIntroduce.do',
+						data : {intro, id},
+						headers: headers,
+						method: 'POST',
+						success(resp){
+							console.log(resp);
+							location.reload();
+						},
+						error: console.log
+					});
+				};
+				
+				/* 취미 수정 */
+				$(".self-btn").on('click', function(e){
+					if($("#etc").val() != ''){
 						modifyAjax();
-						e.preventDefault();
 					}
 				});
 				
@@ -190,10 +274,7 @@
 				});
 				
 				const modifyAjax = () => {
-					const csrfHeader = "${_csrf.headerName}";
-					const csrfToken = "${_csrf.token}";
-					const headers = {};
-					headers[csrfHeader] = csrfToken;
+					
 					$.ajax({
 						url:'${pageContext.request.contextPath}/member/mypage/modifyMemberHobby.do',
 						data: $("#modifyHobbyFrm").serialize(),
