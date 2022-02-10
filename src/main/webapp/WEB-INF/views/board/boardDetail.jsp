@@ -430,9 +430,6 @@ $(".btn-reply").click((e) => {
 	}
 });
 
-$("#likeButton").click((e) => {
-	
-});
 /* ajax 비동기로 처리 */
 /*  $(insertCommentFrm).submit((e) => {
 				e.preventDefault();

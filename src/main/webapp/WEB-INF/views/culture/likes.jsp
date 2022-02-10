@@ -49,11 +49,26 @@ padding-left: 20px;
 			<h1 class="title">Culture</h1>
 		</div>
 		<h1>나다운 찜 목록</h1>
-		${list}	
+		<br />
+		  <div class="py-5">
+	    <div class="container">
+	      <div class="row hidden-md-up" id="result">
+			     <c:forEach var="culture" items="${scrapList}">
+			    	<div class="col-md-4" style="padding: 15px;">
+			         <div class="card culture-list"> 
+			            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
+			              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
+			              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>
+			              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.place}</p>
+			              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.realmName}</p>
+			              <img class="thumnail" src="${culture.imgUrl}" alt="" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`"/>
+			               </div>
+			          </div>
+			        </div>
+		       	 </c:forEach>
+	        </div>
+	        </div>
 	</div>
-</body>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+	</div>
 </body>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

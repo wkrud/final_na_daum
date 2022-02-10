@@ -82,7 +82,6 @@ $(() => {
 
 
 </script>
-<body>
 	<c:forEach var="culture" items="${list}">
 	<div class="wrap" style="">
 	</c:forEach>
@@ -91,64 +90,34 @@ $(() => {
 		 <c:forEach var="culture" items="${list}">
 			<div class="culture_detail">
 			<h1 id="culture-title">${culture.title}</h1>
-			
-			<span><fmt:parseDate value="${culture.startDate}" var="startDateParse" pattern="yyyyMMdd"/>
-			<fmt:formatDate value="${startDateParse}" pattern="yyyy년 MM월 dd일"/>
-			<span>~</span>
-			</span><fmt:parseDate value="${culture.endDate}" var="endDateParse" pattern="yyyyMMdd"/>
-			<fmt:formatDate value="${endDateParse}" pattern="yyyy년 MM월 dd일"/>
-			<br />
-			<img src="${culture.imgUrl}" alt="" style="width: 50%;"/>
-			<br />
-			<span>${culture.area}</span>
-			<span>${culture.realmName}</span>
-			<br />
-			<span id="placeAddr">${culture.placeAddr}</span>
-			<br />
-			<span>${culture.price}</span>
-			<br />
-			<a href="${culture.placeUrl}">${culture.placeUrl}</a>
+				<fmt:parseDate value="${culture.startDate}" var="startDateParse" pattern="yyyyMMdd"/>
+				<fmt:formatDate value="${startDateParse}" pattern="yyyy년 MM월 dd일"/>
+				<span>~</span>
+				<fmt:parseDate value="${culture.endDate}" var="endDateParse" pattern="yyyyMMdd"/>
+				<fmt:formatDate value="${endDateParse}" pattern="yyyy년 MM월 dd일"/>
+				<br />
+				<img src="${culture.imgUrl}" alt="" style="width: 50%;"/>
+				<br />
+				<span>${culture.area}</span>
+				<span>${culture.realmName}</span>
+				<br />
+				<span id="placeAddr">${culture.placeAddr}</span>
+				<br />
+				<span>${culture.price}</span>
+				<br />
+				<a href="${culture.placeUrl}">${culture.placeUrl}</a>
 			</div>
 		 <button type="button" class="btn btn-secondary" onclick="location.href='${culture.bookingUrl}'">예매하기</button>
 		</c:forEach>
 		<br />
-		
 		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-calander">
  		캘린더에 추가
 		</button>
-		
-		<!-- Modal -->
-		<div class="modal fade" id="add-calander" tabindex="-1" role="dialog" aria-labelledby="add-calander" aria-hidden="true">
-		  <form id="promiseFrm">
-		    <div class="modal-dialog modal-dialog-centered" role="document">
-		      <div class="modal-content">
-		        <div class="modal-header">
-		          <h5 class="modal-title" id="add-calanderTitle">약 속</h5>
-		          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		            <span aria-hidden="true">&times;</span>
-		          </button>
-		        </div>
-		        <div class="modal-body">
-		         <span>약속일</span>
-		         <input type="date" id="schedule-date" />
-		         <br />
-		         <br />
-		         <span>@친구</span>
-		         <input type="text" />
-		        </div>
-		        <div class="modal-footer">
-		          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-		          <button type="button" class="btn btn-primary">추가</button>
-		        </div>
-		      </div>
-		    </div>
-		  </form>
-		</div>
 		<!-- scrap.api_code eq apiCode -->
 		<form id="likeFrm">
 			<input type="hidden" name="apiCode" value="${apiCode}" />
 			<input type="hidden" name="id" value="${loginMember.id}" />
-		 	<button type="submit" class="btn btn-danger" id="like-btn">스크랩 하기
+		 	<button type="submit" class="btn btn-danger" id="like-btn" data-like-yes-no="${likeYesNo}">스크랩 하기
 		 	</button>
 		</form>
 		
@@ -221,8 +190,56 @@ $(() => {
 				</c:forEach>
 				</table>
 				</div>
-			</body>
+						<!-- Modal -->
+		<div class="modal fade" id="add-calander" tabindex="-1" role="dialog" aria-labelledby="add-calander" aria-hidden="true">
+		  <form id="promiseFrm">
+		    <div class="modal-dialog modal-dialog-centered" role="document">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+		          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		            <span aria-hidden="true">&times;</span>
+		          </button>
+		        </div>
+		        <div class="modal-body">
+		         <span>약속일</span>
+		         <input type="date" id="schedule-date" />
+		         <br />
+		         <br />
+		         <span>@친구</span>
+		         <div>
+		         	<div class="friend-list-wrap">
+						<div class="friends-list">
+							<div class="friend">
+								<span>친구</span>
+							</div>
+							<div class="friends-section">
+								<c:forEach items="${memberList}" var="ml">
+									<c:forEach items="${friends}" var="fr">
+										<c:if test="${ml.id eq fr.friendId}">
+											<div class="friend-wrap">
+												<div class="friend-name-wrap">
+													<span class="friend-name">${ml.nickname}</span>								
+												</div>		
+											</div>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
+							</div>
+						</div>
+		         </div>
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+		          <button type="button" class="btn btn-primary">추가</button>
+		        </div>
+		      </div>
+		    </div>
+		    </div>
+		  </form>
+		</div>
 	<script>
+
 	$("#comment-enroll-btn").click((e) => {
 		if($("#comment-area").val() == ''){
 			alert('댓글을 작성해 주세요');
@@ -230,17 +247,19 @@ $(() => {
 		}
 		return true;
 	});
+
 			//댓글 등록
 			$(insertCommentFrm).submit((e) => {
 				
 				e.preventDefault();
-				
+
 				const csrfHeader = "${_csrf.headerName}";
-		        const csrfToken = "${_csrf.token}";
-		        const headers = {};
-		        headers[csrfHeader] = csrfToken;
+			    const csrfToken = "${_csrf.token}";
+			    const headers = {};
+			    headers[csrfHeader] = csrfToken;
+			    
 				$.ajax({
-					headers : headers,
+					headers : headers, 
 					url: `${pageContext.request.contextPath}/culture/board/view/${apiCode}`,
 					method: "POST",
 					data: $(insertCommentFrm).serialize(),
@@ -295,7 +314,10 @@ $(() => {
 		        const csrfToken = "${_csrf.token}";
 		        const headers = {};
 		        headers[csrfHeader] = csrfToken;
-				
+		        
+		        const likeYesNo = $(e.target).data("likeYesNo");
+		        console.log(likeYesNo);
+		        
 				$.ajax({
 					url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
 					method: "POST",

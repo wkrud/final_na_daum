@@ -23,7 +23,7 @@
 	
 	<select id="selectCultureLikes" resultType="scrap">
 		select
-		*
+			*
 		from
 			scrap
 		where 

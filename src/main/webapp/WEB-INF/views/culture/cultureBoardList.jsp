@@ -62,11 +62,7 @@ padding-left: 20px;
 		
 		
 }); 
-
-
-
 </script>
-<body>
 	<div class="container">
 		<div class="culture-thumnail">
 			<!-- 썸네일 그림, 타이틀  -->
@@ -113,7 +109,7 @@ padding-left: 20px;
 	      
 	     <c:forEach var="culture" items="${list}">
 	    	<div class="col-md-4" style="padding: 15px;">
-	         <div class="card"> 
+	         <div class="card culture-list"> 
 	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
 	              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>
@@ -147,9 +143,4 @@ padding-left: 20px;
 		<!-- culture-container 끝 -->
 		</div>
 	</div>
-</body>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
-</body>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
