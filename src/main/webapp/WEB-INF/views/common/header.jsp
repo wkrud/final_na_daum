@@ -13,14 +13,14 @@
 <%
     Date now = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM");
-/*     if((Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null){
+     if(!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){
 	    Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    if(member.getBirthday() != null){
 		    Date birth = member.getBirthday();
 		    boolean isBirth = NadaumUtils.isBirthday(birth);
 		    pageContext.setAttribute("isBirth", isBirth);
 	    }    	
-    } */
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -213,7 +213,7 @@
         <button id="profile" type="button"
           data-toggle="collapse" data-target="#alarmList" aria-expanded="false" aria-controls="alarmList">
           <div class="badge-wrap"></div>
-          <div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+          <div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
             <c:if test="${loginMember.loginType eq 'K'}">
               <img src="${loginMember.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />
             </c:if>	

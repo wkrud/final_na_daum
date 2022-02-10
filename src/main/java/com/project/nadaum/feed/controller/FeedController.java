@@ -55,9 +55,10 @@ public class FeedController {
 			// 친구, 팔로잉
 			Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
 			
-			boolean bool = NadaumUtils.isBirthday(member.getBirthday());
-			
-			model.addAttribute("hostBirth", bool);
+			if(member.getBirthday() != null) {
+				boolean bool = NadaumUtils.isBirthday(member.getBirthday());
+				model.addAttribute("hostBirth", bool);
+			}
 			model.addAttribute("check", param);
 			model.addAttribute("hobby", hobby);
 			model.addAttribute("member", member);
