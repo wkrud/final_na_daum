@@ -69,6 +69,11 @@ public class MovieServiceImpl implements MovieService {
 	public int starCount5(String apiCode) {
 		return movieDao.starCount5(apiCode);
 	}
+
+	@Override
+	public int totalStarCount(String apiCode) {
+		return movieDao.totalStarCount(apiCode);
+	}
 	
 
 

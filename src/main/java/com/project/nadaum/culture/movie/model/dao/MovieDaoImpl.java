@@ -54,7 +54,7 @@ public class MovieDaoImpl implements MovieDao {
 
 	@Override
 	public int starCount3(String apiCode) {
-		return session.selectOne("movie.starCount2",apiCode);
+		return session.selectOne("movie.starCount3",apiCode);
 	}
 
 	@Override
@@ -64,7 +64,12 @@ public class MovieDaoImpl implements MovieDao {
 
 	@Override
 	public int starCount5(String apiCode) {
-		return session.selectOne("movie.starCount5",apiCode);
+		return session.selectOne("movie.starCount5", apiCode);
+	}
+
+	@Override
+	public int totalStarCount(String apiCode) {
+		return session.selectOne("movie.totalStarCount", apiCode);
 	}
 
 
