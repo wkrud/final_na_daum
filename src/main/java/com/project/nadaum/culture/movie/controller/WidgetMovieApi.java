@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequestMapping("/movie")
-public class GetMovieApi {
+public class WidgetMovieApi {
 
     // tag값의 정보를 가져오는 메소드
 	private static String getTagValue(String tag, Element eElement) {
@@ -37,7 +37,7 @@ public class GetMovieApi {
 	
 	
 	//영화API
-	@GetMapping("/movieList.do")
+	@GetMapping("/movieBox.do")
 	public ModelAndView getMovieApi(Model model) {
 		int page = 1;
 
@@ -123,7 +123,7 @@ public class GetMovieApi {
 			} catch (Exception e){	
 			e.printStackTrace();
 		}	// try~catch end
-			return new ModelAndView("/movie/movieList","list",list);
+			return new ModelAndView("/movie/movieBox","list",list);
 	}
 	
 

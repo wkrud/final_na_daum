@@ -8,15 +8,21 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.project.nadaum.culture.comment.model.service.CommentService;
+import com.project.nadaum.culture.comment.model.vo.Comment;
+import com.project.nadaum.culture.movie.model.service.MovieService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/movie")
 public class GetMovieDetailApi {
 	
+	@Autowired
+	private CommentService commentService;
+	
+	@Autowired
+	private MovieService movieService;
 	
 	/**
 	 * elem 하위의 len개의 tagName을 찾아서 textContent를 문자열로 리턴
@@ -39,8 +50,6 @@ public class GetMovieDetailApi {
 		//getElementsByTagName -> 직속자식뿐만 아니라 자식태그 탐색가능
 		NodeList nodeList = elem.getElementsByTagName(tagName);
 		int len = nodeList.getLength(); //검색한 태그의 글자 수 
-		
-		
 		
 		if(len == 0) return null; //NodeList의 글자수가 0개일시 null을 리턴.
 		
@@ -62,11 +71,13 @@ public class GetMovieDetailApi {
 //@RequestParam(value="movieCd", required=false) String movieCd
 	
 	// 영화 상세정보API
-	@GetMapping("/movieDetail.do")
-	public void getMovieDetailApi(@RequestParam String movieCd, Model model) {
-		log.debug("movieCd = {} ", movieCd);
+	@GetMapping("/movieDetail/{apiCode}")
+	public ModelAndView getMovieDetailApi(@PathVariable String apiCode, Model model) {
+		log.debug("movieCd = {} ", apiCode);
 		
-		List<Object> list = new ArrayList<>();
+		List<Object> list = new ArrayList<>(); //api 내욜을 넘겨줄 리스트
+		
+		List<Object>  listStar = new ArrayList<>(); //펑점을 담을 리스트
 		
 		try {
 
@@ -74,10 +85,10 @@ public class GetMovieDetailApi {
 			// 영화상세api
 			String url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.xml"
 					+ "?key=2707c14a032dacdea9d8b690c3f99d19" 
-					+ "&movieCd="+ movieCd;
+					+ "&movieCd="+ apiCode;
 			
 			
-			log.debug(movieCd);
+			log.debug(apiCode);
 			
 			DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
@@ -101,7 +112,7 @@ public class GetMovieDetailApi {
 				Element movieInfoElem = (Element) movieInfoNode;
 //				String movieCd = getTagValues("movieCd", movieInfoElem);
 				String movieNm = getTagValues("movieNm", movieInfoElem);
-				String openDt = getTagValues("openDt", movieInfoElem);
+//				String openDt = getTagValues("openDt", movieInfoElem);
 				String nationNm = getTagValues("nationNm", movieInfoElem);
 				String genreNm = getTagValues("genreNm", movieInfoElem);
 				
@@ -110,7 +121,7 @@ public class GetMovieDetailApi {
 
 //				map.put("movieCd", movieCd);
 				map.put("movieNm", movieNm);
-				map.put("openDt", openDt);
+//				map.put("openDt", openDt);
 				map.put("nation", nationNm);
 				map.put("genreNm", genreNm);
 				
@@ -135,14 +146,52 @@ public class GetMovieDetailApi {
 				log.debug("map = {}" ,map);
 				
 				list.add(map);
-				log.debug("list = {}" , list);
-				model.addAttribute("list",list);
 			}
+			
+			List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
+			model.addAttribute("list",list);
+			model.addAttribute("commentList",commentList);
+			log.debug("list = {}" , list);
+			
+			//평점 평균
+			List<Integer> star = movieService.listStar(apiCode); //star 불어오기
+			log.debug("star{}", star);
 
+			int totalStartComment = movieService.totalStarCount(apiCode);
+			
+//			int sum = 0; // 평점 합계 구하는 변수 0으로 초기화
+//			double avg = 0; // 평점 평균 구하는 변수 0으로 초기화
+//			sum = star.stream().mapToInt(Integer::intValue).sum();
+//			System.out.println("starSum : " + sum);
+//			int arraysize = star.size();
+//			avg = sum / arraysize;
+//			System.out.println("avgStar : " + avg);
+//			log.debug("avg{}", avg);
+//			model.addAttribute("avg", avg);
+			
+			double rating = movieService.avgRating(apiCode);
+			int starCount1 = movieService.starCount1(apiCode);
+			int starCount2 = movieService.starCount2(apiCode);
+			int starCount3 = movieService.starCount3(apiCode);
+			int starCount4 = movieService.starCount4(apiCode);
+			int starCount5 = movieService.starCount5(apiCode);
+			log.debug("rating{}", rating);
+			
+			model.addAttribute("rating", rating);
+			
+			model.addAttribute("starCount1", starCount1);
+			model.addAttribute("starCount2", starCount2);
+			model.addAttribute("starCount3", starCount3);
+			model.addAttribute("starCount4", starCount4);
+			model.addAttribute("starCount5", starCount5);
+			
+			model.addAttribute("totalStartComment", totalStartComment);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return new ModelAndView("/movie/movieDetail","list",list);
 	}
 
 
