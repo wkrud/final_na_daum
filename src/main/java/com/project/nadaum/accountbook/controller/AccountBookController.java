@@ -3,7 +3,6 @@ package com.project.nadaum.accountbook.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.nadaum.accountbook.AccountbookPagebar;
 import com.project.nadaum.accountbook.model.service.AccountBookService;
 import com.project.nadaum.accountbook.model.vo.AccountBook;
 import com.project.nadaum.common.NadaumUtils;
@@ -65,9 +65,11 @@ public class AccountBookController {
 		//전체리스트 개수
 		int totalAccountList = accountBookService.countAccountList(param);
 		
+		String incomeExpense = "all";
 		String category = "all";
+		String detail = "all";
 		String url = request.getRequestURI();
-		String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
+		String pagebar = AccountbookPagebar.getPagebar(cPage, limit, totalAccountList, url, incomeExpense, category, detail);
 			
 		model.addAttribute("pagebar", pagebar);
 		
@@ -192,9 +194,10 @@ public class AccountBookController {
 		 //조회한 목록 전체 개수
 		 int totalAccountList = accountBookService.countAccountList(map);
 		 //페이지바
-		 String category = "incomeExpense"; 
-		 String url = request.getRequestURI(); 
-		 String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
+			String category = "all";
+			String detail = "all";
+			String url = request.getRequestURI();
+			String pagebar = AccountbookPagebar.getPagebar(cPage, limit, totalAccountList, url, incomeExpense, category, detail);
 		 
 		//수입, 지출 계산한 값
 			List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
@@ -242,11 +245,14 @@ public class AccountBookController {
 		 int limit = 4;
 		 int offset = (cPage-1) * limit;
 		 String id = member.getId(); 
+		 String incomeExpense = (String) param.get("incomeExpense");
+		 String category = (String) param.get("category");
+		 String detail = (String) param.get("detail");
 		 
 		 Map<String, Object> map = new HashMap<>();
-		 map.put("incomeExpense", param.get("incomeExpense"));
-		 map.put("category", param.get("category"));
-		 map.put("detail", param.get("detail"));
+		 map.put("incomeExpense", incomeExpense);
+		 map.put("category", category);
+		 map.put("detail", detail);
 		 map.put("id", member.getId());
 		 map.put("limit", limit);
 		 map.put("offset", offset);
@@ -258,9 +264,8 @@ public class AccountBookController {
 		//전체리스트 개수
 		int totalAccountList = accountBookService.countAccountList(map);
 		
-		String category = (String) param.get("category");
 		String url = request.getRequestURI();
-		String pagebar = NadaumUtils.getPagebar(cPage, limit, totalAccountList, url, category);
+		String pagebar = AccountbookPagebar.getPagebar(cPage, limit, totalAccountList, url, incomeExpense, category, detail);
 			
 		model.addAttribute("pagebar", pagebar);
 		 

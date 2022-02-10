@@ -11,10 +11,10 @@
 	var expense = ["식비","쇼핑", "생활비", "자기계발", "저축", "유흥", "기타"];
 	
 	//csfr토큰 headers (post 전송시 필요)
-	const csrfToken = $("meta[name='_csrf']").attr("content");
+/*	const csrfToken = $("meta[name='_csrf']").attr("content");
 	const csrfHeader = $("meta[name='_csrf_header']").attr("content");
 	const headers = {};
-	headers[csrfHeader] = csrfToken;
+	headers[csrfHeader] = csrfToken;*/
 	
 	// 유닉스 시간 -> 타임스탬프 -> 기존 date 변환
 	function timeConvert(t){
