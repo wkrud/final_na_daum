@@ -8,7 +8,7 @@
 	outline: 0;
 	border-radius: 50%;
 }
-#profile:hover .thumbnail-wrap{
+#profile:hover .login-member-thumbnail-wrap{
 	box-shadow: 1px 1px 3px #AAAAAA;
 	transition: .5s;
 }
