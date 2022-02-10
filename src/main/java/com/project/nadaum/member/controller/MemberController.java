@@ -928,6 +928,12 @@ public class MemberController {
 		return ResponseEntity.ok(1);
 	}
 	
+	@GetMapping()
+	public ResponseEntity<?> myFriendWidget(@AuthenticationPrincipal Member member){
+		
+		return ResponseEntity.ok(1);
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		try {
