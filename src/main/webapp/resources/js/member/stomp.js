@@ -12,27 +12,12 @@ function connect(){
 			var resp = JSON.parse(response.body);
 			countBedge();
 			console.log('resp = ', resp);
-			if(resp.type == 'friend'){
-				
-				console.log('count');
+			if(resp.type == 'friend'){				
+				console.log('필요가 없네');
 			}else if(resp.type == 'chat'){
-				
-				const name = `chatRoom${resp.room}`;
-				const spec = "left=500px, top=500px, width=450px, height=620px";
-				const url = `http://localhost:9090/nadaum/member/mypage/chat.do?room=${resp.room}&guest=guest`;
-				
-				let message = `<a href="javascript:void(window.open('${url}', '${name}','${spec}'))">${resp.host}님이 채팅방에 초대하셨습니다.</a>`;
-				let code = resp.type + Math.floor(Math.random() * 10000);
-				sendAndInsertAlarm('N',resp.guest,code,message);
-				
-				/*
-				if(confirm(resp.host + '님이 채팅을 신청하셨습니다.')){
-					window.open(url, name, spec);
-				}
-				*/
-			}else if(resp.type == 'help'){
-				
-				console.log('카운트배지실행됨');
+				console.log('필요가 없네');				
+			}else if(resp.type == 'help'){				
+				console.log('필요가 없네');
 			}
 		});
 	});
@@ -45,6 +30,15 @@ function chatInvite(type, host, guest, room){
 		'guest':guest,
 		'room': room
 	};
+	
+	const name = `chatRoom${room}`;
+	const spec = "left=500px, top=500px, width=450px, height=620px";
+	const url = `http://localhost:9090/nadaum/member/mypage/chat.do?room=${room}&guest=guest`;
+	
+	let message = `<a href="javascript:void(window.open('${url}', '${name}','${spec}'))">${host}님이 채팅방에 초대하셨습니다.</a>`;
+	let code = type + Math.floor(Math.random() * 10000);
+	sendAndInsertAlarm('N',guest,code,message);
+	
 	stompClient.send("/nadaum/chat/invite/" + guest,{},JSON.stringify(sendData));
 };
 

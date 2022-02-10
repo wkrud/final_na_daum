@@ -25,7 +25,7 @@
 					<c:forEach items="${friends}" var="fr">
 						<c:if test="${ml.id eq fr.friendId}">
 							<div class="friend-wrap">
-								<div class="login-member-thumbnail-wrap" onclick="goFriendFeed('${ml.id}');" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap use-slick-friend-list-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>
@@ -41,7 +41,9 @@
 								<div class="friend-name-wrap">
 									<span class="friend-name">${ml.nickname}</span>								
 								</div>
-								<div class="friend-btn">
+								<div class="friend-btn feed-chat-option-group">
+									<button type="button" onclick="goFriendFeed('${ml.id}');" class="btn btn-outline-primary">피드구경</button>
+									<button type="button" onclick="startChatNow('${ml.nickname}');" class="btn btn-outline-warning">채팅시작</button>
 									<button type="button" class="btn btn-outline-danger end-friend">친구삭제</button>
 								</div>							
 							</div>
@@ -59,7 +61,7 @@
 					<c:forEach items="${follower}" var="fo">
 						<c:if test="${ml.id eq fo.followerId}">
 							<div class="follower-wrap">
-								<div class="login-member-thumbnail-wrap" onclick="goFriendFeed('${ml.id}');" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap use-slick-friend-list-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>
@@ -75,8 +77,10 @@
 								<div class="follower-name-wrap">
 									<span class="follower-name">${ml.nickname}</span>
 								</div>		
-								<div class="follower-btn">
-									<button type="button" class="btn btn-outline-warning friend-with-follower">친구추가</button>
+								<div class="follower-btn feed-chat-option-group">
+									<button type="button" onclick="goFriendFeed('${ml.id}');" class="btn btn-outline-primary">피드구경</button>
+									<button type="button" onclick="startChatNow('${ml.nickname}');" class="btn btn-outline-warning">채팅시작</button>
+									<button type="button" class="btn btn-outline-success friend-with-follower">친구추가</button>
 								</div>					
 							</div>
 						</c:if>
@@ -94,15 +98,32 @@
 </div>
 <script>
 $(() => {
-	$(".friend-btn").hide();
+	$(".feed-chat-option-group").hide();
 });
+
 const goFriendFeed = (id) => {
-	/* location.href = `/nadaum/feed/socialFeed.do?id=\${id}`; */
-	$(".friend-btn").slideToggle();
+	location.href = `/nadaum/feed/socialFeed.do?id=\${id}`;
 };
-$(".slick-arrow").on('click', function(){
-	console.log(123);
+
+const startChatNow = (guest) => {
+	if(confirm(guest + '님과 DM을 하시겠습니까?')){
+		var room = Math.floor(Math.random() * 100000);
+		console.log('room = ' + room);
+		
+		const name = `chatRoom\${room}`;
+		const spec = "left=500px, top=500px, width=450px, height=620px";
+		const url = `${pageContext.request.contextPath}/member/mypage/chat.do?room=\${room}`;
+		
+		chatInvite('chat', '${loginMember.nickname}', guest, room);
+		windowObjHistorySearch = window.open(url, name, spec);
+	}
+};
+
+$(".use-slick-friend-list-wrap").on('click',function(e) {
+	$(e.target).parent().parent().find('div.feed-chat-option-group').slideToggle();
 });
+
+
 
 const $search = $("#search");
 $search.change((e) => {
@@ -143,7 +164,7 @@ $(function(){
 		infinite: true,
 		slidesToShow: 1,
 		slidesToScroll: 1,
-		speed: 50,
+		speed: 500,
 		arrows: true,
 		autoplay: false,
 		vertical: false,
@@ -151,21 +172,6 @@ $(function(){
 		nextArrow : "<i class='fa fa-arrow-right' aria-hidden='true'></i>"
 	});
 });
-
-/* $(".friend-wrap").click((e) => {
-	let guest = $(e.currentTarget).find('span.friend-name').html();
-	if(confirm(guest + '님과 DM을 하시겠습니까?')){
-		var room = Math.floor(Math.random() * 100000);
-		console.log('room = ' + room);
-		
-		const name = `chatRoom\${room}`;
-		const spec = "left=500px, top=500px, width=450px, height=620px";
-		const url = `${pageContext.request.contextPath}/member/mypage/chat.do?room=\${room}`;
-		
-		chatInvite('chat', '${loginMember.nickname}', guest, room);
-		windowObjHistorySearch = window.open(url, name, spec);	
-	}
-}); */
 
 $(searchFriendBtn).click((e) => {
 	const spec = "left=500px, top=500px, width=265px, height=285px";
