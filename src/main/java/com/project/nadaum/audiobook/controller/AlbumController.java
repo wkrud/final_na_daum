@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +13,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.mail.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -26,13 +25,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -69,15 +66,18 @@ public class AlbumController {
 	@RequestMapping
 	public String audiobookMain(Model model) {
 		
-		//메인화면 (중복코드 제거할것)
+		//메인화면 
 		List<Map<String,Object>> recentList = albumService.selectListAlbumInfoRecentMain();
 		List<Map<String,Object>> classicList = albumService.selectListAlbumInfoByKindMain("Classic");
 		List<Map<String,Object>> jazzList = albumService.selectListAlbumInfoByKindMain("Jazz");
 		List<Map<String,Object>> asmrList = albumService.selectListAlbumInfoByKindMain("ASMR");
+		List<Map<String,Object>> novelList = albumService.selectListAlbumInfoByKindMain("Novel");
+		//model.addAttribute("loginMember",loginMember);
 		model.addAttribute("recentList",recentList);
 		model.addAttribute("classicList",classicList);
 		model.addAttribute("jazzList",jazzList);
 		model.addAttribute("asmrList",asmrList);
+		model.addAttribute("novelList",novelList);
 		return "audiobook/main";
 	}
 
@@ -209,18 +209,17 @@ public class AlbumController {
 
 	/* Album (Old Code 모두 전환예정)*/
 
-	@GetMapping("/album/enrollList")
-	public String albumEnrollList(Model model) {
-		return "/audiobook/albumEnrollList";
-	}
+//	@GetMapping("/album/enrollList")
+//	public String albumEnrollList(Model model) {
+//		return "/audiobook/albumEnrollList";
+//	}
 
 	@GetMapping("/album/enroll")
 	public String albumForm() {
-
 		// 관리자 여부 확인 or aop, filter처리
 		// if(ADMIN!=member.role) {}
 		// else(){}
-		return "/audiobook/albumForm";
+		return "/audiobook/album/enrollForm";
 	}
 	
 	@GetMapping("/album/enroll/list")
@@ -229,18 +228,19 @@ public class AlbumController {
 		int offset = (cPage - 1) * limit;
 		Map<String, Object> param = new HashMap<>();
 		param.put("offset", offset);
-		param.put("limit", limit);
+		param.put("limit", limit); 
 
 		List<AlbumInfo> list = albumService.selectListAlbumInfo(param);
 		log.debug("list ={}", list);
 
 		int totalContent = albumService.selectTotalContent();
 		String url = request.getRequestURI();
-		String pagebar = NadaumUtils.getPagebar(offset, limit, totalContent, url,"");
-
+		String pagebar = getPageBar(cPage, limit, totalContent, url);
+		
 		model.addAttribute("list", list);
 		model.addAttribute("pagebar", pagebar);
-		return "/audiobook/albumEnrollList";
+		
+		return "/audiobook/album/enrollList";
 	}
 
 	@PostMapping("/album/enroll")
@@ -309,11 +309,11 @@ public class AlbumController {
 		if (1 == result) {
 			msg = "앨범 등록 성공!";
 			redirectAttr.addFlashAttribute("msg", msg);
-			return "redirect:/audiobook/album/enrollList";
+			return "redirect:/audiobook/album/enroll/List";
 		} else {
 			msg = "앨범등록 실패 재시도 해주세요";
 			redirectAttr.addFlashAttribute("msg", msg);
-			return "/audiobook/albumForm";
+			return "/audiobook/album/enrollForm";
 		}
 	}
 
@@ -327,14 +327,14 @@ public class AlbumController {
 		
 		// Album result = albumService.selectOneAlbumCollection(code);
 
-		AlbumInfo albumInfo = albumService.selectOneAlbumInfo(code);
-		List<AlbumTrack> tracksList = albumService.selectListAlbumTrack(code);
-		List<AlbumImg> imgsList = albumService.selectListAlbumImg(code);
+		AlbumInfo oldAlbumInfo = albumService.selectOneAlbumInfo(code);
+		List<AlbumTrack> oldTracksList = albumService.selectListAlbumTrack(code);
+		List<AlbumImg> oldImgsList = albumService.selectListAlbumImg(code);
 		model.clear();
 
-		model.addAttribute("albumInfo", albumInfo);
-		model.addAttribute("albumTrackList", tracksList);
-		model.addAttribute("albumImgList", imgsList);
+		model.addAttribute("oldAlbumInfo", oldAlbumInfo);
+		model.addAttribute("oldAlbumTrackList", oldTracksList);
+		model.addAttribute("oldAlbumImgList", oldImgsList);
 		return "/audiobook/album/updateForm";
 	}
 
@@ -345,6 +345,8 @@ public class AlbumController {
 
 		String saveAudioDirectory = application.getRealPath("/resources/upload/audiobook/mp3");
 		String saveImgDirectory = application.getRealPath("/resources/upload/audiobook/img");
+		String s = IMG_PATH;
+		String sk = AUDIO_PATH;
 		log.debug("saveDirectory={}", saveAudioDirectory);
 		log.debug("track1={}", trkFiles[0].getOriginalFilename());
 		log.debug("imgFiles={}", imgFiles[0].getOriginalFilename());
@@ -455,7 +457,7 @@ public class AlbumController {
 		} else {
 			msg = "앨범수정 실패 재시도 해주세요";
 			redirectAttr.addFlashAttribute("msg", msg);
-			return "/audiobook/albumForm";
+			return "/audiobook/album/enrollForm";
 		}
 	}
 
@@ -574,7 +576,7 @@ public class AlbumController {
 			msg = "삭제실패";
 		}
 		modelMap.addAttribute("msg", msg);
-		return "redirect:/audiobook/album/enrollList";
+		return "redirect:/audiobook/album/enroll/list";
 	}
 
 	/*
@@ -619,6 +621,86 @@ public class AlbumController {
 			log.error(e.getMessage(), e);
 			throw e;
 		}
+	}
+	
+	public static String getPageBar(int cPage, int limit, int totalContent, String url) {
+		
+		StringBuilder pagebar = new StringBuilder(); 
+		url = url + "?cPage="; // pageNo 추가전 상태
+		
+		final int pagebarSize = 5;
+		final int totalPage = (int) Math.ceil((double) totalContent / limit);
+		final int pageStart = (cPage - 1) / pagebarSize * pagebarSize + 1;
+		int pageEnd = pageStart + pagebarSize - 1;
+		pageEnd = totalPage < pageEnd ? totalPage : pageEnd;
+		int pageNo = pageStart;
+		
+		pagebar.append("<nav>\r\n"
+				+ "			  <ul class=\"pagination justify-content-center pagination-sm\">\r\n"
+				+ "			    ");
+		
+		// [이전]
+		if(pageNo == 1) {
+			// 이전 영역 비활성화
+			pagebar.append("<li class=\"page-item disabled\">\r\n"
+					+ "			      <a class=\"page-link\" href=\"javascript:paging(" + (pageNo - 1) + ");\" aria-label=\"Previous\">\r\n"
+					+ "			        <span aria-hidden=\"true\">&laquo;</span>\r\n"
+					+ "			        <span class=\"sr-only\">Previous</span>\r\n"
+					+ "			      </a>\r\n"
+					+ "			    </li>");
+		}
+		else {
+			// 이전 영역 활성화
+			pagebar.append("<li class=\"page-item\">\r\n"
+					+ "			      <a class=\"page-link\" href=\"javascript:paging(" + (pageNo - 1) + ");\" aria-label=\"Previous\">\r\n"
+					+ "			        <span aria-hidden=\"true\">&laquo;</span>\r\n"
+					+ "			        <span class=\"sr-only\">Previous</span>\r\n"
+					+ "			      </a>\r\n"
+					+ "			    </li>");
+		}
+		
+		// pageNo
+		while(pageNo <= pageEnd) {
+			if(pageNo == cPage) {
+				// 현재페이지
+				pagebar.append("<li class=\"page-item active\"><a class=\"page-link\" href=\"javascript:paging(" + pageNo + ")\">" + pageNo + "</a></li>\r\n");
+			}
+			else {
+				// 현재페이지가 아닌 경우
+				pagebar.append("<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:paging(" + pageNo + ")\">" + pageNo + "</a></li>\r\n");
+			}
+			pageNo++;
+		}
+		
+		
+		// [다음]
+		if(pageNo > totalPage) {
+			// 다음 페이지 비활성화
+			pagebar.append("<li class=\"page-item disabled\">\r\n"
+					+ "			      <a class=\"page-link\" href=\"#\" aria-label=\"Next\">\r\n"
+					+ "			        <span aria-hidden=\"true\">&raquo;</span>\r\n"
+					+ "			        <span class=\"sr-only\">Next</span>\r\n"
+					+ "			      </a>\r\n"
+					+ "			    </li>\r\n"
+					+ "			  ");
+		}
+		else {
+			// 다음 페이지 활성화
+			pagebar.append("<li class=\"page-item\">\r\n"
+					+ "			      <a class=\"page-link\" href=\"javascript:paging(" + pageNo + ")\" aria-label=\"Next\">\r\n"
+					+ "			        <span aria-hidden=\"true\">&raquo;</span>\r\n"
+					+ "			        <span class=\"sr-only\">Next</span>\r\n"
+					+ "			      </a>\r\n"
+					+ "			    </li>\r\n"
+					+ "			  ");
+		}
+		
+		pagebar.append("			  </ul>\r\n"
+				+ "			</nav>\r\n"
+				+ "<script>"
+				+ "const paging = (pageNo) => { location.href = `" + url + "${pageNo}`;  };"
+				+ "</script>");
+		return pagebar.toString();
 	}
 
 }
