@@ -16,14 +16,21 @@ public class MainServiceImpl implements MainService {
 	private MainDao mainDao;
 
 	@Override
-	public int insertTodoList(TodoList todoList) {
-		return mainDao.insertTodoList(todoList);
+	public int insertTodoList(Map<String, Object> param) {
+		return mainDao.insertTodoList(param);
 	}
 
 	@Override
 	public List<TodoList> userTodoList(Map<String, Object> param) {
 		return mainDao.userTodoList(param);
 	}
+
+	@Override
+	public int deleteTodoList(Map<String, Object> map) {
+		return mainDao.deleteTodoList(map);
+	}
+	
+	
 	
 	
 

@@ -13,7 +13,7 @@
 img{border:0px;}
 .search-card{margin-left:3.5vw;margin-right:3.5vw;}
 .list{margin-left:20vw; margin-right: 20vw; text-align:center;}
-.search-box{margin-bottom:4vw;}
+.search-box{margin-bottom:4vw; margin-left:auto; margin-right:auto;}
 </style>
 <fmt:requestEncoding value="utf-8" />
 
@@ -36,14 +36,14 @@ img{border:0px;}
 </div> -->
 
 <!-- ${_csrf.parameterName}=${_csrf.token}  -->
-<div id="search-container" class="">
+<div id="search-container" class="text-center">
 		<form 
 			name="albumSearchFrm"
 			action="${contextPath}/audiobook/search/list/select?"	
 			method="get"
 		>
-		<div class="col-md-4 offset-md-4 mt-5 border border-success pt-3 search-box">
-			<select name="searchType" required>
+		<div class="col-md-7 mt-5 border pt-3 search-box">
+			<select name="searchType" class="form-select" required>
 				<option value="">검색타입</option>
 				<!-- required여부를 판단할 value="" 반드시 있어야함.-->
 				<option value="kind" <c:if test="${'emp_id' eq param.searchType}">selected</c:if>>장르</option>
@@ -51,10 +51,11 @@ img{border:0px;}
 				<option value="provider" ${'provider' eq param.searchType? "selected" : ""}>제공자</option>
 				<option value="content" ${'content' eq param.searchType? "selected" : ""}>컨텐츠</option>
 			</select>
-			
-			<input type="search" name="searchKeyword" value="${param.searchKeyword}" required/>	
-			<input type="submit" value="검색" />
-			</div>
+			<div class="md-form active-purple-2 mb-3">
+			<input type="search" name="searchKeyword"  value="${param.searchKeyword}" required/>
+			</div>	
+			<input type="submit" value="검색" class="btn btn-dark"/>
+		</div>
 		</form>
 </div>
 
@@ -66,7 +67,8 @@ img{border:0px;}
 			<div class="card h-100">
 				<input id="code" name="code" type="hidden" value="${album.code}"/> 
 				<%-- <img src="resources/upload/audiobook/img/${album.renamedFilename}"  class="card-img-top" alt=""> --%>
-				<a href="${pageContext.request.contextPath}/audiobook/detail?code=${album.code}"><img src="${contextPath}${imgPath}${album.renamedFilename}"  class="card-img-top" alt=""></a>
+				<a href="${pageContext.request.contextPath}/audiobook/detail?code=${album.code}">
+				<img src="${contextPath}${imgPath}${album.renamedFilename}"  class="card-img-top" alt=""></a>
 				<div class="card-body">
 					<h5 class="card-title">${album.title}</h5>
 					<p class="card-text"></p>
@@ -87,30 +89,4 @@ img{border:0px;}
 	</div>
 </c:forEach>
 <!--비동기 통신 페이지 새로고침(미완성)-->
-<script>
-$("#search").click((e)=>{
-	if($("#keyword").val()==null or $("#keyword").val()==''){
-		alert("검색어를 입력해 주세요.");
-		return false;
-	}
-	let keyword =$("#keyword").val();
-	$.ajax({
-		url:`{pageContext.request.contextPath}/audiobook/album/search/list?\${keyword}`,
-		success(resp){
-			let msg ='';
-			const $resultArea = $(".search-list").find("div");
-			$resultArea.empty();
-			if(resp =='0'){
-				msg = `<span>결과가 없습니다ㅠㅠ<span>`;
-				$resultArea.append(msg);
-				return;
-			}else{
-				$(resp).each((i,{code,id,}))
-				
-			}
-		}
-	});
-});
-</script>
-
 <jsp:include page="/WEB-INF/views/audiobook/common/audioBookFooter.jsp"></jsp:include>

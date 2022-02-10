@@ -18,15 +18,70 @@ public class MovieDaoImpl implements MovieDao {
 	private SqlSessionTemplate session;
 
 	@Override
-	public List<Movie> selectMovieList() {
-		return session.selectList("movie.selectMovieList");
+	public int checkScrap(Map<String, Object> map) {
+		return session.selectOne("movie.checkScrap", map);
 	}
 
 	@Override
-	public Movie selectOneMovie(String code) {
-		// TODO Auto-generated method stub
-		return session.selectOne("movie.selectOneMovie", code);
+	public int insertScrap(Map<String, Object> map) {
+		return session.insert("movie.insertScrap", map);
 	}
+
+	@Override
+	public int deleteScrap(Map<String, Object> map) {
+		return session.delete("movie.deleteScrap", map);
+	}
+
+	@Override
+	public double avgRating(String apiCode) {
+		return session.selectOne("movie.avgRating", apiCode);
+	}
+
+	@Override
+	public List<Integer> listStar(String apiCode) {
+		return session.selectList("movie.listStar", apiCode);
+	}
+
+	@Override
+	public int starCount1(String apiCode) {
+		return session.selectOne("movie.starCount1",apiCode);
+	}
+
+	@Override
+	public int starCount2(String apiCode) {
+		return session.selectOne("movie.starCount2",apiCode);
+	}
+
+	@Override
+	public int starCount3(String apiCode) {
+		return session.selectOne("movie.starCount3",apiCode);
+	}
+
+	@Override
+	public int starCount4(String apiCode) {
+		return session.selectOne("movie.starCount4",apiCode);
+	}
+
+	@Override
+	public int starCount5(String apiCode) {
+		return session.selectOne("movie.starCount5", apiCode);
+	}
+
+	@Override
+	public int totalStarCount(String apiCode) {
+		return session.selectOne("movie.totalStarCount", apiCode);
+	}
+
+
+//	@Override
+//	public List<Movie> selectMovieList() {
+//		return session.selectList("movie.selectMovieList");
+//	}
+
+//	@Override
+//	public Movie selectOneMovie(String code) {
+//		return session.selectOne("movie.selectOneMovie", code);
+//	}
 
 //	@Override
 //	public List<Movie> selectMovieList(Map<String, Object> param) {
@@ -37,15 +92,17 @@ public class MovieDaoImpl implements MovieDao {
 //	}
 	
 	
-	@Override
-	public int selectTotalContent() {
-		return session.selectOne("movie.selectTotalContent");
-	}
+//	@Override
+//	public int selectTotalContent() {
+//		return session.selectOne("movie.selectTotalContent");
+//	}
 
-	@Override
-	public Movie selectOneMovieCollection(String code) {
-		return session.selectOne("movie.selectOneMovieCollection", code);
-	}
+//	@Override
+//	public Movie selectOneMovieCollection(String code) {
+//		return session.selectOne("movie.selectOneMovieCollection", code);
+//	}
+
+	
 
 
 	

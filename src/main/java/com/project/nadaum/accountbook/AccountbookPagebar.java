@@ -1,14 +1,13 @@
 package com.project.nadaum.accountbook;
 
-public class accountbookPagebar {
+public class AccountbookPagebar {
 public static String getPagebar(int cPage, int limit, int totalContent, String url, String incomeExpense, String category, String detail) {
 		
 		StringBuilder pagebar = new StringBuilder();
 		
-		String categoryUrl = url + "?category=" + category + "&cPage=";
-		String incomeExpenseUrl = url + "?incomeExpense=" + category + "&cPage=";
-		String detailUrl = url + "?detail=" + category + "&cPage=";
-
+		String searchUrl = url + "?incomeExpense=" + incomeExpense + "&category=" + category + "&detail=" + detail + "&cPage=";
+		String incomeExpenseUrl = url + "?incomeExpense=" + incomeExpense + "&cPage=";
+		
 		url = url + "?cPage=";
 		
 		int pagebarSize = 5;
@@ -45,25 +44,27 @@ public static String getPagebar(int cPage, int limit, int totalContent, String u
 			pagebar.append("<li class='page-item'><a class='page-link' href=" + "javascript:paging(" + pageNo + ")" + ">Next</a></li>\n");
 		}
 		
-		if("all".equals(category) || "all".equals(incomeExpense) || "all".equals(detail)) {
+//		메인에서 전체 리스트 페이징 
+		if("all".equals(category) && "all".equals(incomeExpense) && "all".equals(detail)) {
 			pagebar.append(" </ul>\r\n"
 					+ "</nav>"
 					+ "<script>"
 					+ "const paging = (pageNo) => {location.href=`" + url + "${pageNo}`;};"
 					+ "</script>"
-					);				
-		} else if("all".equals(category)) {
+					);		
+		//incomeExpense pagebar -> category와 detail은 all
+		} else if("all".equals(category) && "all".equals(detail)) {
 			pagebar.append(" </ul>\r\n"
 					+ "</nav>"
 					+ "<script>"
-					+ "const paging = (pageNo) => {location.href=`" + categoryUrl + "${pageNo}`;};"
+					+ "const paging = (pageNo) => {location.href=`" + incomeExpenseUrl + "${pageNo}`;};"
 					+ "</script>"
 					);	
 		} else {
 			pagebar.append(" </ul>\r\n"
 					+ "</nav>"
 					+ "<script>"
-					+ "const paging = (pageNo) => {location.href=`" + categoryUrl + "${pageNo}`;};"
+					+ "const paging = (pageNo) => {location.href=`" + searchUrl + "${pageNo}`;};"
 					+ "</script>"
 					);	
 		}

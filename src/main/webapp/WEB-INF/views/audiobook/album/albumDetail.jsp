@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -7,16 +6,15 @@
 <jsp:include page="/WEB-INF/views/audiobook/common/audioBookHeader.jsp">
 	<jsp:param value="Le Café Livres" name="title" />
 </jsp:include>
-
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<c:set var="imgPath" value="/resources/upload/audiobook/img/"/>
-<c:set var="imgName" value="${img.renamedFilename}"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="imgPath" value="/resources/upload/audiobook/img/" />
+<c:set var="imgName" value="${img.renamedFilename}" />
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/audiobook/track.css" />
-<link rel="script"
-	href="${pageContext.request.contextPath}/resources/js/audiobook/player.js" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/audiobook/track.css" />
+<link rel="script" href="${pageContext.request.contextPath}/resources/js/audiobook/player.js" />
 <style>
 .right-col {
 	float: right;
@@ -52,16 +50,32 @@
 	position: fixed;
 	bottom: 0;
 }
-.sub-menu td, .sub-menu th, .table thead th{
-	border-top : 0px;
-	border-bottom :0px;
+
+.sub-menu td, .sub-menu th, .table thead th {
+	border-top: 0px;
+	border-bottom: 0px;
 }
 
+/* modal css */
+.modal-dialog {
+	max-width: 800px;
+	margin: 30px auto;
+}
+
+.modal-body {
+	position: relative;
+	padding: 0px;
+}
+
+.btn-close {
+	position: absolute;
+	right: -30px;
+	top: 0;
+}
 </style>
 <div class="row row-cols-lg-12 mb-2 justify-content-center relative sub-menu">
 	<div class="col-3 ml-4 pr-0">
-		<img src="${contextPath}${imgPath}${img.renamedFilename}"
-			class="" style="height: 300px; width: 300px;">
+		<img src="${contextPath}${imgPath}${img.renamedFilename}" class="" style="height: 300px; width: 300px;">
 	</div>
 
 	<div class="col-4 sub-menu">
@@ -85,24 +99,16 @@
 					<td></td>
 				</tr>
 				<tr>
-					<td><a href="" style="text-decoration:none; color:black;">찜하기</a></td>
+					<td><a href="" style="text-decoration: none; color: black;">찜하기</a></td>
 				</tr>
 				<tr>
-					<td style="vertical-align: middle;">
-					<c:choose>
-						<c:when test="${empty loginMember.id}">
-							1분 미리듣기중입니다
-						</c:when>
-						<c:otherwise>
-							<a href="">미공개 뮤직비디오</a>
-						</c:otherwise>
-					</c:choose>
-					 &nbsp; &nbsp;
-						&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span
-						style="display: inline-block; text-align: right"><img
-							class="play-icon" style="width: 100px;"
-							src="${pageContext.request.contextPath}/resources/images/audiobook/play.png"
-							id="play"> </span>
+					<td style="vertical-align: middle;"> 
+					<c:if test="${not empty album.mvLink}">
+						<a href="#" class="btn btn-dark" data-toggle="modal" data-target="#videoModal" data-theVideo="${album.mvLink}" style="text-decoration: none;">Music VIDEO<img class="play-icon" style="width: 100px;" src="${pageContext.request.contextPath}/resources/images/audiobook/play.png" id="play"></a>
+						 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+						<span style="display: inline-block; text-align: right">
+					</span>
+					</c:if>
 					</td>
 				</tr>
 			</tbody>
@@ -110,6 +116,62 @@
 	</div>
 	<%-- <div class="col-2 ml-2">장르: 클래식 ${album.kind}</div> --%>
 </div>
+<!-- 뮤직비디오 모달창 -->
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div>
+          <iframe width="100%" height="350" src=""></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+	  autoPlayYouTubeModal();
+	});
+function autoPlayYouTubeModal(){
+	  var trigger = $("body").find('[data-toggle="modal"]');
+	  trigger.click(function() {
+	    var theModal = $(this).data( "target" ),
+	    videoSRC = $(this).attr( "data-theVideo" ), 
+	    videoSRCauto = videoSRC+"?autoplay=1" ;
+	    $(theModal+' iframe').attr('src', videoSRCauto);
+	    $(theModal+' button.close').click(function () {
+	        $(theModal+' iframe').attr('src', videoSRC);
+	    });   
+	  });
+	}
+</script>
+
+<script>
+$(document).on(function() {
+
+	// Gets the video src from the data-src on each button
+	var $videoSrc;  
+	$('.video-btn').click(function() {
+	    $videoSrc = $(this).data( "src" );
+	});
+	console.log($videoSrc);
+  
+	// 모달 열리면 자동재생 
+	$('#myModal').on('shown.bs.modal', function (e) {
+	    
+	$("#video").attr('src',$videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0" ); 
+	})
+	// close
+	$('#myModal').on('hide.bs.modal', function (e) {
+	 // a poor man's stop video
+	    $("#video").attr('src',$videoSrc); 
+	})     
+	});
+
+</script>
+
 
 
 <div class="row row-cols-md-1 justify-content-center ">
@@ -131,55 +193,42 @@
 					<tr>
 						<th scope="row"></th>
 						<!--${no.index}  -->
-						<td><img
-							src="${contextPath}${imgPath}${imgName}"
-							alt="..." class="img-thumbnail"></td>
-						<td style="vertical-align: middle;">
-							${fn:replace(track.originalFilename,".mp3","")}
-						</td>
+						<td><img src="${contextPath}${imgPath}${imgName}" alt="..." class="img-thumbnail"></td>
+						<td style="vertical-align: middle;">${fn:replace(track.originalFilename,".mp3","")}</td>
 						<%-- <td style="vertical-align: middle;">
 							<img class="play-icon"
 							src="${pageContext.request.contextPath}/resources/images/audiobook/play.png"
 							id="play">
 						</td> --%>
 					</tr>
-					
+
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
 	<div class="col-md-3"></div>
 </div>
-<!-- audio player start -->
 
+
+
+<!-- audio player start -->
 <div class="ap" id="ap">
 	<div class="ap__inner">
 		<div class="ap__item ap__item--playback">
 			<button class="ap__controls ap__controls--prev">
-				<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-					xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24"
-					height="24" viewBox="0 0 24 24">
-                        <path
-						d="M9.516 12l8.484-6v12zM6 6h2.016v12h-2.016v-12z"></path>
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M9.516 12l8.484-6v12zM6 6h2.016v12h-2.016v-12z"></path>
                     </svg>
 			</button>
 			<button class="ap__controls ap__controls--toggle">
-				<svg class="icon-play" version="1.1"
-					xmlns="http://www.w3.org/2000/svg"
-					xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="36"
-					height="36" viewBox="0 0 36 36"
-					data-play="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"
+				<svg class="icon-play" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="36" height="36" viewBox="0 0 36 36" data-play="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"
 					data-pause="M 12,26 16.33,26 16.33,10 12,10 z M 20.66,26 25,26 25,10 20.66,10 z">
-                        <path
-						d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"></path>
+                        <path d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"></path>
                     </svg>
 			</button>
 			<button class="ap__controls ap__controls--next">
-				<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-					xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24"
-					height="24" viewBox="0 0 24 24">
-                        <path
-						d="M15.984 6h2.016v12h-2.016v-12zM6 18v-12l8.484 6z"></path>
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M15.984 6h2.016v12h-2.016v-12zM6 18v-12l8.484 6z"></path>
                     </svg>
 			</button>
 		</div>
@@ -203,23 +252,15 @@
 		</div>
 		<div class="ap__item ap__item--settings">
 			<div class="track__time">
-				<span class="track__time--current">--</span> <span> / </span> <span
-					class="track__time--duration">--</span>
+				<span class="track__time--current">--</span> <span> / </span> <span class="track__time--duration">--</span>
 			</div>
 			<div class="ap__controls volume-container">
 				<button class="volume-btn">
-					<svg class="icon-volume-on" version="1.1"
-						xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24"
-						height="24" viewBox="0 0 24 24">
-                            <path
-							d="M14.016 3.234q3.047 0.656 5.016 3.117t1.969 5.648-1.969 5.648-5.016 3.117v-2.063q2.203-0.656 3.586-2.484t1.383-4.219-1.383-4.219-3.586-2.484v-2.063zM16.5 12q0 2.813-2.484 4.031v-8.063q2.484 1.219 2.484 4.031zM3 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6z">
+					<svg class="icon-volume-on" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M14.016 3.234q3.047 0.656 5.016 3.117t1.969 5.648-1.969 5.648-5.016 3.117v-2.063q2.203-0.656 3.586-2.484t1.383-4.219-1.383-4.219-3.586-2.484v-2.063zM16.5 12q0 2.813-2.484 4.031v-8.063q2.484 1.219 2.484 4.031zM3 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6z">
                             </path>
                         </svg>
-					<svg class="icon-volume-off" version="1.1"
-						xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24"
-						height="24" viewBox="0 0 24 24">
+					<svg class="icon-volume-off" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24" height="24" viewBox="0 0 24 24">
                             <path
 							d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.734 1.359-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.25-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q2.484 1.219 2.484 4.031z">
                             </path>
@@ -232,20 +273,14 @@
 				</div>
 			</div>
 			<button class="ap__controls ap__controls--repeat">
-				<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-					xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24"
-					height="24" viewBox="0 0 24 24">
-                        <path
-						d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031h-1.969v-6h12v-3l3.984 3.984-3.984 3.984v-3h-10.031z">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031h-1.969v-6h12v-3l3.984 3.984-3.984 3.984v-3h-10.031z">
                         </path>
                     </svg>
 			</button>
 			<button class="ap__controls ap__controls--playlist">
-				<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-					xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24"
-					height="24" viewBox="0 0 24 24">
-                        <path
-						d="M17.016 12.984l4.969 3-4.969 3v-6zM2.016 15v-2.016h12.984v2.016h-12.984zM18.984 5.016v1.969h-16.969v-1.969h16.969zM18.984 9v2.016h-16.969v-2.016h16.969z">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#333" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M17.016 12.984l4.969 3-4.969 3v-6zM2.016 15v-2.016h12.984v2.016h-12.984zM18.984 5.016v1.969h-16.969v-1.969h16.969zM18.984 9v2.016h-16.969v-2.016h16.969z">
                         </path>
                     </svg>
 			</button>
@@ -1019,7 +1054,7 @@ $(function(){
 	});
 }); 
 
-/*		'title': '${track.originalFilename}',  */
+/*'title': '${track.originalFilename}',*/
 var playList= new Array();
 <c:forEach items="${trackList}" var="track" varStatus="status">
 	
@@ -1063,20 +1098,28 @@ AP.init({
 	} */
 </script>
 
-<div class="modal fade" id="videoModal" tabindex="-1" role="dialog"
-	aria-labelledby="videoModal" aria-hidden="true">
-	<div class="modal-dialog">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
 		<div class="modal-content">
+
+
 			<div class="modal-body">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">&times;</button>
-				<div>
-					<iframe width="100%" height="350" src=""></iframe>
+
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<!-- 16:9 aspect ratio -->
+				<div class="embed-responsive embed-responsive-16by9">
+					<iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always" allow="autoplay"></iframe>
 				</div>
+
+
 			</div>
+
 		</div>
 	</div>
 </div>
+
 
 <script>
 	function autoPlayYouTubeModal() {
@@ -1091,25 +1134,21 @@ AP.init({
 		});
 	}
 </script>
-
+<!-- 뮤직비디오 모달 -->
 
 
 
 <!-- 결제 모달 영역  -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-	data-bs-keyboard="false" tabindex="-1"
-	aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="staticBackdropLabel">결제요청</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"
-					aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">정기결제 하신뒤 이용이 가능합니다.</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary"
-					data-bs-dismiss="modal">취소</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 				<button type="button" class="btn btn-primary">진행</button>
 			</div>
 		</div>

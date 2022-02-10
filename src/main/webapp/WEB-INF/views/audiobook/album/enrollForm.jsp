@@ -96,6 +96,7 @@ $(document).ready(function() {
 		<input type="text" class="form-control" placeholder="크리에이터" name="creator" id="creator" required>
 		<input type="text" class="form-control" placeholder="장르" name="kind" id="kind" required>
 		<input type="text" class="form-control" placeholder="코드" name="code" id="code" required>
+		<input type="text" class="form-control" placeholder="뮤직비디오링크" name="mvLink" id="mvLink">
 		
 		<!-- input:file소스 : https://getbootstrap.com/docs/4.1/components/input-group/#custom-file-input -->
 		<div class="input-group mb-3 al-cover" style="padding: 0px; margin-bottom:15px;">
