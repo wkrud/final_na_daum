@@ -115,7 +115,7 @@ $("#modify-nickname").keyup((e) => {
 			}else{
 				$nError.show();
 				$nOk.hide();
-				$nVAlid.val(0);
+				$nValid.val(0);
 			}
 		},
 		error: console.log

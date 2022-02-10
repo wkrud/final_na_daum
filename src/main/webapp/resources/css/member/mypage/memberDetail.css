@@ -82,7 +82,7 @@
 .check-hobby input{
 	display:none;
 }
-.hobby-select-form label:hover{
+.hobby-select-form .check-hobby label:hover{
 	font-size: 1.1rem;
 }
 
