@@ -12,7 +12,9 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <div class="member-body">
-	<button type="button" class="btn btn-outline-warning" id="searchFriendBtn">친구검색</button>
+	<div class="find-friend-page-button">
+		<button type="button" class="btn btn-outline-warning" id="searchFriendBtn">친구검색</button>
+	</div>
 	<div class="friend-list-wrap">
 		<div class="friends-list">
 			<div class="friend">
@@ -23,7 +25,7 @@
 					<c:forEach items="${friends}" var="fr">
 						<c:if test="${ml.id eq fr.friendId}">
 							<div class="friend-wrap">
-								<div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap" onclick="goFriendFeed('${ml.id}');" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>
@@ -57,7 +59,7 @@
 					<c:forEach items="${follower}" var="fo">
 						<c:if test="${ml.id eq fo.followerId}">
 							<div class="follower-wrap">
-								<div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap" onclick="goFriendFeed('${ml.id}');" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>
@@ -85,40 +87,72 @@
 	</div>
 	<div class="search-right-wrap">
 		<div class="search-right">
-			<form action="">
-				<label for="search">검색여부</label>
-				<input type="checkbox" name="search" id="search" />
-			</form>
+			<label for="search">검색여부</label>
+			<input type="checkbox" name="search" id="search" ${loginMember.search eq 'T' ? 'checked' : ''} />			
 		</div>
 	</div>
 </div>
 <script>
-$(function(){
-	$(".friends-section").slick({
-		infinite: true,
-		slidesToShow: 10,
-		slidesToScroll: 1,
-		speed: 100,
-		arrows: true,
-		autoplay: false,
-		vertical: false,
-		prevArrow : "<button type='button' class='slick-prev'>Previous</button>",		
-		nextArrow : "<button type='button' class='slick-next'>Next</button>"
-	});
-	$(".followers-section").slick({
-		infinite: true,
-		slidesToShow: 10,
-		slidesToScroll: 1,
-		speed: 100,
-		arrows: true,
-		autoplay: false,
-		vertical: false,
-		prevArrow : "<button type='button' class='slick-prev'>Previous</button>",		
-		nextArrow : "<button type='button' class='slick-next'>Next</button>"
+$(() => {
+	$(".friend-btn").hide();
+});
+const goFriendFeed = (id) => {
+	/* location.href = `/nadaum/feed/socialFeed.do?id=\${id}`; */
+	$(".friend-btn").slideToggle();
+};
+$(".slick-arrow").on('click', function(){
+	console.log(123);
+});
+
+const $search = $("#search");
+$search.change((e) => {
+	let searchCheck = '';
+	let id = '${loginMember.id}';
+	if($search.is(':checked')){
+		searchCheck = 'T';
+	}else{
+		searchCheck = 'F';
+	}
+	$.ajax({
+		url: '/nadaum/member/memberUpdate.do',
+		method: 'POST',
+		headers: headers,
+		data: {id,search:searchCheck},
+		success(resp){
+			console.log(resp);
+		},
+		error: console.log
 	});
 });
 
-$(".friend-wrap").click((e) => {
+$(function(){
+	$(".friends-section").slick({
+		infinite: true,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		speed: 500,
+		arrows: true,
+		autoplay: false,
+		vertical: false,
+		prevArrow : "<i class='fa fa-arrow-left' aria-hidden='true'></i>",		
+		nextArrow : "<i class='fa fa-arrow-right' aria-hidden='true'></i>"
+		/* prevArrow : "<button type='button' class='slick-prev'><i class='fa fa-arrow-left' aria-hidden='true'></i></button>",		
+		nextArrow : "<button type='button' class='slick-next'><i class='fa fa-arrow-right' aria-hidden='true'></i></button>" */
+	});
+	$(".followers-section").slick({
+		infinite: true,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		speed: 50,
+		arrows: true,
+		autoplay: false,
+		vertical: false,
+		prevArrow : "<i class='fa fa-arrow-left' aria-hidden='true'></i>",		
+		nextArrow : "<i class='fa fa-arrow-right' aria-hidden='true'></i>"
+	});
+});
+
+/* $(".friend-wrap").click((e) => {
 	let guest = $(e.currentTarget).find('span.friend-name').html();
 	if(confirm(guest + '님과 DM을 하시겠습니까?')){
 		var room = Math.floor(Math.random() * 100000);
@@ -131,7 +165,7 @@ $(".friend-wrap").click((e) => {
 		chatInvite('chat', '${loginMember.nickname}', guest, room);
 		windowObjHistorySearch = window.open(url, name, spec);	
 	}
-});
+}); */
 
 $(searchFriendBtn).click((e) => {
 	const spec = "left=500px, top=500px, width=265px, height=285px";
@@ -152,10 +186,10 @@ $(".end-friend").click((e) => {
 
 const updateFriend = (check, friendNickname) => {
 	
-	const csrfHeader = "${_csrf.headerName}";
+	/* const csrfHeader = "${_csrf.headerName}";
 	const csrfToken = "${_csrf.token}";
 	const headers = {};
-	headers[csrfHeader] = csrfToken;
+	headers[csrfHeader] = csrfToken; */
 	
 	$.ajax({
 		url: '${pageContext.request.contextPath}/member/mypage/updateFriend.do',

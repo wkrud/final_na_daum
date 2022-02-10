@@ -150,6 +150,14 @@ public class MessageController {
 		template.convertAndSend("/topic/" + alarm.getGuest(), gson.toJson(alarm));
 	}
 	
+	@MessageMapping("/chat/checkPeople/{room}")
+	@SendTo("/topic/{room}")
+	public void checkPeople(@Payload Message message) {
+		log.debug("check_map = {}", message);
+		
+		template.convertAndSend("/topic/" + message.getRoom(), new Gson().toJson(message));
+	}
+	
 	
 	
 	
