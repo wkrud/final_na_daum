@@ -424,9 +424,9 @@ div#board-container label.custom-file-label {
 																	<span aria-hidden="true">&times;</span>
 																</button>
 															</div>
+															
 															<form id="updateCommentFrm">
 															<div class="modal-body">
-															
 															<div class="form-group row">
 															<label for="star" class="col-sm-2 col-form-label">평점</label>
 															<div class="col-sm-10">
@@ -440,13 +440,6 @@ div#board-container label.custom-file-label {
 																	<option value="4">4</option>
 																	<option value="5">5</option>
 																</select>
-																<div class="rating" data-rate="3">
-																	<i class="fas fa-star"></i>
-																	<i class="fas fa-star"></i>
-																	<i class="fas fa-star"></i>
-																	<i class="fas fa-star"></i>
-																	<i class="fas fa-star"></i>	
-																</div>
 															</div>	
 															</div>
 															</div>
@@ -454,14 +447,14 @@ div#board-container label.custom-file-label {
 															<div class="form-group row" >
 																<label for="title" class="col-sm-2 col-form-label">내용</label>
 																<div class="col-sm-10">
-																	<input type="text" class="form-control" id="content" name="content" value="${comment.content}" >
+																	<input type="text" class="form-control" name="content" >
 																</div>
 															</div>
 															
+															
 															<input type="hidden" name="code" value="${comment.code}" />
 															<input type="hidden" name="apiCode" value="${apiCode}" />
-															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-															<input type="hidden" name="id" value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
+															<input type="hidden" name="id" value="${loginMember.id}" />
 															<!-- 댓글인 경우 1 -->
 															<input type="hidden" name="commentLevel" value="1" />
 															<!-- 대댓글인 경우 써여져야함 -->
@@ -469,9 +462,10 @@ div#board-container label.custom-file-label {
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary"	data-dismiss="modal">취소</button>
-																<button type="submit" class="btn btn-outline-dark" id="updateComment-btn" value="${comment.code}">수정</button>
+																<button type="submit" class="btn btn-outline-dark" id="updateComment-btn" >수정</button>
 															</div>
 															</form>
+															
 														</div>
 													</div>
 												</div>
@@ -481,67 +475,6 @@ div#board-container label.custom-file-label {
 </div>
 </div>
 <script>
-/* 별점 */
-$(function() {
-	var rating = $('.review .rating');
-
-	rating.each(function() {
-		var targetScore = $(this).attr('data-rate');
-		console.log(targetScore);
-		$(this).find('svg:nth-child(-n' + targetScore + ')').css({color:'#F05522'});
-	});
-	
-	var userScore = $('#makeStar');
-	userScore.change(function(){
-		var userScoreNum = $(this).val();
-		console.log(userScoreNum);
-		$('.make_star svg').css({color:'#000'});
-		$('.make_star svg:nth-child(-n+' + userScoreNum +')').css({color:'#F05522'});
-		
-	});
-	
-	$('.make_star svg').click(function() {
-		var targetNum = $(this).index() +1;
-		$('.make_star svg').css({color:'#000'});
-		$('.make_star svg:nth-child(-n+' + userScoreNum +')').css({color:'#F05522'});
-	});
-});
-
-const drawStar = (target) => {
-	document.querySelector(`.star span`).style.width = `${target.value * 10}%`;
-	
-	if(document.querySelector(`.star span`).style.width == '10%'){
-		$("#section-rating #rating-3").text("0.5");
-		$("#section-rating #rating-result").val("0.5");
-	} else if(document.querySelector(`.star span`).style.width == '20%'){
-		$("#section-rating #rating-3").text("1.0");
-		$("#section-rating #rating-result").val("1.0");
-	} else if(document.querySelector(`.star span`).style.width == '30%'){
-		$("#section-rating #rating-3").text("1.5");
-		$("#section-rating #rating-result").val("1.5");
-	} else if(document.querySelector(`.star span`).style.width == '40%'){
-		$("#section-rating #rating-3").text("2.0");
-		$("#section-rating #rating-result").val("2.0");
-	} else if(document.querySelector(`.star span`).style.width == '50%'){
-		$("#section-rating #rating-3").text("2.5");
-		$("#section-rating #rating-result").val("2.5");
-	} else if(document.querySelector(`.star span`).style.width == '60%'){
-		$("#section-rating #rating-3").text("3.0");
-		$("#section-rating #rating-result").val("3.0");
-	} else if(document.querySelector(`.star span`).style.width == '70%'){
-		$("#section-rating #rating-3").text("3.5");
-		$("#section-rating #rating-result").val("3.5");
-	} else if(document.querySelector(`.star span`).style.width == '80%'){
-		$("#section-rating #rating-3").text("4.0");
-		$("#section-rating #rating-result").val("4.0");
-	} else if(document.querySelector(`.star span`).style.width == '90%'){
-		$("#section-rating #rating-3").text("4.5");
-		$("#section-rating #rating-result").val("4.5");
-	} else if(document.querySelector(`.star span`).style.width == '100%'){
-		$("#section-rating #rating-3").text("5.0");
-		$("#section-rating #rating-result").val("5.0");
-	}
-}
 
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
@@ -602,15 +535,12 @@ $(insertCommentFrm).submit((e) => {
  
  	/* 댓글 수정  */
  $(updateCommentFrm).submit((e) => {	
+	 
  		e.preventDefault();
- 		/* 수정에는 where절에 사용하는 pk값이(식별자) 있어야함. */
-		const code = $(e.target).find("[name=code]").val();
-		console.log(code);
-		const star = $(e.target).find("[name=star]").val();
-		console.log(star);
-		const content = $(e.target).find("[name=content]").val();
-		console.log(content);
-		
+ 		const code = $(e.target).val();
+ 		console.log(e.target);
+ 		console.log(code);
+ 		
 		const obj = {
 			id : $("[name=id]", e.target).val(),
 			code : $("[name=code]", e.target).val(),
@@ -655,7 +585,7 @@ $(insertCommentFrm).submit((e) => {
  			method: "GET",
  			success(resp){
  				console.log(resp);
- 				const {content} = resp;
+ 				const {content, star} = resp;
  				const $frm = $(updateCommentFrm);
  				$frm.find("[name=content]").val(content);
  				$frm.find("[name=star]").val(star);
