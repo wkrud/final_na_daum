@@ -15,13 +15,18 @@ public class MainDaoImpl implements MainDao {
 	private SqlSessionTemplate session;
 
 	@Override
-	public int insertTodoList(TodoList todoList) {
-		return session.insert("main.insertTodoList", todoList);
+	public int insertTodoList(Map<String, Object> param) {
+		return session.insert("main.insertTodoList", param);
 	}
 
 	@Override
 	public List<TodoList> userTodoList(Map<String, Object> param) {
 		return session.selectList("main.userTodoList", param);
+	}
+
+	@Override
+	public int deleteTodoList(Map<String, Object> map) {
+		return session.delete("main.deleteTodoList", map);
 	}
 	
 	

@@ -211,8 +211,17 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 
 .fillterSection a {
 	position : relative;
-	float : right;
 	font-size : 18px;
+	margin : 0px 5px;
+	color : #0A1F33;
+}
+
+#excelModalBtn {
+	float : right;
+}
+
+.fillterSection a:hover {
+	text-decoration : none;
 }
 
 .listBox{
@@ -285,15 +294,15 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   position : fixed;
   z-index : 5;
   width : 100%;
-  height : 100%;
-  display : none;
+  height : 100vh;
+  display : none; 
   margin-top : -100px;
   padding : 0;
   
 }
 
-.insertAccountModal{
-  background-color: #fff;
+.insertAccountModal, .updateAccountModal{
+  background-color: #FFFBF5;
   width : 30%;
   margin : 100px auto;
   padding : 20px;
@@ -302,11 +311,11 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   text-align : center;
 }
 
-#modalCloseBtn{
+.modalCloseBtn{
 	position : absolute;
 	top : 20px;
 	right : 30px;
-	background : white;
+	background : #FFFBF5;
 	border : none;
 	font-size : 20px;
 }
@@ -356,15 +365,21 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   position : relative;
   }
 
-.deleteBtn{
+.modifyBtn{
 	position : absolute;
-	right : 15px;
+	right : 60px;
 	border : none;
-	background-color : lightgray;
+	background-color : #0A1F33;
+	color : #FFFBF5;
 	width : 100px;
 	height : 30px;
 	border-radius : 10px;
 }
+
+.updateBtn {
+	left : 100px;
+}
+
 
 .accountTable {
 	margin : 5px;
@@ -517,4 +532,30 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 }
 
 
-/* 월별차트 */
+/* 엑셀 모달 */
+.findExcelDate {
+	position : relative;
+	width : 500px;
+	height : 150px;
+	z-index : 999;
+	margin : auto;
+	text-align : center;
+	border-radius : 10px;
+	top : 40%;
+	padding : 20px;
+	background-color : #FFFBF5;
+	
+}
+
+.excelbox {
+	width : 150px;
+}
+
+.excel-ment {
+	font-size : 20px;
+}
+
+#excelDownlaodBtn {
+	margin-left : 20px;
+	font-size : 1.5em;
+}

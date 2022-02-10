@@ -28,6 +28,23 @@
 			code = #{code}
 	</delete>
 	
+	<!-- update -->
+	<update id="updateAccount" >
+		update 
+			account_book
+		set
+			detail = #{detail},
+			price = #{price},
+			reg_date = #{regDate},
+			income_expense = #{incomeExpense},
+			payment = #{payment},
+			category = #{category}
+		where
+			code = #{code}
+			and
+			id = #{id}
+	</update>
+	
 	<!-- 전체리스트 -->
 	<select id="selectAllAccountList" resultType="com.project.nadaum.accountbook.model.vo.AccountBook">
 		select
@@ -38,6 +55,18 @@
     		id = #{id}
     	order by
     		reg_date desc
+	</select>
+	
+	<!-- 단일 리스트 -->
+	<select id="selectOneAccount" resultType="com.project.nadaum.accountbook.model.vo.AccountBook">
+		select
+		    *
+		from
+		    account_book
+		where
+		    id = #{id}
+		    and
+		    code = #{code}
 	</select>
 	
 	<!-- 이 달의 수입, 지출 계산  -->
@@ -124,6 +153,19 @@
 		</where>
 	  	order by
 	  		reg_date desc
+	</select>
+	
+	<!-- 엑셀 다운로드 리스트 -->
+	<select id="downloadExcel" resultType="com.project.nadaum.accountbook.model.vo.AccountBook">
+		select
+		    *
+		from
+		    account_book
+		where
+		    id=#{id}
+		    and
+		    reg_date between #{startDate} and #{endDate}
+		order by reg_date desc
 	</select>
 	
 	<select id="chartValue" resultMap="chartListMap">
