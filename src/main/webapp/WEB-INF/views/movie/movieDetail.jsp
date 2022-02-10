@@ -61,6 +61,27 @@ div#board-container label.custom-file-label {
 	text-align: left;
 }
 
+#exampleFormControlTextarea1{
+	border:none;
+	border-right:0px;
+	border-top:0px; 
+	boder-left:0px; 
+	boder-bottom:0px;
+	background-color:transparent;
+	display:inline-block;
+	margin : 0px;
+	pointer-events: none; 
+	font-size : 22px;
+	
+}
+#category-select {
+    width: 100px;
+    display: inline-block;
+    pointer-events: none;
+    border:none;
+    appearance:none;
+}
+
 .star-2 {
     position: relative;
     font-size: 4rem;
@@ -301,7 +322,7 @@ div#board-container label.custom-file-label {
 									<label for="replyId"><i
 										class="fa fa-user-circle-o fa-2x"> <input type="text"
 											class="id-detail movie-detail" name="id" id="id"
-											value="${loginMember.nickname}" /></i> </label>
+											value="${loginMember.nickname}" readonly/></i> </label>
 								</div>
 
 								<form id="insertCommentFrm">
@@ -364,7 +385,9 @@ div#board-container label.custom-file-label {
 										</div>
 
 										<div class="col-sm-10">
+											<label for="star" class="col-sm-2 col-form-label">평점 :</label>
 											<input type="hidden" class="form-control" name="star">
+											          									
 											<select id="category-select" class="form-control"
 												aria-label="Default select example">
 												<option selected>${comment.star}</option>
