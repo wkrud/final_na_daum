@@ -36,13 +36,13 @@ img{border:0px;}
 </div> -->
 
 <!-- ${_csrf.parameterName}=${_csrf.token}  -->
-<div id="search-container" class="">
+<div id="search-container" class="text-center">
 		<form 
 			name="albumSearchFrm"
 			action="${contextPath}/audiobook/search/list/select?"	
 			method="get"
 		>
-		<div class="col-md-4 offset-md-4 mt-5 border border-success pt-3 search-box">
+		<div class="col-md-4 offset-md-4 mt-5 pt-3 ">
 			<select name="searchType" required>
 				<option value="">검색타입</option>
 				<!-- required여부를 판단할 value="" 반드시 있어야함.-->
@@ -53,16 +53,14 @@ img{border:0px;}
 			</select>
 			
 			<input type="search" name="searchKeyword" value="${param.searchKeyword}" required/>	
-			<input type="submit" value="검색" />
+			<input type="submit" value="검색" class="btn btn-dark"/>
 			</div>
 		</form>
 </div>
-
-<h1 style="text-align:center;">selectList확인</h1>
-
-<div class="row row-cols-1 row-cols-md-4 g-4 list">
+<!-- <h1 style="text-align:center;">selectList확인</h1> -->
+<div class="row row-cols-3 row-cols-md-4 list">
 	<c:forEach var="album" items="${selectList}">
-		<div class="col col-md-2 search-card">
+		<div class="col col-md-2">
 			<div class="card h-100">
 				<input id="code" name="code" type="hidden" value="${album.code}"/> 
 				<%-- <img src="resources/upload/audiobook/img/${album.renamedFilename}"  class="card-img-top" alt=""> --%>
@@ -81,17 +79,17 @@ img{border:0px;}
 
 
 <!-- ajax로 페이지 새로고침 영역-->
-<c:forEach var="album" items="${selectList}">
+<%-- <c:forEach var="album" items="${selectList}">
 	<div class="col-md-4 offset-md-4 mt-5 border border-success pt-3">
 		<div class="search-list">
 			<div class="list-group">
 			</div>
 		</div>
 	</div>
-</c:forEach>
+</c:forEach> --%>
 
 
-<!--비동기 통신 페이지 새로고침-->
+<!--비동기 통신 페이지 새로고침용-->
 <script>
 /* $("#search").click((e)=>{
 	if($("#keyword").val()==null or $("#keyword").val()==''){

@@ -37,4 +37,30 @@ public class CommentServiceImpl implements CommentService {
 		return commentDao.deleteCultureComment(code);
 	}
 
+	//영화댓글
+	@Override
+	public List<Comment> selectMovieCommentList(String apiCode) {
+		return commentDao.selectMovieCommentList(apiCode);
+	}
+
+	@Override
+	public int insertMovieComment(Map<String, Object> map) {
+		return commentDao.insertMovieComment(map);
+	}
+
+//	@Override
+//	public int updateMovieComment(String code) {
+//		return commentDao.updateMovieComment(code);
+//	}
+
+	@Override
+	public int updateMovieComment(Comment comment) {
+		return commentDao.updateMovieComment(comment);
+	}
+
+	@Override
+	public Comment selectOneComment(String code) {
+		return commentDao.selectOneComment(code);
+	}
+
 }

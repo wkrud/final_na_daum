@@ -96,9 +96,9 @@ $(document).ready(function() {
 		<input type="text"class="form-control" placeholder="장르" name="kind" id="kind" value="${albumInfo.kind}" required>
 		<input type="text" class="form-control" placeholder="코드" name="code" id="code" value="${albumInfo.code}" required readonly>
 		
-	<c:forEach items="${albumImgList}" var="img" varStatus="status">
+	<c:forEach items="${oldAlbumImgList}" var="img" varStatus="status">
 		<c:choose>
-			<c:when test="${not empty albumImgList && null ne albumImgList}">
+			<c:when test="${not empty oldAlbumImgList && null ne oldAlbumImgList}">
 				<div class="input-group mb-3 al-cover"style="padding: 0px; margin-bottom: 15px;">
 					<div class="input-group-prepend" style="padding: 0px;">
 						<span class="input-group-text">앨범커버</span>
@@ -123,7 +123,7 @@ $(document).ready(function() {
 		</c:choose>
 	</c:forEach>
 			
-	<c:forEach items="${albumTrackList}" var="track" varStatus="status">
+	<c:forEach items="${oldAlbumTrackList}" var="track" varStatus="status">
 		<div class="input-group mb-3 trk-input"
 			style="padding: 0px; margin-bottom: 15px;" name="track"
 			id="track${status.index}">
