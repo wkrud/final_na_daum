@@ -35,5 +35,19 @@ public class CultureServiceImpl implements CultureService {
 		return cultureDao.selectCultureLikes(id);
 	}
 
+	//==========================================
+	@Override
+	public int selectCountLikes(Map<String, Object> map) {
+		return cultureDao.selectCountLikes(map);
+	}
+	
+	@Override
+	public int selectCountLikes(String apiCode) {
+		return cultureDao.selectCountLikes(apiCode);
+	}
+
+	
+
+
 
 }

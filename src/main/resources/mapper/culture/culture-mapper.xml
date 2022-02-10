@@ -31,5 +31,14 @@
 		order by
 			reg_date desc
 	</select>
+	
+	<select id="selectCountLikes" resultType="int">
+		select
+			count(*)
+		from
+			scrap
+		where
+			code = #{apiCode}
+	</select>
 </mapper>
 

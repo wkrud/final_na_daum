@@ -501,11 +501,15 @@ public class CultureController {
 			try{
 				int result = cultureService.insertCultureLike(map);
 				
-				System.out.println(result);
+				int selectCountLikes = cultureService.selectCountLikes(map);
+
+				log.debug("result={}", result);
+				log.debug("selectCountLikes={}", selectCountLikes);
 				String msg = (result > 0) ? "스크랩 성공" : "스크랩 실패";	
 				
 				map.put("result", result);
 				map.put("msg", msg);
+				map.put("selectCountLikes", selectCountLikes);
 
 				System.out.println(map);
 					if(result == 1) {
@@ -528,10 +532,15 @@ public class CultureController {
 				int result = cultureService.deleteCultureLike(apiCode);
 				String msg = (result > 0) ? "스크랩 취소 완료" : "스크랩 취소 실패";	
 				
+				int selectCountLikes = cultureService.selectCountLikes(apiCode);
+				log.debug("result={}", result);
+				log.debug("selectCountLikes={}", selectCountLikes);
+				
 				Map<String, Object> map = new HashMap<>();
 				map.put("result", result);
 				map.put("msg", msg);
-				
+				map.put("selectCountLikes", selectCountLikes);
+
 					if(result == 1) {
 			            return ResponseEntity.ok(map);
 			        } 

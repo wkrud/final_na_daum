@@ -12,4 +12,9 @@ public interface CultureDao {
 	int deleteCultureLike(String apiCode);
 
 	List<Scrap> selectCultureLikes(String id);
+
+	//=====================================
+	int selectCountLikes(Map<String, Object> map);
+	
+	int selectCountLikes(String apiCode);
 }

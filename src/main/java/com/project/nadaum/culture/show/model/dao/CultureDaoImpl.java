@@ -34,4 +34,15 @@ public class CultureDaoImpl implements CultureDao {
 		return session.selectList("culture.selectCultureLikes",id);
 	}
 
+	@Override
+	public int selectCountLikes(Map<String, Object> map) {
+		return session.selectOne("culture.selectCountLikes", map);
+	}
+
+	@Override
+	public int selectCountLikes(String apiCode) {
+		return session.selectOne("culture.selectCountLikes", apiCode);
+
+	}
+
 }

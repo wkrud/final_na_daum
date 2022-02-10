@@ -202,6 +202,8 @@ $(() => {
 		          </button>
 		        </div>
 		        <div class="modal-body">
+		        <span>제목</span>
+		        <input type="text" />
 		         <span>약속일</span>
 		         <input type="date" id="schedule-date" />
 		         <br />
@@ -249,7 +251,9 @@ $(() => {
 		  </form>
 		</div>
 	<script>
-
+	
+	
+	//댓글 공백 방지
 	$("#comment-enroll-btn").click((e) => {
 		if($("#comment-area").val() == ''){
 			alert('댓글을 작성해 주세요');
@@ -318,7 +322,7 @@ $(() => {
 				});
 			});  
 			
-			//스크랩
+			//스크랩===========================================================================================
 			$(likeFrm).submit((e) => {
 				e.preventDefault();
 
@@ -344,6 +348,7 @@ $(() => {
 				});
 			});
 
+			//친구검색	========================================================================================
 			var dest = '${loginMember.nickname}';
 			const $search = $("#searchFriend");
 			$search.on('keyup', function(e){

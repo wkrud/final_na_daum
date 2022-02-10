@@ -14,4 +14,9 @@ public interface CultureService {
 
 	List<Scrap> selectCultureLikes(String id);
 
+	//===================================
+	int selectCountLikes(Map<String, Object> map);
+
+	int selectCountLikes(String apiCode);
+
 }
