@@ -11,22 +11,54 @@
 .friend{
 	margin-left: 15px;
 }
+.friends-list{
+
+}
 .friends-list .friends-section{
 	min-height: 107px;
+	width: 1195px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #EAE7E3;
+	z-index: 8;
+	position: relative;
+}
+.friends-list .friends-section i{
+	color:#0A1F33;
+	font-size: 1.5rem;
+}
+.friend-wrap{
+	margin-top: 20px;
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.friend-btn{
+	
 }
 .friend-btn button{
 	
 }
-
 .slick-list{
-	background-color: #aaaaaa40;
+	min-height: 107px;
+	width: 800px;
+	background-color: #EAE7E3;
 }
 
 
-
+.followers-list{
+	margin-top: 50px;
+}
 .follower{
 	margin-left: 15px;
 }
 .followers-list .followers-section{
 	min-height: 107px;
+	width: 1195px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #EAE7E3;
 }
