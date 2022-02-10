@@ -9,8 +9,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 내 피드" name="title"/>
 </jsp:include>
-<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <sec:authentication property="principal" var="loginMember"/>
 <script src="${pageContext.request.contextPath}/resources/js/feed/socialFeed.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeed.css" />
@@ -34,15 +32,37 @@
 			</div>
 			<div class="profile-info-area">
 				<div class="host-nickname-area">
-					<div class="host-nickname"><span>${member.nickname}</span></div>
+					<div class="host-nickname">
+						<div class="host-nickname-span">
+							<span>${member.nickname}</span>
+						</div>
+						<div class="contact-host-wrap">
+							<i id="make-chat-room" class="fa fa-comments-o" aria-hidden="true"></i>
+						</div>
+					</div>
 				</div>
 				<div class="host-friends-area">
 					<div class="friends-count"><span>팔로잉 : ${socialCount.FOLLOWING}</span></div>
 					<div class="following-count"><span>팔로워 : ${socialCount.FOLLOWER}</span></div>
 				</div>				
-				<div class="host-introduce-area"></div>
+				<div class="host-introduce-area">
+					<div class="host-hobby-wrap">
+						<div class="host-hobby-title">
+							<span>취미 : </span>
+						</div>
+						<div class="hobby-list-wrap">
+							<c:forEach items="${hobby}" var="h">
+								<div class="host-hobby">${h}</div>
+							</c:forEach>
+						</div>
+					</div>
+					<div class="host-introduce-wrap">
+						${member.introduce}
+					</div>
+				</div>
 			</div>
 		</div>
+		<hr />
 		<div class="one-person-feed-area">
 			<div class="feed-limit-area">
 				<c:forEach items="${feed}" var="f">
@@ -102,10 +122,40 @@
 	</div>
 </div>
 <script>
+$(() => {
+ 	<c:if test="${check.type eq 'alarmMessage'}">
+		selectedFeed('${loginMember.id}','${check.code}');
+	</c:if>
+});
+
+const $chatRoom = $("#make-chat-room");
+$chatRoom.click((e) => {
+	console.log(1);
+	var room = Math.floor(Math.random() * 100000);
+	
+	let guest = '${member.nickname}';
+	if(confirm(guest + '님과 DM을 하시겠습니까?')){
+		var room = Math.floor(Math.random() * 100000);
+		console.log('room = ' + room);
+		
+		const name = `chatRoom\${room}`;
+		const spec = "left=500px, top=500px, width=450px, height=620px";
+		const url = `${pageContext.request.contextPath}/member/mypage/chat.do?room=\${room}`;
+		
+		chatInvite('chat', '${loginMember.nickname}', guest, room);
+		windowObjHistorySearch = window.open(url, name, spec);	
+	}
+});
+
 const $detailBody = $(".feed-detail-modal-body");
+let $hidden = $(".hidden-likes-comment");
 $(".one-feed").click((e) => {
-	let code = $(".one-feed").find("input.code").val();
-	console.log(code);
+	let code = '';
+	if($(e.target).attr('class') != 'hidden-likes-comment'){
+		code = $(e.target).parent().parent().find("input.code").val();
+	}else{
+		code = $(e.target).find("input.code").val();
+	}
 	console.log('${member.id}' + " " + code);
 	selectedFeed('${member.id}',code);
 });

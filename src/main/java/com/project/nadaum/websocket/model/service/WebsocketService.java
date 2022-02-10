@@ -9,8 +9,8 @@ public interface WebsocketService {
 
 	List<Map<String, Object>> selectAlarmCount(Member member);
 
-	int updateAlarm(Member member);
+	int updateAlarm(Map<String, Object> map);
 
-	List<Map<String, Object>> selectAllEmotion();
+	List<Map<String, Object>> selectAllFriendForInvite(Member member);
 
 }

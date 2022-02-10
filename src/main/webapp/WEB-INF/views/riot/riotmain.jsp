@@ -3,14 +3,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <jsp:useBean id="dateValue" class="java.util.Date" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Dev등록" name="title" />
 </jsp:include>
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
-<sec:authentication property="principal" var="loginMember"/>
+<meta id="_csrf_header" name="_csrf_header"
+	content="${_csrf.headerName}" />
+<sec:authentication property="principal" var="loginMember" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <link rel="stylesheet"
@@ -62,6 +64,8 @@
 		<img alt="아이콘" src=${ img} style="width: 200px">
 		<div class="fav-button-wrap">
 			<button type="button" class="btn btn-lg btn-outline-warning fav-btn">즐겨찾기</button>
+			
+
 		</div>
 	</div>
 	<div class="col-md-6 px-0">
@@ -6569,7 +6573,8 @@ $(".recent-btn").click((e) => {
 
 
 </script>
-  <script src="${pageContext.request.contextPath}/resources/js/riot/riotfav.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/riot/riotfav.js"></script>
 
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

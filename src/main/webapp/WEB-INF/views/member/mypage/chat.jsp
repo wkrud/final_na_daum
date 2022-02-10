@@ -25,6 +25,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
 	integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
@@ -38,7 +39,7 @@ function fnReloadBlock(){
 		event.returnValue = false;
 	}
 }
-document.onkeydown = fnReloadBlock;
+/* document.onkeydown = fnReloadBlock; */
 </script>
 </head>
 <body>
@@ -54,6 +55,30 @@ document.onkeydown = fnReloadBlock;
 			</div>
 			<div class="chat-send-btn-wrap">
 				<div class="emotion-wrap-body">
+					<div class="option-wrap">
+						<div class="option-emotion"><i class="fa fa-smile-o" aria-hidden="true"></i></div>
+						<div class="option-friend"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
+					</div>
+					<div class="invite-friend">
+						<c:forEach items="${friends}" var="fr">
+							<div class="invite-friend-options">
+								<div class="invite-friend-profile">
+									<c:if test="${fr.LOGINTYPE eq 'K'}">
+										<img class="change-profile" src="${fr.PROFILE}" alt="" />
+									</c:if>
+									<c:if test="${fr.LOGINTYPE eq 'D'}">
+										<c:if test="${fr.PROFILESTATUS eq 'N'}">							
+											<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" />
+										</c:if>
+										<c:if test="${fr.PROFILESTATUS eq 'Y'}">
+											<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/${fr.PROFILE}" alt="" />
+										</c:if>
+									</c:if>					
+								</div>
+								<div class="invite-friend-nickname">${fr.NICKNAME}</div>
+							</div>
+						</c:forEach>
+					</div>
 					<div class="emotion-wrap">
 						<div class="emotion-img-wrap blanket"><input type="hidden" value="blanket" /></div>
 						<div class="emotion-img-wrap daechoong"><input type="hidden" value="daechoong" /></div>
@@ -65,15 +90,12 @@ document.onkeydown = fnReloadBlock;
 				</div>
 				<div class="input-group mb-3 chat-btn-group-wrap">
 					<div class="input-group-append">
-						<button class="btn btn-secondary" id="emotion" type="button">이모티콘</button>
+						<button class="btn btn-secondary" id="emotion" type="button"><i class="fa fa-plus-square-o" aria-hidden="true"></i></button>						
 					</div>
 					<input type="text" id="chat-msg-input" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary" id="chat-send-btn" type="button">전송</button>
 					</div>
-				</div>
-				<div class="invite-btn-wrap">
-					<button type="button" class="btn btn-outline-dark invite-again-btn">다시 초대하기</button>
 				</div>
 			</div>
 		</div>
@@ -83,26 +105,68 @@ var room = '${room}';
 var guestNickname = '';
 const $msgArea = $("#msgArea");
 const $msg = $("#chat-msg-input");
+const $option = $(".option-wrap");
+const $emotion = $(".emotion-wrap");
+const $invite = $(".invite-friend");
+const $inviteBtn = $(".invite-friend-options");
 
 $(() => {
 	connect();
-	$(".chat-btn-group-wrap").hide();
-	if('${guest}' == 'guest'){
-		$(".invite-btn-wrap").hide();
-		$(".chat-btn-group-wrap").show();
+	$emotion.hide();
+	$option.hide();
+	$invite.hide();
+});
+
+$inviteBtn.click((e) => {
+	let guestNickname = '';
+	if($(e.target).attr('class') == 'invite-friend-options'){
+		guestNickname = $(e.target).find('div.invite-friend-nickname').text();
+	}else if($(e.target).attr('class') == 'invite-friend-profile'){
+		guestNickname = $(e.target).parent().find('div.invite-friend-nickname').text();
+	}else if($(e.target).attr('class') == 'change-profile'){
+		guestNickname = $(e.target).parent().parent().find('div.invite-friend-nickname').text();
+	}else if($(e.target).attr('class') == 'invite-friend-nickname'){
+		guestNickname = $(e.target).text();
 	}
-	$(".emotion-wrap").hide();
+	console.log(guestNickname);
+	reInvite('chat', '${loginMember.nickname}', guestNickname, room);
+	$invite.hide();
+});
+
+$msgArea.click((e) => {
+	$emotion.hide();
+	$option.hide();
+	$invite.hide();
+});
+$msg.focus((e) => {
+	$emotion.hide();
+	$option.hide();
+	$invite.hide();
+});
+
+/* 친구초대 */
+$(".option-friend").click((e) => {
+	$invite.slideToggle();
+	$emotion.hide();
+	$option.hide();
 });
 
 /* 이모티콘 관련 */
 $("#emotion").click((e) => {
-	$(".emotion-wrap").slideToggle();
+	$emotion.hide();
+	$option.slideToggle();
+	$invite.hide();
+});
+$(".option-emotion").click((e) => {
+	$option.hide();
+	$emotion.slideToggle();
+	$invite.hide();
 });
 
 $(".emotion-img-wrap").click((e) => {
 	let emo = $(e.target).find('input').val();
 	console.log(emo);
-	$(".emotion-wrap").hide();
+	$emotion.hide();
 	emotionSend(emo);
 });
 
@@ -111,10 +175,6 @@ window.onbeforeunload = function(e) {
 	out();
 	return;
 };
-
-$(".invite-again-btn").click((e) => {
-	reInvite('chat', '${loginMember.nickname}', guestNickname, room);	
-});
 
 /* 엔터로 메세지 전송 */
 $msg.on('keyup', function(e) {
@@ -158,8 +218,6 @@ function connect() {
 				</div>`;
 				guestNickname = resp.writer;
 				console.log('guestNickname = ' + guestNickname);
-				$(".invite-btn-wrap").hide();
-				$(".chat-btn-group-wrap").show();
 			}else if(resp.writer != '${loginMember.nickname}' && resp.type == 'EMOTION'){
 				msg = `<div class='guest-msg'>
 					<div class="profile-wrapper">
@@ -215,8 +273,6 @@ function connect() {
 				</div>
 				</div>`;
 				guestNickname = resp.writer;
-				$(".chat-btn-group-wrap").hide();
-				$(".invite-btn-wrap").show();
 			}
 			showMsg(msg);
 		});
