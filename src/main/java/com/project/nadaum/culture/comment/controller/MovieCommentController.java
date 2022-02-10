@@ -116,7 +116,6 @@ public class MovieCommentController{
 		log.debug("updateComment comment = {}", comment);
 		try {
 			int result = commentService.updateMovieComment(comment);
-//			int result = commentService.updateCultureComment(map);
 			log.debug("updateComment result = {}", result);
 			
 			Map<String, Object> resultMap = new HashMap<>();
