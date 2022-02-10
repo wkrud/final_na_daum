@@ -23,7 +23,7 @@
 					<c:forEach items="${friends}" var="fr">
 						<c:if test="${ml.id eq fr.friendId}">
 							<div class="friend-wrap">
-								<div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>
@@ -57,7 +57,7 @@
 					<c:forEach items="${follower}" var="fo">
 						<c:if test="${ml.id eq fo.followerId}">
 							<div class="follower-wrap">
-								<div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>

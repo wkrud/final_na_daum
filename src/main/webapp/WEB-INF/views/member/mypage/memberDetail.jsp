@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
@@ -88,9 +89,11 @@
 						<form id="memberUpdateFrm">
 							<input type="text" class="form-control" name="id" id="id" value="${loginMember.id}" readonly required/>
 							<input type="text" class="form-control" placeholder="이름" name="name" id="name" value="${loginMember.name}" readonly required/>
+							<input type="text" class="form-control" placeholder="전화번호" name="phone" id="phone" value="${loginMember.phone}" readonly required/>
+							<c:if test="${loginMember.loginType ne 'K'}">
 							<input type="text" class="form-control" placeholder="이메일" name="email" id="email" value="${loginMember.email}" readonly required/>
 							<input type="text" class="form-control" placeholder="주소" name="address" id="address" value="${loginMember.address}" readonly required/>
-							<input type="text" class="form-control" placeholder="전화번호" name="phone" id="phone" value="${loginMember.phone}" readonly required/>
+							</c:if>
 							<label for="birthday">생일</label>
 							<input type="date" name="birthday" id="birthday" value='<fmt:formatDate value="${loginMember.birthday}" pattern="yyyy-MM-dd"/>' />
 							
@@ -218,7 +221,7 @@
 					$(".modify-introduce-wrap").hide();
 					$(".modify-hobby-wrap").hide();
 				});
-				
+					
 				$(".hobby-edit").on('click',function(e) {
 					$(".modify-hobby-wrap").slideToggle();
 				});
@@ -307,10 +310,10 @@
 				$(memberUpdateFrm).submit((e) => {
 					e.preventDefault();
 					
-					const csrfHeader = "${_csrf.headerName}";
+					/* const csrfHeader = "${_csrf.headerName}";
 					const csrfToken = "${_csrf.token}";
 					const headers = {};
-					headers[csrfHeader] = csrfToken;
+					headers[csrfHeader] = csrfToken; */
 					
 					$.ajax({
 						url: "${pageContext.request.contextPath}/member/memberUpdate.do",

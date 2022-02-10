@@ -546,8 +546,7 @@ public class MemberController {
 	@GetMapping("/mypage/memberDetail.do")
 	public void memberDetail(@AuthenticationPrincipal Member member, @RequestParam String tPage, Model model, RedirectAttributes redirectAttr) {
 		try {
-			log.debug("tPage = {}", tPage);			
-			
+			log.debug("tPage = {}", tPage);	
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw e;
@@ -583,7 +582,7 @@ public class MemberController {
 		String category = "all";
 		String url = request.getRequestURI();
 		String pagebar = NadaumUtils.getPagebar(cPage, limit, totalContent, url, category);
-		log.debug("myHelpList = {}", myHelpList);		
+		log.debug("myHelpList = {}", myHelpList);				
 		model.addAttribute("myHelpList", myHelpList);
 		model.addAttribute("pagebar", pagebar);
 	}
@@ -856,7 +855,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberUpdate.do")
-	public String memberUpdate(Member member, @AuthenticationPrincipal Member oldMember){
+	public ResponseEntity<?> memberUpdate(Member member, @AuthenticationPrincipal Member oldMember){
 		int result = 0;
 		try {
 			log.debug("member = {}", member);
@@ -875,7 +874,7 @@ public class MemberController {
 			log.error(e.getMessage(), e);
 			throw e;
 		}		
-		return "redirect:/member/mypage/memberDetail.do?tPage=myPage";
+		return ResponseEntity.ok(1);
 		
 	}
 	
