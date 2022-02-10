@@ -31,6 +31,9 @@
 				</div>
 			</div>
 			<div class="profile-info-area">
+				<div class="host-birthday-icon-area">
+					<c:if test="${hostBirth}"><i class="fa fa-birthday-cake" aria-hidden="true"></i>&nbsp;</c:if>
+				</div>
 				<div class="host-nickname-area">
 					<div class="host-nickname">
 						<div class="host-nickname-span">

@@ -1,3 +1,6 @@
+<%@page import="com.project.nadaum.common.NadaumUtils"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="com.project.nadaum.member.model.vo.Member"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -10,6 +13,12 @@
 <%
     Date now = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM");
+    Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if(member.getBirthday() != null){
+	    Date birth = member.getBirthday();
+	    boolean isBirth = NadaumUtils.isBirthday(birth);
+	    pageContext.setAttribute("isBirth", isBirth);
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -194,7 +203,7 @@
       <div class="user-factors">
         <span class="head-nickname-span">
           <a href="${pageContext.request.contextPath}/member/mypage/memberDetail.do?tPage=myPage">
-            <sec:authentication property="principal.nickname"/>님의 나:다움
+            <c:if test="${isBirth}"><i class="fa fa-birthday-cake" aria-hidden="true"></i>&nbsp;</c:if><sec:authentication property="principal.nickname"/>님의 나:다움
           </a>
         </span>
       </div>
