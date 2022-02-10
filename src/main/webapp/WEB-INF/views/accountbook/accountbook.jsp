@@ -11,8 +11,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="가계부" name="title"/>
 </jsp:include>
-<%-- <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" /> --%>
 <sec:authentication property="principal" var="loginMember"/>
 <link href='${pageContext.request.contextPath}/resources/css/accountbook/main.css' rel='stylesheet' />
 <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
@@ -26,23 +24,39 @@
 %>
 
 <div class="accountWrapper">
+<!-- 엑셀 다운로드 기간선택 모달창 -->
 	<div class="modal-background excelModal">
 	<div class="findExcelDate">
 		<p class="excel-ment">기간을 선택하세요.</p>
-		<button id="modalCloseBtn"><i class="fas fa-sign-in-alt"></i></button>
+		<button class="modalCloseBtn defaultBtn"><i class="fas fa-sign-in-alt"></i></button>
 		<form action="${pageContext.request.contextPath}/accountbook/excel">
 			<input type="text" name="startDate" id="excelDate1" class="excelbox" readonly value="<%=today2%>"/>
 			<input type="text" name="endDate" id="excelDate2" class="excelbox" readonly value="<%=today2%>"/>
-			<button>다운로드</button>
+			<button id="excelDownlaodBtn" class="defaultBtn"><i class="fas fa-download"></i></button>
 		</form>
 	</div>
 	</div>
+	
+<!-- 가계부 수정 모달창 -->
+	<div class="modal-background updateModal">
+	 <div class="updateAccountModal">
+		<form 
+			name="updateFrm" 
+			method="POST"
+			action="${pageContext.request.contextPath}/accountbook/updateAccount.do">
+		<input type="hidden" name="id" value="${loginMember.id}" />
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
+		<table class="updateAccountTable">
+		</table>
+			<input type="submit" class="defaultBtn addAccountBtn" value="등록" />
+		</form>
+			<button class="modalCloseBtn defaultBtn"><i class="fas fa-sign-in-alt"></i></button>
+	</div> 
+	</div>  
 
 <!-- 가계부 입력 모달창 -->
 	<div class="modal-background insertModal">
 	<div class="insertAccountModal">
-		<input type="hidden" name="incomeExpense" id="income" value="I" />
-		<input type="hidden" name="incomeExpense" id="expense" value="E" /> 
 		<form 
 			name="insertFrm" 
 			method="POST"
@@ -102,7 +116,7 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="hidden" name="id" id="id" value="${loginMember.id}" />
+					<input type="hidden" name="id" value="${loginMember.id}" />
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				</td>
 			</tr>
@@ -110,12 +124,9 @@
 		</table>
 			<input type="submit" class="defaultBtn addAccountBtn" value="등록" />
 		</form>
-			<button id="modalCloseBtn"><i class="fas fa-sign-in-alt"></i></button>
+			<button class="modalCloseBtn defaultBtn"><i class="fas fa-sign-in-alt"></i></button>
 	</div>
 	</div>
-
-<input type="hidden" name="incomeExpense" id="income" value="I" />
-<input type="hidden" name="incomeExpense" id="expense" value="E" /> 
 <!-- 차트 부분 -->
 <section class="chartSection">
 	<a href="${pageContext.request.contextPath}/accountbook/accountAnalyze.do" id="detailChartLink">더 보기</a>
@@ -131,9 +142,9 @@
 				name = "searchFrm"
 				id="searchFrm">
 				<select name="incomeExpense" id="mainCategory">
-					<option value="" selected>대분류</option>
-					<option value="I">수입</option>
-					<option value="E">지출</option>
+					<option value="" selected>대분류</option> 
+					<option value="I" <c:if test="${'I' eq searchKeyword.incomeExpense}">selected</c:if>>수입</option>
+					<option value="E" <c:if test="${'E' eq searchKeyword.incomeExpense}">selected</c:if>>지출</option>
 				</select>
 				<select name="category" id="subCategory">
 					<option value="">소분류</option>
@@ -177,7 +188,8 @@
 					</table>
 				</div>
 				<div class="accountUpdate" id="${account.code}">
-					<button class="deleteBtn" onclick="deleteDetail('${account.code}')">삭제</button>
+					<button class="updateBtn modifyBtn" onclick="updateDetail('${account.code}')">수정</button>
+					<button class="deleteBtn modifyBtn" onclick="deleteDetail('${account.code}')">삭제</button>
 				</div>
 			</c:forEach>
 			<c:if test="${totalAccountList gt 4}">

@@ -37,6 +37,10 @@ public interface AccountBookService {
 
 	List<AccountBook> downloadExcel(Map<String, Object> map);
 
+	List<AccountBook> selectOneAccount(Map<String, Object> param);
+
+	int updateAccount(AccountBook account);
+
 
 
 }

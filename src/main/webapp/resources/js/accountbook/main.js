@@ -1,9 +1,6 @@
 	
 	
 	//ajax 로딩시 필요한 값 변수 선언
-	var $id = $("#id").val();
-	var $income = $("#income").val();
-	var $expense = $("#expense").val();
 	var $contextPath = $("#contextPath").val(); //contextPath jsp에서 가져온 값(js파일에서 el을 못 씀)
 	
 	//option 배열
@@ -27,7 +24,7 @@
 	}
 
 	/*모달 버튼*/
-	$("#modalCloseBtn").on('click', function(){
+	$(".modalCloseBtn").on('click', function(){
 		$(".modal-background").fadeOut();
 	});
 		
@@ -38,6 +35,10 @@
 	$("#excelModalBtn").on('click', function(){
 		$(".excelModal").fadeIn();
 	});
+	
+	$("#excelDownlaodBtn").on('click', function() {
+		$(".excelModal").fadeOut();
+	})
 		
 	//수입 지출 변환 함수
 	function IE(x) {
@@ -63,7 +64,7 @@
 
 	
 	//대분류 선택에 따른 소분류 출력 - 검색
-	$("#mainCategory").change(function() {
+	$(document).on("change", "#mainCategory", function() {
 		const $mainCategory = $("#mainCategory").val();
 
 		$('#subCategory').empty();
@@ -83,11 +84,11 @@
 	});
 	
 	//대분류 선택에 따른 소분류 출력 - 모달
-	$("#main").change(function() {
+	$(document).on("change", "#main", function() {
 		const $mainCategory = $("#main").val();
 
 		$('#sub').empty();
-		/*$('#sub').append(`<option value="">카테고리</option>`);*/
+		$('#sub').append(`<option value="">카테고리</option>`);
 
 		if($mainCategory == "I") {
 			for (let i = 0; i < income.length; i++) {
@@ -110,8 +111,7 @@
 		data: {
 			id : $id
 		},
-/*		dataType : "json",
-*/		contentType : "application/json; charset=UTF-8",
+		contentType : "application/json; charset=UTF-8",
 		success : function(result){
 			$("#account_list").html(result);
 
@@ -139,65 +139,89 @@
 				console.log("error", xhr, testStatus, err);
 				alert("조회에 실패했습니다.");
 			}
-		})
+		});
 	};
-		
-	//수입 필터링 -> 지출 필터링이랑 if문으로 var data의 값만 변경해주고 싶은데 어케 수정해야 하나,,,,
-	$('#incomeFilterBtn').click(function() {
-		var data = {"id" : $id, "incomeExpense" : $income};
-		$.ajax({
-			url : $contextPath+'/accountbook/incomeExpenseFilter.do',
-			type : "POST",
-			data : JSON.stringify(data),
+	
+	//수정
+	function updateDetail(code) {
+		$.ajax ({
+			url : $contextPath+"/accountbook/selectOneAccount",
+			type : "Get",
+			dataType : "json",
+			data : {
+				"code" : code
+			},
 			contentType : "application/json; charset=UTF-8",
-			headers : headers,
 			success(result) {
-				$("#account_list").html(result);
+				$('.updateAccountTable').empty();
+				for(const detail in result) {
+					let detailList = `
+					<thead>
+					<tr>
+						<th colspan="4">거래내역 수정</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td colspan="2" rowspan="2">
+							<input type="date" name="regDate" id="regDate" value="`+timeConvert(result[detail].regDate)+`"/>
+						</td>
+						<td>
+							<input class="checkbox-tools" type="radio" name="payment" id="cash" value ="cash"/>
+							<label class="for-checkbox-tools" for="cash">
+								<span><i class="far fa-money-bill-alt"></i></span>
+							</label>
+						</td>
+						<td>
+							<input class="checkbox-tools" type="radio" name="payment" id="card" value ="card"/>
+							<label class="for-checkbox-tools" for="card">
+								<span><i class="far fa-credit-card" id="card"></i></span>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<select name="incomeExpense" id="main">
+								<option value="">대분류</option>
+								<option value="I">수입</option>
+								<option value="E">지출</option>
+							</select>
+						</td>
+						<td>
+							<select name="category" id="sub">
+								<option value="">소분류</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">
+							<label for="detail">
+								<input type="text" name="detail" id="" placeholder="내역을 입력하세요" value="`+result[detail].detail+`" />
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">
+							<label for="price">
+								<input type="text" name="price" id="insertPrice" placeholder="금액을 입력하세요" onkeyup="numberWithCommas(this.value)" value=`+result[detail].price+` />
+							</label>
+						</td>
+						<td>
+							<input type="hidden" name="code" id="code" value="`+result[detail].code+`"/>
+					</tr>
+					</tbody>
+					`
+				$('.updateAccountTable').append(detailList);
+				}
+					$(".updateModal").fadeIn();
 			},
 			error(xhr, testStatus, err) {
 				console.log("error", xhr, testStatus, err);
 				alert("조회에 실패했습니다.");
 			}
 		});
-	});
-	
-	
-	//지출
-/*	$('#expenseFilterBtn').click(function() {
-		var data = {"id" : $id, "incomeExpense" : $expense};
-		$.ajax({
-			url : '/nadaum/accountbook/incomeExpenseFilter.do',
-			type : "POST",
-			data : JSON.stringify(data),
-			contentType : "application/json; charset=UTF-8",
-			headers : headers,
-			success(result) {
-				$("#account_list").html(result);
-			},
-			error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
-			}
-		});
-	});*/
-	
-	//검색
-/*	$('#searchBtn').click(function() {
-		var data = $("#searchFrm").serialize();
-		$.ajax({
-			url : $contextPath+'/accountbook/searchList.do',
-			type : "POST",
-			data : JSON.stringify(data),
-			headers : headers,
-			success(result) {
-				$("#account_list").html(result);
-			},
-			error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
-			}
-			});
-	});*/
+	};
+
 	
 	//차트
 	//차트 로딩하는 메소드
@@ -208,7 +232,7 @@
 	
 	//차트 그리는 함수
 	function drawExpenseChart() {
-		var firstData = {"id" : $id, "incomeExpense" : $expense};
+		var firstData = {"incomeExpense" : "E"};
 		//차트에 구성되는 데이터는 [['Header','Header']['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//Header는 각 배열을 설명할 수 있는 필수값. ['String', 'String']
 		//json 데이터 ajax로 받아오기
@@ -248,7 +272,7 @@
 	
 	//차트 그리는 함수
 	function drawIncomeChart() {
-		var firstData = {"id" : $id, "incomeExpense" : $income};
+		var firstData = {"incomeExpense" : "I"};
 		//차트에 구성되는 데이터 [['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//json 데이터 ajax로 받아오기
 		$.ajax({

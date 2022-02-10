@@ -97,6 +97,16 @@ public class AccountBookDaoImpl implements AccountBookDao {
 	public List<AccountBook> downloadExcel(Map<String, Object> map) {
 		return session.selectList("accountbook.downloadExcel", map);
 	}
+
+	@Override
+	public List<AccountBook> selectOneAccount(Map<String, Object> param) {
+		return session.selectList("accountbook.selectOneAccount", param);
+	}
+
+	@Override
+	public int updateAccount(AccountBook account) {
+		return session.update("accountbook.updateAccount", account);
+	}
 	
 	
 

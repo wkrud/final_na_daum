@@ -45,6 +45,8 @@
 				<i class="far fa-play-circle"></i>
 			</span>
 		</div>
+		<div class="account">
+		</div>
 	</section>
 </article>
 <script>
@@ -69,70 +71,143 @@
    ev.preventDefault();
  }
 
+ //드롭하면서 생기는 이벤트
  function drop(ev) {
    ev.preventDefault();
    var widgetName = ev.dataTransfer.getData("text");
    console.log(widgetName);
-
+	
+   	//피드
    if(widgetName == 'feed-widget') {
-     widget = `
-     <div class="widget_form `+widgetName+`">
-     	`+widgetName+`
-     	<button onclick="deleteWidget()">지우기</button>
-     </div>`
-   } else if(widgetName == 'calendar-widget') {
-     widget = `<div class="widget_form `+widgetName+`">`+widgetName+`</div>`
-   } else if(widgetName == 'todo-widget') {
-     widget = `
-     <div class="widget_form `+widgetName+`">
-     	`+widgetName+`
-     </div>`
-   } else if(widgetName == 'memo-widget') {
-     widget = `<div class="widget_form `+widgetName+`">`+widgetName+`</div>`
-     
-   } else if(widgetName == 'account-widget') {
-	   widget = `<div class="widget_form `+widgetName+`"></div>`
-		  
-	   $.ajax({
-    	url : "${pageContext.request.contextPath}/accountbook/widget",
-     	method : 'GET',
-     	contentType : "application/json; charset=UTF-8",
-     	dataType : "json",
-     	success(data) { `
-        <table style="margin : auto;">
-          <tr>
-            <td colspan="2" style="text-align : center; font-size : 20px;">${loginMember.name}님의 이번 달 미니 가계부</td>
-          </tr>`
-          for(const list in data) {
-   		let accountList = `
-		  <tr>
-			<td style="font-size : 20px; text-align : center;">`+IE(list)+` : `+numberWithCommas(data[list])+`</td>   				
-    	  </tr>
-          }
-		</table>`
-   	$('.widget_form').append(accountList);
-       }
-        
-     	},error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
-     });
-	   
-   } else if(widgetName == 'culture-widget') {
-     widget = `<div class="widget_form `+widgetName+`">`+widgetName+`</div>`
-   } else if(widgetName == 'movie-widget') {
-     widget = `<div class="widget_form `+widgetName+`">`+widgetName+`</div>`
-   } else if(widgetName == 'game-widget') {
-     widget = `<div class="widget_form `+widgetName+`">`+widgetName+`</div>`
-   } else if(widgetName == 'audio-widget') {
-     widget = `<div class="widget_form `+widgetName+`">`+widgetName+`</div>`
+	   if(document.querySelector('.feed-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
    } 
+   //캘린더
+   else if(widgetName == 'calendar-widget') {
+	   if(document.querySelector('.calendar-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+   } 
+   //투두리스트
+   else if(widgetName == 'todo-widget') {
+	   if(document.querySelector('.todo-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+
+			$.ajax({
+		    	url : "${pageContext.request.contextPath}/todoList/widget",
+		     	method : 'GET',
+		     	contentType : "application/json; charset=UTF-8",
+		     	dataType : "json",
+		     	success(data) { `  
+	     		`
+		     	}
+		        
+		     	},error(xhr, testStatus, err) {
+					console.log("error", xhr, testStatus, err);
+					alert("조회에 실패했습니다.");
+				}
+		     });
+	   } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+   }    
+	//메모
+   else if(widgetName == 'memo-widget') {
+	   if(document.querySelector('.memo-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+     
+   } 
+   	//가계부
+   else if(widgetName == 'account-widget') {
+	   if(document.querySelector('.account-widget') == null) {
+		   widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)"><button onclick="delWidget(`+widgetName+`)">삭제하기</button></div>`
+			  
+		   $.ajax({
+	    	url : "${pageContext.request.contextPath}/accountbook/widget",
+	     	method : 'GET',
+	     	contentType : "application/json; charset=UTF-8",
+	     	dataType : "json",
+	     	success(data) { `
+	        <table style="margin : auto;">
+	          <tr>
+	            <td colspan="2" style="text-align : center; font-size : 20px;">${loginMember.name}님의 이번 달 미니 가계부</td>
+	          </tr>`
+	          for(const list in data) {
+	   		let accountList = `
+			  <tr>
+				<td style="font-size : 20px; text-align : center;">`+IE(list)+` : `+numberWithCommas(data[list])+`</td>   				
+	    	  </tr>
+	          }
+			</table>`
+	   	$('.widget_form').append(accountList);
+	       }
+	        
+	     	},error(xhr, testStatus, err) {
+				console.log("error", xhr, testStatus, err);
+				alert("조회에 실패했습니다.");
+			}
+	     });
+	   } else {
+		   alert('위젯은 하나만 생성할 수 있습니다.');
+	       return;
+	   }  
+   } 
+ 	//전시
+ 	else if(widgetName == 'culture-widget') {
+ 		if(document.querySelector('.culture-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+   } 
+ 	//영화
+ 	else if(widgetName == 'movie-widget') {
+ 		if(document.querySelector('.movie-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+   } 
+ 	//게임
+ 	else if(widgetName == 'game-widget') {
+ 		if(document.querySelector('.game-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+   } 
+ 	//오디오북
+ 	else if(widgetName == 'audio-widget') {
+ 		if(document.querySelector('.audio-widget') == null) {
+	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+   } 
+ 	//생성한 내용을 dragZone에 추가
    $("#dragZone").append(widget);
  }
  
- function deleteWidget() {
+ //위젯 이름으로 지우기
+ function delWidget(name) {
 	 console.log("외않데 ㅠㅠ");
+	 div.remove('.'+name+'');
  }
  
 //수입 지출 변환 함수
@@ -149,11 +224,4 @@ function numberWithCommas(n) {
 }
  
 </script>
-
-
-
-
-
-
-
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

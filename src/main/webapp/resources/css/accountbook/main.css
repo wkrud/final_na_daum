@@ -301,8 +301,8 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   
 }
 
-.insertAccountModal{
-  background-color: #fff;
+.insertAccountModal, .updateAccountModal{
+  background-color: #FFFBF5;
   width : 30%;
   margin : 100px auto;
   padding : 20px;
@@ -311,11 +311,11 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   text-align : center;
 }
 
-#modalCloseBtn{
+.modalCloseBtn{
 	position : absolute;
 	top : 20px;
 	right : 30px;
-	background : white;
+	background : #FFFBF5;
 	border : none;
 	font-size : 20px;
 }
@@ -365,9 +365,9 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
   position : relative;
   }
 
-.deleteBtn{
+.modifyBtn{
 	position : absolute;
-	right : 50px;
+	right : 60px;
 	border : none;
 	background-color : #0A1F33;
 	color : #FFFBF5;
@@ -375,6 +375,11 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 	height : 30px;
 	border-radius : 10px;
 }
+
+.updateBtn {
+	left : 100px;
+}
+
 
 .accountTable {
 	margin : 5px;
@@ -548,4 +553,9 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 
 .excel-ment {
 	font-size : 20px;
+}
+
+#excelDownlaodBtn {
+	margin-left : 20px;
+	font-size : 1.5em;
 }
