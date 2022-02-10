@@ -109,6 +109,7 @@ const $option = $(".option-wrap");
 const $emotion = $(".emotion-wrap");
 const $invite = $(".invite-friend");
 const $inviteBtn = $(".invite-friend-options");
+var chatRoomPeople = [];
 
 $(() => {
 	connect();

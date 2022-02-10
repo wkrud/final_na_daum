@@ -80,5 +80,19 @@ public class NadaumUtils {
 		
 		return pagebar.toString();
 	}
+	
+	public static boolean isBirthday(Date birthday) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+		Date today = new Date();
+		String todayStr = sdf.format(today);
+		String birthStr = sdf.format(birthday);
+		
+		if(todayStr.equals(birthStr)) {
+			return true;
+		}		
+		
+		return false;
+	}
 
 }

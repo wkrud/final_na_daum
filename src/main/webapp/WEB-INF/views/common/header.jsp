@@ -1,3 +1,6 @@
+<%@page import="com.project.nadaum.common.NadaumUtils"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="com.project.nadaum.member.model.vo.Member"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -10,6 +13,14 @@
 <%
     Date now = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM");
+     if(!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){
+	    Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    if(member.getBirthday() != null){
+		    Date birth = member.getBirthday();
+		    boolean isBirth = NadaumUtils.isBirthday(birth);
+		    pageContext.setAttribute("isBirth", isBirth);
+	    }    	
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -194,15 +205,15 @@
       <div class="user-factors">
         <span class="head-nickname-span">
           <a href="${pageContext.request.contextPath}/member/mypage/memberDetail.do?tPage=myPage">
-            <sec:authentication property="principal.nickname"/>님의 나:다움
+            <c:if test="${isBirth}"><i class="fa fa-birthday-cake" aria-hidden="true"></i>&nbsp;</c:if><sec:authentication property="principal.nickname"/>님의 나:다움
           </a>
         </span>
       </div>
       <div class="profile-wrap user-factors">
         <button id="profile" type="button"
           data-toggle="collapse" data-target="#alarmList" aria-expanded="false" aria-controls="alarmList">
-          <div class="bedge-wrap"></div>
-          <div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+          <div class="badge-wrap"></div>
+          <div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
             <c:if test="${loginMember.loginType eq 'K'}">
               <img src="${loginMember.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />
             </c:if>	
@@ -279,10 +290,10 @@
 			url: `${pageContext.request.contextPath}/websocket/wsCountAlarm.do`,
 			success(resp){
 				const $alarmList = $("#alarmList");
-				const $bedgeWrap = $(".bedge-wrap");
+				const $badgeWrap = $(".badge-wrap");
 				
 				$alarmList.empty();
-				$bedgeWrap.empty();
+				$badgeWrap.empty();
 				
 				let alarmDiv = `<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>`;
 				$alarmList.append(alarmDiv);
@@ -309,11 +320,11 @@
 				});
 				
 				if(count > 0){
-					let bedge = `
+					let badge = `
 					<span id='bg-alarm' class='badge rounded-pill bg-danger'>\${count}</span>
 					`;
 					
-					$bedgeWrap.append(bedge);
+					$badgeWrap.append(badge);
 				}		
 				
 				$(".alarmContent").click((e) => {
