@@ -13,7 +13,6 @@
 <%
     Date now = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM");
-    System.out.println("ddddddddd ++++ == " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
      if(!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){
 	    Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    if(member.getBirthday() != null){
