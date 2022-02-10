@@ -21,7 +21,7 @@
 				</div>
 				<div class="q-info-wrap">
 					<div class="q-writer-info">
-						<div class="thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+						<div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 							<c:if test="${helpDetail.loginType eq 'K'}">
 								<img src="${helpDetail.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 							</c:if>

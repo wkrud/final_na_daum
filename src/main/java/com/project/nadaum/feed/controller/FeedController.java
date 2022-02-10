@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.nadaum.common.NadaumUtils;
 import com.project.nadaum.feed.model.service.FeedService;
 import com.project.nadaum.feed.model.vo.Feed;
 import com.project.nadaum.feed.model.vo.FeedComment;
@@ -54,6 +55,10 @@ public class FeedController {
 			// 친구, 팔로잉
 			Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
 			
+			if(member.getBirthday() != null) {
+				boolean bool = NadaumUtils.isBirthday(member.getBirthday());
+				model.addAttribute("hostBirth", bool);
+			}
 			model.addAttribute("check", param);
 			model.addAttribute("hobby", hobby);
 			model.addAttribute("member", member);
