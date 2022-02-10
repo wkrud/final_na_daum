@@ -547,10 +547,6 @@ public class MemberController {
 	public void memberDetail(@AuthenticationPrincipal Member member, @RequestParam String tPage, Model model, RedirectAttributes redirectAttr) {
 		try {
 			log.debug("tPage = {}", tPage);	
-			
-			// 생일
-			boolean bool = NadaumUtils.isBirthday(member.getBirthday());
-			model.addAttribute("isBirth", bool);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw e;
