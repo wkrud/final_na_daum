@@ -46,6 +46,8 @@
 <style>
  .ui-widget-header .ui-icon { background-image: url('${pageContext.request.contextPath}/resources/images/common/btns.png'); } 
 </style>
+<!-- datepicker js -->
+<script src="${pageContext.request.contextPath}/resources/js/common/datepicker.js"></script>
 
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"

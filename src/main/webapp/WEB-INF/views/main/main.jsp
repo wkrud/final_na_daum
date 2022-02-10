@@ -45,8 +45,7 @@
 				<i class="far fa-play-circle"></i>
 			</span>
 		</div>
-		<div class="account">
-		</div>
+
 	</section>
 </article>
 <script>
@@ -248,11 +247,11 @@
  
  //투두리스트 삭제
  function delTodoList(no) {
-	 let no = {"no" : no};
+	 let data = {"no" : no};
 	 $.ajax({
     	url : "${pageContext.request.contextPath}/main/deleteTodoList.do",
      	method : 'POST',
-     	data : JSON.stringify(no),
+     	data : JSON.stringify(data),
      	contentType : "application/json; charset=UTF-8",
      	dataType : "json",
 		headers : headers,
