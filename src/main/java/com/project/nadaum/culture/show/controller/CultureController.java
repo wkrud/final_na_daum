@@ -366,7 +366,7 @@ public class CultureController {
 				} catch (Exception e) {
 					  e.printStackTrace();
 			}		  
-			return new ModelAndView("/culture/cultureView","list",list);
+			return new ModelAndView("/culture/cultureDetail","list",list);
 		}
 		//============================= 약속 ==========================================
 	/*	@PostMapping("/schedule.do")
@@ -392,7 +392,6 @@ public class CultureController {
 					resultList.add(apiCode);
 		     }
 		     
-
 			Map<String, Object> perforInfo = null;
 			List<Object> scrapList = new ArrayList<>();
 			
