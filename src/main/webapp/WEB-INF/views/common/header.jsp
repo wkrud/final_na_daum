@@ -13,12 +13,14 @@
 <%
     Date now = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM");
-    Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if(member.getBirthday() != null){
-	    Date birth = member.getBirthday();
-	    boolean isBirth = NadaumUtils.isBirthday(birth);
-	    pageContext.setAttribute("isBirth", isBirth);
-    }
+/*     if((Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null){
+	    Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    if(member.getBirthday() != null){
+		    Date birth = member.getBirthday();
+		    boolean isBirth = NadaumUtils.isBirthday(birth);
+		    pageContext.setAttribute("isBirth", isBirth);
+	    }    	
+    } */
 %>
 <!DOCTYPE html>
 <html>
