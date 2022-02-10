@@ -104,10 +104,10 @@ $(() => {
 		<form id="likeFrm">
 			<input type="hidden" name="apiCode" value="${apiCode}" />
 			<input type="hidden" name="id" value="${loginMember.id}" />
-		 	<button type="submit" class="btn btn-danger" id="like-btn" >스크랩 하기
+		 	<button type="submit" class="btn btn-danger" id="like-btn" data-like-yes-no="${likeYesNo}">스크랩 하기
 		 	</button>
 		</form>
-		
+		${selectCountLikes}
 		
 	<hr>
 	<!-- kakao 지도 -->
@@ -238,7 +238,47 @@ $(() => {
 		  </form>
 		</div>
 	<script>
-	
+	//스크랩===========================================================================================
+	$(likeFrm).submit((e) => {
+		e.preventDefault();
+
+		const csrfHeader = "${_csrf.headerName}";
+        const csrfToken = "${_csrf.token}";
+        const headers = {};
+        headers[csrfHeader] = csrfToken;
+        
+
+		const likeYesNo = $(e.target).data("likeYesNo");
+		console.log(likeYesNo);
+		
+		if(likeYesNo == 1){ 
+			$.ajax({
+				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
+				method: "POST",
+				headers : headers, 
+				data : $(likeFrm).serialize(),
+				success(resp){
+					const result = data["result"]
+					const selectCountLikes = data["selectCountLikes"];
+					console.log(`result : \${result}`);
+					console.log(`selectCountLikes : \${selectCountLikes}`);
+					if(result == 1) {
+						$(e.target).data("likeYesNo", 1);
+						console.log($(e.target).data("likeYesNo"));
+						
+						console.log("selectCountLikes = " + selectCountLikes);
+						console.log("좋아요 등록!");
+						alert("좋아요를 등록했습니다.");
+						}
+					console.log(resp);
+					location.reload();
+					alert(resp.msg);
+					},
+				error: console.log
+				})
+			};
+		});
+
 	
 	//댓글 공백 방지
 	$("#comment-enroll-btn").click((e) => {
@@ -309,30 +349,7 @@ $(() => {
 				});
 			});  
 			
-			//스크랩===========================================================================================
-			$(likeFrm).submit((e) => {
-				e.preventDefault();
-
-				const csrfHeader = "${_csrf.headerName}";
-		        const csrfToken = "${_csrf.token}";
-		        const headers = {};
-		        headers[csrfHeader] = csrfToken;
-		        
-		        
-				$.ajax({
-					url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
-					method: "POST",
-					headers : headers, 
-					data : $(likeFrm).serialize(),
-					success(resp){
-						console.log(resp);
-						location.reload();
-						alert(resp.msg);
-					},
-					error: console.log
-				});
-			});
-
+		
 			//친구검색	========================================================================================
 			var dest = '${loginMember.nickname}';
 			const $search = $("#searchFriend");

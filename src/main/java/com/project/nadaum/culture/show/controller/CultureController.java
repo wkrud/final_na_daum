@@ -510,7 +510,8 @@ public class CultureController {
 				map.put("result", result);
 				map.put("msg", msg);
 				map.put("selectCountLikes", selectCountLikes);
-
+				
+				log.debug("selectCountLikes={}", selectCountLikes);
 				System.out.println(map);
 					if(result == 1) {
 			            return ResponseEntity.ok(map);
