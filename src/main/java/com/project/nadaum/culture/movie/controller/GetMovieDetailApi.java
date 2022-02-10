@@ -40,7 +40,13 @@ public class GetMovieDetailApi {
 		NodeList nodeList = elem.getElementsByTagName(tagName);
 		int len = nodeList.getLength(); //검색한 태그의 글자 수 
 		
+		
+		
 		if(len == 0) return null; //NodeList의 글자수가 0개일시 null을 리턴.
+		
+		
+		
+		
 		
 		String[] tagArr = new String[len]; //태그 글자를 배열에 담음
 		for(int i = 0; i < len; i++) {

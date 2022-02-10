@@ -26,7 +26,7 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
 	integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
 	crossorigin="anonymous">
-
+<link href='${pageContext.request.contextPath}/resources/css/member/mypage/myHelpModal.css' rel='stylesheet' />
 <script>
 $(() => {	
 	$(myQuestions)
@@ -56,7 +56,9 @@ $(() => {
 						</a>
 					</c:forEach>
 				</div>			
-				${pagebar}
+				<div class="modal-pagebar">
+					${pagebar}
+				</div>
 			</div>
 		</div>
 	</div>

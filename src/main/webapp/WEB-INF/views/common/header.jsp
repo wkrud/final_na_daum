@@ -15,6 +15,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <title>${param.title}</title>
 
 <!-- 제이쿼리 -->
@@ -285,12 +287,6 @@
 	});
 	var dest = '${loginMember.nickname}';
 	
-	$("#profile").click(function(){
-		if($("#alarmList").hasClass("show")){
-			console.log($("#alarmList").hasClass("show"));
-			checkBedge();
-		}
-	});
 	/* 샘플코드 */
 	$("#sign-out").click(function(){
 		alert("로그아웃되었습니다.");
@@ -301,23 +297,32 @@
 			success(resp){
 				const $alarmList = $("#alarmList");
 				const $bedgeWrap = $(".bedge-wrap");
+				
 				$alarmList.empty();
 				$bedgeWrap.empty();
+				
+				let alarmDiv = `<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>`;
+				$alarmList.append(alarmDiv);
+				
 				let count = 0;
 				$(resp).each((i, v) => {
 					const {no, code, id, status, content, regDate} = v;
-					count++;
+					count++;					
 					
-					let alarmDiv = `<div class="card card-body alarmContent">\${content}</div>`;
 					if(code.substring(0,2) == 'he'){
 						alarmDiv = `<div class="card card-body alarmContent">
+						<input type="hidden" name="no" value="\${no}" />
 						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=\${code}">\${content}</a>								
 						</div>`;
-					}else{
-						alarmDiv = `<div class="card card-body alarmContent">\${content}</div>`;
+					}else if(code == 'fr'){
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />
+						
+						\${content}</div>`;
+					}else if(code.substring(0,4) == 'chat' || code.substring(0,4) == 'feco' || code.substring(0,4) == 'feli'){
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
-				});						
+				});
 				
 				if(count > 0){
 					let bedge = `
@@ -325,15 +330,28 @@
 					`;
 					
 					$bedgeWrap.append(bedge);
-				}						
+				}		
+				
+				$(".alarmContent").click((e) => {
+			    	let no = $(".alarmContent").find('input').val();
+			    	checkBedge(no);
+			    });
+							
 			},
 			error: console.log
 		});		
     };
     
-    const checkBedge = () => {
+    const checkBedge = (no) => {
+    	const csrfHeader = "${_csrf.headerName}";
+		const csrfToken = "${_csrf.token}";
+		const headers = {};
+		headers[csrfHeader] = csrfToken;
     	$.ajax({
 			url: `${pageContext.request.contextPath}/websocket/checkAlarm.do`,
+			method:'POST',
+			data: {no},
+			headers:headers,
 			success(resp){
 				countBedge();
 			},

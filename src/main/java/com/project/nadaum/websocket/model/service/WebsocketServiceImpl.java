@@ -21,8 +21,8 @@ public class WebsocketServiceImpl implements WebsocketService {
 	}
 
 	@Override
-	public int updateAlarm(Member member) {
-		return websocketDao.updateAlarm(member);
+	public int updateAlarm(Map<String, Object> map) {
+		return websocketDao.updateAlarm(map);
 	}
 
 	@Override

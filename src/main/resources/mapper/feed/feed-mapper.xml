@@ -13,7 +13,7 @@
 	</select>
 	
 	<select id="selectOnePersonFeedOnebyOne" resultType="feed">
-		select d.* from (select rownum as roww, f.* from feed f order by f.reg_date desc)d where d.roww = #{rownum}
+		select d.* from (select rownum as roww, f.* from feed f where f.writer = #{id} order by f.reg_date desc)d where d.roww = #{rownum}
 	</select>
 	
 	<select id="selectAllOneFeedAttachments" resultType="attachment">
@@ -21,7 +21,7 @@
 	</select>
 	
 	<select id="selectAllOneFeedComments" resultType="feedComment">
-		select * from feed_comment f join member m on f.comment_writer = m.id where f_code = #{code}
+		select * from feed_comment f join member m on f.comment_writer = m.id where f_code = #{code} order by f.reg_date
 	</select>
 	
 	<select id="selectOneFeedComment" resultType="feedComment">

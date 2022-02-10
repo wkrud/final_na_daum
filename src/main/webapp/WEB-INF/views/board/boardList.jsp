@@ -35,17 +35,7 @@ function goBoardForm(){
 }
 
 
-$(() => {
-	$(".board-title").click((e) => {
-		console.log(e.target); // td
-		const $tr = $(e.target).parent();
-		console.log($tr);
-		const code = ($tr).val();
-		console.log(code);
-		location.href = `${pageContext.request.contextPath}/board/boardDetail.do?code=\${code}`;
-	
-	});
-});
+
 </script>
 <body>
 	<section id="board-container" class="container">

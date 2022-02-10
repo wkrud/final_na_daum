@@ -30,101 +30,111 @@
 				</div>
 			</div>
 			<div class="question-list-body">
-				<%-- <div class="me-wrap">
-					<span>메모</span>
-					<div class="help-list-main">
-						<ul class="list-group list-group-flush">
-							<c:forEach items="${helpMeList}" var="help">
-								<c:if test="${help.category eq 'me'}">
-									<li class="list-group-item">
-										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-											${help.title}
-										</a>
-									</li>
-								</c:if>
-							</c:forEach>
-						</ul>
+				<c:if test="${checkHelp.ME > 0}">
+					<div class="me-wrap">
+						<span>메모</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpMeList}" var="help">
+									<c:if test="${help.category eq 'me'}">
+										<li class="list-group-item">
+											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+											</a>
+										</li>
+									</c:if>
+								</c:forEach>
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=me">더보기</a>
+						</div>
 					</div>
-					<div class="help-list-footer">
-						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=me">더보기</a>
+				</c:if>
+				<c:if test="${checkHelp.DY > 0}">
+					<div class="dy-wrap">
+						<span>다이어리</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpDyList}" var="help">
+									<c:if test="${help.category eq 'dy'}">
+										<li class="list-group-item">
+											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+											</a>
+										</li>											
+									</c:if>
+								</c:forEach>
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=dy">더보기</a>
+						</div>
 					</div>
-				</div> --%>
-				<div class="dy-wrap">
-					<span>다이어리</span>
-					<div class="help-list-main">
-						<ul class="list-group list-group-flush">
-							<c:forEach items="${helpDyList}" var="help">
-								<c:if test="${help.category eq 'dy'}">
-									<li class="list-group-item">
-										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-											${help.title}
-										</a>
-									</li>
-								</c:if>
-							</c:forEach>
-						</ul>
+				</c:if>
+				<c:if test="${checkHelp.AB > 0}">
+					<div class="ab-wrap">
+						<span>가계부</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpAbList}" var="help">
+									<c:if test="${help.category eq 'ab'}">
+										<li class="list-group-item">
+											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+											</a>
+										</li>
+									</c:if>
+								</c:forEach>
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=ab">더보기</a>
+						</div>
 					</div>
-					<div class="help-list-footer">
-						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=dy">더보기</a>
+				</c:if>
+				<c:if test="${checkHelp.FR > 0}">
+					<div class="fr-wrap">
+						<span>친구</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpFrList}" var="help">
+									<c:if test="${help.category eq 'fr'}">
+										<li class="list-group-item">
+											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+											</a>
+										</li>
+									</c:if>
+								</c:forEach>		
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=fr">더보기</a>
+						</div>
 					</div>
-				</div>
-				<div class="ab-wrap">
-					<span>가계부</span>
-					<div class="help-list-main">
-						<ul class="list-group list-group-flush">
-							<c:forEach items="${helpAbList}" var="help">
-								<c:if test="${help.category eq 'ab'}">
-									<li class="list-group-item">
-										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-											${help.title}
-										</a>
-									</li>
-								</c:if>
-							</c:forEach>
-						</ul>
+				</c:if>
+				<c:if test="${checkHelp.CU > 0}">
+					<div class="cu-wrap">
+						<span>문화</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpCuList}" var="help">
+									<c:if test="${help.category eq 'cu'}">
+										<li class="list-group-item">
+											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+											</a>
+										</li>
+									</c:if>
+								</c:forEach>		
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=cu">더보기</a>
+						</div>
 					</div>
-					<div class="help-list-footer">
-						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=ab">더보기</a>
-					</div>
-				</div>
-				<div class="fr-wrap">
-					<span>친구</span>
-					<div class="help-list-main">
-						<ul class="list-group list-group-flush">
-							<c:forEach items="${helpㄺList}" var="help">
-								<c:if test="${help.category eq 'fr'}">
-									<li class="list-group-item">
-										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-											${help.title}
-										</a>
-									</li>
-								</c:if>
-							</c:forEach>		
-						</ul>
-					</div>
-					<div class="help-list-footer">
-						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=fr">더보기</a>
-					</div>
-				</div>
-				<%-- <div class="cu-wrap">
-					<span>문화</span>
-					<div class="help-list-main">
-						<ul class="list-group list-group-flush">
-							<c:forEach items="${helpCuList}" var="help">
-								<c:if test="${help.category eq 'cu'}">
-									<li class="list-group-item">
-										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-											${help.title}
-										</a>
-									</li>
-								</c:if>
-							</c:forEach>		
-						</ul>
-					</div>
-					<div class="help-list-footer">
-						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=cu">더보기</a>
-					</div>
-				</div> --%>
+				</c:if>
 			</div>
 		</div>
 	</div>

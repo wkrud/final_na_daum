@@ -5,11 +5,15 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<%@ page import="com.project.nadaum.member.model.vo.MemberEntity" %>
 <sec:authentication property="principal" var="loginMember"/>
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판상세보기" name="title" />
 </jsp:include>
-<sec:authentication property="principal" var="loginMember"/>
+
 <style>
 div#board-container {
 	
@@ -36,6 +40,7 @@ border-right:0px;
  background-color:transparent;
  display:inline-block;
 margin : 0px;
+pointer-events: none; 
 }
 .id-detail{border:none;
 border-right:0px;
@@ -46,6 +51,7 @@ border-right:0px;
  display:inline-block;
 margin : 0px;
 font-size:20px;
+pointer-events: none; 
 }
 
 .detailcontent{
@@ -69,8 +75,8 @@ padding : 10px;
 			
 			<div class="container">
  			<div class="row row-cols-4">
-    		<div class="col">작성자 : <input type="text" class="detail" id="writer" name="id" value="${board.id}" readonly></div>
-    		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd'T'HH:mm"/></div>
+    		<div class="col">작성자 : <input type="text" class="detail" id="nickname" name="nickname" value="${board.nickname}" readonly></div>
+    		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd HH:mm"/></div>
     		<div class="col">조회수 : <input type="number" class="detail" id="readCount" name="readCount" title="조회수" value="${board.readCount}" readonly></div>
   			</div>
 			</div>			
@@ -95,7 +101,7 @@ padding : 10px;
 						data-id="${board.id}"
 						data-like-yes-no="${likeYesNo}">좋아요</button>
 						<br />
-						${board.likeCount}
+						<span class="countlikes">${selectCountLikes}</span>
 					</div>
 			<!-- 좋아요 -->	
 
@@ -129,7 +135,7 @@ padding : 10px;
 							<div class="form-inline mb-2">
 								<label for="replyId"><i
 									class="fa fa-user-circle-o fa-2x">
-									<input type="text" class="id-detail" name="id" id="id" value="${loginMember.id}" /></i>
+									<input type="text" class="id-detail" name="id" id="id" value="${loginMember.nickname}" /></i>
 									</label>
 							</div>
 							<form
@@ -178,7 +184,7 @@ padding : 10px;
 									<li class="list-group-item" id="commentList">
 										<div class="form-inline mb-2">
 											<label for="replyId"> <i
-												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
+												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.nickname}</strong>
 											</label> &nbsp;&nbsp;
 											<fmt:formatDate value="${comment.regDate}"	pattern="yyyy-MM-dd HH:mm" />
 										</div> <textarea class="form-control"
@@ -254,11 +260,15 @@ padding : 10px;
 	action="${pageContext.request.contextPath}/board/boardCommentDelete.do"
 	name="boardCommentDelFrm" method="POST">
 	<input type="hidden" name="commentCode" value="${comment.commentCode}" />
-	<input type="hidden" name="code" value="${board.code}" /> <input
-		type="hidden" name="id" id="id" value="${loginMember.id}" /> <input
-		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<input type="hidden" name="code" value="${board.code}" /> 
+	<input type="hidden" name="id" id="id" value="${loginMember.id}" /> 
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 <script>
+
+
+
+
 	//회원아이디와 글쓴이 아이디와 같은때 보임.
 	//삭제 버튼을 눌렀을 때 처리
 const deleteBoard = () => {
@@ -344,6 +354,11 @@ $(".btn-reply").click((e) => {
  $(document).on('click', '#likeButton', function(e) {
 	console.log("좋아요 나왕?");
 	
+	const csrfHeader = "${_csrf.headerName}";
+	const csrfToken = "${_csrf.token}";
+	const headers = {};
+	headers[csrfHeader] = csrfToken;
+	
 	const $code = $(e.target).data("boardCode");
 	const $id = $(e.target).data("id");
 	const likeYesNo = $(e.target).data("likeYesNo");
@@ -356,11 +371,11 @@ $(".btn-reply").click((e) => {
 	if(likeYesNo == 0){
 		
 		$.ajax({
-			url : "${pageContext.request.contextPath}/board/boardLikeAdd",
+			url : "${pageContext.request.contextPath}/board/boardLikeAdd.do",
 			method : "GET",
 			data : {
-				memberId : $memberId,
-				boardCode : $boardCode
+				id : $id,
+				code : $code
 			},
 			success(data){
 				const result = data["result"]
@@ -372,7 +387,7 @@ $(".btn-reply").click((e) => {
 					$(e.target).data("likeYesNo", 1);
 					console.log($(e.target).data("likeYesNo"));
 					
-					//$(e.target).text(newCountLikes);
+					$(".countlikes").text(selectCountLikes);
 					console.log("selectCountLikes = " + selectCountLikes);
 					console.log("좋아요 등록!");
 					alert("좋아요를 등록했습니다.");
@@ -388,11 +403,11 @@ $(".btn-reply").click((e) => {
 	}else{
 		
 		$.ajax({
-			url : "${pageContext.request.contextPath}/board/boardLikeDelete",
+			url : "${pageContext.request.contextPath}/board/boardLikeDelete.do",
 			method : "GET",
 			data : {
-				memberId : $memberId,
-				boardCode : $boardCode
+				id : $id,
+				code : $code
 			},
 			success(data){
 				const result = data["result"];
@@ -404,7 +419,7 @@ $(".btn-reply").click((e) => {
 					$(e.target).data("likeYesNo", 0);
 					console.log($(e.target).data("likeYesNo"));
 					
-					//$(e.target).text(newCountLikes);
+					$(".countlikes").text(selectCountLikes);
 					console.log("selectCountLikes = " + selectCountLikes);
 					console.log("좋아요 취소!");
 					alert("좋아요를 취소했습니다.");
