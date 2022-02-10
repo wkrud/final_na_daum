@@ -51,6 +51,7 @@ import com.project.nadaum.member.model.service.MailSendService;
 import com.project.nadaum.member.model.service.MemberService;
 import com.project.nadaum.member.model.service.MessageService;
 import com.project.nadaum.member.model.vo.Member;
+import com.project.nadaum.member.model.vo.Search;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -855,18 +856,22 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberUpdate.do")
-	public ResponseEntity<?> memberUpdate(Member member, @AuthenticationPrincipal Member oldMember){
+	public ResponseEntity<?> memberUpdate(Member member, @AuthenticationPrincipal Member oldMember) throws Exception{
 		int result = 0;
 		try {
 			log.debug("member = {}", member);
 			log.debug("oldMember = {}", oldMember);
 			
+			if(member.getSearch() != null) {
+				oldMember.setSearch(member.getSearch());
+			}else if(member.getBirthday() != null){
+				oldMember.setBirthday(member.getBirthday());
+			}
+			
 			result = memberService.updateMember(member);
 			
-			oldMember.setEmail(member.getEmail());
-			oldMember.setAddress(member.getAddress());
-			oldMember.setSearch(member.getSearch());
-			oldMember.setBirthday(member.getBirthday());
+//			oldMember.setEmail(member.getEmail());
+//			oldMember.setAddress(member.getAddress());			
 			
 			Authentication newAuthentication = new UsernamePasswordAuthenticationToken(oldMember, oldMember.getPassword(), oldMember.getAuthorities());		
 			SecurityContextHolder.getContext().setAuthentication(newAuthentication);
@@ -874,8 +879,7 @@ public class MemberController {
 			log.error(e.getMessage(), e);
 			throw e;
 		}		
-		return ResponseEntity.ok(1);
-		
+		return ResponseEntity.ok(1);		
 	}
 	
 	@PostMapping("/memberChangeLike.do")

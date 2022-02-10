@@ -5,8 +5,14 @@
 }
 
 /* 친구관리 */
+.find-friend-page-button{
+	text-align: right;
+}
 .friend{
 	margin-left: 15px;
+}
+.friends-list .friends-section{
+	min-height: 107px;
 }
 .friend-btn button{
 	
@@ -20,4 +26,7 @@
 
 .follower{
 	margin-left: 15px;
+}
+.followers-list .followers-section{
+	min-height: 107px;
 }

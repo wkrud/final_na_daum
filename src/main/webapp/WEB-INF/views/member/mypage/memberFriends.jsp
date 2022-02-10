@@ -12,7 +12,9 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <div class="member-body">
-	<button type="button" class="btn btn-outline-warning" id="searchFriendBtn">친구검색</button>
+	<div class="find-friend-page-button">
+		<button type="button" class="btn btn-outline-warning" id="searchFriendBtn">친구검색</button>
+	</div>
 	<div class="friend-list-wrap">
 		<div class="friends-list">
 			<div class="friend">
@@ -85,14 +87,33 @@
 	</div>
 	<div class="search-right-wrap">
 		<div class="search-right">
-			<form action="">
-				<label for="search">검색여부</label>
-				<input type="checkbox" name="search" id="search" />
-			</form>
+			<label for="search">검색여부</label>
+			<input type="checkbox" name="search" id="search" ${loginMember.search eq 'T' ? 'checked' : ''} />			
 		</div>
 	</div>
 </div>
 <script>
+const $search = $("#search");
+$search.change((e) => {
+	let searchCheck = '';
+	let id = '${loginMember.id}';
+	if($search.is(':checked')){
+		searchCheck = 'T';
+	}else{
+		searchCheck = 'F';
+	}
+	$.ajax({
+		url: '/nadaum/member/memberUpdate.do',
+		method: 'POST',
+		headers: headers,
+		data: {id,search:searchCheck},
+		success(resp){
+			console.log(resp);
+		},
+		error: console.log
+	});
+});
+
 $(function(){
 	$(".friends-section").slick({
 		infinite: true,
@@ -118,7 +139,7 @@ $(function(){
 	});
 });
 
-$(".friend-wrap").click((e) => {
+/* $(".friend-wrap").click((e) => {
 	let guest = $(e.currentTarget).find('span.friend-name').html();
 	if(confirm(guest + '님과 DM을 하시겠습니까?')){
 		var room = Math.floor(Math.random() * 100000);
@@ -131,7 +152,7 @@ $(".friend-wrap").click((e) => {
 		chatInvite('chat', '${loginMember.nickname}', guest, room);
 		windowObjHistorySearch = window.open(url, name, spec);	
 	}
-});
+}); */
 
 $(searchFriendBtn).click((e) => {
 	const spec = "left=500px, top=500px, width=265px, height=285px";
@@ -152,10 +173,10 @@ $(".end-friend").click((e) => {
 
 const updateFriend = (check, friendNickname) => {
 	
-	const csrfHeader = "${_csrf.headerName}";
+	/* const csrfHeader = "${_csrf.headerName}";
 	const csrfToken = "${_csrf.token}";
 	const headers = {};
-	headers[csrfHeader] = csrfToken;
+	headers[csrfHeader] = csrfToken; */
 	
 	$.ajax({
 		url: '${pageContext.request.contextPath}/member/mypage/updateFriend.do',
