@@ -3,6 +3,7 @@ package com.project.nadaum.accountbook.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -342,12 +343,14 @@ public class AccountBookController {
 			  
 		//엑셀
 		@GetMapping("/excel")
-		public void downloadExcel(HttpServletResponse resp, @AuthenticationPrincipal Member member) throws IOException{
+		public void downloadExcel(HttpServletResponse resp, @AuthenticationPrincipal Member member, @RequestParam String startDate, String endDate) throws IOException{
 			Map<String, Object> map = new HashMap<>();
 			//엑셀에 담을 리스트 조회
 			String id = member.getId();
 			map.put("id", id);
-			List<AccountBook> list = accountBookService.selectAllAccountList(map);
+			map.put("startDate", startDate);
+			map.put("endDate", endDate);
+			List<AccountBook> list = accountBookService.downloadExcel(map);
 			log.debug("list={}",list);
 			
 				//엑셀 파일 생성
@@ -391,7 +394,7 @@ public class AccountBookController {
 					Row row = sheet.createRow(rowNo++);
 					row.createCell(0).setCellValue(format.format(accountbook.getRegDate()));
 					if(accountbook.getPayment() == null) {
-						row.createCell(1).setCellValue("null");
+						row.createCell(1).setCellValue("미입력");
 					} else {
 						row.createCell(1).setCellValue(accountbook.getPayment().equals("card") ? "카드" : "현금");						
 					}

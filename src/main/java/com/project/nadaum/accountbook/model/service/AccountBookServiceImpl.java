@@ -82,6 +82,11 @@ public class AccountBookServiceImpl implements AccountBookService {
 		return accountBookDao.paymentList(param);
 	}
 
+	@Override
+	public List<AccountBook> downloadExcel(Map<String, Object> map) {
+		return accountBookDao.downloadExcel(map);
+	}
+
 	
 	
 	

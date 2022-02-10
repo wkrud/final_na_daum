@@ -126,6 +126,19 @@
 	  		reg_date desc
 	</select>
 	
+	<!-- 엑셀 다운로드 리스트 -->
+	<select id="downloadExcel" resultType="com.project.nadaum.accountbook.model.vo.AccountBook">
+		select
+		    *
+		from
+		    account_book
+		where
+		    id=#{id}
+		    and
+		    reg_date between #{startDate} and #{endDate}
+		order by reg_date desc
+	</select>
+	
 	<select id="chartValue" resultMap="chartListMap">
 	
 		select

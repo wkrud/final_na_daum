@@ -35,6 +35,8 @@ public interface AccountBookService {
 
 	List<Map<String, Object>> paymentList(Map<String, Object> param);
 
+	List<AccountBook> downloadExcel(Map<String, Object> map);
+
 
 
 }

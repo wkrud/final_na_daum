@@ -20,12 +20,26 @@
 <%
 	Date date = new Date();
 	SimpleDateFormat sdf = new SimpleDateFormat("M월");
+	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 	String today = sdf.format(date);
+	String today2 = sdf2.format(date);
 %>
 
 <div class="accountWrapper">
+	<div class="modal-background excelModal">
+	<div class="findExcelDate">
+		<p class="excel-ment">기간을 선택하세요.</p>
+		<button id="modalCloseBtn"><i class="fas fa-sign-in-alt"></i></button>
+		<form action="${pageContext.request.contextPath}/accountbook/excel">
+			<input type="text" name="startDate" id="excelDate1" class="excelbox" readonly value="<%=today2%>"/>
+			<input type="text" name="endDate" id="excelDate2" class="excelbox" readonly value="<%=today2%>"/>
+			<button>다운로드</button>
+		</form>
+	</div>
+	</div>
+
 <!-- 가계부 입력 모달창 -->
-	<div class="modal-background">
+	<div class="modal-background insertModal">
 	<div class="insertAccountModal">
 		<input type="hidden" name="incomeExpense" id="income" value="I" />
 		<input type="hidden" name="incomeExpense" id="expense" value="E" /> 
@@ -132,11 +146,10 @@
 		</div>
 		<!-- 필터링 -->
 		<div class="fillterSection">
-			<button id="AllListBtn" class="defaultBtn" onclick="location href='${pageContext.request.contextPath}/accountbook/selectAllAccountList.do';">전체보기</button>
 			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=">전체보기</a>
 			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=I">수입</a>
 			<a href="${pageContext.request.contextPath}/accountbook/incomeExpenseFilter.do?incomeExpense=E">지출</a>
-			<a href="${pageContext.request.contextPath}/accountbook/excel">엑셀 다운로드</a>
+			<button id="excelModalBtn" class="defaultBtn">엑셀 다운로드</button>
 		</div>
 		<!-- 가계부 리스트 -->
 		<div id="account_list">

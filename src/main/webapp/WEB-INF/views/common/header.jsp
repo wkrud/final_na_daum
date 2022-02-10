@@ -27,6 +27,12 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 <!-- 제이쿼리 ui css -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- datepicker css -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/datepicker.css" /> 
+<!-- datepicker bcg img -->
+<style>
+ .ui-widget-header .ui-icon { background-image: url('${pageContext.request.contextPath}/resources/images/common/btns.png'); } 
+</style>
 
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
