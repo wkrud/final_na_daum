@@ -69,11 +69,12 @@ public class GetMovieDetailApi {
 	            
 	            while ((line = br.readLine()) != null) {
 	                result = result.concat(line);
-	                System.out.println("line = "+ line);                
+	                System.out.println("line = "+ line); //api 불러서 그냥읽음 가공x        
 	            }            
 	            
 	            // JSON parser 만들어 문자열 데이터를 객체화한다.
-	            JSONParser parser = new JSONParser();
+	            //JSONObject -> 데이터를 key:value
+	            JSONParser parser = new JSONParser(); // JSONParser -> 파싱
 	            JSONObject obj = (JSONObject)parser.parse(result);
 	            System.out.println("obj = "+ obj); 
 	            
