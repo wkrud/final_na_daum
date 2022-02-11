@@ -39,7 +39,7 @@ function fnReloadBlock(){
 		event.returnValue = false;
 	}
 }
-/* document.onkeydown = fnReloadBlock; */
+document.onkeydown = fnReloadBlock;
 </script>
 </head>
 <body>
