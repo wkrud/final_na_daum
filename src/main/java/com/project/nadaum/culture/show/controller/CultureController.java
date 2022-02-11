@@ -368,14 +368,7 @@ public class CultureController {
 			}		  
 			return new ModelAndView("/culture/cultureDetail","list",list);
 		}
-		//============================= 약속 ==========================================
-	/*	@PostMapping("/schedule.do")
-		public String insertSchedule() {
-			
-			return null;
-			
-		}
-*/
+
 		//============================= 스크랩 ==========================================
 		//스크랩 목록
 		@PostMapping("/likes.do")
