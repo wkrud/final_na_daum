@@ -122,6 +122,16 @@ public class FeedServiceImpl implements FeedService {
         return feedDao.insertAttachment(attach);
     }
 
+	@Override
+	public List<Map<String, Object>> addFeedMain(Map<String, Object> map) {
+		return feedDao.addFeedMain(map);
+	}
+
+	@Override
+	public List<Feed> feedMain() {
+		return feedDao.feedMain();
+	}
+
 	
 	
 	
