@@ -110,12 +110,15 @@ const $emotion = $(".emotion-wrap");
 const $invite = $(".invite-friend");
 const $inviteBtn = $(".invite-friend-options");
 var chatRoomPeople = [];
+var set = new Set(chatRoomPeople);
+var uniquePeople = [...set];
 
 $(() => {
 	connect();
 	$emotion.hide();
 	$option.hide();
 	$invite.hide();
+	chatRoomPeople.push('${loginMember.nickname}');
 });
 
 $inviteBtn.click((e) => {
@@ -129,9 +132,13 @@ $inviteBtn.click((e) => {
 	}else if($(e.target).attr('class') == 'invite-friend-nickname'){
 		guestNickname = $(e.target).text();
 	}
-	console.log(guestNickname);
-	reInvite('chat', '${loginMember.nickname}', guestNickname, room);
-	$invite.hide();
+	
+	if(uniquePeople.includes(guestNickname)){
+		alert('이미 같이 있어요');
+	}else{
+		reInvite('chat', '${loginMember.nickname}', guestNickname, room);
+		$invite.hide();		
+	}
 });
 
 $msgArea.click((e) => {
@@ -218,6 +225,11 @@ function connect() {
 				</div>
 				</div>`;
 				guestNickname = resp.writer;
+				
+				if(!chatRoomPeople.includes(guestNickname))
+					chatRoomPeople.push(guestNickname);			
+				
+				currentPeopleCheck(chatRoomPeople);
 				console.log('guestNickname = ' + guestNickname);
 			}else if(resp.writer != '${loginMember.nickname}' && resp.type == 'EMOTION'){
 				msg = `<div class='guest-msg'>
@@ -274,10 +286,37 @@ function connect() {
 				</div>
 				</div>`;
 				guestNickname = resp.writer;
+				settingCheck('N', guestNickname);
+			}else if(resp.type == 'CHECK'){
+				settingCheck(resp.check, 'N');
 			}
 			showMsg(msg);
 		});
 	});
+};
+
+function settingCheck(check, out){
+	if(out === 'N'){
+		chatRoomPeople = [];
+		$(check).each((i, v) => {
+			chatRoomPeople.push(v);
+		});
+		set = new Set(chatRoomPeople);
+		uniquePeople = [...set];	
+	}else{
+		chatRoomPeople = chatRoomPeople.filter((e) => e !== out);
+		set = new Set(chatRoomPeople);
+		uniquePeople = [...set];
+	}
+};
+
+function currentPeopleCheck(checkArr){
+	var checkData = {
+		'room':room,
+		'type':'CHECK',
+		'check':checkArr
+	};
+	stompClient.send("/nadaum/chat/checkPeople/" + room,{},JSON.stringify(checkData));
 };
 
 function send(){
@@ -292,7 +331,6 @@ function send(){
 		};
 	console.log('msg = ' + msg);
 	stompClient.send("/nadaum/chat/" + room,{},JSON.stringify(joinData));
-	
 };
 
 function emotionSend(emo){

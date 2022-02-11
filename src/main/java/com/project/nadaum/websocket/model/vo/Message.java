@@ -24,5 +24,6 @@ public class Message implements Serializable {
 	private String time;
 	private String greeting;
 	private String out;
+	private String[] check;
 
 }
