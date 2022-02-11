@@ -26,6 +26,8 @@ public interface FeedService {
 
 	List<Map<String, Object>> selectAddFeed(Map<String, Object> map);
 
+	int feedEnroll(Feed feed);
+
 	
 
 }
