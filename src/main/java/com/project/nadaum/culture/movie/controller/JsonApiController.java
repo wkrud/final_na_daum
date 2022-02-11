@@ -12,36 +12,29 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.project.nadaum.culture.comment.model.service.CommentService;
-import com.project.nadaum.culture.comment.model.vo.Comment;
 import com.project.nadaum.culture.movie.model.service.MovieService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping("/movie")
-public class GetMovieApi {
+//@RequestMapping("/movie")
+public class JsonApiController {
+	
+	//	@Autowired
+	//	private MovieService movieService;
 
-	@Autowired
-	private MovieService movieService;
-	
-	@Autowired
-	private CommentService commentService;
-	
-	//영화API
-		@GetMapping("/movieList.do")
-		public ModelAndView getMovieApi(Model model) {
-			  // TMDB api
-			List<Map<String, Object>> list = new ArrayList<>();
+	 public void widgetMovie(Model model) {
+	        // TMDB api
+			List<Map<String, Object>> widgetMovieList = new ArrayList<>();
 		
 	        try {
 	            // 인증키
@@ -51,8 +44,6 @@ public class GetMovieApi {
 	            urlStr += "?"+ URLEncoder.encode("api_key","UTF-8") +"=" + serviceKey;
 	            urlStr += "&"+ URLEncoder.encode("language","UTF-8") +"=ko-kr";
 	            urlStr += "&"+ URLEncoder.encode("page","UTF-8") +"=1";
-//	            urlStr += "&"+ URLEncoder.encode("year","UTF-8") +"=2019";
-//	            urlStr += "&"+ URLEncoder.encode("_returnType","UTF-8") +"=json";
 	            
 	            URL url = new URL(urlStr);
 	            
@@ -69,10 +60,8 @@ public class GetMovieApi {
 	            }            
 	            
 	            // JSON parser 만들어 문자열 데이터를 객체화한다.
-	            
-	            JSONParser parser = new JSONParser(); //
-	            
-	            JSONObject obj = (JSONObject)parser.parse(result); //
+	            JSONParser parser = new JSONParser();
+	            JSONObject obj = (JSONObject)parser.parse(result);
 	            System.out.println("obj = "+ obj); 
 	            
 	            // list 아래가 배열형태로
@@ -92,8 +81,6 @@ public class GetMovieApi {
 	                String releaseDate = (String) movie.get("release_date");	// 개봉날짜
 	                String title = (String) movie.get("title");            // 제목
 	                Double voteAverage = Double.parseDouble(String.valueOf(movie.get("vote_average")));        // 평균 평점
-	               
-	                       
 	                
 	                Map<String, Object> map = new HashMap<>();
 	                map.put("apiCode", id);
@@ -103,18 +90,20 @@ public class GetMovieApi {
 	                map.put("title", title);
 	                map.put("voteAverage", voteAverage);
 	                
-	                log.debug("map = {}" ,map);
+//	                log.debug("map = {}" ,map);
+	                System.out.println("map = "+ map);                
 	                
-	                list.add(map);
+	                widgetMovieList.add(map);
 	            }
 	            
-	            log.debug("list = {}" , list);
+//	            log.debug("widgetMovieList = {}" , widgetMovieList);
+	            System.out.println("widgetMovieList = "+ widgetMovieList);                
 	            br.close();
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-	        return new ModelAndView("/movie/movieList", "list", list);
+	        	model.addAttribute("widgetMovieList", widgetMovieList);
 	    }
 	
-}
 	
+}
