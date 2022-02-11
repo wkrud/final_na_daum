@@ -24,6 +24,8 @@ public interface FeedService {
 
 	int deleteComment(Map<String, Object> map);
 
+	List<Map<String, Object>> selectAddFeed(Map<String, Object> map);
+
 	
 
 }

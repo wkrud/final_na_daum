@@ -93,6 +93,11 @@ public class FeedServiceImpl implements FeedService {
 		return feedDao.deleteComment(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectAddFeed(Map<String, Object> map) {
+		return feedDao.selectAddFeed(map);
+	}
+
 	
 	
 	
