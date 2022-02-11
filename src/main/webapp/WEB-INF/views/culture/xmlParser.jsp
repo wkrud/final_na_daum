@@ -6,7 +6,11 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="문화" name="title"/>
 </jsp:include>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/culture/cultureBoardList.css" />
+<title>Insert title here</title>
+
+</head>
+<script>
+</script>
 <style>
 section#content{
 }
@@ -39,31 +43,80 @@ padding: 15px;
 .form-group{
 padding-left: 20px;
 }
+@charset "UTF-8";
+/* 페이지 설정 */
+#container{
+padding: 0;
+}
+.container{
+	padding: 0;
+}
+section{
+	background-color: #FFFBF5;
+	
+}
+body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #EEEEEE;
+}
+
+/* 썸네일 이미지 설정*/
+
+.culture-thumnail{
+	position: relative;
+	padding: 0;
+}
+.culture-thumnail img{
+	height: 450px;
+	width: 100%;
+	opacity: 0.75;
+}
+.title{
+	position: absolute;
+	top: 30%;
+    left: 60%;
+}
+/*검색 폼 */
+.search-form{
+	position: absolute;
+    background: #F2F2F2;
+    left: 10%;
+    bottom: -10%;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px grey;
+    margin-bottom: 20px;
+}
+
+
+/* 오렌지색 버튼*/
+.btn {
+  border-radius: 10px;
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+  margin-left: 30px;
+}
+
+.btn:active {
+  transform: translate(0px, 5px);
+  -webkit-transform: translate(0px, 5px);
+  box-shadow: 0px 1px 0px 0px;
+}
+
+.orange {
+  background-color: #F6953C;
+  box-shadow: 0px 4px 0px 0px #CD6509;
+}
+
+.orange:hover {
+  background-color: #FF983C;
+}
 </style>
-<script>
-//cultureDetail
-/* $(() => {
-		
-		//날짜 넣기
-		 const value = new Date();
-		
-		const f = n => n < 10 ? "0" + n : n;
-		// yyyy-mm-dd
-		const today = `\${value.getFullYear()}-\${f(value.getMonth() + 1)}-\${f(value.getDate())}`;
-		console.log(today);
-		
-		start = document.getElementById("startDate");
-		start.value = today;
-		
-		const after_month = `\${value.getFullYear()}-\${f(value.getMonth() + 2)}-\${f(value.getDate())}`;
-		console.log(after_month);
-		end = document.getElementById("endDate");
-		end.value = after_month; 
-}); */
-
-
-
-</script>
 <body>
 	<div class="container">
 		<div class="culture-thumnail">
@@ -120,41 +173,4 @@ padding-left: 20px;
 		</div>
 	</div>
 </body>
-<script>
- $(searchFrm).submit((e) => {
-	e.preventDefault();
-	
-	
-/* 	const startDate = $(e.target).find("[id=startDate]").val();
-	console.log(startDate); */
-	
-/* 	var area_opt = document.getElementById("search-area");
-	var area = area_opt.options[area_opt.selectedIndex].value;
-	
-	console.log(area); */
-
-	
-	const csrfHeader = "${_csrf.headerName}";
-    const csrfToken = "${_csrf.token}";
-    const headers = {};
-    headers[csrfHeader] = csrfToken;
-    
-    
-	$.ajax({
-		headers : headers, 
-		url: `${pageContext.request.contextPath}/culture/board/${page}`,
-		method: "POST",
-		data : $(searchFrm).serialize(),
-		success(resp){
-			console.log(resp);
-		},
-		error: console.log
-	});
-	
-}); 
-</script>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
-</body>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+</html>
