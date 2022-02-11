@@ -154,7 +154,12 @@ public class FeedController {
 	}
 	
 	@GetMapping("/feedMain.do")
-	public void feedMain() {}
+	public void feedMain(Model model) {
+		List<Feed> feed = feedService.feedMain();
+		log.debug("feed = {}", feed);
+		
+		model.addAttribute("feed", feed);
+	}
 
 	@GetMapping("/addFeedPage.do")
 	public ResponseEntity<?> addFeedPage(@RequestParam Map<String, Object> map){
@@ -202,5 +207,20 @@ public class FeedController {
         
         return "redirect:/feed/feedMain.do";
     }
+	
+	@GetMapping("/addFeedMain.do")
+	public ResponseEntity<?> addFeedMain(@RequestParam Map<String, Object> map){
+		log.debug("map = {}", map);
+		int page = Integer.parseInt((String) map.get("page"));
+		int limit = 2;
+		int offset = (page - 1) * limit;
+		map.put("limit", limit);
+		map.put("offset", offset);
+		
+		List<Map<String, Object>> addFeed = feedService.addFeedMain(map);
+		log.debug("addFeed = {}", addFeed);
+		
+		return ResponseEntity.ok(addFeed);
+	}
 	
 }

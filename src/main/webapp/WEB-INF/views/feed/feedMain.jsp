@@ -100,7 +100,10 @@
 	margin: 9px;
     width: 200px;
 }
+.commentBtn{cursor: pointer;}
+.likeBtn{cursor: pointer;}
 </style>
+
 <script>
 // 피드내용 체크
 function feedValidate(){
@@ -150,7 +153,7 @@ $(document).ready(function (e){
         //파일명이 길면 파일명...으로 처리
         var fileName = f.name;
         if(fileName.length > 10){
-          fileName = fileName.substring(0,7)+"...";
+          fileName = fileName.substring(0,7) + "...";
         }    
         //div에 이미지 추가
         var str = '<div style="display: inline-flex; padding: 10px; list-style: none;"><li>';
@@ -231,20 +234,22 @@ $(document).ready(function (e){
 	</form>
 </div>
 	<!-- 피드 목록 -->
-	<div class="feedList" id="feedList">
-	<!-- 피드 출력되는 부분 -->
-	</div>
-	<div class="paginaiton"></div>
-		<div class="feedItem" id="941">
+	<c:forEach items="${feed}" var="feed">
+		<div class="feedItem" id="${feed.CODE}">
 			<div class="feedHeader">
-				<div class="user" data-user="8186">
+				<div class="user" data-user="${feed.WRITER}">
 					<div class="userPic">
+					<c:if test="${not empty feed.PROFILE}">
 						<img
-							src="https://indiz.kr/folder-image/2021-10/2021-10-24/profile-image/20211024215709-8186.png">
+							src="${feed.PROFILE}">
+					</c:if>
+					<c:if test="${empty feed.PROFILE}">
+						<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" />
+					</c:if>
 					</div>
 					<div class="userInfo">
-						<div class="userNickname">ENTER</div>
-						<div class="userUploadDate"><fmt:formatDate value="" pattern="yyyy-MM-dd"/></div>
+						<div class="userNickname">${feed.NICKNAME}</div>
+						<div class="userUploadDate"><fmt:formatDate value="${feed.REGDATE}" pattern="yyyy-MM-dd"/></div>
 					</div>
 				</div>
 				<div class="moreBtn">
@@ -261,20 +266,27 @@ $(document).ready(function (e){
 			</div>
 			<div class="feedBody">
 				<div class="feedPic">
-					<img
-						src="https://indiz.kr/folder-image/2022-02/2022-02-07/feed-image/20220207220534-8186-0.jpg">
+					<c:if test="${not empty feed.FILENAME}">
+						<img
+							src="${pageContext.request.contextPath}/resources/upload/feed/img/${feed.FILENAME}">
+					</c:if>
+					<c:if test="${empty feed.FILENAME}">
+					</c:if>	
 				</div>
 				<div class="feedBodyBtn">
 					<div class="likeBtn like">
 						<i class="fa fa-thumbs-up"></i>
-						<div class="likeNum">2</div>
+						<div class="likeNum">${feed.LIKES}</div>
 					</div>
-					<div class="commentBtn">댓글(0)</div>
+					<div class="commentBtn">댓글(${feed.COMMENTS})</div>
 				</div>
-				<div class="feedContent">(대충 오랜만이라는 글)</div>
+				<div class="feedContent">${feed.CONTENT}</div>
 			</div>
 		</div> 
-		 
+	</c:forEach>
+	<div class="feedList" id="feedList">
+	<!-- 피드 출력되는 부분 --> 	 
+	</div>	 
 		
 	<!-- 피드 읽기 모달 -->
 	<div class="modal fade" id="readFeedModal" tabindex="-1" role="dialog"
@@ -287,60 +299,199 @@ $(document).ready(function (e){
 	</div>
 </article>
 <script>
-function YesScroll () {
-	const pagination = document.querySelector('.paginaiton'); // 페이지네이션 정보획득
-	const fullContent = document.querySelector('.infinite'); // 전체를 둘러싼 컨텐츠 정보획득
-	const screenHeight = screen.height; // 화면 크기
-	let oneTime = false; // 일회용 글로벌 변수
-	document.addEventListener('scroll',OnScroll,{passive:true}) // 스크롤 이벤트함수정의
-	 function OnScroll () { //스크롤 이벤트 함수
-	   const fullHeight = fullContent.clientHeight; // infinite 클래스의 높이   
-	   const scrollPosition = pageYOffset; // 스크롤 위치
-	   if (fullHeight-screenHeight/2 <= scrollPosition && !oneTime) { // 만약 전체높이-화면높이/2가 스크롤포지션보다 작아진다면
-	     oneTime = true; // oneTime 변수를 true로 변경해주고,
-	     madeBox(); // 컨텐츠를 추가하는 함수
-	   }
-	 }
-	 }
-	YesScroll();
 
-//스크롤 페이징
-fnPaging();
-function fnPaging(Start) {
-    var LimitCount = 3;  // 몇개의 데이터를 가져올지 설정
-    var Start = 1;
-    var IndexStart = (Start - 1) * LimitCount; // 몇번째 인덱스 부터 데이터를 가져올지 설정
- 
-    //controller에 설정된 페이지 정보를 전달
-    var objData = { "IndexStart" : IndexStart, "limit" : LimitCount }; 
- 
-    const csrfHeader = "${_csrf.headerName}";
-	const csrfToken = "${_csrf.token}";
-	const headers = {};
-	headers[csrfHeader] = csrfToken;
-    $.ajax( {
-        url : "${pageContext.request.contextPath}/feed/feedMain.do",
-        type : "POST",
-        headers: headers,
-        data : objData,
-        dataType : 'json',
-        async : false,   // async 는 반드시 false로 사용
-        success : function(data){
-        	var f = document.getElementById(feedList);
-        	for (var i = 0; i < data.length; i++){
-        		console.log(data[i].content);
-        		
-        	    }   
-        	$('.feedList').append(data);
-        },
-        error : console.log
-    });
+function getFormatDate(date){
+    var year = date.getFullYear();              
+    var month = (1 + date.getMonth());          
+    month = month >= 10 ? month : '0' + month;  
+    var day = date.getDate();                   
+    day = day >= 10 ? day : '0' + day;          
+    return  year + '-' + month + '-' + day;      
+}
 
-} 
-$(window).scroll(function() { 
-	if($(window).scrollTop() == $(document).height() - $(window).height()){ 
-		fnPaging();
-	} 
+const $feedArea = $(".feedList");
+const $chatRoom = $("#make-chat-room");
+const $detailBody = $(".feed-detail-modal-body");
+var loading = false;
+var page = 2;
+
+/* 페이징 id, page */
+const addFeedPage = (id, page) => {
+	
+	$.ajax({
+		url: '${pageContext.request.contextPath}/feed/addFeedMain.do',
+		data: {id, page},
+		success(resp){
+			const $resp = $(resp);
+			let feedDiv = ``;
+			
+			$resp.each((i,{CODE,WRITER,NICKNAME,CONTENT,REGDATE,PROFILE,FILENAME,COMMENTS,LIKES,LOGINTYPE}) => {
+				let rd = new Date(REGDATE);
+				feedDate = getFormatDate(rd);
+
+				if(FILENAME != null){
+					feedDiv = `
+					<div class="paginaiton"></div>
+						<div class="feedItem" id="\${CODE}">
+							<div class="feedHeader">
+								<div class="user" data-user="\${WRITER}">
+									<div class="userPic">
+									<c:if test="\${LOGINTYPE eq 'K'}">
+										<img src="\${PROFILE}" alt="" />
+									</c:if>
+									<c:if test="\${LOGINTYPE eq 'D'}">
+										<c:if test="\${PROFILE eq 'N'}">							
+											<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" />
+										</c:if>
+										<c:if test="${member.profileStatus eq 'Y'}">
+											<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/${member.profile}" alt="" />
+										</c:if>
+									</c:if>	
+									
+									<c:choose>
+								        <c:when test="${empty PROFILE}">
+								        	<img src="\${PROFILE}" />
+								        </c:when>         
+								        <c:otherwise>
+								       	 	<img src="${pageContext.request.contextPath}/resources/upload/member/profile/image.png" alt="" />
+								         </c:otherwise>
+								    </c:choose>							
+									</div>
+									<div class="userInfo">
+										<div class="userNickname">\${NICKNAME}</div>
+										<div class="userUploadDate">\${feedDate}</div>
+									</div>
+								</div>
+								<div class="moreBtn">
+									<a class="btn" role="button" data-toggle="dropdown"
+										aria-haspopup="true" aria-expanded="false"> <i
+										class="fa fa-ellipsis-h"></i>
+									</a>
+									<!-- dropdown-menu -->
+									<div class="dropdown-menu dropdown-menu-right"
+										aria-labelledby="dropdownMenuLink">
+										<a class="dropdown-item feedReport">신고하기</a>
+									</div>
+								</div>
+							</div>
+							<div class="feedBody">
+								<div class="feedPic">
+									<img
+										src="${pageContext.request.contextPath}/resources/upload/feed/img/\${FILENAME}">
+								</div>
+							</div>
+								<div class="feedBodyBtn">
+									<div class="likeBtn like">
+										<i class="fa fa-thumbs-up"></i>
+										<div class="likeNum">\${LIKES}</div>
+									</div>
+									<div class="commentBtn">댓글(\${COMMENTS})</div>
+								</div>
+								<div class="feedContent">\${CONTENT}</div>
+							</div>
+						</div> `;
+				} else {
+					feedDiv = `
+						<div class="paginaiton"></div>
+							<div class="feedItem" id="\${CODE}">
+								<div class="feedHeader">
+									<div class="user" data-user="\${WRITER}">
+										<div class="userPic">
+										<c:choose>
+									        <c:when test="${empty PROFILE}">
+									        	<img src="\${PROFILE}" />
+									        </c:when>         
+									        <c:otherwise>
+									       	 	<img src="${pageContext.request.contextPath}/resources/upload/member/profile/image.png" alt="" />
+									         </c:otherwise>
+								    	</c:choose>
+										</div>
+										<div class="userInfo">
+											<div class="userNickname">\${NICKNAME}</div>
+											<div class="userUploadDate">\${feedDate}</div>
+										</div>
+									</div>
+									<div class="moreBtn">
+										<a class="btn" role="button" data-toggle="dropdown"
+											aria-haspopup="true" aria-expanded="false"> <i
+											class="fa fa-ellipsis-h"></i>
+										</a>
+										<!-- dropdown-menu -->
+										<div class="dropdown-menu dropdown-menu-right"
+											aria-labelledby="dropdownMenuLink">
+											<a class="dropdown-item feedReport">신고하기</a>
+										</div>
+									</div>
+								</div>
+								<div class="feedBody">
+									<div class="feedPic">
+									</div>
+								</div>
+									<div class="feedBodyBtn">
+										<div class="likeBtn like">
+											<i class="fa fa-thumbs-up"></i>
+											<div class="likeNum">\${LIKES}</div>
+										</div>
+										<div class="commentBtn">댓글(\${COMMENTS})</div>
+									</div>
+									<div class="feedContent">\${CONTENT}</div>
+								</div>
+							</div> `;
+				}
+				
+				$feedArea.append(feedDiv);
+				
+				$(".commentBtn").click((e) => {
+					feedDetailModalView(e);
+				});
+			});
+			console.log(page);
+			loading = false;
+			if($resp.length === 0){
+				loading = true;
+			}
+			console.log(loading);
+		},
+		error: console.log
+	});
+};
+
+$(".contentWrapper").scroll(function(){
+	
+	if($(".contentWrapper").width() > 1260){
+		if($(".contentWrapper").height() > 660){
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.6)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}else {
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.2)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}
+		
+	}else if($(".contentWrapper").width() < 1260){
+		if($(".contentWrapper").height() > 660){
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.15)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}else {
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * 0.1)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}
+	}
 });
 
 
