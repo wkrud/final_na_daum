@@ -163,7 +163,7 @@ background: #707070;
 			<a href="${pageContext.request.contextPath}/movie/widgetMovie.do">위젯</a>
 		</div>
 
-		<!-- 영화정보진흥원 api -->
+		<%-- <!-- 영화정보진흥원 api -->
 		<div id="movieapi-container">
 			<div class="py-5">
 				<div class="container">
@@ -186,7 +186,7 @@ background: #707070;
 										<p class="card-text">${movie.movieNm}</p>
 										<p class="card-text">${movie.prdYear}</p>
 										<p class="card-text">${movie.typeNm}</p>
-										<%-- <p class="card-text">${movie.genreAlt}</p> --%>
+										<p class="card-text">${movie.genreAlt}</p>
 										<p class="card-text">${movie.peopleNm}</p>
 										<p class="card-text"></p>
 										<div class="d-flex justify-content-between align-items-center">
@@ -204,8 +204,20 @@ background: #707070;
 
 				</div>
 			</div>
-		</div>
+		</div> --%>
 		
+		
+		<!-- TMDB api -->
+	<div class="upcoming-movie">
+		<c:forEach var="movie" items="${list}">
+		<div class="card" style="width: 18rem;">
+  			<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
+  			<div class="card-body">
+   			 <p class="card-text">${movie.title}</p>
+  			</div>
+		</div>
+		</c:forEach>
+	</div>
 		
 		<!-- 슬라이더 -->
 		<div class="row blog">

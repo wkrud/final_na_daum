@@ -82,13 +82,6 @@ public class JsonApiController {
 	                String title = (String) movie.get("title");            // 제목
 	                Double voteAverage = Double.parseDouble(String.valueOf(movie.get("vote_average")));        // 평균 평점
 	                
-//	                String issueVal  = (String) movie.get("issueVal");        // 발령농도
-//	                String itemCode  = (String) movie.get("itemCode");        // 미세먼지 구분 PM10, PM25
-//	                String issueGbn  = (String) movie.get("issueGbn");        // 경보단계 : 주의보/경보
-//	                String clearDate = (String) movie.get("clearDate");        // 해제일자
-//	                String clearTime = (String) movie.get("clearTime");        // 해제시간
-//	                String clearVal = (String) movie.get("clearVal");            // 해제시 미세먼지농도
-	                
 	                Map<String, Object> map = new HashMap<>();
 	                map.put("apiCode", id);
 	                map.put("overview", overview);

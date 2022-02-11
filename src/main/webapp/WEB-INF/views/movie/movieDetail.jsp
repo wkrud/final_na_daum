@@ -6,7 +6,7 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@page import="com.project.nadaum.culture.movie.controller.GetMovieDetailApi"%>
+<%@page import="com.project.nadaum.culture.movie.controller.GetMovieApi"%>
 
 <sec:authentication property="principal" var="loginMember"/>
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
@@ -127,12 +127,12 @@ div#board-container label.custom-file-label {
 	<div class="movie-detail-content">
 
 		<!-- 상세정보 -->
-		<c:forEach var="movie" items="${list}">
+			<%-- <c:forEach var="movie" items="${list}"> --%>
 			<div class="row featurette">
-				<div class="col-md-7 order-md-2">
+				<<%-- div class="col-md-7 order-md-2">
 					<h2 class="featurette-heading">
 						<input type="text" class="form-control- movie-detail"
-							placeholder="제목" name="title" id="title" value="${movie.movieNm}"
+							placeholder="제목" name="title" id="title" value="${movie.title}"
 							readonly>
 					</h2>
 					<p class="lead">
@@ -140,12 +140,12 @@ div#board-container label.custom-file-label {
 						<label for="date" class="col-sm-2 col-form-label">개봉일 : </label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control- movie-detail"
-								name="openDt" title="개봉일" id="date" value="${movie.openDt}"
+								name="openDt" title="개봉일" id="date" value="${movie.releaseDate}"
 								readonly>
 						</div>
-					</div>
+					</div> --%>
 
-					<div class="form-group row">
+					<%-- <div class="form-group row">
 						<label for="nationNm" class="col-sm-2 col-form-label">제작국가
 							: </label>
 						<div class="col-sm-10">
@@ -153,19 +153,19 @@ div#board-container label.custom-file-label {
 								name="nation" title="제작국가" id="nationNm" value="${movie.nation}"
 								readonly>
 						</div>
-					</div>
+					</div> --%>
 
 					<div class="form-group row">
 						<label for="genreNm" class="col-sm-2 col-form-label">장르 :
 						</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control- movie-detail"
-								name="genreNm" title="장르" id="genreNm" value="${movie.genreNm}"
+								name="genreNm" title="장르" id="genreNm" value="${genre}"
 								readonly>
 						</div>
 					</div>
 
-					<div class="form-group row">
+					<%-- <div class="form-group row">
 						<label for="director" class="col-sm-2 col-form-label">감독 :
 						</label>
 						<div class="col-sm-10">
@@ -173,7 +173,7 @@ div#board-container label.custom-file-label {
 								name="director" title="감독" id="director"
 								value="${movie.director}" readonly>
 						</div>
-					</div>
+					</div> --%>
 
 					<%-- <div class="form-group row" >
 						<label for="date" class="col-sm-2 col-form-label">개봉일 : </label>
@@ -184,19 +184,19 @@ div#board-container label.custom-file-label {
 
 
 				</div>
-				<div class="col-md-5 order-md-1">
+				<%-- <div class="col-md-5 order-md-1">
 					<svg
 						class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
 						width="500" height="500" xmlns="http://www.w3.org/2000/svg"
 						preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
 						aria-label="Placeholder: 500x500">
+						<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" >
 					<title>Placeholder</title>
 					<rect width="100%" height="100%" fill="#eee" />
-					<text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text>
 					</svg>
-				</div>
+				</div> --%>
 			</div>
-		</c:forEach>
+		<%-- </c:forEach> --%>
 		<!-- 캘린더 약속 버튼 -->
 		<br />
 		<button type="button" class="btn btn-secondary" data-toggle="modal"
@@ -224,14 +224,26 @@ div#board-container label.custom-file-label {
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
+						<!-- 모달 내용 시작 -->
 						<div class="modal-body">
-							<span>약속일</span> <input type="date" id="schedule-date" /> <br />
-							<br /> <span>@친구</span> <input type="text" />
+						
+							<span>약속일</span> 
+							<input type="date" id="schedule-date" /> 
+							<br /> 
+							<div class="form-group row" >
+								<label for="title" class="col-sm-2 col-form-label">제목</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력해주세요" required >
+								</div>
+							</div>
+							<br />
+							<span>@친구</span> <input type="text" />
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">취소</button>
 							<button type="button" class="btn btn-primary">추가</button>
+						
 						</div>
 						
 					</div>
@@ -246,9 +258,7 @@ div#board-container label.custom-file-label {
 			January 1, 2014 by <a href="#">Mark</a>
 		</p>
 
-		<p>This blog post shows a few different types of content that’s
-			supported and styled with Bootstrap. Basic typography, images, and
-			code are all supported.</p>
+		<p>${overview}</p>
 
 	</div>
 	<hr class="featurette-divider" />
