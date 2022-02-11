@@ -9,7 +9,7 @@
 <%@page import="com.project.nadaum.culture.movie.controller.GetMovieApi"%>
 
 <sec:authentication property="principal" var="loginMember" />
-<jsp:include page="/WEB-INF/views/common/header2.jsp">
+<jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="위젯영화" name="widget-movie" />
 </jsp:include>
 
@@ -156,27 +156,6 @@
 		<!-- 슬라이드 끝 -->
 	</div>
 
-
-
-	<!-- 위젯 안에 들어갈 영화 (upcoming movie) -->
-	<div class="upcoming-movie-item">
-		<c:forEach var="movie" items="${widgetMovieList}">
-
-			<div class="card post" style="width: 18rem;">
-				<img class="card-img-top slider-image"
-					src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
-					alt="Card image cap">
-				<div class="card-body post-info">
-					<p class="card-text">${movie.title}</p>
-					<p class="card-text" align="right">평점 : ${movie.voteAverage}</p>
-					<p class="card-text">${movie.apiCode}</p>
-					<p class="card-text">${movie.overview}</p>
-					<p class="card-text">${movie.releaseDate}</p>
-				</div>
-			</div>
-
-		</c:forEach>
-	</div>
 
 
 </div>
