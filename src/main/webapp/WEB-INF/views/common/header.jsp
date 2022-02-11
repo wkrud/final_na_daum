@@ -30,13 +30,30 @@
 <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <title>${param.title}</title>
 
+<!-- 제이쿼리 -->
 <script src="https://code.jquery.com/jquery-3.6.0.js"
 	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	crossorigin="anonymous"></script>
+<!-- 제이쿼리 ui js -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- 제이쿼리 style css -->
+<link rel="stylesheet" href="/resources/demos/style.css">
+<!-- 제이쿼리 ui css -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- datepicker css -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/datepicker.css" /> 
+<!-- datepicker bcg img -->
+<style>
+ .ui-widget-header .ui-icon { background-image: url('${pageContext.request.contextPath}/resources/images/common/btns.png'); } 
+</style>
+<!-- datepicker js -->
+<script src="${pageContext.request.contextPath}/resources/js/common/datepicker.js"></script>
+
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
 	integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
 	crossorigin="anonymous"></script>
+	
 <!-- 부트스트랩 js/css -->
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
@@ -50,13 +67,15 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- 써머노트 -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<!-- 스톰프 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/member/stomp.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/member/info.js"></script>
 
+<!-- 폰트어썸 -->
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 
 <!-- 사용자작성 css -->
@@ -312,7 +331,7 @@
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />
 						
 						\${content}</div>`;
-					}else if(code.substring(0,4) == 'chat' || code.substring(0,4) == 'feco' || code.substring(0,4) == 'feli'){
+					}else if(code.substring(0,4) == 'chat' || code.substring(0,4) == 'fcom' || code.substring(0,4) == 'flik'){
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);

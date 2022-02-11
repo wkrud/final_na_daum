@@ -179,6 +179,14 @@ const selectedFeed = (id, code) => {
 			
 			likeHtml(resp.feed.code, resp.feed.writer, resp.guest.nickname);			
 			
+			$(".feed-textarea").on('keyup',function(e){
+				if($(".feed-textarea").val() != ''){
+					if(e.key === 'Enter' || e.keyCode === 13){
+						$("#write-comment-btn").trigger('click');
+					}
+				}
+			});
+			
 			$("#write-comment-btn").on('click',function(){	
 				let $content = $(".feed-textarea");
 				if($content.val() == ''){
@@ -198,6 +206,7 @@ const selectedFeed = (id, code) => {
 		error: console.log
 	});
 };
+
 
 const deleteComment = (no, id, code) => {
 	
@@ -274,7 +283,7 @@ const writeComment = (content, code, id) => {
 			
 			let content = `<a href='/nadaum/feed/socialFeed.do?id=${id}&code=${resp.fcode}&type=alarmMessage'>${resp.nickname}님이 회원님의 피드에 댓글을 작성했습니다.</a>`;
 			let ranNo = Math.floor(Math.random() * 10000);
-			let alarmCode = 'fecomment-' + resp.no + ranNo;
+			let alarmCode = 'fcomment-' + resp.no + ranNo;
 			sendAndInsertAlarm('I',id, alarmCode, content);
 			
 		},
@@ -288,7 +297,7 @@ const likeHtml = (code, writer, guestNickname) => {
 	
 		console.log('hi');
 		let ranNo = Math.floor(Math.random() * 10000);
-		let alarmCode = 'felike-' + ranNo;
+		let alarmCode = 'flike-' + ranNo;
 		let content = '';
 		
 		let check = '';

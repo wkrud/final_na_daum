@@ -12,7 +12,9 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <div class="member-body">
-	<button type="button" class="btn btn-outline-warning" id="searchFriendBtn">친구검색</button>
+	<div class="find-friend-page-button">
+		<button type="button" class="btn btn-outline-warning" id="searchFriendBtn">친구검색</button>
+	</div>
 	<div class="friend-list-wrap">
 		<div class="friends-list">
 			<div class="friend">
@@ -23,7 +25,7 @@
 					<c:forEach items="${friends}" var="fr">
 						<c:if test="${ml.id eq fr.friendId}">
 							<div class="friend-wrap">
-								<div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap use-slick-friend-list-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>
@@ -32,14 +34,16 @@
 											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" style="width:45px; height:45px; object-fit:cover;" />
 										</c:if>						
 										<c:if test="${ml.profileStatus eq 'Y'}">		
-											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${attach.renamedFilename}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
+											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
 										</c:if>	
 									</c:if>
 								</div>
 								<div class="friend-name-wrap">
 									<span class="friend-name">${ml.nickname}</span>								
 								</div>
-								<div class="friend-btn">
+								<div class="friend-btn feed-chat-option-group">
+									<button type="button" onclick="goFriendFeed('${ml.id}');" class="btn btn-outline-primary">피드구경</button>
+									<button type="button" onclick="startChatNow('${ml.nickname}');" class="btn btn-outline-warning">채팅시작</button>
 									<button type="button" class="btn btn-outline-danger end-friend">친구삭제</button>
 								</div>							
 							</div>
@@ -57,7 +61,7 @@
 					<c:forEach items="${follower}" var="fo">
 						<c:if test="${ml.id eq fo.followerId}">
 							<div class="follower-wrap">
-								<div class="login-member-thumbnail-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
+								<div class="login-member-thumbnail-wrap use-slick-friend-list-wrap" style="border-radius:50%; width:45px; height: 45px; overflow:hidden; padding: 0;">
 									<c:if test="${ml.loginType eq 'K'}">
 										<img src="${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />								
 									</c:if>
@@ -66,15 +70,17 @@
 											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" style="width:45px; height:45px; object-fit:cover;" />
 										</c:if>						
 										<c:if test="${ml.profileStatus eq 'Y'}">		
-											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${attach.renamedFilename}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
+											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
 										</c:if>	
 									</c:if>
 								</div>
 								<div class="follower-name-wrap">
 									<span class="follower-name">${ml.nickname}</span>
 								</div>		
-								<div class="follower-btn">
-									<button type="button" class="btn btn-outline-warning friend-with-follower">친구추가</button>
+								<div class="follower-btn feed-chat-option-group">
+									<button type="button" onclick="goFriendFeed('${ml.id}');" class="btn btn-outline-primary">피드구경</button>
+									<button type="button" onclick="startChatNow('${ml.nickname}');" class="btn btn-outline-warning">채팅시작</button>
+									<button type="button" class="btn btn-outline-success friend-with-follower">친구추가</button>
 								</div>					
 							</div>
 						</c:if>
@@ -85,41 +91,21 @@
 	</div>
 	<div class="search-right-wrap">
 		<div class="search-right">
-			<form action="">
-				<label for="search">검색여부</label>
-				<input type="checkbox" name="search" id="search" />
-			</form>
+			<label for="search">검색여부</label>
+			<input type="checkbox" name="search" id="search" ${loginMember.search eq 'T' ? 'checked' : ''} />			
 		</div>
 	</div>
 </div>
 <script>
-$(function(){
-	$(".friends-section").slick({
-		infinite: true,
-		slidesToShow: 10,
-		slidesToScroll: 1,
-		speed: 100,
-		arrows: true,
-		autoplay: false,
-		vertical: false,
-		prevArrow : "<button type='button' class='slick-prev'>Previous</button>",		
-		nextArrow : "<button type='button' class='slick-next'>Next</button>"
-	});
-	$(".followers-section").slick({
-		infinite: true,
-		slidesToShow: 10,
-		slidesToScroll: 1,
-		speed: 100,
-		arrows: true,
-		autoplay: false,
-		vertical: false,
-		prevArrow : "<button type='button' class='slick-prev'>Previous</button>",		
-		nextArrow : "<button type='button' class='slick-next'>Next</button>"
-	});
+$(() => {
+	$(".feed-chat-option-group").hide();
 });
 
-$(".friend-wrap").click((e) => {
-	let guest = $(e.currentTarget).find('span.friend-name').html();
+const goFriendFeed = (id) => {
+	location.href = `/nadaum/feed/socialFeed.do?id=\${id}`;
+};
+
+const startChatNow = (guest) => {
 	if(confirm(guest + '님과 DM을 하시겠습니까?')){
 		var room = Math.floor(Math.random() * 100000);
 		console.log('room = ' + room);
@@ -129,8 +115,60 @@ $(".friend-wrap").click((e) => {
 		const url = `${pageContext.request.contextPath}/member/mypage/chat.do?room=\${room}`;
 		
 		chatInvite('chat', '${loginMember.nickname}', guest, room);
-		windowObjHistorySearch = window.open(url, name, spec);	
+		windowObjHistorySearch = window.open(url, name, spec);
 	}
+};
+
+$(".use-slick-friend-list-wrap").on('click',function(e) {
+	$(e.target).parent().parent().find('div.feed-chat-option-group').slideToggle();
+});
+
+
+
+const $search = $("#search");
+$search.change((e) => {
+	let searchCheck = '';
+	let id = '${loginMember.id}';
+	if($search.is(':checked')){
+		searchCheck = 'T';
+	}else{
+		searchCheck = 'F';
+	}
+	$.ajax({
+		url: '/nadaum/member/memberUpdate.do',
+		method: 'POST',
+		headers: headers,
+		data: {id,search:searchCheck},
+		success(resp){
+			console.log(resp);
+		},
+		error: console.log
+	});
+});
+
+$(function(){
+	$(".friends-section").slick({
+		infinite: true,
+		slidesToShow: 5,
+		slidesToScroll: 1,
+		speed: 500,
+		arrows: true,
+		autoplay: false,
+		vertical: false,
+		prevArrow : "<i class='fa fa-arrow-left' aria-hidden='true'></i>",		
+		nextArrow : "<i class='fa fa-arrow-right' aria-hidden='true'></i>"
+	});
+	$(".followers-section").slick({
+		infinite: true,
+		slidesToShow: 5,
+		slidesToScroll: 1,
+		speed: 500,
+		arrows: true,
+		autoplay: false,
+		vertical: false,
+		prevArrow : "<i class='fa fa-arrow-left' aria-hidden='true'></i>",		
+		nextArrow : "<i class='fa fa-arrow-right' aria-hidden='true'></i>"
+	});
 });
 
 $(searchFriendBtn).click((e) => {
@@ -152,10 +190,10 @@ $(".end-friend").click((e) => {
 
 const updateFriend = (check, friendNickname) => {
 	
-	const csrfHeader = "${_csrf.headerName}";
+	/* const csrfHeader = "${_csrf.headerName}";
 	const csrfToken = "${_csrf.token}";
 	const headers = {};
-	headers[csrfHeader] = csrfToken;
+	headers[csrfHeader] = csrfToken; */
 	
 	$.ajax({
 		url: '${pageContext.request.contextPath}/member/mypage/updateFriend.do',

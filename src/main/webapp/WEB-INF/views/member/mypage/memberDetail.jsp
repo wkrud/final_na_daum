@@ -80,7 +80,7 @@
 						</div>
 						<div class="nickname-wrap">
 							<p>
-								별명 : <span>${loginMember.nickname}</span>
+								별명 : <span>${loginMember.nickname}&nbsp;</span>
 								<button type="button" id="modify-nickname-modal" class="btn btn-outline-warning">별명 수정</button>
 							</p>
 						</div>
@@ -95,7 +95,7 @@
 							<input type="text" class="form-control" placeholder="주소" name="address" id="address" value="${loginMember.address}" readonly required/>
 							</c:if>
 							<label for="birthday">생일</label>
-							<input type="date" name="birthday" id="birthday" value='<fmt:formatDate value="${loginMember.birthday}" pattern="yyyy-MM-dd"/>' />
+							<input type="text" name="birthday" id="birthday" placeholder="yyyy-mm-dd" value='<fmt:formatDate value="${loginMember.birthday}" pattern="yyyy-MM-dd"/>' />
 							
 							<div class="info-update-btn">
 								<input type="submit" class="btn btn-outline-success" value="수정" >
@@ -214,6 +214,10 @@
 				
 				<script>
 				$(() => {
+					$("#birthday").datepicker({
+						showAnim: "fold",
+						duration: "normal"
+					});
 					/* db에서 불러온 소개에서 <br/>을 \r\n으로 변경하여 코드가 보이지 않도록 수정 */
 					$intro.val($intro.val().split('<br/>').join('\r\n'));
 					/* 소개 사이즈 체크 */

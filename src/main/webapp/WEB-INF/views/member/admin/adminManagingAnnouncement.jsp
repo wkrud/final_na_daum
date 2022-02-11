@@ -34,7 +34,7 @@
 					<c:forEach items="${announceList}" var="an" varStatus="vs">
 						<tr>
 							<td>${vs.count}</td>
-							<td>${an.title}</td>
+							<td><a href="${pageContext.request.contextPath}/member/mypage/announcementDetail.do?board=${an.code}">${an.title}</a></td>
 							<td>${an.readCount}</td>
 							<td>${an.regDate}</td>
 							<td><button type="button" class="btn btn-warning" onclick="location.href='${pageContext.request.contextPath}/member/admin/adminEnrollFrm.do?check=announcement&code=${an.code}'">수정</button></td>
