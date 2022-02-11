@@ -129,7 +129,7 @@ div#board-container label.custom-file-label {
 
 		<!-- 상세정보 -->
 		<%-- <c:forEach var="movie" items="${list}"> --%>
-		<div class="row featurette"><<%-- div class="col-md-7
+		<div class="row featurette"><%-- <div class="col-md-7
 			order-md-2"> <h2 class="featurette-heading"> <input type="text"
 			class="form-control- movie-detail" placeholder="제목" name="title"
 			id="title" value="${movie.title}" readonly> </h2> <p class="lead">
@@ -143,7 +143,7 @@ div#board-container label.custom-file-label {
 			movie-detail" name="nation" title="제작국가" id="nationNm"
 			value="${movie.nation}" readonly> </div> </div> --%> <div
 			class="form-group row"> <label for="genreNm" class="col-sm-2
-			col-form-label">장르 : </label> <div class="col-sm-10"> <input
+			col-form-label"> 장르 : </label> <div class="col-sm-10"> <input
 			type="text" class="form-control- movie-detail" name="genreNm"
 			title="장르" id="genreNm" value="${genre}" readonly> </div></div>
 
