@@ -43,13 +43,38 @@
 		)
 	</insert>
 	
-	<select id="selectOneAccount" resultType="riotFavo">
+	<select id="selectOneDetailAccount" resultType="int">
 		select 
-			*
+			count(*)
 		from
 			riot_myaccount
 		where
 			member_id = #{member_Id} 
+	
+	</select>
+	
+	<select id="selectOneAccountName" resultType="riotFavo">
+		select 
+			a.member_id,
+            a.sm_id,
+            a.fav_accept,
+            b.name
+            
+		from
+			riot_myaccount a join riot_record b
+            on a.sm_id = b.id
+		where
+			member_id = #{member_Id} and sm_id = #{sm_Id}
+	
+	</select>
+	
+	<select id="selectOneAccount" resultType="int">
+		select 
+			count(*)
+		from
+			riot_myaccount
+		where
+			member_id = #{member_Id} and sm_id = #{sm_Id}
 	
 	</select>
 	

@@ -13,9 +13,14 @@ public interface RiotService {
 	
 	int insertRiotFavo(Map<String, Object> map);
 	
-	RiotFavo selectOneAccount(Map<String, Object> map);
+	int selectOneDetailAccount(Map<String, Object> map);
+	
+	int selectOneAccount(Map<String, Object> map);
+	
+	RiotFavo selectOneAccountName(Map<String, Object> map);
 	
 	int deleteFav(Map<String, Object> map);
+	
 
 	
 }

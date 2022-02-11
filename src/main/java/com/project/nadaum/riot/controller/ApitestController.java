@@ -58,23 +58,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApitestController {
 
-	final static String API_KEY = "RGAPI-7fb187de-1557-408c-8445-84143594181a";
-
-	
+	final static String API_KEY = "RGAPI-51b1456f-88a9-442c-bf25-de167ce12528";
 
 	@Autowired
 	private RiotService riotService;
-	
-	public static <T> HttpEntity<T> setHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Origin", "https://developer.riotgames.com");
-        headers.set("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
-        headers.set("X-Riot-Token", API_KEY);
-        headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
-        headers.set("User-Agent", "내 브라우저 정보");
 
-        return new HttpEntity<T>(headers);
-    }
+	public static <T> HttpEntity<T> setHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Origin", "https://developer.riotgames.com");
+		headers.set("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
+		headers.set("X-Riot-Token", API_KEY);
+		headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+		headers.set("User-Agent", "내 브라우저 정보");
+
+		return new HttpEntity<T>(headers);
+	}
 
 	@RequestMapping("/riotheader.do")
 	public void riotheader() {
@@ -82,23 +80,18 @@ public class ApitestController {
 	}
 
 	@RequestMapping(value = "/riot1.do", method = RequestMethod.GET)
-	public String searchSummoner(Model model, HttpServletRequest httpServletRequest, 
-			Summoner summoner,LeagueEntry leagueentry,LeagueEntries leagueentries,MatchDto matchDto) {
+	public String searchSummoner(Model model, HttpServletRequest httpServletRequest, Summoner summoner,
+			LeagueEntry leagueentry, LeagueEntries leagueentries, MatchDto matchDto) {
 		BufferedReader br = null;
 		String SummonerName = httpServletRequest.getParameter("nickname").replaceAll(" ", "%20");
 		RestTemplate restTemplate = new RestTemplate();
-		 MatchList[] matchlist =null;
+		MatchList[] matchlist = null;
 		List<MatchList> wraplist = null;
 		List<MatchDto> matchDtolist = new ArrayList();
-		
+
 		LinkedHashMap<Integer, Object> map = new LinkedHashMap<>();
-		List<LinkedHashMap<Integer,Object>> test= new ArrayList<LinkedHashMap<Integer,Object>>();
-		
-		
-	
-		
-	
-		
+		List<LinkedHashMap<Integer, Object>> test = new ArrayList<LinkedHashMap<Integer, Object>>();
+
 		log.info("SummonerName = {}", SummonerName);
 
 		Gson gson = new GsonBuilder().create();
@@ -119,7 +112,7 @@ public class ApitestController {
 			log.info("summoner = {}", resulturl);
 			JsonElement element = JsonParser.parseString(resulturl);
 			JsonObject object = element.getAsJsonObject();
-			
+
 			int profileIconId = object.get("profileIconId").getAsInt();
 			String name = object.get("name").getAsString();
 			String puuid = object.get("puuid").getAsString();
@@ -154,16 +147,16 @@ public class ApitestController {
 			URL url = new URL(urlstr);
 			HttpURLConnection urlconnection = (HttpURLConnection) url.openConnection();
 			urlconnection.setRequestMethod("GET");
-			br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(), "UTF-8")); 
+			br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(), "UTF-8"));
 			String resulttier = "";
 			String line;
-			while ((line = br.readLine()) != null) { 
-				resulttier =resulttier + line;
+			while ((line = br.readLine()) != null) {
+				resulttier = resulttier + line;
 			}
 			log.info("resulttier = {}", resulttier);
 			JsonArray element = (JsonArray) JsonParser.parseString(resulttier);
 			JsonObject object = (JsonObject) element.get(0);
-			
+
 			String summonerId = summoner.getId();
 			int wins = object.get("wins").getAsInt();
 			int losses = object.get("losses").getAsInt();
@@ -172,11 +165,10 @@ public class ApitestController {
 			String queueType = object.get("queueType").getAsString();
 			int leaguePoints = object.get("leaguePoints").getAsInt();
 			String leagueId = object.get("leagueId").getAsString();
-			leagueentry = new LeagueEntry(0,leagueId,queueType,tier,rank,leaguePoints,wins,losses);
+			leagueentry = new LeagueEntry(0, leagueId, queueType, tier, rank, leaguePoints, wins, losses);
 			log.info("leagueentry = {}", leagueentry);
-			
-			if(element.get(1) != null)
-			{
+
+			if (element.get(1) != null) {
 				JsonObject object2 = (JsonObject) element.get(1);
 				int wins2 = object2.get("wins").getAsInt();
 				int losses2 = object2.get("losses").getAsInt();
@@ -185,14 +177,12 @@ public class ApitestController {
 				String queueType2 = object2.get("queueType").getAsString();
 				int leaguePoints2 = object2.get("leaguePoints").getAsInt();
 				String leagueId2 = object2.get("leagueId").getAsString();
-				leagueentries = new LeagueEntries(0,leagueId2,queueType2,tier2,rank2,leaguePoints2,wins2,losses2);
+				leagueentries = new LeagueEntries(0, leagueId2, queueType2, tier2, rank2, leaguePoints2, wins2,
+						losses2);
 				log.info("leagueentries = {}", leagueentries);
-				
+
 			}
-			
-	
-		
-			
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -201,87 +191,77 @@ public class ApitestController {
 		try {
 			String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/" + summoner.getPuuid()
 					+ "/ids?start=0&count=20&api_key=" + API_KEY;
-			     matchlist = restTemplate.getForObject(urlstr,MatchList[].class);
-			     log.info("match = {}", matchlist);
-			     wraplist = Arrays.asList(matchlist);
-			     log.info("list = {}", wraplist);
-			    
-			
+			matchlist = restTemplate.getForObject(urlstr, MatchList[].class);
+			log.info("match = {}", matchlist);
+			wraplist = Arrays.asList(matchlist);
+			log.info("list = {}", wraplist);
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
-		
-		
-		
+
 		try {
-			for(int i=0; i< 5; i++)
-			{
-			String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";		
-			HttpEntity<MatchDto> request = setHeaders();
-			ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(), HttpMethod.GET, request, MatchDto.class);
-			  matchDto = response.getBody();
-			  matchDtolist = Arrays.asList(matchDto);
-			  map.put(i, matchDtolist);
-			  test.add(map);
+			for (int i = 0; i < 5; i++) {
+				String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";
+				HttpEntity<MatchDto> request = setHeaders();
+				ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(),
+						HttpMethod.GET, request, MatchDto.class);
+				matchDto = response.getBody();
+				matchDtolist = Arrays.asList(matchDto);
+				map.put(i, matchDtolist);
+				test.add(map);
 //			  log.info("test = {}", test);
 			}
-			for(int i=5; i< 10; i++)
-			{
-			String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";		
-			HttpEntity<MatchDto> request = setHeaders();
-			ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(), HttpMethod.GET, request, MatchDto.class);
-			  matchDto = response.getBody();
-			  matchDtolist = Arrays.asList(matchDto);
-			  map.put(i, matchDtolist);
-			  test.add(map);
+			for (int i = 5; i < 10; i++) {
+				String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";
+				HttpEntity<MatchDto> request = setHeaders();
+				ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(),
+						HttpMethod.GET, request, MatchDto.class);
+				matchDto = response.getBody();
+				matchDtolist = Arrays.asList(matchDto);
+				map.put(i, matchDtolist);
+				test.add(map);
 //			  log.info("test = {}", test);
 			}
-			
-			for(int i=10; i< 15; i++)
-			{
-			String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";		
-			HttpEntity<MatchDto> request = setHeaders();
-			ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(), HttpMethod.GET, request, MatchDto.class);
-			  matchDto = response.getBody();
-			  matchDtolist = Arrays.asList(matchDto);
-			  map.put(i, matchDtolist);
-			  test.add(map);
+
+			for (int i = 10; i < 15; i++) {
+				String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";
+				HttpEntity<MatchDto> request = setHeaders();
+				ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(),
+						HttpMethod.GET, request, MatchDto.class);
+				matchDto = response.getBody();
+				matchDtolist = Arrays.asList(matchDto);
+				map.put(i, matchDtolist);
+				test.add(map);
 //			  log.info("test = {}", test);
 			}
-			
-			for(int i=15; i< 20; i++)
-			{
-			String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";		
-			HttpEntity<MatchDto> request = setHeaders();
-			ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(), HttpMethod.GET, request, MatchDto.class);
-			  matchDto = response.getBody();
-			  matchDtolist = Arrays.asList(matchDto);
-			  map.put(i, matchDtolist);
-			  test.add(map);
+
+			for (int i = 15; i < 20; i++) {
+				String urlstr = "https://asia.api.riotgames.com/lol/match/v5/matches/";
+				HttpEntity<MatchDto> request = setHeaders();
+				ResponseEntity<MatchDto> response = restTemplate.exchange(urlstr + wraplist.get(i).getMatchId(),
+						HttpMethod.GET, request, MatchDto.class);
+				matchDto = response.getBody();
+				matchDtolist = Arrays.asList(matchDto);
+				map.put(i, matchDtolist);
+				test.add(map);
 //			  log.info("test = {}", test);
 			}
-			   
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
-	
-		
-		
-		  //log.info("test = {}", test);
+
+		// log.info("test = {}", test);
 		model.addAttribute("summoner", summoner);
 		model.addAttribute("img", "http://ddragon.leagueoflegends.com/cdn/12.1.1/img/profileicon/"
 				+ summoner.getProfileIconId() + ".png");
 		model.addAttribute("leagueentry", leagueentry);
 		model.addAttribute("leagueentries", leagueentries);
-		model.addAttribute("tierImg", "/resources/image/riot/"+leagueentry.getTier()+".png");
-		model.addAttribute("tierImg", "/resources/image/riot/"+leagueentries.getTier()+".png");
+		model.addAttribute("tierImg", "/resources/image/riot/" + leagueentry.getTier() + ".png");
+		model.addAttribute("tierImg", "/resources/image/riot/" + leagueentries.getTier() + ".png");
 		model.addAttribute("test", test);
 		model.addAttribute("wraplist", wraplist);
-		
-		
-		
 
 		return "riot/riotmain";
 
@@ -291,69 +271,140 @@ public class ApitestController {
 	public void riotmain() {
 
 	}
-	
+
 	@ResponseBody
-	@PostMapping("/riotFav.do")
-	public Map<String, Object> riotFav(@RequestBody Map<String, Object> favData , RiotFavo riotfavo,Model model) {
+	@PostMapping("/riotAddFav.do")
+	public Map<String, Object> riotAddFav(@RequestBody Map<String, Object> favData) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> accountmap = new HashMap<String, Object>();
-		Map<String, Object> messagemap = new HashMap<String, Object>();
-		
+	
+
 		log.debug("favData = " + favData);
 		String member_Id = (String) favData.get("member_id");
 		String sm_Id = (String) favData.get("summoner_id");
-		 log.info("oneaccount = {}", member_Id);
-		 accountmap.put("member_Id", member_Id);
-		
+		log.info("oneaccount = {}", member_Id);
+		accountmap.put("member_Id", member_Id);
+
 		map.put("member_Id", favData.get("member_id"));
 		map.put("sm_Id", favData.get("summoner_id"));
 		
+		int result = riotService.insertRiotFavo(map);
 		
+		RiotFavo namecheck = riotService.selectOneAccountName(map);
 		
-		RiotFavo oneaccount = riotService.selectOneAccount(accountmap);
-		model.addAttribute("oneaccount", oneaccount);
+		log.info("namecheck={}",namecheck);
 		
+		String name = namecheck.getName();
+		map.put("summonerName",name);
 		
-		 log.info("oneaccount = {}", oneaccount);
-		 
-		 
-		 
-		 if(oneaccount == null) {
-			 
-			 int result = riotService.insertRiotFavo(map);
-			 String msg = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
-			 messagemap.put("insert", msg);
-			 log.info("msg = {}", msg);
-			 
-		 }
-		 else {
-			 		
-			 
-			 		if((oneaccount.getSmId()).equals(sm_Id) ) {
-			 			
-			 			 int resultdele = riotService.deleteFav(accountmap);
-			 			 int result = riotService.insertRiotFavo(map);
-			 			 String msg2 = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
-			 			 messagemap.put("delete", msg2);
-			 			
-			 			
-			 		}
-			 		else {
-			 			
-			 			 int resultdele = riotService.deleteFav(accountmap);
-			 			 int result = riotService.insertRiotFavo(map);
-			 			 String msg3 = result > 0 ? "즐겨찾기 등록 성공!" : "즐겨찾기 등록 실패!";
-			 			 messagemap.put("delete", msg3);
-			 		        
-			 		}
-			 		
-			 
-			 
-		 }
-		 
-		 
-		 
-		return messagemap;
-		
+		map.put("result",result);
+
+	
+
+		return map;
+
 	}
+	
+	@ResponseBody
+	@PostMapping("/riotdelFav.do")
+	public Map<String, Object> riotdelFav(@RequestBody Map<String, Object> favData) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> accountmap = new HashMap<String, Object>();
+	
+
+		log.debug("favData = " + favData);
+		String member_Id = (String) favData.get("member_id");
+		String sm_Id = (String) favData.get("summoner_id");
+		
+		
+		accountmap.put("member_Id", member_Id);
+
+		map.put("member_Id", favData.get("member_id"));
+		map.put("sm_Id", favData.get("summoner_id"));
+		
+		int result = riotService.deleteFav(accountmap);
+		RiotFavo namecheck = riotService.selectOneAccountName(map);
+		String name = namecheck.getName();
+		map.put("summonerName",name);
+		
+		map.put("result",result);
+		
+		
+
+	
+
+		return map;
+
+	}
+	
+
+	@ResponseBody
+	@PostMapping("/riotTotalFav.do")
+	public Map<String, Object> riotTotalFav(@RequestBody Map<String, Object> Data) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+
+		String member_Id = (String) Data.get("member_id");
+		String sm_Id = (String) Data.get("summoner_id");
+
+		map.put("member_Id", member_Id);
+		
+		
+		int oneaccount;
+		int noaccount;
+		try {
+			
+			oneaccount = riotService.selectOneDetailAccount(map);
+			log.info("oneaccount");
+			resultmap.put("favcount", oneaccount);
+			log.info("resultmap");
+
+			log.info("oneaccount = {}", oneaccount);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+
+		return resultmap;
+
+	}
+	
+	@ResponseBody
+	@PostMapping("/riotOneFav.do")
+	public Map<String, Object> riotOneFav(@RequestBody Map<String, Object> Data) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+
+		String member_Id = (String) Data.get("member_id");
+		String sm_Id = (String) Data.get("summoner_id");
+
+		map.put("member_Id", member_Id);
+		map.put("sm_Id", sm_Id);
+		RiotFavo namecheck = riotService.selectOneAccountName(map);
+		String name = namecheck.getName();
+		
+		
+		int oneaccount;
+		try {
+			
+			oneaccount = riotService.selectOneAccount(map);
+			log.info("oneaccount");
+			map.put("Oneresult", oneaccount);
+			map.put("summonerName",name);
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+
+		return map;
+
+	}
+
 }

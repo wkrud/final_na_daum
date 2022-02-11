@@ -34,16 +34,29 @@ public class RiotServiceImpl implements RiotService {
 		return riotDao.insertRiotFavo(map);
 	}
 
-	@Override
-	public RiotFavo selectOneAccount(Map<String, Object> map) {
-		
-		return riotDao.selectOneAccount(map);
-	}
 
 	@Override
 	public int deleteFav(Map<String, Object> map) {
 		
 		return riotDao.deleteFav(map);
+	}
+
+	@Override
+	public int selectOneAccount(Map<String, Object> map) {
+		
+		return riotDao.selectOneAccount(map);
+	}
+
+	@Override
+	public int selectOneDetailAccount(Map<String, Object> map) {
+		
+		return riotDao.selectOneDetailAccount(map);
+	}
+
+	@Override
+	public RiotFavo selectOneAccountName(Map<String, Object> map) {
+		
+		return riotDao.selectOneAccountName(map);
 	}
 
 

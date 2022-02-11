@@ -44,6 +44,8 @@ public interface BoardService {
 	int boardLikeAdd(Map<String, Object> param);
 
 	int selectCountLikes(String code);
+	
+	int selectIdCountLikes(Map<String, Object> param);
 
 	int boardLikeDelete(Map<String, Object> param);
 

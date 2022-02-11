@@ -98,6 +98,15 @@
 			code = #{code}
 	</select>
 	
+	<select id="selectIdCountLikes" resultType="int">
+		select 
+			count(*)
+		from
+			likes
+		where
+			code = #{code} and id = #{id}
+	</select>
+	
 	<insert id="boardLikeAdd">
 	insert into
 		likes

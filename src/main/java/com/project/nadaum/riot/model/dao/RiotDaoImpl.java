@@ -36,17 +36,33 @@ public class RiotDaoImpl implements RiotDao {
 	}
 
 
-	@Override
-	public RiotFavo selectOneAccount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return session.selectOne("riot.selectOneAccount", map);
-	}
 
 
 	@Override
 	public int deleteFav(Map<String, Object> map) {
 		
 		return session.delete("riot.deleteFav", map);
+	}
+
+
+	@Override
+	public int selectOneAccount(Map<String, Object> map) {
+		
+		return session.selectOne("riot.selectOneAccount", map);
+	}
+
+
+	@Override
+	public int selectOneDetailAccount(Map<String, Object> map) {
+		
+		return session.selectOne("riot.selectOneDetailAccount", map);
+	}
+
+
+	@Override
+	public RiotFavo selectOneAccountName(Map<String, Object> map) {
+	
+		return session.selectOne("riot.selectAccountName", map);
 	}
 
 
