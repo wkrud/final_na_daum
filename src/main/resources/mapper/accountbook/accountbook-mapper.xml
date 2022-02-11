@@ -83,10 +83,11 @@
 	                from
 	                    account_book
 	                where
-	                   	to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
+	                    id = #{id}
+	                    and
+	                    to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
+	                    <!-- reg_date between #{regDate} and last_day(#{regDate}) -->
           		)
-	    where
-	        id = #{id}
 	    group by income_expense
 	    )
 	</select>

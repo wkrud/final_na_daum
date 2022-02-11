@@ -3,6 +3,7 @@ package com.project.nadaum.accountbook.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,15 +50,16 @@ public class AccountBookController {
 	// 가계부 첫 화면에 보여질 값들
 	@RequestMapping(value = "/accountbook.do")
 	public void accountbook(@RequestParam(defaultValue = "1") int cPage, @AuthenticationPrincipal Member member,
-			Model model, HttpServletRequest request) {
+			Model model, @RequestParam Date date, HttpServletRequest request) {
 		int limit = 4;
 		int offset = (cPage - 1) * limit;
 		String id = member.getId();
-
+		
 		Map<String, Object> param = new HashMap<>();
 		param.put("offset", offset);
 		param.put("limit", limit);
 		param.put("id", id);
+		param.put("date", date);
 		// 로그인한 아이디로 등록된 가계부 전체 목록
 		List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
 

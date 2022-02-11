@@ -308,7 +308,7 @@
 		});
 	};
 	
-	/* 코드 찍기 */
+	/* 수정/삭제창 토글 */
 	$('.accountListDiv').click(function() {
 		const code = this.className.split(" ")[1];
 		$('#'+code+'').slideToggle();
