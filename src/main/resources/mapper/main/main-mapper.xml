@@ -3,6 +3,17 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="main">
+
+	<!-- 위젯 드롭시 자동 테이블 등록 -->
+	<insert id="insertWidget">
+		insert into
+			widget
+		values(
+			seq_widget_no.nextval,
+			#{id},
+			#{widgetName}
+		)
+	</insert>
 	
 	<!-- 내려놓으면서 생성되는 기본 투두리스트 -->
 	<insert id="insertTodoList">

@@ -29,6 +29,11 @@ public class MainServiceImpl implements MainService {
 	public int deleteTodoList(Map<String, Object> map) {
 		return mainDao.deleteTodoList(map);
 	}
+
+	@Override
+	public int insertWidget(Map<String, Object> param) {
+		return mainDao.insertWidget(param);
+	}
 	
 	
 	

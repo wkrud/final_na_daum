@@ -28,6 +28,11 @@ public class MainDaoImpl implements MainDao {
 	public int deleteTodoList(Map<String, Object> map) {
 		return session.delete("main.deleteTodoList", map);
 	}
+
+	@Override
+	public int insertWidget(Map<String, Object> param) {
+		return session.insert("main.insertWidget", param);
+	}
 	
 	
 

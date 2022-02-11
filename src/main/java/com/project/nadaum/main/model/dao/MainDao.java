@@ -13,4 +13,6 @@ public interface MainDao {
 
 	int deleteTodoList(Map<String, Object> map);
 
+	int insertWidget(Map<String, Object> param);
+
 }

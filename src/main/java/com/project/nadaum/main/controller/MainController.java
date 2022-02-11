@@ -40,6 +40,21 @@ public class MainController {
 		
 	}
 	
+	//드래그존에 드롭시 위젯 테이블에 insert
+	@ResponseBody
+	@GetMapping(value="/insertWidget.do")
+	public int insertWidget(@AuthenticationPrincipal Member member, @RequestParam String widgetName) {
+		String id = member.getId();
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("widgetName", widgetName);
+		
+		int insertWidget = mainService.insertWidget(param);
+		
+		return insertWidget;
+	}
+	
 	//투두리스트 생성
 	@ResponseBody
 	@GetMapping(value="/insertTodoList.do")

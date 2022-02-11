@@ -97,9 +97,28 @@
    //투두리스트
    else if(widgetName == 'todo-widget') {
 	   if(document.querySelector('.todo-widget') == null) {
+		   //내려놓을 때 db 등록
+		  	$.ajax({
+		    	url : "${pageContext.request.contextPath}/main/insertWidget.do",
+		     	method : 'GET',
+		     	data : {
+		     		"widgetName" : widgetName
+		     	},
+		     	contentType : "application/json; charset=UTF-8",
+		     	dataType : "json",
+		     	success(data) {
+		     		console.log(data);
+		     		alert("등록 성공");
+		     	}, error(xhr, testStatus, err) {
+    					console.log("error", xhr, testStatus, err);
+    					alert("위젯 등록에 실패했습니다.");
+    				}
+     			});
+		   
+		   //위젯 박스 생성
 	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`
-	        		<button onclick="delWidget(`+this+`)">위젯 삭제</button></div>`
-
+	        		<button onclick="delWidget(this)">위젯 삭제</button></div>`
+			//투두리스트 자동 등록
 			$.ajax({
 		    	url : "${pageContext.request.contextPath}/main/insertTodoList.do",
 		     	method : 'GET',
@@ -107,6 +126,7 @@
 		     	dataType : "json",
 		     	success(data) {
 		     		console.log(data);
+		     		//투두리스트 insert 성공시 리스트 로딩
 		     		if(data == 1) {
 		     			$.ajax({
 		     				url : "${pageContext.request.contextPath}/main/userTodoList.do",
@@ -302,6 +322,53 @@
 		}
 	 });
 	};
+	
+	
+	
+	
+	
+/* 위젯 생성 함수들 */
+
+function todoWidget() {
+$.ajax({
+	url : "${pageContext.request.contextPath}/main/userTodoList.do",
+	method : 'GET',
+   	contentType : "application/json; charset=UTF-8",
+   	dataType : "json",
+   	success(resp) {
+   		console.log(resp);
+   		console.log(resp.length);
+
+   		let todoList = "";
+   	todoList = `<ul class="todoListRoom">
+   					<li><input type="text" name="title" id="title" value="`+resp[0].title+`" /></li>
+   					<li><input type="text" name="regDate" value="`+timeConvert(resp[0].regDate)+`" /></li>
+   				</ul>
+   					`
+   				$(".widget_form").append(todoList);
+   		//for문으로 투두리스트 목록
+		for(let i = 0; i < resp.length; i++) {		    		     			
+   		todoList = `
+   			<li>
+   				<input type="checkbox" name="no" id="" value="`+resp[i].no+`" />
+   				<input type="text" name="content" id="" value="`+resp[i].content+`" />
+   				<button onclick="delTodoList(`+resp[i].no+`)">삭제하기</button>
+   			</li>
+   		`
+		$(".todoListRoom").append(todoList);
+		}
+		//버튼 추가
+		todoList = `<button class="`+resp[0].title+`">+ 일정을 추가하세요</button>`
+		$(".todoListRoom").append(todoList);
+   	},error(xhr, testStatus, err) {
+	console.log("error", xhr, testStatus, err);
+	alert("위젯 로딩에 실패했습니다.");
+	}
+});
+};
+	
+	
+	
  
 //수입 지출 변환 함수
 function IE(x) {
