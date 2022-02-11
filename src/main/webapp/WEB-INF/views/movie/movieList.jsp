@@ -87,7 +87,7 @@ background: #707070;
 </style>
 	<div class="movie-container">
 		<!-- 썸네일 그림, 타이틀  -->
-		<div class="movie-banner">
+		 <div class="movie-banner">
 			<div id="myCarousel" class="carousel slide" data-ride="carousel">
 				<ol class="carousel-indicators">
 					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
