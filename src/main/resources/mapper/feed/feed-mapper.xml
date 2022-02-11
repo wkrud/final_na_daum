@@ -86,8 +86,50 @@
 		insert into attachment
 		values(seq_attachment_no.nextval, #{code}, #{originalFilename}, #{renamedFilename}, default)
 	</insert>
-
-
+	<select id="addFeedMain" resultType="map">
+		select 
+			f.code code,
+			f.writer writer,
+			f.content content,
+			f.reg_date regDate,
+			a.renamed_filename filename,
+			m.nickname nickname,
+			m.profile profile,
+			m.login_type loginType,
+			(select count(*) from feed_comment where f_code = f.code) comments,
+			(select count(*) from likes where code = f.code) likes
+		from
+			feed f left join attachment a
+				on f.code = a.code
+				left join member m
+				on f.writer = m.id 
+		order by
+			f.reg_date desc
+	</select>
+	<select id="feedMain" resultType="map">
+		<![CDATA[
+		select * from
+		(select 
+			f.code code,
+			f.writer writer,
+			f.content content,
+			f.reg_date regDate,
+			a.renamed_filename filename,
+			m.nickname nickname,
+			m.profile profile,
+			m.login_type loginType,
+			(select count(*) from feed_comment where f_code = f.code) comments,
+			(select count(*) from likes where code = f.code) likes
+		from
+			feed f left join attachment a
+				on f.code = a.code
+				left join member m
+				on f.writer = m.id 
+		order by
+			f.reg_date desc)
+		where rownum <= 2
+		]]>
+	</select>
 
 
 </mapper>
