@@ -463,13 +463,13 @@ public class ApitestController {
 	
 	@ResponseBody
 	@PostMapping("/riotWidget.do")
-	public Map<String, Object> riotWidget(@RequestBody String member_id) {
-		Map<String, Object> map = new HashMap<String, Object>();	
+	public Map<String, Object> riotWidget(@RequestBody Map<String, Object> map) {
+		
 		RiotWidget widgetinfo;
 		
 		try {
 			
-			widgetinfo = riotService.selectOneWidget(member_id);
+			widgetinfo = riotService.selectOneWidget(map);
 			map.put("widgetinfo", widgetinfo);
 			log.info("oneaccount= {}",widgetinfo);
 			
