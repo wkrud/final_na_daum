@@ -29,6 +29,7 @@ div#board-container {
 
 input, button, textarea {
 	margin-bottom: 15px;
+	resize: none;
 }
 
 button {
