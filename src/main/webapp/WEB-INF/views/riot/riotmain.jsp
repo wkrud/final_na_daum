@@ -36,6 +36,7 @@
 <input type="hidden" id="id" value="${loginMember.id}" />
 <input type="hidden" id="nickName" value="${loginMember.nickname}" />
 <input type="hidden" id="summonerId" value="${summoner.id}" />
+<input type="hidden" id="summonerNameCheck" value="${summoner.name}" />
 <div id="nadaumgg">
 	<h1>Nadaum.gg</h1>
 </div>
