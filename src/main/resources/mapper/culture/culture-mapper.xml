@@ -6,39 +6,20 @@
 	<insert id="insertCultureLike">
 		insert 
 		into 
-			scrap
+			likes 
 		values
-			(concat('sc-',seq_culture_no.nextval), #{id}, sysdate, #{apiCode})
+			(seq_likes_no.nextval, #{id}, #{apiCode})
 	</insert>
 	
 	<delete id="deleteCultureLike">
 		delete 
 		from 
-			scrap
+			likes 
 		where 
 			id = #{id} 
 		and 
-			code = #{apiCode}
+			code = #{api_code}
 	</delete>
 	
-	<select id="selectCultureLikes" resultType="scrap">
-		select
-			*
-		from
-			scrap
-		where 
-			id = #{id} 
-		order by
-			reg_date desc
-	</select>
-	
-	<select id="selectCountLikes" resultType="int">
-		select
-			count(*)
-		from
-			scrap
-		where
-			code = #{apiCode}
-	</select>
 </mapper>
 
