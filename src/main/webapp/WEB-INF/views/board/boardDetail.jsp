@@ -8,10 +8,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 
-<%@ page import="com.project.nadaum.member.model.vo.MemberEntity" %>
-<sec:authentication property="principal" var="loginMember"/>
+<%@ page import="com.project.nadaum.member.model.vo.MemberEntity"%>
+<sec:authentication property="principal" var="loginMember" />
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
+<meta id="_csrf_header" name="_csrf_header"
+	content="${_csrf.headerName}" />
 
 <sec:authentication property="principal" var="loginMember" />
 
@@ -23,7 +24,6 @@
 
 <style>
 div#board-container {
-	
 	width: 1000px;
 }
 
@@ -39,29 +39,6 @@ div#board-container label.custom-file-label {
 	text-align: left;
 }
 
-div.col>.detail{
-border:none;
-border-right:0px;
- border-top:0px; 
- boder-left:0px; 
- boder-bottom:0px;
- background-color:transparent;
- display:inline-block;
-margin : 0px;
-pointer-events: none; 
-}
-.id-detail{border:none;
-border-right:0px;
- border-top:0px; 
- boder-left:0px; 
- boder-bottom:0px;
- background-color:transparent;
- display:inline-block;
-margin : 0px;
-font-size:20px;
-pointer-events: none; 
-
-
 div.col>.detail {
 	border: none;
 	border-right: 0px;
@@ -71,7 +48,7 @@ div.col>.detail {
 	background-color: transparent;
 	display: inline-block;
 	margin: 0px;
-
+	pointer-events: none;
 }
 
 .id-detail {
@@ -84,6 +61,27 @@ div.col>.detail {
 	display: inline-block;
 	margin: 0px;
 	font-size: 20px;
+	pointer-events: none; div .col>.detail { border : none;
+	border-right: 0px;
+	border-top: 0px;
+	boder-left: 0px;
+	boder-bottom: 0px;
+	background-color: transparent;
+	display: inline-block;
+	margin: 0px;
+}
+
+.id-detail {
+	border: none;
+	border-right: 0px;
+	border-top: 0px;
+	boder-left: 0px;
+	boder-bottom: 0px;
+	background-color: transparent;
+	display: inline-block;
+	margin: 0px;
+	font-size: 20px;
+	width: 124px;
 }
 
 .detailcontent {
@@ -97,33 +95,25 @@ div.col>.detail {
 
 		<div id="detailcontent-container" class="form-horizontal">
 			<!-- 넘겨주어야하는 값 -->
-			<input type="hidden" name="code" id="countcode" value="${board.code}" /> <input
-				type="hidden" name="id" id="id" value="${loginMember.id}" /> <input
-				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			<input type="hidden" name="code" id="countcode" value="${board.code}" />
+			<input type="hidden" name="id" id="id" value="${loginMember.id}" />
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
 
 
 			<h1 class="display-3" readonly>${board.title}</h1>
 
 			<div class="container">
 
- 			<div class="row row-cols-4">
-    		<div class="col">작성자 : <input type="text" class="detail" id="nickname" name="nickname" value="${board.nickname}" readonly></div>
-    		<div class="col">등록일자 : <fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd HH:mm"/></div>
-    		<div class="col">조회수 : <input type="number" class="detail" id="readCount" name="readCount" title="조회수" value="${board.readCount}" readonly></div>
-  			</div>
-			</div>			
-			
-			
-
 				<div class="row row-cols-4">
 					<div class="col">
-						작성자 : <input type="text" class="detail" id="writer" name="id"
-							value="${board.id}" readonly>
+						작성자 : <input type="text" class="detail" id="nickname"
+							name="nickname" value="${board.nickname}" readonly>
 					</div>
 					<div class="col">
 						등록일자 :
 						<fmt:formatDate value="${board.regDate}"
-							pattern="yyyy-MM-dd'T'HH:mm" />
+							pattern="yyyy-MM-dd HH:mm" />
 					</div>
 					<div class="col">
 						조회수 : <input type="number" class="detail" id="readCount"
@@ -131,6 +121,9 @@ div.col>.detail {
 					</div>
 				</div>
 			</div>
+
+
+
 
 
 
@@ -188,16 +181,36 @@ div.col>.detail {
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item" id="comment-li">
 							<div class="form-inline mb-2">
-								<label for="replyId"><i
+								<div class="profileimg1">
+									<div class="profileimg-detail1"
+										style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+										<c:if test="${loginMember.loginType eq 'K'}">
+											<img src="${loginMember.profile}" alt=""
+												style="width: 45px; height: 45px; object-fit: cover;" />
+										</c:if>
+										<c:if test="${loginMember.loginType eq 'D'}">
+											<c:if test="${loginMember.profileStatus eq 'N'}">
+												<img
+													src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+													alt=""
+													style="width: 45px; height: 45px; object-fit: cover;" />
+											</c:if>
+											<c:if test="${loginMember.profileStatus eq 'Y'}">
+												<img
+													src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}"
+													alt=""
+													style="width: 45px; height: 45px; object-fit: cover;" />
+											</c:if>
+										</c:if>
+									</div>
 
-									class="fa fa-user-circle-o fa-2x">
-									<input type="text" class="id-detail" name="id" id="id" value="${loginMember.nickname}" /></i>
+								</div>
+								<div class="profileimg2">
+									<label for="replyId"> <input type="text"
+										class="id-detail" name="id" id="replyId"
+										value="${loginMember.nickname}" />
 									</label>
-
-									class="fa fa-user-circle-o fa-2x"> <input type="text"
-										class="id-detail" name="id" id="id" value="${loginMember.id}" /></i>
-								</label>
-
+								</div>
 							</div>
 							<form
 								action="${pageContext.request.contextPath}/board/boardCommentEnroll.do"
@@ -245,16 +258,53 @@ div.col>.detail {
 							<c:when test="${comment.commentLevel eq 1 }">
 								<ul class="list-group list-group-flush" id="level1">
 									<li class="list-group-item" id="commentList">
-										<div class="form-inline mb-2">
-											<label for="replyId"> <i
-												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.nickname}</strong>
-											</label> &nbsp;&nbsp;
-											<fmt:formatDate value="${comment.regDate}"
-												pattern="yyyy-MM-dd HH:mm" />
-										</div> <textarea class="form-control"
-											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+										<div>
+											<div class="form-inline mb-2">
+												<label for="replyId">
 
-										<%-- 회원일때만 답글 버튼이 나타남 --%>
+													<div class="form-inline mb-2">
+														<div class="profileimg1">
+															<div class="profileimg-detail1"
+																style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+																<c:if test="${comment.loginType eq 'K'}">
+																	<img src="${comment.profile}" alt=""
+																		style="width: 45px; height: 45px; object-fit: cover;" />
+																</c:if>
+																<c:if test="${comment.loginType eq 'D'}">
+																	<c:if test="${comment.profileStatus eq 'N'}">
+																		<img
+																			src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+																			alt=""
+																			style="width: 45px; height: 45px; object-fit: cover;" />
+																	</c:if>
+																	<c:if test="${comment.profileStatus eq 'Y'}">
+																		<img
+																			src="${pageContext.request.contextPath}/resources/upload/member/profile/${comment.profile}"
+																			alt=""
+																			style="width: 45px; height: 45px; object-fit: cover;" />
+																	</c:if>
+																</c:if>
+															</div>
+
+														</div>
+														<div class="profileimg2">
+															<label for="replyId"> <input type="text"
+																class="id-detail" name="id" id="replyId"
+																value="&nbsp;&nbsp;${comment.nickname}" />
+															</label>
+														</div>
+													</div>
+												</label> &nbsp;&nbsp;
+												<fmt:formatDate value="${comment.regDate}"
+													pattern="yyyy-MM-dd HH:mm" />
+											</div>
+
+											<div>
+												<textarea class="form-control"
+													id="exampleFormControlTextarea1" rows="1"
+													readonly="readonly">${comment.content}</textarea>
+											</div>
+										</div> <%-- 회원일때만 답글 버튼이 나타남 --%>
 										<div class="row float-right">
 											<button type="button" onclick="firstReply()"
 												class="btn btn-warning btnReComment btn-reply"
@@ -279,8 +329,39 @@ div.col>.detail {
 									<li class="list-group-item" id=level2Reply
 										style="padding-left: 100px;">
 										<div class="form-inline mb-2">
-											<label for="replyId"> <i
-												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
+											<label for="replyId">
+												<div class="form-inline mb-2">
+													<div class="profileimg1">
+														<div class="profileimg-detail1"
+															style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+															<c:if test="${comment.loginType eq 'K'}">
+																<img src="${comment.profile}" alt=""
+																	style="width: 45px; height: 45px; object-fit: cover;" />
+															</c:if>
+															<c:if test="${comment.loginType eq 'D'}">
+																<c:if test="${comment.profileStatus eq 'N'}">
+																	<img
+																		src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+																		alt=""
+																		style="width: 45px; height: 45px; object-fit: cover;" />
+																</c:if>
+																<c:if test="${comment.profileStatus eq 'Y'}">
+																	<img
+																		src="${pageContext.request.contextPath}/resources/upload/member/profile/${comment.profile}"
+																		alt=""
+																		style="width: 45px; height: 45px; object-fit: cover;" />
+																</c:if>
+															</c:if>
+														</div>
+
+													</div>
+													<div class="profileimg2">
+														<label for="replyId"> <input type="text"
+															class="id-detail" name="id" id="replyId"
+															value="&nbsp;&nbsp;${comment.nickname}" />
+														</label>
+													</div>
+													</div>
 											</label> &nbsp;&nbsp;
 											<fmt:formatDate value="${comment.regDate}"
 												pattern="yyyy-MM-dd HH:mm" />
@@ -303,16 +384,18 @@ div.col>.detail {
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
+					</div>
+					</div>
 		</c:if>
 	</div>
 </div>
 <!-- 댓글 목록 끝 -->
 
 
-</div>
 
 
-</div>
+
+
 </body>
 <form name="boardDelFrm" method="POST"
 	action="${pageContext.request.contextPath}/board/boardDelete.do">
@@ -324,9 +407,9 @@ div.col>.detail {
 	action="${pageContext.request.contextPath}/board/boardCommentDelete.do"
 	name="boardCommentDelFrm" method="POST">
 	<input type="hidden" name="commentCode" value="${comment.commentCode}" />
-	<input type="hidden" name="code" value="${board.code}" /> 
-	<input type="hidden" name="id" id="id" value="${loginMember.id}" /> 
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<input type="hidden" name="code" value="${board.code}" /> <input
+		type="hidden" name="id" id="id" value="${loginMember.id}" /> <input
+		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 <script>
 $(document).ready(function() {

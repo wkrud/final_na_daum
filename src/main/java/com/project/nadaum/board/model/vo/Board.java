@@ -22,17 +22,25 @@ public class Board extends BoardEntity implements Serializable {/**
 	private int commentCount;
 	private int likeCount;
 	private String nickname;
-	
-	
+	private String profile;
+    private String loginType;
+    private String profileStatus;
+    
 	public Board(String code, String title, String id, String content, String category, int readCount, Date regDate,
-			MemberEntity member, Likes like, int commentCount, int likeCount, String nickname) {
+			MemberEntity member, Likes like, int commentCount, int likeCount, String nickname, String profile,
+			String loginType, String profileStatus) {
 		super(code, title, id, content, category, readCount, regDate);
 		this.member = member;
 		this.like = like;
 		this.commentCount = commentCount;
 		this.likeCount = likeCount;
 		this.nickname = nickname;
+		this.profile = profile;
+		this.loginType = loginType;
+		this.profileStatus = profileStatus;
 	}
+	
+	
 	
 	
 	

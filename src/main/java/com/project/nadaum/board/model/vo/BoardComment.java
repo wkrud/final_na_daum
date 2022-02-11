@@ -27,7 +27,8 @@ public class BoardComment implements Serializable {
 	private int commentLevel; // 댓글 -> 1, 대댓글 -> 2
 	private String commentRef; //대댓글인 경우, 참조하는 댓글번호 code,  댓글인 경우 null
 	private Date regDate;
-
-	private MemberEntity member;
+	private String profile;
+    private String loginType;
+    private String profileStatus;
 	private String nickname;
 }
