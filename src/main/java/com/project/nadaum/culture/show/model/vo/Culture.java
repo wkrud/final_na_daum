@@ -10,12 +10,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Scrap implements Serializable {
+public class Culture implements Serializable {
 
    private static final long serialVersionUID = 1L;
 
    private String code;
-   private String id;
-   private Date regDate;
-   private String apiCode;
+   private String title;
+   private Date startDate;
+   private Date endDate;
+   private String area;
+   private String place;
+   private String realmName;
+   private String imgUrl;
 }
