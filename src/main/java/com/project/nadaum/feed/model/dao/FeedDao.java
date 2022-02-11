@@ -37,4 +37,8 @@ public interface FeedDao {
 
 	List<Map<String, Object>> selectAddFeed(Map<String, Object> map);
 
+	int feedEnroll(Feed feed);
+	
+    int insertAttachment(Attachment attach);
+
 }
