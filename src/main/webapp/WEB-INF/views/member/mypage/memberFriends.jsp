@@ -149,7 +149,7 @@ $search.change((e) => {
 $(function(){
 	$(".friends-section").slick({
 		infinite: true,
-		slidesToShow: 1,
+		slidesToShow: 5,
 		slidesToScroll: 1,
 		speed: 500,
 		arrows: true,
@@ -157,12 +157,10 @@ $(function(){
 		vertical: false,
 		prevArrow : "<i class='fa fa-arrow-left' aria-hidden='true'></i>",		
 		nextArrow : "<i class='fa fa-arrow-right' aria-hidden='true'></i>"
-		/* prevArrow : "<button type='button' class='slick-prev'><i class='fa fa-arrow-left' aria-hidden='true'></i></button>",		
-		nextArrow : "<button type='button' class='slick-next'><i class='fa fa-arrow-right' aria-hidden='true'></i></button>" */
 	});
 	$(".followers-section").slick({
 		infinite: true,
-		slidesToShow: 1,
+		slidesToShow: 5,
 		slidesToScroll: 1,
 		speed: 500,
 		arrows: true,
