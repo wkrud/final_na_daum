@@ -179,6 +179,14 @@ const selectedFeed = (id, code) => {
 			
 			likeHtml(resp.feed.code, resp.feed.writer, resp.guest.nickname);			
 			
+			$(".feed-textarea").on('keyup',function(e){
+				if($(".feed-textarea").val() != ''){
+					if(e.key === 'Enter' || e.keyCode === 13){
+						$("#write-comment-btn").trigger('click');
+					}
+				}
+			});
+			
 			$("#write-comment-btn").on('click',function(){	
 				let $content = $(".feed-textarea");
 				if($content.val() == ''){
@@ -198,6 +206,7 @@ const selectedFeed = (id, code) => {
 		error: console.log
 	});
 };
+
 
 const deleteComment = (no, id, code) => {
 	

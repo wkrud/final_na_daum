@@ -21,6 +21,7 @@ public class RiotFavo implements Serializable{
 	
 	private String memberId;
 	private String smId;
+	private String name;
 	private boolean favAccept;
 
 	

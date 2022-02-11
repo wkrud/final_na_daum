@@ -135,6 +135,12 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.selectCountLikes(code);
 	}
 
+	@Override
+	public int selectIdCountLikes(Map<String, Object> param) {
+		
+		return boardDao.selectIdCountLikes(param);
+	}
+
 	
 
 	

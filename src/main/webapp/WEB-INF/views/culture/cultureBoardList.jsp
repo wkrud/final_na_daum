@@ -18,7 +18,7 @@ div#culture-container{width:100%; margin:0 auto;text-align:center;}
 #culture_code{
 	display:none;
 }
-.card{
+.culture-card{
 height: 300px;
 padding: 15px;
 }
@@ -42,7 +42,7 @@ padding-left: 20px;
 </style>
 <script>
 //cultureDetail
-/* $(() => {
+ $(() => {
 		
 		//날짜 넣기
 		 const value = new Date();
@@ -59,33 +59,57 @@ padding-left: 20px;
 		console.log(after_month);
 		end = document.getElementById("endDate");
 		end.value = after_month; 
-}); */
-
-
-
+		
+		
+}); 
 </script>
-<body>
 	<div class="container">
 		<div class="culture-thumnail">
 			<!-- 썸네일 그림, 타이틀  -->
 			<img src="${pageContext.request.contextPath}/resources/images/culture/festival.jpg" alt="문화썸네일" />
 			<h1 class="title">Culture</h1>
-			<form class="form-inline" id="searchFrm">
-				 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
-				  <button type="submit" class="btn orange btn-default">Search</button>
-					<button type="button" class="btn btn-dark">나다운 찜 목록</button>
+			<form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}" method="post">
+			 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
+				 	
+				  <div class="form-group" id="period">
+				    <label for="Date" class="control-label">기간</label>
+				    <input type="date" class="form-control" id="startDate" name="startDate">
+				    <input type="date" class="form-control" id="endDate" name="endDate">
+				  </div>
+				  <div class="form-group" id="area">
+				    <label for="area" class="control-label">지역</label>
+				      <select class="form-control" name="searchArea" id="searchArea">
+				        <option value="">모두</option>
+				        <option value="서울">서울</option>
+				        <option value="경기">경기</option>
+				      </select>
+				  </div>
+				  <div class="form-group" id="genre">
+				    <label for="genre" class="control-label">장르</label>
+				      <select class="form-control" name="searchGenre" id="searchGenre">
+				      	<option value="">모두</option>
+				        <option value="A000">연극</option><!-- A연극 -->
+				        <option value="B000">음악</option><!-- B 음악  -->
+				        <option value="C000">무용</option><!-- C 무용-->
+				        <option value="D000">미술</option><!-- D 미술  -->
+				      </select>
+				  </div>
+				  <button type="submit" class="btn orange btn-default" id="search-btn" >Search</button>
+			</form>
+			<form action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}" method="post">
+				<input type="hidden" name="id" value="${loginMember.id}" />
+					<button type="submit" class="btn btn-dark"  >나다운 찜 목록</button>			
 			</form>
 		</div>
 	<div id="culture-container">
 	    <br />
-	    
 	     <div class="py-5">
 	    <div class="container">
-	      <div class="row hidden-md-up">
-	       
+	      <div class="row hidden-md-up" id="result">
+	      
 	     <c:forEach var="culture" items="${list}">
 	    	<div class="col-md-4" style="padding: 15px;">
-	         <div class="card"> 
+	         <div class="card culture-card"> 
 	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
 	              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>
@@ -119,42 +143,4 @@ padding-left: 20px;
 		<!-- culture-container 끝 -->
 		</div>
 	</div>
-</body>
-<script>
- $(searchFrm).submit((e) => {
-	e.preventDefault();
-	
-	
-/* 	const startDate = $(e.target).find("[id=startDate]").val();
-	console.log(startDate); */
-	
-/* 	var area_opt = document.getElementById("search-area");
-	var area = area_opt.options[area_opt.selectedIndex].value;
-	
-	console.log(area); */
-
-	
-	const csrfHeader = "${_csrf.headerName}";
-    const csrfToken = "${_csrf.token}";
-    const headers = {};
-    headers[csrfHeader] = csrfToken;
-    
-    
-	$.ajax({
-		headers : headers, 
-		url: `${pageContext.request.contextPath}/culture/board/${page}`,
-		method: "POST",
-		data : $(searchFrm).serialize(),
-		success(resp){
-			console.log(resp);
-		},
-		error: console.log
-	});
-	
-}); 
-</script>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
-</body>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

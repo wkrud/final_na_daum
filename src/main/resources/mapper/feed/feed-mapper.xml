@@ -58,6 +58,37 @@
 		delete from feed_comment where no = #{no} and comment_writer = #{id} and f_code = #{code}
 	</delete>
 	
+	<select id="selectAddFeed" resultType="map">
+		select 
+			f.code code,
+			f.writer writer,
+			f.content content,
+			f.reg_date regdate,
+			a.renamed_filename filename,
+			(select count(*) from feed_comment where f_code = f.code) comments,
+			(select count(*) from likes where code = f.code) likes
+		from
+			feed f left join attachment a
+				on f.code = a.code
+		where
+			writer = #{id}
+		order by
+			f.reg_date desc
+	</select>
+	
+	<insert id="feedEnroll">
+		insert into feed values(concat('fe-',seq_feed_no.nextval), #{writer}, #{content}, default)
+		<selectKey order="AFTER" resultType="string" keyProperty="code">
+			select concat('fe-',seq_feed_no.currval) from dual
+		</selectKey>	
+	</insert>
+	<insert id="insertAttachment">
+		insert into attachment
+		values(seq_attachment_no.nextval, #{code}, #{originalFilename}, #{renamedFilename}, default)
+	</insert>
+
+
+
 
 </mapper>
 

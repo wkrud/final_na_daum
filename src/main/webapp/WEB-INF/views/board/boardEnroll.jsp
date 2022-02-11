@@ -15,6 +15,7 @@
 	width: 715px;
 	height: 927px;
 	left: 500px;
+	margin: 0 auto;
 }
 </style>
 <script>
