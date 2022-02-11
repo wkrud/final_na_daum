@@ -13,7 +13,10 @@ import com.project.nadaum.feed.model.dao.FeedDao;
 import com.project.nadaum.feed.model.vo.Feed;
 import com.project.nadaum.feed.model.vo.FeedComment;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 @Transactional(rollbackFor=Exception.class)
 public class FeedServiceImpl implements FeedService {
 
@@ -99,6 +102,25 @@ public class FeedServiceImpl implements FeedService {
 	public List<Map<String, Object>> selectAddFeed(Map<String, Object> map) {
 		return feedDao.selectAddFeed(map);
 	}
+
+	@Override
+    public int feedEnroll(Feed feed) {
+        int result = feedDao.feedEnroll(feed);
+        log.debug("code = {}", feed.getCode());
+        
+        List<Attachment> attachments = feed.getAttachments();
+        if(attachments != null) {
+            for(Attachment attach : attachments) {
+                attach.setCode(feed.getCode());
+                result = insertAttachment(attach);
+                
+            }
+        }
+        return result;
+    }
+    public int insertAttachment(Attachment attach) {
+        return feedDao.insertAttachment(attach);
+    }
 
 	
 	
