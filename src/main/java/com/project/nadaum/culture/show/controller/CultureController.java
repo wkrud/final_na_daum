@@ -65,25 +65,7 @@ public class CultureController {
 	        return null;
 	    return nValue.getNodeValue();
 	}
-	
-	private static String getTagValues(String tagName, Element elem) {
-		//getElementsByTagName -> 직속자식뿐만 아니라 자식태그 탐색가능
-		NodeList nodeList = elem.getElementsByTagName(tagName);
-		int len = nodeList.getLength(); //검색한 태그의 글자 수 
-		
-		if(len == 0) return null; //NodeList의 글자수가 0개일시 null을 리턴.
-		
-		String[] tagArr = new String[len]; //태그 글자를 배열에 담음
-		for(int i = 0; i < len; i++) {
-			Node tagNameNode = nodeList.item(i); // tagName에 해당하는 node객체
-			NodeList nList = tagNameNode.getChildNodes(); // tagName의 자식 컨텐츠
-			Node contentNode = nList.item(0); // 텍스트노드
-//			System.out.println(contentNode.getNodeType() == Element.TEXT_NODE); // true
-			tagArr[i] = contentNode.getTextContent(); // 텍스트노드의 텍스트컨텐트를 tagarr에 담음.
-		}
-		
-		return String.join(",", tagArr);
-	}
+
 		
 	@GetMapping("/board/{page}")
 	public  ModelAndView getCultureApi(@PathVariable int page,HttpServletRequest request,  Model model){
@@ -305,87 +287,8 @@ public class CultureController {
 					  e.printStackTrace();
 			}		  
 			return new ModelAndView("/culture/cultureView","list",list);
-		}
 		
-	
-		@PostMapping("/board/{page}/period")
-		public ResponseEntity<?> SearchPeriod(@RequestParam Map<String,Object> map ,@PathVariable int page, Model model){
-			
-			System.out.println(map);
-			
-			for(Object value : map.values()) {
-				System.out.println(value);
-			}
-			
-			List<Object> list = new ArrayList<>();
-				try {
-					
-				while(true){
-					// parsing할 url 지정(API 키 포함해서)
-					String url = "http://www.culture.go.kr/openapi/rest/publicperformancedisplays/period"
-							+ "?serviceKey=p%2B16HHPYFEvCkanGQCoGc9CAAG7x66tc5u3xrBmJpM8avVLTGiJ%2FjJaIvItRCggk79J9k%2Byn47IjYUHr%2FdzlgA%3D%3D"
-							+ "&rows=9"
-							+ "&cPage="+page;
-					
-					log.debug("url={}",url);
-					DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
-					DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
-					Document doc = dBuilder.parse(url);
-					
-					// root tag 
-					doc.getDocumentElement().normalize();
-					
-					// 파싱할 tag
-					NodeList nList = doc.getElementsByTagName("perforList");
-					
-					for(int temp = 0; temp < nList.getLength(); temp++){
-						Node nNode = nList.item(temp);
-						if(nNode.getNodeType() == Node.ELEMENT_NODE){
-							
-							Element eElement = (Element) nNode;
-							
-//							System.out.println(eElement.getTextContent());
-							String seq = getTagValue("seq", eElement);
-							String title = getTagValue("title", eElement);
-							String startDate = getTagValue("startDate", eElement);
-							String endDate = getTagValue("endDate", eElement);
-							String area = getTagValue("area", eElement);
-							String place = getTagValue("place", eElement);
-							String thumbnail = getTagValue("thumbnail", eElement);
-							String realmName = getTagValue("realmName", eElement);
-							
-							Map<String, Object> resultMap = new HashMap<>();
-							resultMap.put("seq", seq);
-							resultMap.put("title", title);
-							resultMap.put("startDate", startDate);
-							resultMap.put("endDate", endDate);
-							resultMap.put("area", area);
-							resultMap.put("place", place);
-							resultMap.put("thumbnail", thumbnail);
-							resultMap.put("realmName", realmName);
-							resultMap.put("msg", "조회 성공");
-							
-							list.add(resultMap);
-							
-						}	// for end
-						
-					}	// if end
-					System.out.println(list);
-					model.addAttribute("list",list);
-					System.out.println("page number : "+page);
-					model.addAttribute("page",page);
-					 
-					
-					if(page > 0){ break; }
-				}
-				
-				}catch (Exception e) {
-					log.error(e.getMessage(), e);
-					return ResponseEntity.badRequest().build();
-				}
-				return ResponseEntity.ok(map);
 		}
-
 	//============================= 스크랩 ==========================================
 		
 	@PostMapping("/board/view/{apiCode}/likes")
