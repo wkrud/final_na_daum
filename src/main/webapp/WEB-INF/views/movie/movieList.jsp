@@ -62,6 +62,10 @@
 padding : 100px;
 }
 
+.movie-card{
+display:inline-block;
+}
+
 .blog .carousel-indicators {
 	left: 0;
 	top: auto;
@@ -210,8 +214,13 @@ background: #707070;
 		<!-- TMDB api -->
 	<div class="upcoming-movie">
 		<c:forEach var="movie" items="${list}">
-		<div class="card" style="width: 18rem;">
+		<div class="card movie-card" style="width: 18rem;">
+			
   			<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
+            						
+            						<rect width="100%" height="100%" fill="#55595c" />
+           		 					</svg>	
+  			
   			<div class="card-body">
    			 <p class="card-text">${movie.title}</p>
   			</div>
