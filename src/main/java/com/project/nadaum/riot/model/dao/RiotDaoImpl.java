@@ -91,9 +91,9 @@ public class RiotDaoImpl implements RiotDao {
 
 
 	@Override
-	public RiotWidget selectOneWidget(String member_id) {
+	public RiotWidget selectOneWidget(Map<String, Object> map) {
 		
-		return session.selectOne(member_id);
+		return session.selectOne("riot.selectOneWidget",map);
 	}
 	
 
