@@ -12,6 +12,7 @@ const selectedFeed = (id, code) => {
 			let commenterProfileImg = '';
 			let commentDate = '';
 			let likes = '';		
+			let dmDiv = '';
 			
 			
 			if(resp.likeCheck > 0){
@@ -35,6 +36,25 @@ const selectedFeed = (id, code) => {
 				hostProfile = resp.member.profile;							
 			}
 			
+			if(resp.feed.writer == resp.guest.id){
+				dmDiv = `
+				<div clsas="feed-host-profile">
+					<img src="${hostProfile}" alt="" />
+				</div>
+				`;
+			}else{
+				dmDiv = `
+				<div clsas="dropdown feed-host-profile">
+					<img src="${hostProfile}" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"/>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="click-send-chat" href='javascript:void(0);' onclick="startChatNow('${resp.guest.nickname}', '${resp.member.nickname}');">채팅하기</a>
+					</div>
+				</div>
+				`;
+			}
+			
+			
+			
 			console.log(resp);
 			let feedDiv = '';
 			if(resp.feed.attachCount > 0){
@@ -43,9 +63,7 @@ const selectedFeed = (id, code) => {
 					<article class="one-feed-detail-area">
 						<div class="feed-profile-delete-wrap">
 							<div class="feed-profile-wrap">
-								<div clsas="feed-host-profile">
-									<img src="${hostProfile}" alt="" />
-								</div>
+								${dmDiv}
 								<div class="feed-host-nickname">
 									<span>${resp.member.nickname}</span>
 								</div>
@@ -87,9 +105,7 @@ const selectedFeed = (id, code) => {
 					<article class="one-feed-detail-area">
 						<div class="feed-profile-delete-wrap">
 							<div class="feed-profile-wrap">
-								<div clsas="feed-host-profile">
-									<img src="${hostProfile}" alt="" />
-								</div>
+								${dmDiv}
 								<div class="feed-host-nickname">
 									<span>${resp.member.nickname}</span>
 								</div>
@@ -172,7 +188,7 @@ const selectedFeed = (id, code) => {
 						<img src="${commenterProfileImg}" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"/>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 							<a href='/nadaum/feed/socialFeed.do?id=${v.commentWriter}'>피드 구경하기</a>
-							<a>채팅하기</a>
+							<a href='javascript:void(0);' onclick="startChatNow('${resp.guest.nickname}', '${v.nickname}');">채팅하기</a>
 						</div>
 					</div>
 					`;
@@ -234,6 +250,20 @@ const selectedFeed = (id, code) => {
 		},
 		error: console.log
 	});
+};
+
+const startChatNow = (host, guest) => {
+	if(confirm(guest + '님과 DM을 하시겠습니까?')){
+		var room = Math.floor(Math.random() * 100000);
+		console.log('room = ' + room);
+		
+		const name = `chatRoom${room}`;
+		const spec = "left=500px, top=500px, width=450px, height=620px";
+		const url = `/nadaum/member/mypage/chat.do?room=${room}`;
+		
+		chatInvite('chat', host, guest, room);
+		windowObjHistorySearch = window.open(url, name, spec);
+	}
 };
 
 const deleteFeedBtn = (code) => {

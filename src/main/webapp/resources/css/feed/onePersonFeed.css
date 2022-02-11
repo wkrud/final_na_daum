@@ -154,6 +154,16 @@ article.one-feed-detail-area{
 .feed-profile-wrap{
 	display: flex;
 }
+.feed-profile-wrap .feed-host-profile{
+	
+}
+.click-send-chat{
+	display: block !important;
+	padding-left: 10px;
+	text-decoration: none;
+	color: black;
+}
+
 .feed-delete-wrap{
 	margin-right: 5px;	
 }
@@ -267,7 +277,12 @@ article.one-feed-comment-area-wrap{
 }
 .commenter-profile-img .dropdown-menu a{
 	display: block;
-	margin-left: 10px;
+	padding-left: 10px;
+	text-decoration: none;
+	color: black;
+}
+.commenter-profile-img .dropdown-menu a:hover{
+	background-color: #fff6e9;
 }
 
 .commenter-nickname-area{
