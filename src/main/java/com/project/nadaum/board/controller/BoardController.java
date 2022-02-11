@@ -95,6 +95,47 @@ public class BoardController {
 		return map;
 	}
 	
+	@ResponseBody
+	@GetMapping("/boardLikeTotalAdd.do")
+	public Map<String, Object> boardLikeTotalAdd(@RequestParam String code, @RequestParam String id) {
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("code", code);
+		param.put("id", id);
+
+		// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
+		int selectCountLikes = boardService.selectCountLikes(code); 
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("selectCountLikes", selectCountLikes);
+		
+		
+		
+		return map;
+	}
+	
+	@ResponseBody
+	@GetMapping("/boardLikeIdCount.do")
+	public Map<String, Object> boardLikeIdCount(@RequestParam String code, @RequestParam String id) {
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("code", code);
+		param.put("id", id);
+
+		
+		// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
+		int selectIdCountLikes = boardService.selectIdCountLikes(param); 
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("selectIdCountLikes", selectIdCountLikes);
+		
+		
+		
+		return map;
+	}
+	
 	//게시물 댓글삭제
 	@PostMapping("/boardCommentDelete.do")
 	public String boardCommentDelete (
