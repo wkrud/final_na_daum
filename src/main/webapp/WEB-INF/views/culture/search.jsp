@@ -18,7 +18,7 @@ div#culture-container{width:100%; margin:0 auto;text-align:center;}
 #culture_code{
 	display:none;
 }
-.culture-card{
+.card{
 height: 300px;
 padding: 15px;
 }
@@ -62,14 +62,19 @@ padding-left: 20px;
 		
 		
 }); 
+
+
+
 </script>
+<body>
 	<div class="container">
 		<div class="culture-thumnail">
 			<!-- 썸네일 그림, 타이틀  -->
 			<img src="${pageContext.request.contextPath}/resources/images/culture/festival.jpg" alt="문화썸네일" />
 			<h1 class="title">Culture</h1>
 			<form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}" method="post">
-			 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
+			<%-- <form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do" method="post"> --%>
+				 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
 				 	
 				  <div class="form-group" id="period">
 				    <label for="Date" class="control-label">기간</label>
@@ -95,6 +100,7 @@ padding-left: 20px;
 				      </select>
 				  </div>
 				  <button type="submit" class="btn orange btn-default" id="search-btn" >Search</button>
+					
 			</form>
 			<form action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}" method="post">
 				<input type="hidden" name="id" value="${loginMember.id}" />
@@ -107,9 +113,9 @@ padding-left: 20px;
 	    <div class="container">
 	      <div class="row hidden-md-up" id="result">
 	      
-	     <c:forEach var="culture" items="${list}">
+	     <c:forEach var="culture" items="${perforList}">
 	    	<div class="col-md-4" style="padding: 15px;">
-	         <div class="card culture-card"> 
+	         <div class="card"> 
 	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
 	              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>
@@ -123,24 +129,12 @@ padding-left: 20px;
 	    			</div>
 	    		</div>
 	    	</div>
-	    	<div class="paging">
-	    		<ul>
-	    			<c:if test="${page != 1}">
-	    				<li><a href="${pageContext.request.contextPath}/culture/board/1">첫 페이지</a></li>	    			
-	    			</c:if>
-	    			<c:if test="${page-1 != 0}">
-	    				<li><a href="${pageContext.request.contextPath}/culture/board/${page-1}">이전 페이지</a></li>	    			
-	    			</c:if>
-	    			<li>${page}/20</li>
-	    			<c:if test="${page+1 < 21}">
-	    				<li><a href="${pageContext.request.contextPath}/culture/board/${page+1}">다음 페이지</a></li>
-	    			</c:if>
-	    			<c:if test="${page != 20}">
-	    				<li><a href="${pageContext.request.contextPath}/culture/board/20">마지막 페이지</a></li>	    			
-	    			</c:if>
-	    		</ul>
-	    	</div>
 		<!-- culture-container 끝 -->
 		</div>
 	</div>
+</body>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+</body>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
