@@ -25,8 +25,6 @@ public class MovieController {
 	@Autowired
 	private MovieService movieService;
 	
-	@Autowired
-	private GetMovieDetailApi getMovieDetailApi;
 	
 	//평점 평균
 	
