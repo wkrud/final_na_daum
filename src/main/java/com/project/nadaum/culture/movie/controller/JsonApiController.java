@@ -26,14 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping("/movie")
-public class WidgetMovieApi {
+//@RequestMapping("/movie")
+public class JsonApiController {
 	
-	@Autowired
-	private MovieService movieService;
-	
-	@GetMapping("/widgetMovie.do")
-	 public ModelAndView widgetMovie(Model model) {
+	//	@Autowired
+	//	private MovieService movieService;
+
+	 public void widgetMovie(Model model) {
 	        // TMDB api
 			List<Map<String, Object>> widgetMovieList = new ArrayList<>();
 		
@@ -45,8 +44,6 @@ public class WidgetMovieApi {
 	            urlStr += "?"+ URLEncoder.encode("api_key","UTF-8") +"=" + serviceKey;
 	            urlStr += "&"+ URLEncoder.encode("language","UTF-8") +"=ko-kr";
 	            urlStr += "&"+ URLEncoder.encode("page","UTF-8") +"=1";
-//	            urlStr += "&"+ URLEncoder.encode("year","UTF-8") +"=2019";
-//	            urlStr += "&"+ URLEncoder.encode("_returnType","UTF-8") +"=json";
 	            
 	            URL url = new URL(urlStr);
 	            
@@ -100,17 +97,19 @@ public class WidgetMovieApi {
 	                map.put("title", title);
 	                map.put("voteAverage", voteAverage);
 	                
-	                log.debug("map = {}" ,map);
+//	                log.debug("map = {}" ,map);
+	                System.out.println("map = "+ map);                
 	                
 	                widgetMovieList.add(map);
 	            }
 	            
-	            log.debug("widgetMovieList = {}" , widgetMovieList);
+//	            log.debug("widgetMovieList = {}" , widgetMovieList);
+	            System.out.println("widgetMovieList = "+ widgetMovieList);                
 	            br.close();
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-	        return new ModelAndView("/movie/widgetMovie", "widgetMovieList", widgetMovieList);
+	        	model.addAttribute("widgetMovieList", widgetMovieList);
 	    }
 	
 	

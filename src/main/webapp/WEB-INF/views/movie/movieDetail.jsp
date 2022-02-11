@@ -18,6 +18,7 @@
 <style>
 .movie-detail-container {
 	width: 80%;
+	margin: 0 auto;
 	padding-right: 15px;
     padding-left: 80px;
 }
@@ -189,9 +190,10 @@ div#board-container label.custom-file-label {
 						width="500" height="500" xmlns="http://www.w3.org/2000/svg"
 						preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
 						aria-label="Placeholder: 500x500">
-					<title>Placeholder</title><rect width="100%" height="100%"
-							fill="#eee" />
-					<text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+					<title>Placeholder</title>
+					<rect width="100%" height="100%" fill="#eee" />
+					<text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text>
+					</svg>
 				</div>
 			</div>
 		</c:forEach>
@@ -428,6 +430,9 @@ div#board-container label.custom-file-label {
 								</ul>
 							</c:if>
 						</c:forEach>
+						</div>
+					</div>
+						
 			</c:if>
 		</div>
 	</div>
@@ -489,10 +494,10 @@ div#board-container label.custom-file-label {
 													</div>
 												</div>
 	
-	<hr class="featurette-divider" />
+			<hr class="featurette-divider" />
 
-</div>
-</div>
+	</div>
+
 <script>
 
 /* 댓글 등록 */
