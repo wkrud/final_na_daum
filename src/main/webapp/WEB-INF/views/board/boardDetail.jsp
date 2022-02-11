@@ -401,7 +401,7 @@ div.col>.detail {
 <form name="boardDelFrm" method="POST"
 	action="${pageContext.request.contextPath}/board/boardDelete.do">
 	<input type="hidden" name="code" value="${board.code}" /> <input
-		type="hidden" name="id" id="id" value="${loginMember.id}" /> <input
+		type="hidden" name="id" id="deleteid" value="${loginMember.id}" /> <input
 		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 <form
@@ -409,7 +409,7 @@ div.col>.detail {
 	name="boardCommentDelFrm" method="POST">
 	<input type="hidden" name="commentCode" value="${comment.commentCode}" />
 	<input type="hidden" name="code" value="${board.code}" /> <input
-		type="hidden" name="id" id="id" value="${loginMember.id}" /> <input
+		type="hidden" name="id" id="commentdeleteid" value="${loginMember.id}" /> <input
 		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 <script>
