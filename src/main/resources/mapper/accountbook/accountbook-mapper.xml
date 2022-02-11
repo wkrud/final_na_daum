@@ -45,6 +45,31 @@
 			id = #{id}
 	</update>
 	
+	<!-- 이달의 월 조회 -->
+	<select id="searchToday" resultType="String">
+		select
+		    *
+		from (
+			select
+				to_char(reg_date, 'yyyy-mm') as day
+			from
+				account_book
+			<where>
+				<choose>
+                 <when test="date != null and date != ''">
+                   and
+                   to_char(reg_date, 'yyyy-mm') = #{date}
+                 </when>
+                 <otherwise>
+                   and
+                   to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+                 </otherwise>
+                 </choose>
+              </where>
+			)
+		group by day
+	</select>
+	
 	<!-- 전체리스트 -->
 	<select id="selectAllAccountList" resultType="com.project.nadaum.accountbook.model.vo.AccountBook">
 		select
@@ -82,11 +107,19 @@
 	                    *
 	                from
 	                    account_book
-	                where
+	                <where>
 	                    id = #{id}
-	                    and
-	                    to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
-	                    <!-- reg_date between #{regDate} and last_day(#{regDate}) -->
+	                  <choose>
+		                  <when test="date != null and date != ''">
+		                    and
+		                    to_char(reg_date, 'yyyy-mm') = #{date}
+		                  </when>
+		                  <otherwise>
+		                    and
+		                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+		                  </otherwise>
+	                  </choose>
+	                </where>
           		)
 	    group by income_expense
 	    )
@@ -107,10 +140,19 @@
 				        *
 				    from
 				        account_book
-				    where
-				        to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
-				        and
-				        id = #{id}
+				    <where>
+	                    id = #{id}
+	                  <choose>
+		                  <when test="date != null and date != ''">
+		                    and
+		                    to_char(reg_date, 'yyyy-mm') = #{date}
+		                  </when>
+		                  <otherwise>
+		                    and
+		                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+		                  </otherwise>
+	                  </choose>
+	                </where>
 				    order by
 				        reg_date desc
 			    )
@@ -169,6 +211,7 @@
 		order by reg_date desc
 	</select>
 	
+	<!-- 메인페이지 차트 -->
 	<select id="chartValue" resultMap="chartListMap">
 	
 		select
@@ -179,16 +222,26 @@
 		        *
 		    from
 		        account_book
-		    where
-		        to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, 0), 'yyyy-mm')
-		        and
-		        id = #{id}
+		    <where>
+                id = #{id}
+              <choose>
+	               <when test="date != null and date != ''">
+	                 and
+	                 to_char(reg_date, 'yyyy-mm') = #{date}
+	               </when>
+	               <otherwise>
+	                 and
+	                  to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+	               </otherwise>
+	           </choose>
 		        and
 		        income_expense = #{incomeExpense}
+	        </where>
 		    )
 	group by category
 	</select>
 	
+	<!-- 검색목록 페이징용 카운트 -->
 	<select id="countAccountList" resultType="int">
 		select 
 			count(*) 
@@ -209,6 +262,7 @@
 		</if>
 	</select>
 	
+	<!-- 디테일 - 먼슬리 차트 -->
 	<select id="detailMonthlyChart" resultMap="monthlyChart">
 		select
 		    monthly,
@@ -216,7 +270,16 @@
 		    nvl(sum(case when income_expense='E' then price end), 0) as expense
 		from (
 			select
-			    to_char(reg_date,'yyyy-mm') as monthly,
+				<choose>
+	                  <when test="date != null and date != ''">
+	                    and
+	                    to_char(reg_date, 'yyyy-mm') = #{date} as monthly,
+	                  </when>
+	                  <otherwise>
+	                    and
+	                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm') as monthly,
+	                  </otherwise>
+	             </choose>
 			    price,
 			    income_expense
 			from
@@ -240,12 +303,21 @@
 			    *
 			from
 			    account_book
-			where
-			    to_char(reg_date, 'mm') = to_char(add_months(sysdate, #{monthly}), 'mm')
-			    and
-			    id = #{id}
-		)
-	</select>
+			<where>
+                id = #{id}
+              <choose>
+                 <when test="date != null and date != ''">
+                   and
+                   to_char(reg_date, 'yyyy-mm') = #{date}
+                 </when>
+                 <otherwise>
+                   and
+                   to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+                 </otherwise>
+               </choose>
+             </where>
+			)
+		</select>
 	
 	<!-- 최애 카테고리 리스트 -->
 	<select id="categoryChart" resultMap="monthlyCountList">
@@ -258,17 +330,35 @@
 		    sum(price) as sum
 		from
 		    (select
-		        to_char(add_months(sysdate, #{monthly}), 'yyyy-mm') as monthly,
+		    	<choose>
+                  <when test="date != null and date != ''">
+                    and
+                    to_char(reg_date, 'yyyy-mm') = #{date} as monthly,
+                  </when>
+                  <otherwise>
+                    and
+                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm') as monthly,
+                  </otherwise>
+                 </choose>
 		        category,
 		        price
 		    from
 		        account_book
-		    where
-		        to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, #{monthly}), 'yyyy-mm')
-		        and
-		        id = #{id}
+		    <where>
+	            id = #{id}
+                 <choose>
+                  <when test="date != null and date != ''">
+                    and
+                    to_char(reg_date, 'yyyy-mm') = #{date}
+                  </when>
+                  <otherwise>
+                    and
+                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+                  </otherwise>
+                 </choose>
 		        and
 		        income_expense= #{incomeExpense}
+	        </where>
 		    )
 		group by monthly, category)
 		where rownum <![CDATA[<=]]> 3
@@ -285,12 +375,21 @@
 		    payment
 		from
 		    account_book
-		where
-		    id=#{id}
-		    and
-		     to_char(reg_date, 'yyyy-mm') = to_char(add_months(sysdate, #{monthly}), 'yyyy-mm')
+		<where>
+             id = #{id}
+           <choose>
+            <when test="date != null and date != ''">
+              and
+              to_char(reg_date, 'yyyy-mm') = #{date}
+            </when>
+            <otherwise>
+              and
+              to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm')
+            </otherwise>
+           </choose>
 		    and
 		    income_expense = #{incomeExpense}
+	     </where>
 		) group by payment
 	</select>
 	

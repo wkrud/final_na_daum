@@ -29,7 +29,7 @@
 		<!-- 헤더 -->
 		<div class="analyze-account-header">
 			<button class="defaultBtn" onclick="count('minus')"><i class="fas fa-arrow-left"></i></button>
-			<p>월의 나:다운 가계부</p>
+			<p>${today}월의 나:다운 가계부</p>
 			<button class="defaultBtn" onclick="count('plus')"><i class="fas fa-arrow-right"></i></button>
 		</div>
 		<!-- 수입 -->

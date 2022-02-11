@@ -50,7 +50,7 @@ public class AccountBookController {
 	// 가계부 첫 화면에 보여질 값들
 	@RequestMapping(value = "/accountbook.do")
 	public void accountbook(@RequestParam(defaultValue = "1") int cPage, @AuthenticationPrincipal Member member,
-			Model model, @RequestParam Date date, HttpServletRequest request) {
+			Model model, String date, HttpServletRequest request) {
 		int limit = 4;
 		int offset = (cPage - 1) * limit;
 		String id = member.getId();
@@ -60,6 +60,9 @@ public class AccountBookController {
 		param.put("limit", limit);
 		param.put("id", id);
 		param.put("date", date);
+		
+		//이달의 월 조회
+		String today = accountBookService.searchToday(param);
 		// 로그인한 아이디로 등록된 가계부 전체 목록
 		List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
 
@@ -76,7 +79,7 @@ public class AccountBookController {
 		model.addAttribute("pagebar", pagebar);
 
 		// 수입, 지출 계산한 값
-		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(param);
 		log.debug("incomeList={}", incomeList);
 		// 필요한 값만 맵 객체로 변환
 		Map<String, Object> incomeExpenseList = new HashMap<>();
@@ -100,7 +103,7 @@ public class AccountBookController {
 		log.info("incomeExpenseList={}", incomeExpenseList);
 
 		// 월간 총 합계 금액
-		String monthlyAccount = accountBookService.monthlyAccount(id);
+		String monthlyAccount = accountBookService.monthlyAccount(param);
 		// 만약 사용자 입력값이 없어서 monthlyAccount합계가 null값이 넘어온다면 해당 변수에 0 대입
 		if (monthlyAccount == null) {
 			monthlyAccount = "0";
@@ -111,17 +114,23 @@ public class AccountBookController {
 		model.addAttribute("incomeExpenseList", incomeExpenseList);
 		model.addAttribute("monthlyAccount", monthlyAccount);
 		model.addAttribute("totalAccountList", totalAccountList);
+		model.addAttribute("today", today);
 	}
 
 	// 차트 더보기 페이지
 	@RequestMapping(value = "/accountAnalyze.do")
 	public void detailChartData(@RequestParam(defaultValue = "0") int monthly, @AuthenticationPrincipal Member member,
-			Model model) {
+			String date, Model model) {
 		// 수입
 		Map<String, Object> param = new HashMap<>();
 		param.put("monthly", monthly);
 		param.put("id", member.getId());
 		param.put("incomeExpense", "I");
+		param.put("date", date);
+		
+		//이달의 월 조회
+		String today = accountBookService.searchToday(param);
+				
 		// 수입 카테고리 베스트3
 		List<Map<String, Object>> categoryList_I = accountBookService.categoryChart(param);
 		// 현금/카드 건수
@@ -132,6 +141,7 @@ public class AccountBookController {
 		param2.put("monthly", monthly);
 		param2.put("id", member.getId());
 		param2.put("incomeExpense", "E");
+		param.put("date", date);
 		// 지출 카테고리 베스트3
 		List<Map<String, Object>> categoryList_E = accountBookService.categoryChart(param2);
 		// 현금, 카드 건수
@@ -142,6 +152,7 @@ public class AccountBookController {
 		model.addAttribute("categoryList_E", categoryList_E);
 		model.addAttribute("paymentList_I", paymentList_I);
 		model.addAttribute("paymentList_E", paymentList_E);
+		model.addAttribute("today", today);
 	}
 
 	// 전체 리스트 출력
@@ -202,7 +213,8 @@ public class AccountBookController {
 	// 수입, 지출별 정렬
 	@GetMapping(value = "/incomeExpenseFilter.do")
 	public String incomeExpenseFilter(@RequestParam(defaultValue = "1") int cPage,
-			@AuthenticationPrincipal Member member, String incomeExpense, Model model, HttpServletRequest request) {
+			@AuthenticationPrincipal Member member, String incomeExpense, Model model, 
+			String date, HttpServletRequest request) {
 		int limit = 4;
 		int offset = (cPage - 1) * limit;
 		String id = member.getId();
@@ -212,6 +224,7 @@ public class AccountBookController {
 		map.put("incomeExpense", incomeExpense);
 		map.put("offset", offset);
 		map.put("limit", limit);
+		map.put("date", date);
 		// 조회한 목록
 		List<AccountBook> accountList = accountBookService.incomeExpenseFilter(map);
 		log.debug("incomeExpense={}", incomeExpense);
@@ -225,7 +238,7 @@ public class AccountBookController {
 				detail);
 
 		// 수입, 지출 계산한 값
-		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(map);
 		// 필요한 값만 맵 객체로 변환
 		Map<String, Object> incomeExpenseList = new HashMap<>();
 		if (incomeList.size() == 0) {
@@ -246,7 +259,7 @@ public class AccountBookController {
 		log.info("incomeExpenseList={}", incomeExpenseList);
 
 		// 월간 총 합계 금액
-		String monthlyAccount = accountBookService.monthlyAccount(id);
+		String monthlyAccount = accountBookService.monthlyAccount(map);
 		log.info("monthlyAccount={}", monthlyAccount);
 		// 만약 사용자 입력값이 없어서 monthlyAccount합계가 null값이 넘어온다면 해당 변수에 0 대입
 		if (monthlyAccount == null) {
@@ -265,7 +278,7 @@ public class AccountBookController {
 	// 검색
 	@GetMapping(value = "/searchList.do")
 	public String searchList(@RequestParam(defaultValue = "1") int cPage, @AuthenticationPrincipal Member member,
-			@RequestParam Map<String, Object> param, Model model, HttpServletRequest request) {
+			@RequestParam Map<String, Object> param, Model model, String date, HttpServletRequest request) {
 		int limit = 4;
 		int offset = (cPage - 1) * limit;
 		String id = member.getId();
@@ -280,6 +293,7 @@ public class AccountBookController {
 		map.put("id", member.getId());
 		map.put("limit", limit);
 		map.put("offset", offset);
+		map.put("date", date);
 		log.info("map={}", map);
 
 		List<AccountBook> accountList = accountBookService.searchList(map);
@@ -295,7 +309,7 @@ public class AccountBookController {
 		model.addAttribute("pagebar", pagebar);
 
 		// 수입, 지출 계산한 값
-		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(map);
 		// 필요한 값만 맵 객체로 변환
 		Map<String, Object> incomeExpenseList = new HashMap<>();
 		if (incomeList.size() == 0) {
@@ -316,7 +330,7 @@ public class AccountBookController {
 		log.info("incomeExpenseList={}", incomeExpenseList);
 
 		// 월간 총 합계 금액
-		String monthlyAccount = accountBookService.monthlyAccount(id);
+		String monthlyAccount = accountBookService.monthlyAccount(map);
 		log.info("monthlyAccount={}", monthlyAccount);
 		// 만약 사용자 입력값이 없어서 monthlyAccount합계가 null값이 넘어온다면 해당 변수에 0 대입
 		if (monthlyAccount == null) {
@@ -339,6 +353,8 @@ public class AccountBookController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("id", member.getId());
 		map.put("incomeExpense", param.get("incomeExpense"));
+		map.put("date", param.get("date"));
+		log.debug("map={}",map);
 		List<Map<String, Object>> chartValue = accountBookService.chartValue(map);
 		log.debug("chartValue={}", chartValue);
 
@@ -348,9 +364,10 @@ public class AccountBookController {
 	// detailChart
 	@ResponseBody
 	@PostMapping(value = "/detailMonthlyChart.do", produces = "application/json; charset=UTF-8")
-	public List<Map<String, Object>> detailMonthlyChart(@AuthenticationPrincipal Member member, Model model) {
+	public List<Map<String, Object>> detailMonthlyChart(@AuthenticationPrincipal Member member, String date, Model model) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("id", member.getId());
+		map.put("date", date);
 		List<Map<String, Object>> list = accountBookService.detailMonthlyChart(map);
 		log.debug("list={}", list);
 		return list;
@@ -360,10 +377,11 @@ public class AccountBookController {
 	@ResponseBody
 	@PostMapping(value = "/categoryChart.do", produces = "application/json; charset=UTF-8")
 	public List<Map<String, Object>> categoryChart(@RequestParam(defaultValue = "0") int monthly,
-			@AuthenticationPrincipal Member member, @RequestBody Map<String, Object> param, Model model) {
+			@AuthenticationPrincipal Member member, @RequestBody Map<String, Object> param, String date, Model model) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("monthly", monthly);
 		map.put("id", member.getId());
+		map.put("date", date);
 		map.put("incomeExpense", param.get("incomeExpense"));
 
 		List<Map<String, Object>> list = accountBookService.categoryChart(map);
@@ -461,9 +479,13 @@ public class AccountBookController {
 	// 메인 위젯 ajax
 	@ResponseBody
 	@GetMapping("/widget")
-	public Map<String, Object> accountWidget(@AuthenticationPrincipal Member member) {
+	public Map<String, Object> accountWidget(String date, @AuthenticationPrincipal Member member) {
+		Map<String, Object> map = new HashMap<>();
 		String id = member.getId();
-		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(id);
+		map.put("id", id);
+		map.put("date", date);
+		
+		List<Map<String, Object>> incomeList = accountBookService.monthlyTotalIncome(map);
 		log.debug("incomeList={}", incomeList);
 
 		// 필요한 값만 맵 객체로 변환

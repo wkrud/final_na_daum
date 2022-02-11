@@ -199,19 +199,19 @@
 	<section class="infoSection">
 		<div class="account">
 			<div>
-				<a href="${pageContext.request.contextPath}/accountbook/accountbook.do?date=2022-01">
+ 				<button type="submit" onclick="monthly('before')">
 					<i class="fas fa-angle-left"></i>
-				</a>
-				<a href="#">
-					<i class="fas fa-angle-right"></i>					
-				</a>
+				</button>
+				<button type="submit" onclick="monthly('next')">
+					<i class="fas fa-angle-right"></i>
+				</button>
 			</div>
 			<table class="account-info">
 				<tr>
 					<td colspan="2">${loginMember.name}님의</td>
 				</tr>
 				<tr>
-					<td colspan="2"><%= today %> 총 자산</td>
+					<td colspan="2">${today}월 총 자산</td>
 				</tr>
 				<tr id="total_income">
 					<td colspan="2" style="font-size:40px"><fmt:formatNumber value="${monthlyAccount}" type="number"/>원</td>
@@ -236,6 +236,7 @@
 	</section>
 </div>
 
+<input type="hidden" name="today" id="today" value="${today}" />
 <input type="hidden" id="chartData" value="${chartData}" />
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
 <script src='${pageContext.request.contextPath}/resources/js/accountbook/main.js'></script>

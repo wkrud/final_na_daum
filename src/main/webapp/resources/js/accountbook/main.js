@@ -2,6 +2,7 @@
 	
 	//ajax 로딩시 필요한 값 변수 선언
 	var $contextPath = $("#contextPath").val(); //contextPath jsp에서 가져온 값(js파일에서 el을 못 씀)
+	var $today = $("#today").val(); // 오늘 날짜 ㅠ
 	
 	//option 배열
 	var income = ["급여","용돈","기타"];
@@ -232,7 +233,7 @@
 	
 	//차트 그리는 함수
 	function drawExpenseChart() {
-		var firstData = {"incomeExpense" : "E"};
+		var firstData = {"incomeExpense" : "E", date : $today};
 		//차트에 구성되는 데이터는 [['Header','Header']['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//Header는 각 배열을 설명할 수 있는 필수값. ['String', 'String']
 		//json 데이터 ajax로 받아오기
@@ -241,8 +242,8 @@
 			type : "POST",
 			data : JSON.stringify(firstData),
 			contentType : "application/json; charset=UTF-8",
-			headers : headers,
 			dataType : "json",
+			headers : headers,
 			async : false, //ajax는 비동기 통신이기 때문에 해당 옵션을 동기식으로 변경해서 차트가 그려지기 전에 다른 작업을 못하도록 막음
 			success(data) {
 				console.log(data);
@@ -272,7 +273,7 @@
 	
 	//차트 그리는 함수
 	function drawIncomeChart() {
-		var firstData = {"incomeExpense" : "I"};
+		var firstData = {"incomeExpense" : "I", date : $today};
 		//차트에 구성되는 데이터 [['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//json 데이터 ajax로 받아오기
 		$.ajax({
@@ -280,8 +281,8 @@
 			type : "POST",
 			data : JSON.stringify(firstData),
 			contentType : "application/json; charset=UTF-8",
-			headers : headers,
 			dataType : "json",
+			headers : headers,
 			async : false, //ajax는 비동기 통신이기 때문에 해당 옵션을 동기식으로 변경해서 차트가 그려지기 전에 다른 작업을 못하도록 막음
 			success(data) {
 				console.log(data);
@@ -319,3 +320,29 @@
 		$("#excelDate1").datepicker();
 		$("#excelDate2").datepicker();
 	});
+	
+// 월별 조회 ㅠㅠ
+let year = $today.slice(0, 4);
+let month = $today.slice(5, 7);
+let searchDay = "";
+
+function monthly(m) {
+	if(m == "before") {
+		if( 1 < month) {
+			month = parseInt(month) -1;
+		} else {
+			month = 12;
+			year = parseInt(year) - 1;
+		}
+	} else if(m == "next") {
+		if(month < 12) {
+			month = parseInt(month) + 1;
+		} else {
+			month = 1;
+			year = parseInt(year) + 1;
+		}
+	}
+	searchDay = year+'-'+(month >= 10? month : '0'+month);
+	location.href = $contextPath+`/accountbook/accountbook.do?date=`+searchDay;		
+}
+    
