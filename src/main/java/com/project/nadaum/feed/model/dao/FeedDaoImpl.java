@@ -100,6 +100,19 @@ public class FeedDaoImpl implements FeedDao {
     public int insertAttachment(Attachment attach) {
         return session.insert("feed.insertAttachment", attach);
     }
+
+	@Override
+	public List<Map<String, Object>> addFeedMain(Map<String, Object> map) {
+		int offset = (int) map.get("offset");
+		int limit = (int) map.get("limit");
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("feed.addFeedMain", map, rowBounds);
+	}
+
+	@Override
+	public List<Feed> feedMain() {
+		return session.selectList("feed.feedMain");
+	}
 	
 	
 }

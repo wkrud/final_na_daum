@@ -41,4 +41,8 @@ public interface FeedDao {
 	
     int insertAttachment(Attachment attach);
 
+	List<Map<String, Object>> addFeedMain(Map<String, Object> map);
+
+	List<Feed> feedMain();
+
 }
