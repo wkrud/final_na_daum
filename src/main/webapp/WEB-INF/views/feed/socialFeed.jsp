@@ -149,8 +149,7 @@ const addFeedPage = (id, page) => {
 			let feedDiv = ``;
 			
 			$resp.each((i,{CODE,WRITER,CONTENT,REGDATE,FILENAME,COMMENTS,LIKES}) => {
-				
-			
+												
 				if(resp.attachments != ''){
 					feedDiv = `
 					<div class="one-feed">
