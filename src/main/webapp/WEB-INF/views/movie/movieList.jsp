@@ -61,11 +61,30 @@
 .movieapi-container{
 padding : 100px;
 }
+
+.blog .carousel-indicators {
+	left: 0;
+	top: auto;
+    bottom: -40px;
+
+}
+
+/* The colour of the indicators */
+.blog .carousel-indicators li {
+    background: #a3a3a3;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+}
+
+.blog .carousel-indicators .active {
+background: #707070;
+}
 </style>
 	<div class="movie-container">
 		<!-- 썸네일 그림, 타이틀  -->
 		<div class="movie-banner">
-			<!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
+			<div id="myCarousel" class="carousel slide" data-ride="carousel">
 				<ol class="carousel-indicators">
 					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 					<li data-target="#myCarousel" data-slide-to="1"></li>
@@ -112,21 +131,22 @@ padding : 100px;
 								<h1>One more for good measure.</h1>
 								<p>Cras justo odio, dapibus ac facilisis in,</p>
 								<p>
-									<a class="btn btn-lg btn-primary" href="#" role="button">Browse
-										gallery</a>
+									<a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a>
 								</p>
 							</div>
 						</div>
 					</div>
 				</div>
-				<a class="carousel-control-prev" href="#myCarousel" role="button"
-					data-slide="prev"> <span class="carousel-control-prev-icon"
-					aria-hidden="true"></span> <span class="sr-only">Previous</span>
-				</a> <a class="carousel-control-next" href="#myCarousel" role="button"
-					data-slide="next"> <span class="carousel-control-next-icon"
-					aria-hidden="true"></span> <span class="sr-only">Next</span>
+				<a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev"> 
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span> 
+				<span class="sr-only">Previous</span>
+				</a> 
+				
+				<a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next"> 
+				<span class="carousel-control-next-icon" aria-hidden="true"></span> 
+				<span class="sr-only">Next</span>
 				</a>
-			</div> -->
+			</div>
 
 
 			<!-- 검색창 -->
@@ -140,9 +160,10 @@ padding : 100px;
 			</form>
 			
 			<a href="${pageContext.request.contextPath}/scrap/scrapList.do">스크랩</a>
+			<a href="${pageContext.request.contextPath}/movie/widgetMovie.do">위젯</a>
 		</div>
 
-		<!-- 영화정보진흥원 api -->
+		<%-- <!-- 영화정보진흥원 api -->
 		<div id="movieapi-container">
 			<div class="py-5">
 				<div class="container">
@@ -165,7 +186,7 @@ padding : 100px;
 										<p class="card-text">${movie.movieNm}</p>
 										<p class="card-text">${movie.prdYear}</p>
 										<p class="card-text">${movie.typeNm}</p>
-										<%-- <p class="card-text">${movie.genreAlt}</p> --%>
+										<p class="card-text">${movie.genreAlt}</p>
 										<p class="card-text">${movie.peopleNm}</p>
 										<p class="card-text"></p>
 										<div class="d-flex justify-content-between align-items-center">
@@ -183,16 +204,110 @@ padding : 100px;
 
 				</div>
 			</div>
-		</div>
-
+		</div> --%>
 		
-</body>
+		
+		<!-- TMDB api -->
+	<div class="upcoming-movie">
+		<c:forEach var="movie" items="${list}">
+		<div class="card" style="width: 18rem;">
+  			<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
+  			<div class="card-body">
+   			 <p class="card-text">${movie.title}</p>
+  			</div>
+		</div>
+		</c:forEach>
+	</div>
+		
+		<!-- 슬라이더 -->
+		<div class="row blog">
+                <div class="col-md-12">
+                    <div id="blogCarousel" class="carousel slide" data-ride="carousel">
+
+                        <ol class="carousel-indicators">
+                            <li data-target="#blogCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#blogCarousel" data-slide-to="1"></li>
+                        </ol>
+
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--.row-->
+                            </div>
+                            <!--.item-->
+
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">
+                                            <img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--.row-->
+                            </div>
+                            <!--.item-->
+
+                        </div>
+                        <!--.carousel-inner-->
+                        
+                    </div>
+                    <!--.Carousel-->
+
+                </div>
+            </div>
+
+
+</div>
+		
+
 <script>
 /* the movie api 에서 top_rated  불러오기*/
 
 
 /* 페이지 로딩 될때 영화 */
-
+// optional
+		$('#blogCarousel').carousel({
+				interval: 5000
+		});
  
  /*  버튼 누를 시 영화 상세보기로 이동 */
 $(".goDetail").click((e) => {
