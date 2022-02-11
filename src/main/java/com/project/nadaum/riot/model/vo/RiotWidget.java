@@ -14,16 +14,19 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RiotFavo implements Serializable{
+public class RiotWidget implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
 	
-	private String memberId;
-	private String smId;
+	
 	private String name;
-	private boolean favAccept;
-
+	private String tier;
+	private String rank;
+	private int leaguePoints;
+	private int wins;
+	private int losses;
+	
 	
 	
 

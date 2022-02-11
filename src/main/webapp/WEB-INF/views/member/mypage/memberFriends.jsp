@@ -34,7 +34,7 @@
 											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" style="width:45px; height:45px; object-fit:cover;" />
 										</c:if>						
 										<c:if test="${ml.profileStatus eq 'Y'}">		
-											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${attach.renamedFilename}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
+											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
 										</c:if>	
 									</c:if>
 								</div>
@@ -70,7 +70,7 @@
 											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" style="width:45px; height:45px; object-fit:cover;" />
 										</c:if>						
 										<c:if test="${ml.profileStatus eq 'Y'}">		
-											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${attach.renamedFilename}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
+											<img src="${pageContext.request.contextPath}/resources/upload/member/profile/${ml.profile}" alt="" style="width:45px; height:45px; object-fit:cover;" />										 		
 										</c:if>	
 									</c:if>
 								</div>
@@ -149,7 +149,7 @@ $search.change((e) => {
 $(function(){
 	$(".friends-section").slick({
 		infinite: true,
-		slidesToShow: 1,
+		slidesToShow: 5,
 		slidesToScroll: 1,
 		speed: 500,
 		arrows: true,
@@ -157,12 +157,10 @@ $(function(){
 		vertical: false,
 		prevArrow : "<i class='fa fa-arrow-left' aria-hidden='true'></i>",		
 		nextArrow : "<i class='fa fa-arrow-right' aria-hidden='true'></i>"
-		/* prevArrow : "<button type='button' class='slick-prev'><i class='fa fa-arrow-left' aria-hidden='true'></i></button>",		
-		nextArrow : "<button type='button' class='slick-next'><i class='fa fa-arrow-right' aria-hidden='true'></i></button>" */
 	});
 	$(".followers-section").slick({
 		infinite: true,
-		slidesToShow: 1,
+		slidesToShow: 5,
 		slidesToScroll: 1,
 		speed: 500,
 		arrows: true,

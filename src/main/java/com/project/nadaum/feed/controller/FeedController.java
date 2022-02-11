@@ -1,9 +1,13 @@
 package com.project.nadaum.feed.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.nadaum.common.NadaumUtils;
+import com.project.nadaum.common.vo.Attachment;
 import com.project.nadaum.feed.model.service.FeedService;
 import com.project.nadaum.feed.model.vo.Feed;
 import com.project.nadaum.feed.model.vo.FeedComment;
@@ -35,6 +42,9 @@ public class FeedController {
 	@Autowired
 	private MemberService memberService;
 	
+    @Autowired 
+    private ServletContext application;
+	
 	@GetMapping("/socialFeed.do")
 	public void socialFeed(@RequestParam Map<String, Object> param, Model model) {
 		try {
@@ -51,7 +61,7 @@ public class FeedController {
 			int totalCount = feedService.countAllHostFeed(param);
 			param.put("totalCount", totalCount);
 			List<Feed> feed = feedService.selectOnePersonFeed(param);
-					
+						
 			// 친구, 팔로잉
 			Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
 			
@@ -146,4 +156,51 @@ public class FeedController {
 	@GetMapping("/feedMain.do")
 	public void feedMain() {}
 
+	@GetMapping("/addFeedPage.do")
+	public ResponseEntity<?> addFeedPage(@RequestParam Map<String, Object> map){
+		log.debug("map = {}", map);
+		int page = Integer.parseInt((String) map.get("page"));
+		int limit = 8;		
+		int offset = (page - 1) * limit;
+		map.put("limit", limit);
+		map.put("offset", offset);
+		
+		List<Map<String, Object>> addFeed = feedService.selectAddFeed(map);
+		log.debug("addFeed = {}", addFeed);
+		return ResponseEntity.ok(addFeed);
+	}
+	
+	@PostMapping("/feedEnroll.do")
+    public String feedEnroll(Feed feed, RedirectAttributes redirectAttr, 
+            @RequestParam(required = false) MultipartFile upFile) throws IllegalStateException, IOException {
+        
+        // 첨부파일 경로
+        String saveDirectory = application.getRealPath("/resources/upload/feed/img");
+        List<Attachment> attachments = new ArrayList<>();
+        
+        // attachment 저장
+        if(!upFile.isEmpty()) {
+            log.debug("upFile = {}, size = {}", upFile.getOriginalFilename(), upFile.getSize());
+            // 저장경로, renamedFilename
+            String originalFilename = upFile.getOriginalFilename();
+            String renamedFilename = NadaumUtils.rename(originalFilename);
+            File dest = new File(saveDirectory, renamedFilename);
+            upFile.transferTo(dest);
+            
+            Attachment attach = new Attachment();
+            attach.setOriginalFilename(originalFilename);
+            attach.setRenamedFilename(renamedFilename);
+            attachments.add(attach);
+        }
+        if(!attachments.isEmpty())
+            feed.setAttachments(attachments);
+        log.debug("feed = {}", feed);
+        
+        int result = feedService.feedEnroll(feed);
+        String msg = "피드를 등록했습니다.";
+        redirectAttr.addFlashAttribute("msg", msg);
+        
+        return "redirect:/feed/feedMain.do";
+    }
+	
 }

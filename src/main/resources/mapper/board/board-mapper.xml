@@ -100,6 +100,15 @@
 			code = #{code}
 	</select>
 	
+	<select id="selectIdCountLikes" resultType="int">
+		select 
+			count(*)
+		from
+			likes
+		where
+			code = #{code} and id = #{id}
+	</select>
+	
 	<insert id="boardLikeAdd">
 	insert into
 		likes
@@ -170,6 +179,9 @@
 		<result column="comment_level" property="commentLevel"/>
 		<result column="comment_ref" property="commentRef"/>
 		<result column="reg_date" property="regDate"/>
+		<result column="profile" property="profile"/>
+		<result column="login_type" property="loginType"/>
+		<result column="profile_status" property="profileStatus"/>
 	</resultMap>
 	
 	<resultMap type="map" id="likesMap">

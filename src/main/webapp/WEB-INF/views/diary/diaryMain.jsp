@@ -16,9 +16,6 @@
 	<jsp:param value="나:다움 Diary" name="title"/>
 </jsp:include>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/diary/diaryMain.css"/> 
-<style>
-
-</style>
 <div id="diaryMain-container">
 	<div id="diaryYear">
 		<i class="fas fa-angle-left" onclick='yearMinus()'></i>	
