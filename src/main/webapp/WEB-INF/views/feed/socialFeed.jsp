@@ -68,7 +68,7 @@
 		<hr />
 		<div class="one-person-feed-area">
 			<div class="feed-limit-area">
-				<c:forEach items="${feed}" var="f">
+				<c:forEach items="${feed}" var="f" begin="0" end="7">
 					<!-- 사진이 있다면 -->
 					<c:if test="${not empty f.attachments}">
 						<div class="one-feed">
@@ -112,7 +112,6 @@
 		</div>
 	</div>	
 
-
 	<!-- 게시물 상세보기 모달 -->
 	<div class="modal fade" id="feedViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -129,9 +128,122 @@ $(() => {
  	<c:if test="${check.type eq 'alarmMessage'}">
 		selectedFeed('${loginMember.id}','${check.code}');
 	</c:if>
+	console.log($(".one-feed").length);
 });
 
+const $feedArea = $(".feed-limit-area");
 const $chatRoom = $("#make-chat-room");
+const $detailBody = $(".feed-detail-modal-body");
+var loading = false;
+var page = 2;
+
+/* 페이징 id, page */
+const addFeedPage = (id, page) => {
+	
+	$.ajax({
+		url: '${pageContext.request.contextPath}/feed/addFeedPage.do',
+		data: {id, page},
+		success(resp){
+			
+			const $resp = $(resp);
+			let feedDiv = ``;
+			
+			$resp.each((i,{CODE,WRITER,CONTENT,REGDATE,FILENAME,COMMENTS,LIKES}) => {
+												
+				if(resp.attachments != ''){
+					feedDiv = `
+					<div class="one-feed">
+						<div class="hidden-likes-comment">
+							<input type="hidden" class="code" value="\${CODE}"/>
+							<div class="likes-count">
+								<i class="fas fa-heart"></i>
+								\${LIKES}
+							</div>
+							<div class="comments-count">
+								<i class="far fa-comment"></i>
+								\${COMMENTS}
+							</div>
+						</div>
+						<div class="feed-area">
+							<div class="feed-content-hidden">\${CONTENT}</div>
+						</div>
+					</div>`;
+				}else{
+					feedDiv = `
+					<div class="one-feed">
+						<div class="hidden-likes-comment">
+							<input type="hidden" class="code" value="\${CODE}"/>
+							<div class="likes-count">
+								<i class="fas fa-heart"></i>
+								\${LIKES}
+							</div>
+							<div class="comments-count">
+								<i class="far fa-comment"></i>
+								\${COMMENTS}
+							</div>
+						</div>
+						<div class="feed-area">
+							<img class="change-profile" src="${pageContext.request.contextPath}/resources/\${FILENAME}" alt="" />
+						</div>
+					</div>`;
+				}
+				
+				$feedArea.append(feedDiv);
+				
+				$(".one-feed").click((e) => {
+					feedDetailModalView(e);
+				});
+			});
+			console.log(page);
+			loading = false;
+			if($resp.length === 0){
+				loading = true;
+			}
+			console.log(loading);
+		},
+		error: console.log
+	});
+};
+
+$(".contentWrapper").scroll(function(){
+	
+	if($(".contentWrapper").width() > 1260){
+		if($(".contentWrapper").height() > 660){
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.6)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}else {
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.2)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}
+		
+	}else if($(".contentWrapper").width() < 1260){
+		if($(".contentWrapper").height() > 660){
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.15)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}else {
+			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * 0.1)){
+				if(!loading){
+					loading = true;
+					addFeedPage('${member.id}', page++);
+				}
+			}
+		}
+	}
+});
+
+
 $chatRoom.click((e) => {
 	console.log(1);
 	var room = Math.floor(Math.random() * 100000);
@@ -150,9 +262,13 @@ $chatRoom.click((e) => {
 	}
 });
 
-const $detailBody = $(".feed-detail-modal-body");
+
 let $hidden = $(".hidden-likes-comment");
 $(".one-feed").click((e) => {
+	feedDetailModalView(e);
+});
+
+const feedDetailModalView = (e) => {
 	let code = '';
 	if($(e.target).attr('class') != 'hidden-likes-comment'){
 		code = $(e.target).parent().parent().find("input.code").val();
@@ -161,6 +277,6 @@ $(".one-feed").click((e) => {
 	}
 	console.log('${member.id}' + " " + code);
 	selectedFeed('${member.id}',code);
-});
+};
 </script>	
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

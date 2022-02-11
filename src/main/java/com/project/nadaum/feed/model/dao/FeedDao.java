@@ -35,4 +35,6 @@ public interface FeedDao {
 
 	Feed selectOnePersonFeedOnebyOne(Map<String, Object> param);
 
+	List<Map<String, Object>> selectAddFeed(Map<String, Object> map);
+
 }

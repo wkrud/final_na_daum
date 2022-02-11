@@ -29,6 +29,8 @@ public class FeedServiceImpl implements FeedService {
 	public List<Feed> selectOnePersonFeed(Map<String, Object> param) {
 		List<Feed> list = new ArrayList<>();
 		int limit = (int) param.get("totalCount");
+		if(limit > 8)
+			limit = 8;
 		for(int i = 0; i < limit; i++) {
 			param.put("rownum", i+1);
 			Feed feed = feedDao.selectOnePersonFeedOnebyOne(param);
@@ -91,6 +93,11 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	public int deleteComment(Map<String, Object> map) {
 		return feedDao.deleteComment(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAddFeed(Map<String, Object> map) {
+		return feedDao.selectAddFeed(map);
 	}
 
 	
