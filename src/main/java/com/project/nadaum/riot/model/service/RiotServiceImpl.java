@@ -80,9 +80,9 @@ public class RiotServiceImpl implements RiotService {
 	}
 
 	@Override
-	public RiotWidget selectOneWidget(String member_id) {
+	public RiotWidget selectOneWidget(Map<String, Object> map) {
 		
-		return riotDao.selectOneWidget(member_id);
+		return riotDao.selectOneWidget(map);
 	}
 
 

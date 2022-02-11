@@ -29,7 +29,7 @@ public interface RiotDao {
 
 	LeagueEntry selectOneLeagueEntry(String summonerId);
 
-	RiotWidget selectOneWidget(String member_id);
+	RiotWidget selectOneWidget(Map<String, Object> map);
 
 
 }
