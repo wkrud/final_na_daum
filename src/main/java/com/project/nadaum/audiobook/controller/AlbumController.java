@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -61,7 +63,6 @@ public class AlbumController {
 	public static final String AUDIO_PATH = "C:\\Workspaces\\finalProject\\na_daum\\src\\main\\webapp\\resources\\upload\\audiobook\\mp3\\";
 	public static final String IMG_PATH = "C:\\Workspaces\\finalProject\\na_daum\\src\\main\\webapp\\resources\\upload\\audiobook\\img\\";
 	
-	
 	@GetMapping("/")
 	@RequestMapping
 	public String audiobookMain(Model model) {
@@ -79,6 +80,18 @@ public class AlbumController {
 		model.addAttribute("asmrList",asmrList);
 		model.addAttribute("novelList",novelList);
 		return "audiobook/main";
+	}
+	
+	@GetMapping("/widget")
+	public ResponseEntity<ModelMap> widgetInfo(ModelMap model) {
+		try {
+			List<Map<String,Object>> widgetMenu = albumService.selectListAlbumInfoByKindMain("Novel");
+			log.debug("widgetMenu={}",widgetMenu);
+			model.addAttribute("bookList",widgetMenu);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok(model);
 	}
 
 	@GetMapping("/detail")
@@ -118,7 +131,8 @@ public class AlbumController {
 		model.addAttribute("searchList", searchList);
 		return "/audiobook/search/searchList";
 	}
-
+	
+	//Dynamic Search
 	@GetMapping("/search/list/select")
 	public String albumSearch(@RequestParam String searchType, 
 							  @RequestParam String searchKeyword,
@@ -138,13 +152,11 @@ public class AlbumController {
 			// searchList.get(i).get("renamedFilename");
 			String imgSrc = application.getRealPath("/resources/upload/audiobook")
 					+ (String) selectList.get(i).get("renamedFilename");
-
 			log.debug("imgSrc={}", imgSrc);
 			Map<String, Object> url = new HashMap<>();
 			url.put("imgSrc", imgSrc);
 			selectList.get(i).put("imgSrc", imgSrc);
 		}
-		
 		
 		model.clear();
 		model.addAttribute("selectList",selectList);
@@ -152,7 +164,7 @@ public class AlbumController {
 		return "/audiobook/search/selectList";
 	}
 
-	/*
+	/* 동적 입력으로 전환
 	 * @GetMapping("/search/type") public String albumSearch(@RequestParam
 	 * Map<String, Object> type, ModelMap model) { List<AlbumInfo> list =
 	 * albumService.selectListAlbumInfoByType(type); model.addAttribute(list);
@@ -161,7 +173,6 @@ public class AlbumController {
 
 
 	/* comment */
-	
 	@GetMapping("/album/comment/list")
 	public String albumCommentList(@RequestParam Album album, ModelMap model) {
 		List<AlbumComment> list = albumService.selectListAlbumComment(album.getCode());
@@ -174,6 +185,9 @@ public class AlbumController {
 
 	}
 
+	/** 
+	 * Comment - Enroll,Update,Delete 
+	 */
 	@PostMapping("/album/comment/enroll")
 	public String albumCommentEnroll(@RequestParam AlbumComment alComment, ModelMap model) {
 		log.debug("albumComment={}", alComment);
@@ -208,12 +222,10 @@ public class AlbumController {
 
 
 	/* Album (Old Code 모두 전환예정)*/
-
-//	@GetMapping("/album/enrollList")
-//	public String albumEnrollList(Model model) {
-//		return "/audiobook/albumEnrollList";
-//	}
-
+	
+	/** 
+	 * Album - Enroll,Update,Delete 
+	 */
 	@GetMapping("/album/enroll")
 	public String albumForm() {
 		// 관리자 여부 확인 or aop, filter처리
@@ -223,7 +235,7 @@ public class AlbumController {
 	}
 	
 	@GetMapping("/album/enroll/list")
-	public String albumList(@RequestParam(defaultValue = "1") int cPage, HttpServletRequest request, Model model) {
+	public String albumList(@AuthenticationPrincipal Member member, @RequestParam(defaultValue = "1") int cPage, HttpServletRequest request, Model model) {
 		int limit = 10;
 		int offset = (cPage - 1) * limit;
 		Map<String, Object> param = new HashMap<>();
@@ -290,7 +302,10 @@ public class AlbumController {
 				attach.setRenamedFilename(renamedFilename);
 				imgList.add(attach);
 			} else {
-				// 디폴트 이미지 설정
+				//default Img
+				AlbumImg attach = new AlbumImg();
+				attach.setOriginalFilename(DEFAULT_IMG);
+				imgList.add(attach);
 			}
 		}
 
@@ -317,148 +332,150 @@ public class AlbumController {
 		}
 	}
 
+	
 	@GetMapping("/album/update")
-	public String albumUpdate(@RequestParam String code, ModelMap model) {
-		// 관리자 권한 확인 or Filter등록
-
-		/*
-		 * 앨범 정보 불러오기 : 한번에 다불러오면 다시 객체를 생성해서 매핑해야되므로 따로 불러와서 바로 넘겨주는것이 나음.
-		 */
-		
-		// Album result = albumService.selectOneAlbumCollection(code);
-
+	public String albumUpdate(@AuthenticationPrincipal Member member, @RequestParam String code, ModelMap model) {
+	
+		// Album result = albumService.selectOneAlbumCollection(code); 
+		//앨범 정보 불러오기 : 한번에 다불러오면 다시 객체를 생성해서 매핑해야되므로 따로 불러와서 바로 넘겨주는것이 나음.
 		AlbumInfo oldAlbumInfo = albumService.selectOneAlbumInfo(code);
-		List<AlbumTrack> oldTracksList = albumService.selectListAlbumTrack(code);
-		List<AlbumImg> oldImgsList = albumService.selectListAlbumImg(code);
+		List<AlbumTrack> oldTrackList = albumService.selectListAlbumTrack(code);
+		List<AlbumImg> oldImgList = albumService.selectListAlbumImg(code);
+		
 		model.clear();
-
 		model.addAttribute("oldAlbumInfo", oldAlbumInfo);
-		model.addAttribute("oldAlbumTrackList", oldTracksList);
-		model.addAttribute("oldAlbumImgList", oldImgsList);
+		model.addAttribute("oldTrackList", oldTrackList);
+		model.addAttribute("oldImgList", oldImgList);
 		return "/audiobook/album/updateForm";
 	}
 
 	@PostMapping("/album/update")
-	public String albumUpdate(Album album, @RequestParam(name = "trkFile") MultipartFile[] trkFiles,
-			@RequestParam(name = "imgFile") MultipartFile[] imgFiles, ModelMap model, RedirectAttributes redirectAttr)
+	public String albumUpdate(Album album, ModelMap model,
+			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
+			@RequestParam(name = "imgFile") MultipartFile[] imgFiles, 
+			@RequestParam(name="trkOriginalFileName")String[] trkOriginalFileNames,
+			@RequestParam(name="imgOriginalFileName")String[] imgOriginalFileNames,
+			@RequestParam(name="trkRenamedFileName")String[] trkRenamedFileNames,
+			@RequestParam(name="imgRenamedFileName")String[] imgRenamedFileNames,
+			RedirectAttributes redirectAttr)
 			throws IllegalStateException, IOException {
-
-		String saveAudioDirectory = application.getRealPath("/resources/upload/audiobook/mp3");
-		String saveImgDirectory = application.getRealPath("/resources/upload/audiobook/img");
-		String s = IMG_PATH;
-		String sk = AUDIO_PATH;
+		// 삭제전 이전리스트 목록
+		AlbumInfo oldAlbumInfo = albumService.selectOneAlbumInfo(album.getCode());
+		List<AlbumTrack> oldTrackList = albumService.selectListAlbumTrack(album.getCode());
+		List<AlbumImg> oldImgList = albumService.selectListAlbumImg(album.getCode());
+		
+		log.debug("StringTrackFileNames={}",trkOriginalFileNames);
+		log.debug("StringImgFileNames={}",imgOriginalFileNames);
+		
+		/*
+		 * String saveAudioDirectory = application.getRealPath("/resources/upload/audiobook/mp3"); String
+		 * saveImgDirectory = application.getRealPath("/resources/upload/audiobook/img");
+		 * String code = album.getCode();
+		 * AlbumInfo albumOriginInfo = albumService.selectOneAlbumInfo(code);
+		 * List<AlbumTrack> trackOriginList = albumService.selectListAlbumTrack(code);
+		 * List<AlbumImg> imgOriginList = albumService.selectListAlbumImg(code);
+		 */
+		String saveImgDirectory = IMG_PATH;
+		String saveAudioDirectory = AUDIO_PATH;
+		
 		log.debug("saveDirectory={}", saveAudioDirectory);
 		log.debug("track1={}", trkFiles[0].getOriginalFilename());
 		log.debug("imgFiles={}", imgFiles[0].getOriginalFilename());
 
-		// 삭제전 이전리스트 목록
-		String code = album.getCode();
-		AlbumInfo albumOriginInfo = albumService.selectOneAlbumInfo(code);
-		List<AlbumTrack> trackOriginList = albumService.selectListAlbumTrack(code);
-		List<AlbumImg> imgOriginList = albumService.selectListAlbumImg(code);
+		Set<String> oldTrackOriginNameSet = oldTrackList.stream()
+									.map(x -> x.getOriginalFilename())
+									.collect(Collectors.toSet());
+		Set<String> oldImgOriginNameSet = oldImgList.stream()
+									.map(x -> x.getOriginalFilename())
+									.collect(Collectors.toSet());
+		Set<String> oldTrackReNameSet = oldTrackList.stream()
+									.map(x -> x.getRenamedFilename())
+									.collect(Collectors.toSet());
+		Set<String> oldImgReNameSet = oldImgList.stream()
+									.map(x -> x.getRenamedFilename())
+									.collect(Collectors.toSet());
 		
-		List<String> trackNameList = trackOriginList.stream()
-									.map(x -> x.getOriginalFilename())
-									.collect(Collectors.toList());
-		List<String> imgNameList = imgOriginList.stream()
-									.map(x -> x.getOriginalFilename())
-									.collect(Collectors.toList());
+		/* 새로입력된 파일*/
+		List<AlbumTrack> newTrackList = new ArrayList<>();
+		List<AlbumImg> newImgList = new ArrayList<>();
+		List<String> delTrackRenamedList = new ArrayList<>();
+		List<String> delTrackOriginList = new ArrayList<>();
+		List<String> delImgRenamedList = new ArrayList<>();
+		List<String> delImgOriginList = new ArrayList<>();
 
-		// 새로입력
-		List<AlbumTrack> trackList = new ArrayList<>();
-		List<AlbumImg> imgList = new ArrayList<>();
-
+		
 		for (int i = 0; i < trkFiles.length; i++) {
 			MultipartFile trkFile = trkFiles[i];
+			String trkOriginalFileName= trkOriginalFileNames[i];
+			String trkRenamedFileName= trkRenamedFileNames[i];
 			if (!trkFile.isEmpty()) {
-				String originalFilename = trkFile.getOriginalFilename();
-				log.debug(originalFilename);
-
-				if (!trackNameList.contains(originalFilename)) {
-					String renamedFilename = NadaumUtils.rename(originalFilename);
-					File dest = new File(saveAudioDirectory, renamedFilename);
+				String updateFilename = trkFile.getOriginalFilename();
+				log.debug(updateFilename);
+				if(trkOriginalFileName!=updateFilename) {
+					String renamedUpdateFilename = NadaumUtils.rename(updateFilename);
+					File dest = new File(saveAudioDirectory, renamedUpdateFilename);
 					trkFile.transferTo(dest);
-
+					
 					AlbumTrack attach = new AlbumTrack();
-					attach.setOriginalFilename(originalFilename);
-					attach.setRenamedFilename(renamedFilename);
-					trackList.add(attach);
+					attach.setOriginalFilename(updateFilename);
+					attach.setRenamedFilename(renamedUpdateFilename);
+					newTrackList.add(attach);
+					delTrackOriginList.add(trkOriginalFileName);
+					delTrackRenamedList.add(trkRenamedFileName);
 				}
 			}
 		}
 		
 		for (int i = 0; i < imgFiles.length; i++) {
 			MultipartFile imgFile = imgFiles[i];
+			String imgOriginalFileName= imgOriginalFileNames[i];
+			String imgRenamedFileName= imgRenamedFileNames[i];
 			if (!imgFile.isEmpty()) {
-				String originalFilename = imgFile.getOriginalFilename();
-				log.debug(originalFilename);
-
-				if (!imgNameList.contains(originalFilename)) {
-					String renamedFilename = NadaumUtils.rename(originalFilename);
-					File dest = new File(saveImgDirectory, renamedFilename);
+				String updateFilename = imgFile.getOriginalFilename();
+				log.debug(updateFilename);
+				if(imgOriginalFileName!=updateFilename) {
+					String renamedUpdateFilename = NadaumUtils.rename(updateFilename);
+					File dest = new File(saveImgDirectory, renamedUpdateFilename);
 					imgFile.transferTo(dest);
-
+					
 					AlbumImg attach = new AlbumImg();
-					attach.setOriginalFilename(originalFilename);
-					attach.setRenamedFilename(renamedFilename);
-					imgList.add(attach);
+					attach.setOriginalFilename(updateFilename);
+					attach.setRenamedFilename(renamedUpdateFilename);
+					newImgList.add(attach);
+					delImgOriginList.add(imgOriginalFileName);
+					delTrackRenamedList.add(imgRenamedFileName);
 				}
 			} else {
 				AlbumImg attach = new AlbumImg();
 				attach.setOriginalFilename(DEFAULT_IMG);
-				attach.setRenamedFilename(DEFAULT_IMG);
-				imgList.add(attach);
+				newImgList.add(attach);
 			}
 		}
-
-		if (!trackList.isEmpty()) {
-			album.setAlbumTracks(trackList);
-			album.setAlbumImgs(imgList);
+		if (!newTrackList.isEmpty()) {
+			album.setAlbumTracks(newTrackList);
+			album.setAlbumImgs(newImgList);
 		}
 
-		log.debug("album = {}", album);
-		log.debug("trkfile={}", trkFiles[0].getOriginalFilename());
-		log.debug("trkfile={}", trkFiles[1].getOriginalFilename());
-
-		int result = albumService.updateAlbum(album);
+		//int result = albumService.updateAlbum(album);
 		String msg = "";
 		model.clear();
 		//
-		if (1 == result) {
-			
-			trackNameList.removeAll(trackList.stream().map(x->x.getOriginalFilename()).collect(Collectors.toList()));
-			imgNameList.removeAll(imgList.stream().map(x->x.getOriginalFilename()).collect(Collectors.toList()));
-			log.debug("trackNameList={}",trackNameList);
-			log.debug("imgNameList={}",imgNameList);
-			
-			List<String> delTracks = trackOriginList.stream()
-								.filter(x->trackNameList.contains(x.getOriginalFilename()))
-								.map(AlbumTrack::getRenamedFilename)
-								.collect(Collectors.toList());
-			List<String> delImgs = imgOriginList.stream()
-								.filter(x->imgNameList.contains(x.getOriginalFilename()))
-								.map(AlbumImg::getRenamedFilename)
-								.collect(Collectors.toList());
-			
-			String audioPath = saveAudioDirectory;
-			String imgPath = saveImgDirectory;
-			
-			File folder = new File(imgPath);
-			File[] imgFileList =  folder.listFiles();
-			File folder2 = new File(audioPath);
-			File[] trackFileList = folder2.listFiles();
-			
-			Stream.of(imgFileList).filter(x->delImgs.contains(x.getName())).forEach(File::delete);
-			Stream.of(trackFileList).filter(x->delTracks.contains(x.getName())).forEach(File::delete);
-			
-			msg = "앨범 수정 성공!";
-			redirectAttr.addFlashAttribute("msg", msg);
-			return "redirect:/audiobook/album/enroll/list";
-		} else {
-			msg = "앨범수정 실패 재시도 해주세요";
-			redirectAttr.addFlashAttribute("msg", msg);
-			return "/audiobook/album/enrollForm";
-		}
+		/*
+		 * if (1 == result) { File folder = new File(imgPath); File[] imgFileList =
+		 * folder.listFiles(); File folder2 = new File(audioPath); File[] trackFileList
+		 * = folder2.listFiles();
+		 * 
+		 * Stream.of(imgFileList).filter(x->delImgs.contains(x.getName())).forEach(File:
+		 * :delete);
+		 * Stream.of(trackFileList).filter(x->delTracks.contains(x.getName())).forEach(
+		 * File::delete);
+		 * 
+		 * msg = "앨범 수정 성공!"; redirectAttr.addFlashAttribute("msg", msg); return
+		 * "redirect:/audiobook/album/enroll/list"; } else { msg = "앨범수정 실패 재시도 해주세요";
+		 * redirectAttr.addFlashAttribute("msg", msg); return
+		 * "/audiobook/album/enrollForm"; }
+		 */
+		return "";
 	}
 
 	@GetMapping("/album/delete")
@@ -506,6 +523,7 @@ public class AlbumController {
 		
 		/*
 		 * Old Code 
+		 * 
 		 * for(int i=0;i<trackOriginList.size();i++) { 
 		 * String delFile = AUDIO_PATH+trackOriginList.get(i).getRenamedFilename();
 		 * System.out.println(delFile); 
@@ -520,7 +538,7 @@ public class AlbumController {
 		 * log.debug("{}파일이 삭제되었습니다.",imgOriginList.get(i).getRenamedFilename()); }
 		 */
 		
-		/*Stream방식*/
+		/* Stream방식 */
 		HashSet<String> trackSet = (HashSet<String>) trackOriginList.stream().map(x->x.getRenamedFilename()).collect(Collectors.toSet());
 		HashSet<String> imgSet = (HashSet<String>) imgOriginList.stream().map(x->x.getRenamedFilename()).collect(Collectors.toSet());
 		
@@ -550,19 +568,18 @@ public class AlbumController {
 		/*
 		 * for(int i=0; i<trackFileList.length;i++) { String s
 		 * =trackFileList[i].getName(); log.debug("s={}",s); }
-		 */
-		 
-		
+		 */	 
+
 		log.debug("trackFileList={}",trackFileList);
 		//Set<File> tfSet = new HashSet<>(Arrays.asList(trackFileList)); 
 		//Set<File> ifSet = new HashSet<>(Arrays.asList(imgFileList));
 		Stream.of(trackFileList)
 			.filter(x->trackSet.contains(x.getName()))
-			//.peek(System.out::println)
+			//.peek(System.out::println) 속도느려짐 deprecated
 			.forEach(File::delete);
 		Stream.of(imgFileList)
 			.filter(x->imgSet.contains(x.getName()))
-			//.peek(System.out::println)
+			//.peek(System.out::println) 속도느려짐 deprecated
 			.forEach(File::delete);
 		log.debug("imgFileList={}",imgFileList);
 		log.debug("trackFileList={}",trackFileList);
@@ -580,7 +597,7 @@ public class AlbumController {
 	}
 
 	/*
-	 * sample
+	 * Sample
 	 */
 	@GetMapping("/detail/sample/collections") 
 	public String albumSamplePage(
@@ -601,16 +618,21 @@ public class AlbumController {
 		// model.addAttribute("album",album);
 		return "/audiobook/sample/albumDetailTimeStamp";
 	}
-
+	
 	/*
 	 * (미완) SPA audiobook player
 	 */
-	@GetMapping("/album/sample/ajax")
-	public ResponseEntity albumAudioListAjax() {
-
-		return ResponseEntity.ok().build();
+	@GetMapping("/sample/playList")
+	public ResponseEntity<Map<String, Object>> albumAudioListAjax() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("icon", "iconImage");
+		map.put("title","Recital");
+		map.put("file","https://docs.google.com/uc?export=open&id=1-LennS20yQSBr0Ualiu_12J1HjmtI5ef" );
+		return ResponseEntity.ok(map);
 	}
-
+	/**
+	 * Date Form binder
+	 */
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		try {
@@ -622,7 +644,14 @@ public class AlbumController {
 			throw e;
 		}
 	}
-	
+	/**
+	 * 페이지바 
+	 * @param cPage : page that client request
+	 * @param limit : limit for one page
+	 * @param totalContent : number of total rows
+	 * @param url : url for mapping page bar button
+	 * @return
+	 */
 	public static String getPageBar(int cPage, int limit, int totalContent, String url) {
 		
 		StringBuilder pagebar = new StringBuilder(); 
@@ -638,7 +667,6 @@ public class AlbumController {
 		pagebar.append("<nav>\r\n"
 				+ "			  <ul class=\"pagination justify-content-center pagination-sm\">\r\n"
 				+ "			    ");
-		
 		// [이전]
 		if(pageNo == 1) {
 			// 이전 영역 비활성화

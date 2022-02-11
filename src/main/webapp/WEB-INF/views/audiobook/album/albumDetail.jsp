@@ -12,67 +12,8 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="imgPath" value="/resources/upload/audiobook/img/" />
 <c:set var="imgName" value="${img.renamedFilename}" />
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/audiobook/track.css" />
 <link rel="script" href="${pageContext.request.contextPath}/resources/js/audiobook/player.js" />
-<style>
-.right-col {
-	float: right;
-	margin-right: 6%;
-	margin-top: 120px;
-	display: flex;
-	align-items: center;
-}
-
-.right-col p {
-	font-size: 18px;
-	color: #5f5f5f;
-	font-weight: 400;
-	margin-right: 15px;
-}
-
-.play-icon {
-	width: 70px;
-	cursor: pointer;
-}
-
-.playBtn {
-	height: 50px;
-	width: 30px
-}
-
-.img-thumbnail {
-	width: auto;
-	height: 100px;
-}
-
-#audioContainer {
-	position: fixed;
-	bottom: 0;
-}
-
-.sub-menu td, .sub-menu th, .table thead th {
-	border-top: 0px;
-	border-bottom: 0px;
-}
-
-/* modal css */
-.modal-dialog {
-	max-width: 800px;
-	margin: 30px auto;
-}
-
-.modal-body {
-	position: relative;
-	padding: 0px;
-}
-
-.btn-close {
-	position: absolute;
-	right: -30px;
-	top: 0;
-}
-</style>
 <div class="row row-cols-lg-12 mb-2 justify-content-center relative sub-menu">
 	<div class="col-3 ml-4 pr-0">
 		<img src="${contextPath}${imgPath}${img.renamedFilename}" class="" style="height: 300px; width: 300px;">
@@ -104,10 +45,11 @@
 				<tr>
 					<td style="vertical-align: middle;"> 
 					<c:if test="${not empty album.mvLink}">
-						<a href="#" class="btn btn-dark" data-toggle="modal" data-target="#videoModal" data-theVideo="${album.mvLink}" style="text-decoration: none;">Music VIDEO<img class="play-icon" style="width: 100px;" src="${pageContext.request.contextPath}/resources/images/audiobook/play.png" id="play"></a>
-						 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-						<span style="display: inline-block; text-align: right">
-					</span>
+						<a href="#" class="btn btn-outline-info" data-toggle="modal" data-target="#videoModal" data-theVideo="${album.mvLink}"> 
+						<span  style="text-decoration: none;">Music VIDEO</span>
+						</a>
+						<img class="play-icon" style="width: 100px;" src="${pageContext.request.contextPath}/resources/images/audiobook/play.png" id="play">						
+						
 					</c:if>
 					</td>
 				</tr>
@@ -117,13 +59,13 @@
 	<%-- <div class="col-2 ml-2">장르: 클래식 ${album.kind}</div> --%>
 </div>
 <!-- 뮤직비디오 모달창 -->
-<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
+<div class="modal modal-center fade modal-dialog-centered" id="videoModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <div>
-          <iframe width="100%" height="350" src=""></iframe>
+        <div class="iframe">
+          <iframe width="100%" height="350px" src=""></iframe>
         </div>
       </div>
     </div>
