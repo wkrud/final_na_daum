@@ -2,6 +2,8 @@
 var member_id = $('#id').val();
 var nickname = $('#nickname').val();
 var summonerId = $('#summonerId').val();
+var summonerNameCheck = $('#summonerNameCheck').val();
+
 
 $(document).ready(function() {
 
@@ -76,7 +78,7 @@ $(".fav-btn").click((e) => {
 	$.ajax({
 		type: "post",
 		headers: headers,
-		url: '/nadaum/riot/riotTotalFav.do',
+		url: '/nadaum/riot/riotTotal2Fav.do',
 		dataType: "json",
 		contentType: "application/json; charset=utf-8;",
 		data: JSON.stringify(
@@ -115,10 +117,13 @@ $(".fav-btn").click((e) => {
 									favData
 								),
 								success: function(response) {
+									const result = response["result"];
 
-									const summonerName = response["summonerName"];
 									if (result > 0) {
-										alert(summonerName + "를 즐겨찾기 해제 하였습니다!");
+										alert(">>" + summonerNameCheck + "<< 즐겨찾기 해제 하였습니다!");
+										$('.fav-btn').css("background-color", "#e9ecef");
+										$('.fav-btn').css("color", "#ffc107");
+										$('.fav-btn').css("border-color", "##ffc107");
 									}
 
 
@@ -130,7 +135,7 @@ $(".fav-btn").click((e) => {
 
 						}
 						else {
-									alert(summonerName + "가 즐겨찾기가 되어있는 상태입니다! 먼저 즐겨찾기해제후 눌러주세요!");
+							alert(">>" + summonerName + "<< 즐겨찾기가 되어있는 상태입니다!\n먼저 즐겨찾기해제후 눌러주세요!");
 
 						}
 
@@ -162,7 +167,9 @@ $(".fav-btn").click((e) => {
 						const sm_Id = response["sm_Id"];
 						const summonerName = response["summonerName"];
 						if (result > 0) {
-							alert(summonerName + "를 즐겨찾기 하였습니다!");
+							alert(">>" + summonerName + "<< 즐겨찾기 하였습니다!");
+							$('.fav-btn').css("background-color", "#ffc107");
+							$('.fav-btn').css("color", "#1d2124");
 						}
 
 

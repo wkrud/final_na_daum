@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.nadaum.riot.model.dao.RiotDao;
+import com.project.nadaum.riot.model.vo.LeagueEntry;
 import com.project.nadaum.riot.model.vo.RiotFavo;
 import com.project.nadaum.riot.model.vo.Summoner;
 
@@ -57,6 +58,24 @@ public class RiotServiceImpl implements RiotService {
 	public RiotFavo selectOneAccountName(Map<String, Object> map) {
 		
 		return riotDao.selectOneAccountName(map);
+	}
+
+	@Override
+	public int selectOneMemberAccount(Map<String, Object> map) {
+		
+		return riotDao.selectOneMemberAccount(map);
+	}
+
+	@Override
+	public int insertLeagueEntry(LeagueEntry leagueentry) {
+		
+		return riotDao.insertLeagueEntry(leagueentry);
+	}
+
+	@Override
+	public LeagueEntry selectOneLeagueEntry(String summonerId) {
+		
+		return riotDao.selectOneLeagueEntry(summonerId);
 	}
 
 

@@ -24,5 +24,6 @@ public class LeagueEntry implements Serializable{
 	private int leaguePoints;
 	private int wins;
 	private int losses;
+	private String summonerId;
 
 }

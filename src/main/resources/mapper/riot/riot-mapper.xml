@@ -23,6 +23,22 @@
 		)
 	</insert>
 	
+	<insert id="insertLeagueEntry">
+		insert into
+			riot_tier(no, league_id, queuetype, tier, rank, league_points, wins, losses, summoner_id)
+		values(
+			seq_riot_tier_no.nextval,
+			#{leagueId},
+			#{queueType},
+			#{tier},
+			#{rank},
+			#{leaguePoints},
+			#{wins},
+			#{losses},
+			#{summonerId}
+		)
+	</insert>
+	
 	<select id="selectOneSummoner" resultType="summoner">
 		select 
 			*
@@ -30,6 +46,15 @@
 			riot_record
 		where
 			puuid = #{puuid}
+	</select>
+	
+	<select id="selectOneLeagueEntry" resultType="leagueEntry">
+		select 
+			*
+		from
+			riot_tier
+		where
+			summoner_id = #{summonerId}
 	</select>
 	
 	<insert id="insertRiotFavo">
@@ -44,6 +69,16 @@
 	</insert>
 	
 	<select id="selectOneDetailAccount" resultType="int">
+		select 
+			count(*)
+		from
+			riot_myaccount
+		where
+			member_id = #{member_Id} and sm_id = #{sm_Id}
+	
+	</select>
+	
+	<select id="selectOneMemberAccount" resultType="int">
 		select 
 			count(*)
 		from
@@ -64,7 +99,7 @@
 			riot_myaccount a join riot_record b
             on a.sm_id = b.id
 		where
-			member_id = #{member_Id} and sm_id = #{sm_Id}
+			member_id = #{member_Id} 
 	
 	</select>
 	

@@ -165,8 +165,22 @@ public class ApitestController {
 			String queueType = object.get("queueType").getAsString();
 			int leaguePoints = object.get("leaguePoints").getAsInt();
 			String leagueId = object.get("leagueId").getAsString();
-			leagueentry = new LeagueEntry(0, leagueId, queueType, tier, rank, leaguePoints, wins, losses);
+			leagueentry = new LeagueEntry(0, leagueId, queueType, tier, rank, leaguePoints, wins, losses,summonerId);
 			log.info("leagueentry = {}", leagueentry);
+			
+			LeagueEntry dbleagueentry = riotService.selectOneLeagueEntry(summonerId);
+			log.info("dbleagueentry = {}", dbleagueentry);
+			if (dbleagueentry == null) {
+				int dbleagueentryrecord = riotService.insertLeagueEntry(leagueentry);
+
+				String msg = dbleagueentryrecord > 0 ? "summoner 티어 등록 성공!" : "summoner 티어 등록 실패!";
+				log.info("msg = {}", msg);
+			} else {
+				String msg = "이미 db에 저장되어있는 summoner 티어입니다";
+				log.info("msg = {}", msg);
+			}
+			
+		
 
 			if (element.get(1) != null) {
 				JsonObject object2 = (JsonObject) element.get(1);
@@ -323,10 +337,8 @@ public class ApitestController {
 		map.put("sm_Id", favData.get("summoner_id"));
 		
 		int result = riotService.deleteFav(accountmap);
-		RiotFavo namecheck = riotService.selectOneAccountName(map);
-		String name = namecheck.getName();
-		map.put("summonerName",name);
-		
+	 
+		log.debug("result = " + result);
 		map.put("result",result);
 		
 		
@@ -348,18 +360,58 @@ public class ApitestController {
 		String sm_Id = (String) Data.get("summoner_id");
 
 		map.put("member_Id", member_Id);
+		map.put("sm_Id", sm_Id);
 		
-		
+		 
 		int oneaccount;
 		int noaccount;
 		try {
 			
 			oneaccount = riotService.selectOneDetailAccount(map);
-			log.info("oneaccount");
+			log.info("oneaccount= {}",oneaccount);
+			
 			resultmap.put("favcount", oneaccount);
-			log.info("resultmap");
+			
+			log.info("resultmap",resultmap);
 
-			log.info("oneaccount = {}", oneaccount);
+		
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+
+		return resultmap;
+
+	}
+	
+	@ResponseBody
+	@PostMapping("/riotTotal2Fav.do")
+	public Map<String, Object> riotTotal2Fav(@RequestBody Map<String, Object> Data) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+
+		String member_Id = (String) Data.get("member_id");
+		String sm_Id = (String) Data.get("summoner_id");
+
+		map.put("member_Id", member_Id);
+		
+		
+		 
+		int oneaccount;
+		int noaccount;
+		try {
+			
+			oneaccount = riotService.selectOneMemberAccount(map);
+			log.info("oneaccount= {}",oneaccount);
+			
+			resultmap.put("favcount", oneaccount);
+			
+			log.info("resultmap",resultmap);
+
+		
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -384,6 +436,7 @@ public class ApitestController {
 		map.put("member_Id", member_Id);
 		map.put("sm_Id", sm_Id);
 		RiotFavo namecheck = riotService.selectOneAccountName(map);
+		log.info("namecheck={}",namecheck);
 		String name = namecheck.getName();
 		
 		
@@ -406,5 +459,7 @@ public class ApitestController {
 		return map;
 
 	}
+	
+	
 
 }
