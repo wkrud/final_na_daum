@@ -149,7 +149,7 @@ $search.change((e) => {
 $(function(){
 	$(".friends-section").slick({
 		infinite: true,
-		slidesToShow: 5,
+		slidesToShow: 4,
 		slidesToScroll: 1,
 		speed: 500,
 		arrows: true,
