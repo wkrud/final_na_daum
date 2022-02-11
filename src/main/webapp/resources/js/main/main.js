@@ -191,6 +191,21 @@
  	else if(widgetName == 'movie-widget') {
  		if(document.querySelector('.movie-widget') == null) {
 	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	      
+	      $.ajax({
+		 	url : $contextPath+"/movie/widgetMovie.do",
+		 	method : 'GET',
+	     	contentType : "application/json; charset=UTF-8",
+	     	dataType : "json",
+	     	success(data) {
+				console.log(data);
+			},
+			error(xhr, testStatus, err) {
+				console.log("error", xhr, testStatus, err);
+				alert("조회에 실패했습니다.");
+			}
+		});
+	      
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -293,8 +308,7 @@
 		}
 	 });
 	};
-	
-	
+
 	
  
 //수입 지출 변환 함수
