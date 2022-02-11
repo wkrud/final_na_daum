@@ -92,7 +92,14 @@ public class FeedDaoImpl implements FeedDao {
 		return session.selectList("feed.selectAddFeed",map,rowBounds);
 	}
 	
-	
+	@Override
+    public int feedEnroll(Feed feed) {
+        return session.insert("feed.feedEnroll", feed);
+    }
+    @Override
+    public int insertAttachment(Attachment attach) {
+        return session.insert("feed.insertAttachment", attach);
+    }
 	
 	
 }
