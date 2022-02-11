@@ -45,4 +45,6 @@ public interface FeedDao {
 
 	List<Feed> feedMain();
 
+	void deleteFeed(Map<String, Object> map);
+
 }

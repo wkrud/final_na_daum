@@ -223,4 +223,16 @@ public class FeedController {
 		return ResponseEntity.ok(addFeed);
 	}
 	
+	@PostMapping("/deleteFeed.do")
+	public ResponseEntity<?> deleteFeed(@RequestParam Map<String, Object> map){
+		try {
+			log.debug("map = {}", map);
+			feedService.deleteFeed(map);			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return ResponseEntity.badRequest().build();
+		}
+		return ResponseEntity.ok(1);
+	}
+	
 }
