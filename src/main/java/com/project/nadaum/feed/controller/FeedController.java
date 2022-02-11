@@ -51,7 +51,7 @@ public class FeedController {
 			int totalCount = feedService.countAllHostFeed(param);
 			param.put("totalCount", totalCount);
 			List<Feed> feed = feedService.selectOnePersonFeed(param);
-					
+						
 			// 친구, 팔로잉
 			Map<String, Object> socialCount = feedService.selectAllHostSocialCount(param);
 			
@@ -146,4 +146,18 @@ public class FeedController {
 	@GetMapping("/feedMain.do")
 	public void feedMain() {}
 
+	@GetMapping("/addFeedPage.do")
+	public ResponseEntity<?> addFeedPage(@RequestParam Map<String, Object> map){
+		log.debug("map = {}", map);
+		int page = Integer.parseInt((String) map.get("page"));
+		int limit = 8;		
+		int offset = (page - 1) * limit;
+		map.put("limit", limit);
+		map.put("offset", offset);
+		
+		List<Map<String, Object>> addFeed = feedService.selectAddFeed(map);
+		log.debug("addFeed = {}", addFeed);
+		return ResponseEntity.ok(addFeed);
+	}
+	
 }

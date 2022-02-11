@@ -3,6 +3,7 @@ package com.project.nadaum.feed.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.project.nadaum.common.vo.Attachment;
 import com.project.nadaum.feed.model.vo.Feed;
 import com.project.nadaum.feed.model.vo.FeedComment;
+import com.project.nadaum.member.model.vo.Member;
 
 @Repository
 public class FeedDaoImpl implements FeedDao {
@@ -80,6 +82,14 @@ public class FeedDaoImpl implements FeedDao {
 	@Override
 	public Feed selectOnePersonFeedOnebyOne(Map<String, Object> param) {
 		return session.selectOne("feed.selectOnePersonFeedOnebyOne", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAddFeed(Map<String, Object> map) {
+		int offset = (int) map.get("offset");
+		int limit = (int) map.get("limit");
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("feed.selectAddFeed",map,rowBounds);
 	}
 	
 	
