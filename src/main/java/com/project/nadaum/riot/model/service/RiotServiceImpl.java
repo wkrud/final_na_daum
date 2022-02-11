@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.project.nadaum.riot.model.dao.RiotDao;
 import com.project.nadaum.riot.model.vo.LeagueEntry;
 import com.project.nadaum.riot.model.vo.RiotFavo;
+import com.project.nadaum.riot.model.vo.RiotWidget;
 import com.project.nadaum.riot.model.vo.Summoner;
 
 
@@ -76,6 +77,12 @@ public class RiotServiceImpl implements RiotService {
 	public LeagueEntry selectOneLeagueEntry(String summonerId) {
 		
 		return riotDao.selectOneLeagueEntry(summonerId);
+	}
+
+	@Override
+	public RiotWidget selectOneWidget(String member_id) {
+		
+		return riotDao.selectOneWidget(member_id);
 	}
 
 

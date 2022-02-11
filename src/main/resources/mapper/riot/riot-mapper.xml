@@ -103,6 +103,25 @@
 	
 	</select>
 	
+		<select id="selectOneWidget" resultType="riotWidget">
+		select 
+			b.name,
+            c.tier,
+            c.rank,
+            c.league_points,
+            c.wins,
+            c.losses
+		from
+			riot_myaccount a join riot_record b
+            on a.sm_id = b.id  join riot_tier c
+            on a.sm_id = c.summoner_id
+		where
+			member_id = #{member_Id} 
+	
+	</select>
+	
+	
+	
 	<select id="selectOneAccount" resultType="int">
 		select 
 			count(*)

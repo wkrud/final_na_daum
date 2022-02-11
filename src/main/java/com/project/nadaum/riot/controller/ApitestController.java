@@ -48,6 +48,7 @@ import com.project.nadaum.riot.model.vo.LeagueEntries;
 import com.project.nadaum.riot.model.vo.LeagueEntry;
 import com.project.nadaum.riot.model.vo.MatchList;
 import com.project.nadaum.riot.model.vo.RiotFavo;
+import com.project.nadaum.riot.model.vo.RiotWidget;
 import com.project.nadaum.riot.model.vo.Summoner;
 import com.project.nadaum.riot.model.vo.riotDto.MatchDto;
 
@@ -448,6 +449,31 @@ public class ApitestController {
 			map.put("Oneresult", oneaccount);
 			map.put("summonerName",name);
 			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+
+		return map;
+
+	}
+	
+	@ResponseBody
+	@PostMapping("/riotWidget.do")
+	public Map<String, Object> riotWidget(@RequestBody String member_id) {
+		Map<String, Object> map = new HashMap<String, Object>();	
+		RiotWidget widgetinfo;
+		
+		try {
+			
+			widgetinfo = riotService.selectOneWidget(member_id);
+			map.put("widgetinfo", widgetinfo);
+			log.info("oneaccount= {}",widgetinfo);
+			
+
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

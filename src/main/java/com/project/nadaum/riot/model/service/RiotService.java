@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.project.nadaum.riot.model.vo.LeagueEntry;
 import com.project.nadaum.riot.model.vo.RiotFavo;
+import com.project.nadaum.riot.model.vo.RiotWidget;
 import com.project.nadaum.riot.model.vo.Summoner;
 
 public interface RiotService {
@@ -27,6 +28,8 @@ public interface RiotService {
 	int insertLeagueEntry(LeagueEntry leagueentry);
 
 	LeagueEntry selectOneLeagueEntry(String summonerId);
+
+	RiotWidget selectOneWidget(String member_id);
 	
 
 	

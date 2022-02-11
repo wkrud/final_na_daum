@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.project.nadaum.riot.model.vo.LeagueEntry;
 import com.project.nadaum.riot.model.vo.RiotFavo;
+import com.project.nadaum.riot.model.vo.RiotWidget;
 import com.project.nadaum.riot.model.vo.Summoner;
 
 @Repository
@@ -86,6 +87,13 @@ public class RiotDaoImpl implements RiotDao {
 		
 		return session.selectOne("riot.selectOneLeagueEntry",summonerId);
 
+	}
+
+
+	@Override
+	public RiotWidget selectOneWidget(String member_id) {
+		
+		return session.selectOne(member_id);
 	}
 	
 
