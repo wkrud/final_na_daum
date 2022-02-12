@@ -17,11 +17,11 @@ public interface MovieDao {
 
 //	Movie selectOneMovieCollection(String code);
 
-	int checkScrap(Map<String, Object> map);
+	int checkScrap(Map<String, Object> param);
 
-	int insertScrap(Map<String, Object> map);
+	int insertScrap(Map<String, Object> param);
 
-	int deleteScrap(Map<String, Object> map);
+	int deleteScrap(Map<String, Object> param);
 
 	double avgRating(String apiCode);
 

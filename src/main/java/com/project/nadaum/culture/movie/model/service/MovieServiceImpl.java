@@ -21,18 +21,18 @@ public class MovieServiceImpl implements MovieService {
 	private MovieDao movieDao;
 
 	@Override
-	public int checkScrap(Map<String, Object> map) {
-		return movieDao.checkScrap(map);
+	public int checkScrap(Map<String, Object> param) {
+		return movieDao.checkScrap(param);
 	}
 
 	@Override
-	public int insertScrap(Map<String, Object> map) {
-		return movieDao.insertScrap(map);
+	public int insertScrap(Map<String, Object> param) {
+		return movieDao.insertScrap(param);
 	}
 
 	@Override
-	public int deleteScrap(Map<String, Object> map) {
-		return movieDao.deleteScrap(map);
+	public int deleteScrap(Map<String, Object> param) {
+		return movieDao.deleteScrap(param);
 	}
 
 	@Override

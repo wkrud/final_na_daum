@@ -75,6 +75,10 @@
 <!-- 폰트어썸 -->
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 
+<!-- movie widget slide css/js -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/style.css" /> 
 <!-- member -->
@@ -131,14 +135,14 @@
       </li>
       <li class="nav-list personal-main contain-li">
           <span class="nav-icon"><i class="far fa-address-book header-icon"></i></span>
-          <span class="nav-title">퍼스널</span>
+          <span class="nav-title">다이어리</span>
       </li>
         <div class="personal-sub">
           <ul>
             <li class="nav-list">
               <a href="${pageContext.request.contextPath}/diary/diaryMain.do?date=<%= date.format(now) %>-01">      
                 <span class="nav-icon"></span>
-                <span class="nav-title">다이어리</span>
+                <span class="nav-title">일기</span>
               </a>
             </li>
             <li class="nav-list">
