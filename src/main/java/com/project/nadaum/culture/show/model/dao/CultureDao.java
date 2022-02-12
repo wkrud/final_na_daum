@@ -32,4 +32,6 @@ public interface CultureDao {
 	int totalStarCount(String apiCode);
 
 	int insertSchedule(Map<String, Object> map);
+
+	List<Scrap> selectCultureWidget(String id);
 }

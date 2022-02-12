@@ -218,6 +218,12 @@ $(() => {
 		<input type="hidden" name="id" value="${loginMember.id}" />
 		<button type="submit" class="btn btn-dark">나다운 찜 목록</button>
 	</form>
+	<form
+		action="${pageContext.request.contextPath}/culture/widget.do?${_csrf.parameterName}=${_csrf.token}"
+		method="post">
+		<input type="hidden" name="id" value="${loginMember.id}" />
+		<button type="submit" class="btn btn-dark">위젯</button>
+	</form>
 
 	<div id="culture-container">
 		<div class="py-5">
