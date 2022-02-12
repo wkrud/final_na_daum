@@ -26,6 +26,8 @@ public interface BoardDao {
 	
 	Board selectOneBoard(String code);
 
+	Board selectOneRiotBoard(String code);
+	
 	Board selectOneBoardCollection(String code);
 
 	//조회수
