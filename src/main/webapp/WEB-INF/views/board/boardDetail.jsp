@@ -108,8 +108,25 @@ div.col>.detail {
 
 				<div class="row row-cols-4">
 					<div class="col">
-						작성자 : <input type="text" class="detail" id="nickname"
-							name="nickname" value="${board.nickname}" readonly>
+						<c:choose>
+							<c:when test="${boardriot.nickname != null}">
+								<div class="boarddetailwrap"
+									style="display: flex !important; flex-direction: column; align-items: flex-start; margin-left: 50px;">
+									<div class="boarddetail1">
+										<span>작성자: ${board.nickname}</span>
+									</div>
+									<div class="boarddetail2" style="text-align: left;">
+										<span>소환사닉네임: ${boardriot.name}</span><br> <span>소환사티어:
+											${boardriot.tier} ${boardriot.rank} ${boardriot.leaguePoints}</span>
+									</div>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<input type="text" class="detail" id="nickname" name="nickname"
+									value="${board.nickname}" readonly>
+							</c:otherwise>
+						</c:choose>
+
 					</div>
 					<div class="col">
 						등록일자 :
