@@ -12,6 +12,7 @@ const selectedFeed = (id, code) => {
 			let commenterProfileImg = '';
 			let commentDate = '';
 			let likes = '';		
+			let dmDiv = '';
 			
 			
 			if(resp.likeCheck > 0){
@@ -35,23 +36,42 @@ const selectedFeed = (id, code) => {
 				hostProfile = resp.member.profile;							
 			}
 			
+			if(resp.feed.writer == resp.guest.id){
+				dmDiv = `
+				<div clsas="feed-host-profile">
+					<img src="${hostProfile}" alt="" />
+				</div>
+				`;
+			}else{
+				dmDiv = `
+				<div clsas="dropdown feed-host-profile">
+					<img src="${hostProfile}" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"/>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="click-send-chat" href='javascript:void(0);' onclick="startChatNow('${resp.guest.nickname}', '${resp.member.nickname}');">채팅하기</a>
+					</div>
+				</div>
+				`;
+			}
+			
+			
+			
 			console.log(resp);
 			let feedDiv = '';
 			if(resp.feed.attachCount > 0){
 				feedDiv = `
 				<div class="one-feed-detail-area-wrap">
 					<article class="one-feed-detail-area">
-						<div class="feed-profile-wrap">
-							<div clsas="feed-host-profile">
-								<img src="${hostProfile}" alt="" />
-							</div>
-							<div class="feed-host-nickname">
-								<span>${resp.member.nickname}</span>
-							</div>
+						<div class="feed-profile-delete-wrap">
+							<div class="feed-profile-wrap">
+								${dmDiv}
+								<div class="feed-host-nickname">
+									<span>${resp.member.nickname}</span>
+								</div>
+							</div>							
 						</div>
 						<div class="feed-pic-area-wrap">
 							<div class="feed-pic-area">
-								<img src="" alt="" />
+								<img src="/nadaum/resources/upload/feed/img/${resp.feed.attachments[0].renamedFilename}" alt="" />
 							</div>
 						</div>
 						<div class="feed-content-area-wrap">
@@ -70,7 +90,7 @@ const selectedFeed = (id, code) => {
 							<div class="input-group mb-3" style="margin-bottom: 0!important;">
 								<textarea class="form-control feed-textarea" placeholder="댓글을 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
 								<div class="input-group-append">
-									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">Button</button>
+									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">댓글작성</button>
 								</div>
 							</div>
 						</div>
@@ -79,22 +99,18 @@ const selectedFeed = (id, code) => {
 				`;
 				
 			}else{
-				
-				if(resp.feed.comments.length){				
-				}
-				
+								
 				feedDiv = `
 				<div class="one-feed-detail-area-wrap">
 					<article class="one-feed-detail-area">
-						<div class="feed-profile-wrap">
-							<div clsas="feed-host-profile">
-								<img src="${hostProfile}" alt="" />
-							</div>
-							<div class="feed-host-nickname">
-								<span>${resp.member.nickname}</span>
-							</div>
-						</div>
-						
+						<div class="feed-profile-delete-wrap">
+							<div class="feed-profile-wrap">
+								${dmDiv}
+								<div class="feed-host-nickname">
+									<span>${resp.member.nickname}</span>
+								</div>
+							</div>							
+						</div>						
 						<div class="only-content-feed-area-wrap">
 							<div class="only-content-feed">
 								${resp.feed.content}
@@ -113,7 +129,7 @@ const selectedFeed = (id, code) => {
 							<div class="input-group mb-3" style="margin-bottom: 0!important;">
 								<textarea class="form-control feed-textarea" placeholder="댓글을 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2"></textarea>
 								<div class="input-group-append">
-									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">Button</button>
+									<button id="write-comment-btn" class="btn btn-outline-secondary" type="button">댓글작성</button>
 								</div>
 							</div>
 						</div>
@@ -124,8 +140,22 @@ const selectedFeed = (id, code) => {
 						
 			$detailBody.append(feedDiv);
 			
+			let $deleteFeedArea = $(".feed-profile-delete-wrap");
+			if(resp.guest.id == resp.feed.writer){
+				let feedDeleteBtn = `
+				<div class="feed-delete-wrap">
+					<div class="dropdown comment-setting-btn-wrap">
+						<i data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fas fa-ellipsis-v comment-setting-btn"></i>
+						<div class="dropdown-menu" onclick="deleteFeedBtn('${resp.feed.code}');" aria-labelledby="dropdownMenuButton">피드삭제</div>
+					</div>
+				</div>`;
+				$deleteFeedArea.append(feedDeleteBtn);
+			}
+			
+			
 			let $commetArea = $(".feed-comment-area");		
 			let deleteBtn = '';
+			let profileOptionBtn = '';
 			
 			$(resp.feed.comments).each((i, v) => {
 				
@@ -141,24 +171,39 @@ const selectedFeed = (id, code) => {
 				}
 				
 				if(v.commentWriter == resp.guest.id){
-					deleteBtn = `<input type="hidden" class="comment-no" value="${v.no}"/><button class="dropdown-item delete-btn">댓글 삭제</button>`;
+					deleteBtn = `
+					<div class="dropdown comment-setting-btn-wrap">
+						<i data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fas fa-ellipsis-v comment-setting-btn"></i>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><input type="hidden" class="comment-no" value="${v.no}"/><button class="dropdown-item delete-btn">댓글 삭제</button></div>
+					</div>`;
+					
+					profileOptionBtn = `
+					<div class="commenter-profile-img">
+						<img src="${commenterProfileImg}" />
+					</div>
+					`;
+				}else{					
+					profileOptionBtn = `
+					<div class="dropdown commenter-profile-img">
+						<img src="${commenterProfileImg}" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"/>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a href='/nadaum/feed/socialFeed.do?id=${v.commentWriter}'>피드 구경하기</a>
+							<a href='javascript:void(0);' onclick="startChatNow('${resp.guest.nickname}', '${v.nickname}');">채팅하기</a>
+						</div>
+					</div>
+					`;
 				}
-				
+								
 				commentDiv = `
 				<div class="commenter-area-wrap">
 					<div class="commenter-profile-area-wrap">
 						<div class="commenter-profile-area">
-							<div class="commenter-profile-img">
-								<img src="${commenterProfileImg}" alt="" />
-							</div>
+							${profileOptionBtn}
 							<div class="commenter-nickname-area">
 								<span>${v.nickname}</span>
 							</div>
-						</div>
-						<div class="dropdown comment-setting-btn-wrap">
-							<i data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fas fa-ellipsis-v comment-setting-btn"></i>
-							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">${deleteBtn}</div>
-						</div>
+						</div>							
+						${deleteBtn}						
 					</div>
 					<div class="commenter-comment-area">
 						<span>${v.content}</span>
@@ -200,13 +245,41 @@ const selectedFeed = (id, code) => {
 			$(".delete-btn").on('click',function(e){
 				let val = $(e.target).parent().find('input').val();
 				deleteComment(val, resp.guest.id, resp.feed.code);
-			});	
+			});				
 					
 		},
 		error: console.log
 	});
 };
 
+const startChatNow = (host, guest) => {
+	if(confirm(guest + '님과 DM을 하시겠습니까?')){
+		var room = Math.floor(Math.random() * 100000);
+		console.log('room = ' + room);
+		
+		const name = `chatRoom${room}`;
+		const spec = "left=500px, top=500px, width=450px, height=620px";
+		const url = `/nadaum/member/mypage/chat.do?room=${room}`;
+		
+		chatInvite('chat', host, guest, room);
+		windowObjHistorySearch = window.open(url, name, spec);
+	}
+};
+
+const deleteFeedBtn = (code) => {
+	console.log(code);
+	$.ajax({
+		url: '/nadaum/feed/deleteFeed.do',
+		data: {code},
+		type: "POST",
+		headers: headers,
+		success(resp){
+			console.log(resp);
+			location.reload();
+		},
+		error: console.log
+	});
+};
 
 const deleteComment = (no, id, code) => {
 	

@@ -1,13 +1,17 @@
 package com.project.nadaum.culture.movie.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.project.nadaum.culture.comment.model.service.CommentService;
 import com.project.nadaum.culture.comment.model.vo.Comment;
@@ -30,170 +30,128 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/movie")
 public class GetMovieDetailApi {
+
+	@Autowired
+	private MovieService movieService;
 	
 	@Autowired
 	private CommentService commentService;
 	
-	@Autowired
-	private MovieService movieService;
-	
-	/**
-	 * elem 하위의 len개의 tagName을 찾아서 textContent를 문자열로 리턴
-	 * 
-	 * @param tagName
-	 * @param elem
-	 * @return
-	 */
-	// tag값의 정보를 가져오는 메소드
-	//getTagValues -> 복수건 처리가능하게 메소드 변경
-	private static String getTagValues(String tagName, Element elem) {
-		//getElementsByTagName -> 직속자식뿐만 아니라 자식태그 탐색가능
-		NodeList nodeList = elem.getElementsByTagName(tagName);
-		int len = nodeList.getLength(); //검색한 태그의 글자 수 
-		
-		if(len == 0) return null; //NodeList의 글자수가 0개일시 null을 리턴.
-		
-		
-		
-		
-		
-		String[] tagArr = new String[len]; //태그 글자를 배열에 담음
-		for(int i = 0; i < len; i++) {
-			Node tagNameNode = nodeList.item(i); // tagName에 해당하는 node객체
-			NodeList nList = tagNameNode.getChildNodes(); // tagName의 자식 컨텐츠
-			Node contentNode = nList.item(0); // 텍스트노드
-//			System.out.println(contentNode.getNodeType() == Element.TEXT_NODE); // true
-			tagArr[i] = contentNode.getTextContent(); // 텍스트노드의 텍스트컨텐트를 tagarr에 담음.
-		}
-		
-		return String.join(",", tagArr);
-	}
-//@RequestParam(value="movieCd", required=false) String movieCd
-	
 	// 영화 상세정보API
-	@GetMapping("/movieDetail/{apiCode}")
-	public ModelAndView getMovieDetailApi(@PathVariable String apiCode, Model model) {
-		log.debug("movieCd = {} ", apiCode);
-		
-		List<Object> list = new ArrayList<>(); //api 내욜을 넘겨줄 리스트
-		
-		List<Object>  listStar = new ArrayList<>(); //펑점을 담을 리스트
-		
-		try {
-
-			// parsing할 url 지정(API 키 포함해서)
-			// 영화상세api
-			String url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.xml"
-					+ "?key=2707c14a032dacdea9d8b690c3f99d19" 
-					+ "&movieCd="+ apiCode;
+		@GetMapping("/movieDetail/{apiCode}")
+		public ModelAndView getMovieDetailApi(@PathVariable String apiCode, Model model) {
+			log.debug("movieCd = {} ", apiCode);
 			
+			  // TMDB api
+			List<Map<String, Object>> list = new ArrayList<>();
 			
-			log.debug(apiCode);
-			
-			DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
-			Document doc = dBuilder.parse(url);
-
-			doc.getDocumentElement().normalize();
-
-			System.out.println("Root element : " + doc.getDocumentElement().getNodeName());
-
 			Map<String, Object> map = new HashMap<>();
-			
-			NodeList nList = doc.getElementsByTagName("movieInfo");
-			Node movieInfoNode = nList.item(0);
-			//item(NodeList의 ) -> 컬렉션의 인덱스 항목을 반환합니다. index가 목록의 노드 수보다 크거나 같으면 null을 반환
-			//log.debug("nList = {}",nList);
+	        
+			try {
+	            // 인증키
+	            String serviceKey = "5640ea577618caa1d5cefe4b2fea1683";
+	            
+	            String urlStr = "https://api.themoviedb.org/3/movie/" + apiCode;
+	            urlStr += "?"+ URLEncoder.encode("api_key","UTF-8") +"=" + serviceKey;
+	            urlStr += "&"+ URLEncoder.encode("language","UTF-8") +"=ko-kr";
+//	            urlStr += "&"+ URLEncoder.encode("page","UTF-8") +"=1";
+//	            urlStr += "&"+ URLEncoder.encode("year","UTF-8") +"=2019";
+//	            urlStr += "&"+ URLEncoder.encode("_returnType","UTF-8") +"=json";
+	            
+	            URL url = new URL(urlStr);
+	            
+	            String line = "";
+	            String result = "";
+	            
+	            BufferedReader br;
+	            br = new BufferedReader(new InputStreamReader(url.openStream()));
+	            System.out.println(br);                
+	            
+	            while ((line = br.readLine()) != null) {
+	                result = result.concat(line);
+	                System.out.println("line = "+ line); //api 불러서 그냥읽음 가공x        
+	            }            
+	            
+	            // JSON parser 만들어 문자열 데이터를 객체화한다.
+	            //JSONObject -> 데이터를 key:value
+	            JSONParser parser = new JSONParser(); // JSONParser -> 파싱
+	            JSONObject obj = (JSONObject)parser.parse(result);
+	            System.out.println("obj = "+ obj); 
+	            
+	            // list 아래가 배열형태로 []
+	            // "dates": {"maximum": "2022-03-09", "minimum": "2022-02-16"	        
+	            JSONArray parse_listArr = (JSONArray)obj.get("genres");
+	            System.out.println(parse_listArr); 
+	            String miseType = "";
+	            
+//	            JSONArray parse_listArr = (JSONArray)obj.get("genres");
+	            
+	            
+	            // 객체형태로 {}
+	            // {"returnType":"json","clearDate":"--",.......},... 
+	            for (int i=0; i< parse_listArr.size(); i++) {
+	                JSONObject movie = (JSONObject) parse_listArr.get(i);
+	                
+	                String genre = String.valueOf(movie.get("name"));	// id코드 /int 타입을 String 타입으로 곧바로 캐스팅 하면 오류 나서 캐스팅 변환이 아닌 String 클래스의 valueOf(Object) 를 사용하여 처리
+//	                String overview = (String) movie.get("overview");	// 상세정보
+//	                String posterPath = (String) movie.get("poster_path");        // 포스터
+//	                String releaseDate = (String) movie.get("release_date");	// 개봉날짜
+//	                String title = (String) movie.get("title");            // 제목
+//	                Double voteAverage = Double.parseDouble(String.valueOf(movie.get("vote_average")));        // 평균 평점
 
-			// node가 tag element인 경우
-			if (movieInfoNode.getNodeType() == Node.ELEMENT_NODE) {
-				
-				//getTagvalues메소드로 자식태그까지 탐색가능
-				Element movieInfoElem = (Element) movieInfoNode;
-//				String movieCd = getTagValues("movieCd", movieInfoElem);
-				String movieNm = getTagValues("movieNm", movieInfoElem);
-//				String openDt = getTagValues("openDt", movieInfoElem);
-				String nationNm = getTagValues("nationNm", movieInfoElem);
-				String genreNm = getTagValues("genreNm", movieInfoElem);
-				
-				System.out.println(nationNm); // 한국
-				System.out.println(genreNm); // 사극, 드라마
+	                
+	                map.put("genre", genre);
+//	                map.put("overview", overview);
+//	                map.put("posterPath", posterPath);
+//	                map.put("releaseDate", releaseDate);
+//	                map.put("title", title);
+//	                map.put("voteAverage", voteAverage);
+	                
+	                log.debug("map = {}" ,map);
+	                
+	                list.add(map);	                
+	            }
+	            
+	            //댓글목록 불러오기
+	            List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
+				model.addAttribute("commentList",commentList);
 
-//				map.put("movieCd", movieCd);
-				map.put("movieNm", movieNm);
-//				map.put("openDt", openDt);
-				map.put("nation", nationNm);
-				map.put("genreNm", genreNm);
-				
-				
-				// 감독  directors > peopleNm
-				NodeList directorsNodeList = movieInfoElem.getElementsByTagName("directors");
-				Node directorsNode = directorsNodeList.item(0);
-//				System.out.println(directorsNode.getNodeType() == Element.ELEMENT_NODE); // true
-				Element directorsElem = (Element) directorsNode; // Element로 변환해야 탐색가능 getElementByXXX
-				
-				// 한줄 작성
-//				Element directorsElem = (Element) movieInfoElem.getElementsByTagName("directors").item(0);
-				String director = getTagValues("peopleNm", directorsElem);
-				System.out.println(director);
-				
-				map.put("director",director);
-				
-				// 출연  actors > peopleNm
-				Element actorsElem = (Element) movieInfoElem.getElementsByTagName("actors").item(0);
-				String actors = getTagValues("peopleNm", actorsElem);
-				System.out.println(actors);
-				log.debug("map = {}" ,map);
-				
-				list.add(map);
-			}
+				model.addAttribute("list",list);
+				log.debug("list = {}" , list);
 			
-			List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
-			model.addAttribute("list",list);
-			model.addAttribute("commentList",commentList);
-			log.debug("list = {}" , list);
-			
-			//평점 평균
-			List<Integer> star = movieService.listStar(apiCode); //star 불어오기
-			log.debug("star{}", star);
+				
+				//평점 평균
+//				List<Integer> star = movieService.listStar(apiCode); //star 불어오기
+//				log.debug("star{}", star);
 
-			int totalStartComment = movieService.totalStarCount(apiCode);
-			
-//			int sum = 0; // 평점 합계 구하는 변수 0으로 초기화
-//			double avg = 0; // 평점 평균 구하는 변수 0으로 초기화
-//			sum = star.stream().mapToInt(Integer::intValue).sum();
-//			System.out.println("starSum : " + sum);
-//			int arraysize = star.size();
-//			avg = sum / arraysize;
-//			System.out.println("avgStar : " + avg);
-//			log.debug("avg{}", avg);
-//			model.addAttribute("avg", avg);
-			
-			double rating = movieService.avgRating(apiCode);
-			int starCount1 = movieService.starCount1(apiCode);
-			int starCount2 = movieService.starCount2(apiCode);
-			int starCount3 = movieService.starCount3(apiCode);
-			int starCount4 = movieService.starCount4(apiCode);
-			int starCount5 = movieService.starCount5(apiCode);
-			log.debug("rating{}", rating);
-			
-			model.addAttribute("rating", rating);
-			
-			model.addAttribute("starCount1", starCount1);
-			model.addAttribute("starCount2", starCount2);
-			model.addAttribute("starCount3", starCount3);
-			model.addAttribute("starCount4", starCount4);
-			model.addAttribute("starCount5", starCount5);
-			
-			model.addAttribute("totalStartComment", totalStartComment);
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new ModelAndView("/movie/movieDetail","list",list);
-	}
+				int totalStartComment = movieService.totalStarCount(apiCode); //총 star를 준 사람의 수
+				if (totalStartComment != 0) {
+	                double rating = movieService.avgRating(apiCode); //별점평균
+	                log.debug("rating{}", rating);
+	                model.addAttribute("rating", rating);
+	            }
 
+				int starCount1 = movieService.starCount1(apiCode);
+				int starCount2 = movieService.starCount2(apiCode);
+				int starCount3 = movieService.starCount3(apiCode);
+				int starCount4 = movieService.starCount4(apiCode);
+				int starCount5 = movieService.starCount5(apiCode);
+				
+				model.addAttribute("starCount1", starCount1);
+				model.addAttribute("starCount2", starCount2);
+				model.addAttribute("starCount3", starCount3);
+				model.addAttribute("starCount4", starCount4);
+				model.addAttribute("starCount5", starCount5);
+				
+				model.addAttribute("totalStartComment", totalStartComment);
 
+	            br.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return new ModelAndView("/movie/movieDetail", "list", list);
+	    }
 
+	
 }
+	

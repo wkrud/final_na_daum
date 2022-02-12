@@ -135,6 +135,27 @@
 						</div>
 					</div>
 				</c:if>
+				<c:if test="${checkHelp.FE > 0}">
+					<div class="cu-wrap">
+						<span>피드</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpCuList}" var="help">
+									<c:if test="${help.category eq 'fe'}">
+										<li class="list-group-item">
+											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+											</a>
+										</li>
+									</c:if>
+								</c:forEach>		
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=cu">더보기</a>
+						</div>
+					</div>
+				</c:if>
 			</div>
 		</div>
 	</div>
