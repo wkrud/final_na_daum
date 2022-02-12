@@ -49,6 +49,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
 	integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
 	crossorigin="anonymous"></script>
+
 	
 <!-- 부트스트랩 js/css -->
 <script
@@ -75,6 +76,10 @@
 <!-- 폰트어썸 -->
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 
+<!-- movie widget slide css/js -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/style.css" /> 
 <!-- member -->
@@ -83,6 +88,8 @@
 <link href='${pageContext.request.contextPath}/resources/css/member/mypage/member.css' rel='stylesheet' />
 <link href='${pageContext.request.contextPath}/resources/css/member/mypage/help.css' rel='stylesheet' />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/member/mypage/memberDetail.css" />
+
+
 
 <%-- RedirectAttriutes가 session에 저장한 msg를 꺼내서 출력(바로 제거) --%>
 <c:if test="${not empty msg}">
