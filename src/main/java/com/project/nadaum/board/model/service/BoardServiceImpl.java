@@ -141,6 +141,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.selectIdCountLikes(param);
 	}
 
+	@Override
+	public Board selectOneRiotBoard(String code) {
+		
+		return boardDao.selectOneRiotBoard(code);
+	}
 	
 
 	
