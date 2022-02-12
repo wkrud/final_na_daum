@@ -131,6 +131,12 @@ public class BoardDaoImpl implements BoardDao {
 		return session.selectOne("board.selectOneRiotBoard", code);
 	}
 
+	@Override
+	public int insertSchedule(Map<String, Object> map) {
+		
+		return session.insert("board.insertSchedule", map);
+	}
+
 	
 
 

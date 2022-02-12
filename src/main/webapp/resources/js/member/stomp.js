@@ -87,6 +87,3 @@ const commonAlarmSystem = (code, guest, content) => {
 
 
 
-
-
-
