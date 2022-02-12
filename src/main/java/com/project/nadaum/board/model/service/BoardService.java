@@ -48,6 +48,8 @@ public interface BoardService {
 	int selectIdCountLikes(Map<String, Object> param);
 
 	int boardLikeDelete(Map<String, Object> param);
+	
+	Board selectOneRiotBoard(String code);
 
 
 

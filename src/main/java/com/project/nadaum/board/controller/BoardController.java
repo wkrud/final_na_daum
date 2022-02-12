@@ -272,6 +272,7 @@ public class BoardController {
 			
 			//게시글 가져오기
 			Board board = boardService.selectOneBoard(code);
+			Board boardriot = boardService.selectOneRiotBoard(code);
 //			Board board = boardService.selectOneBoardCollection(code);
 			log.debug("boardDetail board ={}", board);
 			log.debug("code = {} ", code);
@@ -287,6 +288,7 @@ public class BoardController {
 			log.debug("boardDetail board ={}", board);
 			//model.addAttribute("selectCountLikes",selectCountLikes);
 			model.addAttribute("board", board);
+			model.addAttribute("boardriot",boardriot);
 			model.addAttribute("commentList", commentList);
 			
 			
