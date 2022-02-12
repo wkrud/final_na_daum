@@ -172,7 +172,7 @@
   box-shadow: 35px -35px 0 10px var(--yellow);
 }
 
-.personal-sub, .culture-sub {
+.personal-sub, .culture-sub, .game-sub {
   display: none;
 }
 
