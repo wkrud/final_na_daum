@@ -314,11 +314,6 @@
 				$(memberUpdateFrm).submit((e) => {
 					e.preventDefault();
 					
-					/* const csrfHeader = "${_csrf.headerName}";
-					const csrfToken = "${_csrf.token}";
-					const headers = {};
-					headers[csrfHeader] = csrfToken; */
-					
 					$.ajax({
 						url: "${pageContext.request.contextPath}/member/memberUpdate.do",
 						data: $(e.target).serialize(),
@@ -342,6 +337,8 @@
 				</div>
 	  			<div class="more-alarm-btn-wrap">
 	  				<button type="button" id="more-alarm-btn" class="btn btn-primary">더보기</button>
+	  				<button type="button" class="btn btn-secondary no-more-alarm-plz">줄이기</button>
+	  				<button type="button" class="btn btn-danger read-all-alarm">읽음처리</button>
 	  			</div>
 			</c:if>
 		</div>
@@ -349,10 +346,23 @@
 </div>
 <script>
 <c:if test="${param.tPage eq 'alarm'}">
+const $alarmUl = $(".alarm-wrap ul");
 var cPage = 1;
 $(() => {
 	moreAlarm();
 });
+
+$(".no-more-alarm-plz").click((e) => {
+	$alarmUl.empty();
+	cPage = 1;
+	moreAlarm();
+});
+
+$(".read-all-alarm").click((e) => {
+	checkBadge(0);
+	location.reload();
+});
+
 $("#more-alarm-btn").click((e) => {
 	moreAlarm();
 });
@@ -373,16 +383,13 @@ const moreAlarm = () => {
 					alarmLi = `<li class="list-group-item"><a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=\${code}">\${content}</a></li>`;
 				}else if(code.substring(0,2) == 'he' && status == 'T'){
 					alarmLi = `<li class="list-group-item list-group-item-secondary"><a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=\${code}">\${content}</a></li>`;
-				}else if(code.substring(0,2) == 'fr' && status == 'F'){
+				}else if(code.substring(0,2) != 'he' && status == 'F'){
 					alarmLi = `<li class="list-group-item">\${content}</li>`;
-				}else if(code.substring(0,2) == 'fr' && status == 'T'){
-					alarmLi = `<li class="list-group-item list-group-item-secondary">\${content}</li>`;
-				}else{
+				}else if(code.substring(0,2) != 'he' && status == 'T'){
 					alarmLi = `<li class="list-group-item list-group-item-secondary">\${content}</li>`;
 				}
 				$alarmUl.append(alarmLi);
-			});
-			
+			});			
 			
 		},
 		error: console.log
