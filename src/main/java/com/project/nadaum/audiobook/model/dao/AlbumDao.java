@@ -27,6 +27,8 @@ public interface AlbumDao {
 
 	int deleteAlbum(String code);	
 	
+	AlbumInfo selectWidgetAlbumInfo(Map<String,Object> map);
+	
 	AlbumInfo selectOneAlbumInfo(String code);
 
 	Album selectOneAlbumCollection(String code);
@@ -110,6 +112,8 @@ public interface AlbumDao {
 	List<Map<String, Object>> selectListAlbumInfoRecentMain();
 
 	List<Map<String, Object>> selectListAlbumInfoByKindMain(String kind);
+
+	
 
 
 }

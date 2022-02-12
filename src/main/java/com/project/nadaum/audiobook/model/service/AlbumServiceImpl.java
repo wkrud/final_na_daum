@@ -281,6 +281,11 @@ public class AlbumServiceImpl implements AlbumService {
 		return 1==result1&&1==result2?1:0;
 	}
 
+	@Override
+	public AlbumInfo selectWidgetAlbumInfo(Map<String,Object> map) {
+		return albumDao.selectWidgetAlbumInfo(map);
+	}
+
 	
 
 	
