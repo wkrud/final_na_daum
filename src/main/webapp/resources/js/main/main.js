@@ -9,13 +9,24 @@
 	 addWidget.classList.toggle('enlargement');
  };
 
- //홈 진입시 draggable 속성 추가, 만들어진 위젯 존재하면 띄워주기
  $(() => {
+ 	//홈 진입시 draggable 속성 추가, 만들어진 위젯 존재하면 띄워주기
    $(".accept-drag").attr('draggable', 'true');
    $(".accept-drag").attr('ondragstart', 'drag(event)');
-   gameWidgetInfo();
-   todoListWidgetInfo();
-   accountbookWidgetInfo();
+   
+   //위젯이 존재하면 해당 내용 로딩
+    if(document.querySelector('.game-widget') != null) {
+ 	  gameWidgetInfo();
+   } 
+	if (document.querySelector('.todo-widget') != null) {
+  	 todoListWidgetInfo();	
+   } 
+    if (document.querySelector('.account-widget') != null) {
+  	 accountbookWidgetInfo();	
+   }
+   	if (document.querySelector('.culture-widget') != null){
+	cultureWidgetInfo();
+   }
    
  })
 
@@ -31,11 +42,14 @@ const dragOver = (ev) => {
  //드롭하면서 생기는 이벤트
 const drop = (ev) => {
    ev.preventDefault();
-   var widgetName = ev.dataTransfer.getData("text");
-   console.log(widgetName);
+   let widgetName = ev.dataTransfer.getData("text");
+   let widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">
+   				 <button onclick="delWidget(`+widgetName+`)">삭제하기</button>
+   				 <p>`+widgetName+`</p></div>`
+
    
-   const insertWidget = () => {
 	//내려놓을 때 db 등록
+   const insertWidget = () => {
 	  	$.ajax({
 	    	url : $contextPath+"/main/insertWidget.do",
 	     	method : 'GET',
@@ -45,8 +59,9 @@ const drop = (ev) => {
 	     	contentType : "application/json; charset=UTF-8",
 	     	dataType : "json",
 	     	success(data) {
-	     		console.log(data);
-	     		alert("등록 성공");
+				if(data==1) {
+		     		alert("위젯 등록 성공");					
+				} 
 	     	}, error(xhr, testStatus, err) {
 					console.log("error", xhr, testStatus, err);
 					alert("위젯 등록에 실패했습니다.");
@@ -54,10 +69,11 @@ const drop = (ev) => {
  			});
 	}
 	
+	//위젯 생성
    	//피드
    if(widgetName == 'feed-widget') {
 	   if(document.querySelector('.feed-widget') == null) {
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	        insertWidget(); 
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -66,7 +82,7 @@ const drop = (ev) => {
    //캘린더
    else if(widgetName == 'calendar-widget') {
 	   if(document.querySelector('.calendar-widget') == null) {
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	        insertWidget(); 
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -75,28 +91,7 @@ const drop = (ev) => {
    //투두리스트
    else if(widgetName == 'todo-widget') {
 	   if(document.querySelector('.todo-widget') == null) {
-		   //내려놓을 때 db 등록
-		  	$.ajax({
-		    	url : $contextPath+"/main/insertWidget.do",
-		     	method : 'GET',
-		     	data : {
-		     		"widgetName" : widgetName
-		     	},
-		     	contentType : "application/json; charset=UTF-8",
-		     	dataType : "json",
-		     	success(data) {
-		     		console.log(data);
-		     		alert("등록 성공");
-		     	}, error(xhr, testStatus, err) {
-    					console.log("error", xhr, testStatus, err);
-    					alert("위젯 등록에 실패했습니다.");
-    				}
-     			});
-		   
-		  //위젯 박스 생성
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`
-	        		<button onclick="delWidget(`+widgetName+`)">위젯 삭제</button></div>`
-		   
+		   insertWidget();   
 			//투두리스트 자동 등록
 			$.ajax({
 		    	url : $contextPath+"/main/insertTodoList.do",
@@ -107,41 +102,7 @@ const drop = (ev) => {
 		     		console.log(data);
 		     		//투두리스트 insert 성공시 리스트 로딩
 		     		if(data == 1) {
-		     			$.ajax({
-		     				url : $contextPath+"/main/userTodoList.do",
-		     				method : 'GET',
-		    		     	contentType : "application/json; charset=UTF-8",
-		    		     	dataType : "json",
-		    		     	success(resp) {
-		    		     		console.log(resp);
-		    		     		console.log(resp.length);
-		    			        		
-		    		     		let todoList = "";
-				    		   	todoList = `<ul class="todoListRoom">
-				    		   					<li><input type="text" name="title" id="title" value="`+resp[0].title+`" /></li>
-				    		   					<li><input type="text" name="regDate" value="`+timeConvert(resp[0].regDate)+`" /></li>
-				    		   				</ul>
-				    		   					`
-				    		   				$(".widget_form").append(todoList);
-		    		     		//for문으로 투두리스트 목록
-	    		   				for(let i = 0; i < resp.length; i++) {		    		     			
-		    		     		todoList = `
-		    		     			<li>
-		    		     				<input type="checkbox" name="no" id="" value="`+resp[i].no+`" />
-		    		     				<input type="text" name="content" id="" value="`+resp[i].content+`" />
-		    		     				<button onclick="delTodoList(`+resp[i].no+`)">삭제하기</button>
-		    		     			</li>
-		    		     		`
-   		     					$(".todoListRoom").append(todoList);
-   		     					}
-	    		   				//버튼 추가
-	    		   				todoList = `<button class="`+resp[0].title+`">+ 일정을 추가하세요</button>`
-	    		   				$(".todoListRoom").append(todoList);
-		    		     	},error(xhr, testStatus, err) {
-		    					console.log("error", xhr, testStatus, err);
-		    					alert("위젯 로딩에 실패했습니다.");
-		    				}
-		     			});
+		     			todoListWidgetInfo();
 		     		} else {
 		     			alert("위젯 등록에 실패했습니다.");
 		     		} //success 끝
@@ -158,7 +119,7 @@ const drop = (ev) => {
 	//메모
    else if(widgetName == 'memo-widget') {
 	   if(document.querySelector('.memo-widget') == null) {
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	        insertWidget(); 
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -169,7 +130,6 @@ const drop = (ev) => {
    else if(widgetName == 'account-widget') {
 	   if(document.querySelector('.account-widget') == null) {
 		   insertWidget();
-		   widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)"><button onclick="delWidget(`+widgetName+`)">삭제하기</button></div>`
 		   accountbookWidgetInfo();
 	   } else {
 		   alert('위젯은 하나만 생성할 수 있습니다.');
@@ -179,7 +139,8 @@ const drop = (ev) => {
  	//전시
  	else if(widgetName == 'culture-widget') {
  		if(document.querySelector('.culture-widget') == null) {
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	        insertWidget(); 
+	        cultureWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -188,7 +149,7 @@ const drop = (ev) => {
  	//영화
  	else if(widgetName == 'movie-widget') {
  		if(document.querySelector('.movie-widget') == null) {
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	        insertWidget(); 
 	      
 	      $.ajax({
 		 	url : $contextPath+"/movie/widgetMovie.do",
@@ -213,7 +174,6 @@ const drop = (ev) => {
  	else if(widgetName == 'game-widget') {
  		if(document.querySelector('.game-widget') == null) {
 			insertWidget();
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
 		    gameWidgetInfo();
  		 
  		 } else {
@@ -224,7 +184,7 @@ const drop = (ev) => {
  	//오디오북
  	else if(widgetName == 'audio-widget') {
  		if(document.querySelector('.audio-widget') == null) {
-	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
+	        insertWidget(); 
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -383,6 +343,31 @@ const accountbookWidgetInfo = () => {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
 		}
+	});
+}
+
+//전시
+const cultureWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/culture/widget.do",
+		method : 'POST',
+		contentType : "application/json; charset=UTF-8",
+     	dataType : "json",
+     	headers : headers,
+     	success(resp) {
+			console.log(resp);
+			for(data in resp) {
+				let content = `
+				<p>컬쳐러럴러러럴러....털그럭...</p><p>컬쳐러럴러러럴러....털그럭...</p><p>컬쳐러럴러러럴러....털그럭...</p>
+				`
+				$(".culture-widget").append(content);
+			}
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+     	
 	});
 }
 	
