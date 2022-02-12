@@ -31,8 +31,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -81,7 +83,26 @@ public class AlbumController {
 		model.addAttribute("novelList", novelList);
 		return "audiobook/main";
 	}
-
+	
+	
+	@ResponseBody
+	@PostMapping("/widget")
+	public Map<String,Object> audiobookWidget(@RequestBody Map<String,Object> map){
+		
+		try {
+			AlbumInfo albumInfo = albumService.selectWidgetAlbumInfo(map);
+			String imgLink = application.getRealPath("/resources/upload/audiobook")
+							+ albumService.selectListAlbumImg(albumInfo.getCode()).get(0).getRenamedFilename();
+			map.put("albumInfo", albumInfo);// albumInfo.title, albumInfo.kind...
+			map.put("imgLink", imgLink); //이미지 표시하시면 img src에 붙여 쓰시면됩니다.
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	
+	
 	@GetMapping("/widgetInfo")
 	public ResponseEntity<ModelMap> widgetInfo(ModelMap model) {
 		try {
@@ -94,7 +115,7 @@ public class AlbumController {
 		return ResponseEntity.ok(model);
 	}
 	
-	@GetMapping("/widget")
+	@GetMapping("/widgetPage")
 	public String widget(ModelMap model) {
 		try {
 			List<Map<String, Object>> widgetMenu = albumService.selectListAlbumInfoByKindMain("Novel");

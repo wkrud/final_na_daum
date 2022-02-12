@@ -254,5 +254,10 @@ public class AlbumDaoImpl implements AlbumDao {
 		return session.delete("album.deleteAllAlbumImgs",code);
 	}
 
+	@Override
+	public AlbumInfo selectWidgetAlbumInfo(Map<String,Object> map) {
+		return session.selectOne("album.selectWidgetAlbumInfo",map);
+	}
+
 
 }

@@ -20,6 +20,15 @@
 		order by
 			reg_date desc
 	</select>
+	
+	<select id="selectWidgetAlbumInfo" resultType="albumInfo">
+		select
+			*
+		from 
+			(select * from album_info order by reg_date desc)
+		where 
+			rownum=1
+	</select>
 
 	<insert id="insertAlbumInfo" parameterType="albumInfo">
 		insert into 
