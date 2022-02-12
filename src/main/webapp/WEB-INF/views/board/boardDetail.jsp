@@ -714,6 +714,27 @@ $(".btn-reply").click((e) => {
 	
 });
 
+ $(scheduleFrm).submit((e) => {
+		e.preventDefault();
+
+		const csrfHeader = "${_csrf.headerName}";
+     const csrfToken = "${_csrf.token}";
+     const headers = {};
+     headers[csrfHeader] = csrfToken;
+     
+			$.ajax({
+				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
+				method: "POST",
+				headers : headers, 
+				data : $(scheduleFrm).serialize(),
+				success(resp){
+					location.reload();
+					alert(resp.msg);
+					},
+				error: console.log
+				});
+	});
+
  /* var dest = '${loginMember.nickname}';
 	const $search = $("#searchFriend");
 	$search.on('keyup', function(e){
@@ -762,38 +783,6 @@ $(".btn-reply").click((e) => {
 		});
 	}); */
 
-$("#likeButton").click((e) => {
-	
-});
-/* ajax 비동기로 처리 */
-/*  $(insertCommentFrm).submit((e) => {
-				e.preventDefault();
-				
-				const csrfHeader = "${_csrf.headerName}";
-		        const csrfToken = "${_csrf.token}";
-		        const headers = {};
-		        headers[csrfHeader] = csrfToken;
-				$.ajax({
-					headers : headers,
-					url: `${pageContext.request.contextPath}/board/boardCommentEnroll.do`,
-					method: "POST",
-					data: $(insertCommentFrm).serialize(),
-					success(resp){
-						console.log(resp)
-						location.reload();
-						alert(resp.msg);
-						
-					},
-					error: console.log
-				});
-				
-			}); */
-/**
- * 초기 페이지 로딩시 댓글 불러오기
- */
-$(function(){    
-    getCommentList();  
-});
 
 
 
