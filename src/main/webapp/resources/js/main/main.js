@@ -13,7 +13,6 @@
  $(() => {
    $(".accept-drag").attr('draggable', 'true');
    $(".accept-drag").attr('ondragstart', 'drag(event)');
-   $(".widget-form").attr('ondragstart', 'drag(widget)');
    
    //정보 로딩
    data = { "member_Id" : $id};
