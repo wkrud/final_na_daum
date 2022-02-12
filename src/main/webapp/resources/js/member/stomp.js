@@ -75,7 +75,15 @@ const sendAndInsertAlarm = (type,id,code,content) => {
 	});
 };
 
-
+const commonAlarmSystem = (code, guest, content) => {
+	var commonData = {
+		'code':code,
+		'guest':guest,
+		'content':content
+	};	
+	sendAndInsertAlarm('C',guest,code,content);
+	stompClient.send("/nadaum/chat/commonAlarm/" + guest,{},JSON.stringify(commonData));
+};
 
 
 
