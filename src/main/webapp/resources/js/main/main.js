@@ -5,9 +5,9 @@
 
 //클릭시 커지게
  let addWidget = document.querySelector('.add-widget');
- addWidget.onclick = $(() => {
+ addWidget.onclick = function() {
 	 addWidget.classList.toggle('enlargement');
- });
+ };
 
  //홈 진입시 draggable 속성 추가, 만들어진 위젯 존재하면 띄워주기
  $(() => {
@@ -15,14 +15,14 @@
    $(".accept-drag").attr('ondragstart', 'drag(event)');
    
    //정보 로딩
-   data = { "member_Id" : $id};
+   member_Id = {"member_Id" : $id};
    $.ajax({
 		url : $contextPath+"/riot/riotWidget.do",
 	 	method : 'POST',
 	 	contentType : "application/json; charset=UTF-8",
 	 	dataType : "json",
 	 	headers : headers,
-	 	data : JSON.stringify(data),
+	 	data : JSON.stringify(member_Id),
 	 	success(resp) { 
 	 		console.log(resp);
 	 		for(data in resp) {
@@ -288,10 +288,25 @@ const drop = (ev) => {
    $("#dragZone").append(widget);
  }
  
- //위젯 이름으로 지우기
- function delWidget(w) {
-	 console.log(w);
- }
+ //위젯 delete
+ const delWidget = (no) => {
+	$.ajax({
+    	url : $contextPath+"/main/deleteWidget.do",
+     	method : 'POST',
+     	data : {
+     		"no" : no,
+     	},
+		headers : headers,
+     	success(data) {
+			console.log(data);
+			alert("위젯 삭제 완료");
+			location.reload();
+		},error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("위젯 로딩에 실패했습니다.");
+		}
+	});
+	}
  
  //투두리스트 삭제
 const delTodoList = (no) => {
