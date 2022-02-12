@@ -27,6 +27,9 @@
    	if (document.querySelector('.culture-widget') != null){
 	cultureWidgetInfo();
    }
+   	if (document.querySelector('.audio-widget') != null) {
+	AudiobookWidgetInfo();
+   }
    
  })
 
@@ -184,6 +187,7 @@ const drop = (ev) => {
  	else if(widgetName == 'audio-widget') {
  		if(document.querySelector('.audio-widget') == null) {
 	        insertWidget(); 
+	        AudiobookWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -375,6 +379,33 @@ const cultureWidgetInfo = () => {
 const calendarWidgetInfo = () => {
 	
 }
+
+
+//오디오북
+const AudiobookWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/audiobook/widget.do",
+		method : 'POST',
+		contentType : "application/json; charset=UTF-8",
+     	dataType : "json",
+     	headers : headers,
+     	success(resp) {
+			console.log(resp);
+			for(data in resp) {
+				let content = `
+				<p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p>
+				`
+				$(".culture-widget").append(content);
+			}
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+     	
+	});
+}
+
 	
  
 //수입 지출 변환 함수

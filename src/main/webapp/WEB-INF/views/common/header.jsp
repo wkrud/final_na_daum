@@ -75,6 +75,10 @@
 <!-- 폰트어썸 -->
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 
+<!-- movie widget slide css/js -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/style.css" /> 
 <!-- member -->
