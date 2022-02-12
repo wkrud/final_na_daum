@@ -68,6 +68,7 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 <!-- 스톰프 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/common/checkAlarmJs.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/member/stomp.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/member/info.js"></script>
 
@@ -250,7 +251,11 @@
             </c:if>								
           </div>						    
         </button>
-        <div class="collapse" id="alarmList"></div>
+        <div class="collapse" id="alarmList">
+        	<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>
+        	<div class="alarms-wrap"></div>
+        	<div class="card card-body my-feed"><a href="javascript:void(0);" onclick="checkBadge(0);">알림 모두비우기</a></div>
+        </div>
       </div>
     </div>
     <!-- 도움말 창 -->
@@ -266,7 +271,7 @@
 			</iframe>
 		</div>
 	</div>
-  <script>
+  <script>  	
     //메뉴 토글
     let toggle = document.querySelector('.nav-toggle');
     let nav = document.querySelector('.nadaum-nav');
@@ -312,19 +317,17 @@
 	$("#sign-out").click(function(){
 		alert("로그아웃되었습니다.");
 	});
-	 const countBedge = () => {
+	const countBedge = () => {
     	$.ajax({
 			url: `${pageContext.request.contextPath}/websocket/wsCountAlarm.do`,
 			success(resp){
-				const $alarmList = $("#alarmList");
+				const $alarmList = $(".alarms-wrap");
 				const $badgeWrap = $(".badge-wrap");
+				let alarmDiv = '';
 				
 				$alarmList.empty();
 				$badgeWrap.empty();
-				
-				let alarmDiv = `<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>`;
-				$alarmList.append(alarmDiv);
-				
+								
 				let count = 0;
 				$(resp).each((i, v) => {
 					const {no, code, id, status, content, regDate} = v;
@@ -356,29 +359,12 @@
 				
 				$(".alarmContent").click((e) => {
 			    	let no = $(".alarmContent").find('input').val();
-			    	checkBedge(no);
+			    	checkBadge(no);
 			    });
 																			
 			},
 			error: console.log
 		});		
-    };
-    
-    const alarmReload = () => {
-    	$("#alarmList").load(window.location.href + ' #alarmList');
-    };
-    
-    const checkBedge = (no) => {
-    	$.ajax({
-			url: `${pageContext.request.contextPath}/websocket/checkAlarm.do`,
-			method:'POST',
-			data: {no},
-			headers:headers,
-			success(resp){
-				countBedge();
-			},
-			error: console.log
-		});	
     };
     
     /* iframe보이기 */
