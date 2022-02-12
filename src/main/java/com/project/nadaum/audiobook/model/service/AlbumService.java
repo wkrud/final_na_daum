@@ -34,6 +34,8 @@ public interface AlbumService {
 	int deleteAlbum(String code);
 
 	AlbumInfo selectOneAlbumInfo(String code);
+	
+	AlbumInfo selectWidgetAlbumInfo(Map<String,Object> map);
 
 	List<AlbumInfo> selectListAlbumInfo();
 
@@ -108,6 +110,8 @@ public interface AlbumService {
 	List<Map<String, Object>> selectListAlbumInfoByKindMain(String string);
 
 	List<Map<String, Object>> selectListAlbumInfoRecentMain();
+
+	
 
 	
 
