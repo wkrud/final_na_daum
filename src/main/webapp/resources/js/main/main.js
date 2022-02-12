@@ -44,7 +44,6 @@ const drop = (ev) => {
    ev.preventDefault();
    let widgetName = ev.dataTransfer.getData("text");
    let widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">
-   				 <button onclick="delWidget(`+widgetName+`)">삭제하기</button>
    				 <p>`+widgetName+`</p></div>`
 
    
@@ -369,6 +368,12 @@ const cultureWidgetInfo = () => {
 		}
      	
 	});
+}
+
+
+//캘린더
+const calendarWidgetInfo = () => {
+	
 }
 	
  
