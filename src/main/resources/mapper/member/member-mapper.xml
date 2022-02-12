@@ -279,7 +279,8 @@
 		select
 			(SELECT count(category) FROM help WHERE category = 'dy') dy,
 			(SELECT count(category) FROM help WHERE category = 'ab') ab,
-			(SELECT count(category) FROM help WHERE category = 'fr') fr
+			(SELECT count(category) FROM help WHERE category = 'fr') fr,
+			(SELECT count(category) FROM help WHERE category = 'fe') fe
 		from
 			help
 		where

@@ -132,6 +132,11 @@ public class FeedServiceImpl implements FeedService {
 		return feedDao.feedMain();
 	}
 
+	@Override
+	public void deleteFeed(Map<String, Object> map) {
+		feedDao.deleteFeed(map);
+	}
+
 	
 	
 	
