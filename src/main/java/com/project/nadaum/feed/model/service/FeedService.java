@@ -28,6 +28,12 @@ public interface FeedService {
 
 	int feedEnroll(Feed feed);
 
+	List<Map<String, Object>> addFeedMain(Map<String, Object> map);
+
+	List<Feed> feedMain();
+
+	void deleteFeed(Map<String, Object> map);
+
 	
 
 }
