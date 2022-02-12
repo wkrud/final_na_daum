@@ -1,6 +1,6 @@
 package com.project.nadaum.accountbook.model.dao;
 
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,13 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.nadaum.accountbook.model.vo.AccountBook;
-import com.project.nadaum.accountbook.model.vo.AccountBookChart;
 
 @Repository
 public class AccountBookDaoImpl implements AccountBookDao {
 	
 	@Autowired
 	private SqlSessionTemplate session;
+	
+	
+
+	@Override
+	public String searchToday(Map<String, Object> param) {
+		return session.selectOne("accountbook.searchToday", param);
+	}
 
 	@Override
 	public int insertAccount(AccountBook account) {
@@ -36,14 +42,18 @@ public class AccountBookDaoImpl implements AccountBookDao {
 		return session.delete("accountbook.deleteAccount", code);
 	}
 
+	/*
+	 * @Override public List<Map<String, Object>> monthlyTotalIncome(String id) {
+	 * return session.selectList("accountbook.monthlyTotalIncome", id); }
+	 */
 	@Override
-	public List<Map<String, Object>> monthlyTotalIncome(String id) {
-		return session.selectList("accountbook.monthlyTotalIncome", id);
+	public List<Map<String, Object>> monthlyTotalIncome(Map<String, Object> param) {
+		return session.selectList("accountbook.monthlyTotalIncome", param);
 	}
 
 	@Override
-	public String monthlyAccount(String id) {
-		return session.selectOne("accountbook.monthlyAccount", id);
+	public String monthlyAccount(Map<String, Object> param) {
+		return session.selectOne("accountbook.monthlyAccount", param);
 	}
 
 	@Override

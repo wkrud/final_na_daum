@@ -71,6 +71,25 @@
 		where
 			b.code = #{code}
 	</select>
+	<select id="selectOneRiotBoard" resultType="board">
+		select
+			m.nickname,
+            m.login_type,
+            m.profile_status,
+            m.profile,
+            r.*,
+            rr.*,
+            rt.*
+		from
+			board b
+				join member m
+					on b.id = m.id join riot_myaccount r
+                    on b.id = r.member_id join riot_record rr
+                    on r.sm_id = rr.id join riot_tier rt
+                    on rr.id = rt.summoner_id
+		where
+			b.code = #{code}
+	</select>
 	
 	<!-- <select id="selectAttachmentListByBoardCode" resultType="attachment">
 		select

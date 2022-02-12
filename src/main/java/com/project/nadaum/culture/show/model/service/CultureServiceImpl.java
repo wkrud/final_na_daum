@@ -46,6 +46,54 @@ public class CultureServiceImpl implements CultureService {
 		return cultureDao.selectCountLikes(apiCode);
 	}
 
+	//===========================================
+	@Override
+	public double avgRating(String apiCode) {
+		return cultureDao.avgRating(apiCode);
+	}
+
+	@Override
+	public List<Integer> listStar(String apiCode) {
+		return cultureDao.listStar(apiCode);
+	}
+
+	@Override
+	public int starCount1(String apiCode) {
+		return cultureDao.starCount1(apiCode);
+	}
+
+	@Override
+	public int starCount2(String apiCode) {
+		return cultureDao.starCount2(apiCode);
+	}
+
+	@Override
+	public int starCount3(String apiCode) {
+		return cultureDao.starCount3(apiCode);
+	}
+
+	@Override
+	public int starCount4(String apiCode) {
+		return cultureDao.starCount4(apiCode);
+	}
+
+	@Override
+	public int starCount5(String apiCode) {
+		return cultureDao.starCount5(apiCode);
+	}
+
+	@Override
+	public int totalStarCount(String apiCode) {
+		return cultureDao.totalStarCount(apiCode);
+	}
+
+	@Override
+	public int insertSchedule(Map<String, Object> map) {
+		return cultureDao.insertSchedule(map);
+	}
+	
+
+
 	
 
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.nadaum.main.model.service.MainService;
 import com.project.nadaum.main.model.vo.TodoList;
+import com.project.nadaum.main.model.vo.Widget;
 import com.project.nadaum.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +33,35 @@ public class MainController {
 
 	@RequestMapping(value="/main.do")
 	public void main(@AuthenticationPrincipal Member member, Model model) {
+		String id = member.getId();
 		
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		
+		List<Widget> widgetList = mainService.allWidgetList(param);
+		log.debug("widgetList={}", widgetList);
+		
+		model.addAttribute("widgetList", widgetList);
 	}
 	
 	@RequestMapping(value="/todoList.do")
 	public void todoList(@AuthenticationPrincipal Member member, Model model) {
 		
+	}
+	
+	//드래그존에 드롭시 위젯 테이블에 insert
+	@ResponseBody
+	@GetMapping(value="/insertWidget.do")
+	public int insertWidget(@AuthenticationPrincipal Member member, @RequestParam String widgetName) {
+		String id = member.getId();
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("widgetName", widgetName);
+		
+		int insertWidget = mainService.insertWidget(param);
+		
+		return insertWidget;
 	}
 	
 	//투두리스트 생성

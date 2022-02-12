@@ -1,10 +1,5 @@
 	var $contextPath = $("#contextPath").val(); //contextPath jsp에서 가져온 값(js파일에서 el을 못 씀)
-	
-	//csfr토큰 headers (post 전송시 필요)
-/*	const csrfToken = $("meta[name='_csrf']").attr("content");
-	const csrfHeader = $("meta[name='_csrf_header']").attr("content");
-	const headers = {};
-	headers[csrfHeader] = csrfToken;*/
+	var $today = $("#today").val(); // 오늘 날짜
 	
 	//차트 로딩하는 메소드
 	google.charts.load('visualization', '1', {'packages':['corechart']});
@@ -50,8 +45,6 @@
 		});
 	};
 	
-	
-
 	//차트 그리는 함수 - 수입 카테고리 카운트
 	function drawCategoryIChart() {
 			let data = {"incomeExpense" : "I"};
@@ -122,14 +115,29 @@
 			}
 		});
 	};
-	
-	//past month
-		let monthly = 0;
-		function count(type) {
-			if(type=="plus") {
-				monthly = ++monthly;
-			} else if(type=="minus") {
-				monthly = --monthly;
-			}
-			console.log(monthly);
+
+
+	// 월별 조회
+let year = $today.slice(0, 4);
+let month = $today.slice(5, 7);
+let searchDay = "";
+
+const monthly = (m) => {
+	if(m == "before") {
+		if( 1 < month) {
+			month = parseInt(month) -1;
+		} else {
+			month = 12;
+			year = parseInt(year) - 1;
 		}
+	} else if(m == "next") {
+		if(month < 12) {
+			month = parseInt(month) + 1;
+		} else {
+			month = 1;
+			year = parseInt(year) + 1;
+		}
+	}
+	searchDay = year+'-'+(month >= 10? month : '0'+month);
+	location.href = $contextPath+`/accountbook/accountAnalyze.do?date=`+searchDay;		
+}
