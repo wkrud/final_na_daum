@@ -188,6 +188,7 @@ div.col>.detail {
 		</div>
 
 	</div>
+	
 	<hr style="margin-top: 30px;" />
 	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog" aria-labelledby="add-calander" aria-hidden="true">
 		  <form id="promiseFrm">
@@ -688,7 +689,7 @@ $(".btn-reply").click((e) => {
 	
 });
 
- $(scheduleFrm).submit((e) => {
+ $(promiseFrm).submit((e) => {
 		e.preventDefault();
 
 		const csrfHeader = "${_csrf.headerName}";
