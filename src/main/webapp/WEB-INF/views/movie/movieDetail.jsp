@@ -128,26 +128,45 @@ div#board-container label.custom-file-label {
 	<div class="movie-detail-content">
 
 		<!-- 상세정보 -->
-		<%-- <c:forEach var="movie" items="${list}"> --%>
-		<div class="row featurette"><%-- <div class="col-md-7
-			order-md-2"> <h2 class="featurette-heading"> <input type="text"
-			class="form-control- movie-detail" placeholder="제목" name="title"
-			id="title" value="${movie.title}" readonly> </h2> <p class="lead">
-			<div class="form-group row"> <label for="date" class="col-sm-2
-			col-form-label">개봉일 : </label> <div class="col-sm-10"> <input
-			type="text" class="form-control- movie-detail" name="openDt"
-			title="개봉일" id="date" value="${movie.releaseDate}" readonly> </div>
-			</div> --%> <%-- <div class="form-group row"> <label for="nationNm"
-			class="col-sm-2 col-form-label">제작국가 : </label> <div
-			class="col-sm-10"> <input type="text" class="form-control-
-			movie-detail" name="nation" title="제작국가" id="nationNm"
-			value="${movie.nation}" readonly> </div> </div> --%> <div
-			class="form-group row"> <label for="genreNm" class="col-sm-2
-			col-form-label"> 장르 : </label> <div class="col-sm-10"> <input
-			type="text" class="form-control- movie-detail" name="genreNm"
-			title="장르" id="genreNm" value="${genre}" readonly> </div></div>
-
-		<%-- <div class="form-group row">
+		<c:forEach var="movie" items="${list}">
+			<div class="row featurette">
+				<div class="col-md-7 order-md-2">
+					<h2 class="featurette-heading">
+						<input type="text" class="form-control- movie-detail"
+							placeholder="제목" name="title" id="title" value="${movie.title}"
+							readonly>
+					</h2>
+					<p class="lead">
+					<div class="form-group row">
+						<label for="date" class="col-sm-2
+			col-form-label">개봉일
+							: </label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control- movie-detail"
+								name="openDt" title="개봉일" id="date" value="${movie.releaseDate}"
+								readonly>
+						</div>
+					</div>
+					<%-- <div class="form-group row">
+						<label for="nationNm" class="col-sm-2 col-form-label">제작국가
+							: </label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control-
+			movie-detail"
+								name="nation" title="제작국가" id="nationNm" value="${movie.nation}"
+								readonly>
+						</div>
+					</div> --%>
+					<div class="form-group row">
+						<label for="genreNm" class="col-sm-2 col-form-label">장르 : </label>
+						<div class="col-sm-10">
+					
+							<input type="text" class="form-control- movie-detail"
+								name="genreNm" title="장르" id="genreNm" value="${movie.genre}" readonly>
+					
+						</div>
+					</div>
+					<%-- <div class="form-group row">
 						<label for="director" class="col-sm-2 col-form-label">감독 :
 						</label>
 						<div class="col-sm-10">
@@ -157,61 +176,65 @@ div#board-container label.custom-file-label {
 						</div>
 					</div> --%>
 
-		<%-- <div class="form-group row" >
+					<%-- <div class="form-group row">
 						<label for="date" class="col-sm-2 col-form-label">개봉일 : </label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail" name="openDt" title="개봉일" id="date" value="${movie.openDt}" readonly>
+							<input type="text" class="form-control- movie-detail"
+								name="openDt" title="개봉일" id="date" value="${movie.releaseDate}"
+								readonly>
 						</div>
 					</div> --%>
 
 
-	</div>
-	<%-- <div class="col-md-5 order-md-1">
-					<svg
+				</div>
+				<div class="col-md-5 order-md-1">
+					<%-- <svg
 						class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
 						width="500" height="500" xmlns="http://www.w3.org/2000/svg"
 						preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
 						aria-label="Placeholder: 500x500">
-						<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" >
-					<title>Placeholder</title>
+						<img class="card-img-top"
+							src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
+							alt="Card image cap">
 					<rect width="100%" height="100%" fill="#eee" />
-					</svg>
-				</div> --%>
-</div>
-<%-- </c:forEach> --%>
-<!-- 캘린더 약속 버튼 -->
-<br />
-<button type="button" class="btn btn-secondary" data-toggle="modal"
-	data-target="#add-calander">캘린더&raquo;</button>
+					</svg> --%>
+					<img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+							src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
+							alt="Card image cap">
+				</div>
+			</div>
+		</c:forEach>
 
-<!-- 스크랩 버튼 -->
+		<!-- 캘린더 약속 버튼 -->
+		<br />
+		<button type="button" class="btn btn-secondary" data-toggle="modal"
+			data-target="#add-calander">캘린더&raquo;</button>
 
-<c:if test="${ loginMember.id != null }">
-	<button type="button" class="btn btn-success"
-		onclick="scrap(); return false;" value="${apiCode}">
-		스크랩<i class="fas fa-check-double ml-1"></i>
-	</button>
+		<!-- 스크랩 버튼 -->
 
-</c:if>
+		<c:if test="${ loginMember.id != null }">
+			<button type="button" class="btn btn-success"
+				onclick="scrap(); return false;" value="${apiCode}">
+				스크랩<i class="fas fa-check-double ml-1"></i>
+			</button>
+
+		</c:if>
 
 
-<!-- 영화 줄거리 -->
-<hr />
-<h2 class="blog-post-title">영화 줄거리</h2>
-<p class="blog-post-meta">
-	January 1, 2014 by <a href="#">Mark</a>
-</p>
+		<!-- 영화 줄거리 -->
+		<hr />
+		<h2 class="blog-post-title">영화 줄거리</h2>
+		<p class="blog-post-meta"><c:forEach items="${list }" var="movie">${movie.overview}</c:forEach> </p>
 
-<p>${overview}</p>
+	</div>
+	<hr class="featurette-divider" />
 
-</div>
-<hr class="featurette-divider" />
-
-<!-- 영화 평점 -->
-<div class="movie-rating">
-	<h2 class="blog-post-title">영화 평점</h2>
-	<p class="blog-post-meta">참여자 평점 :
-	<div>
+	<!-- 영화 평점 -->
+	<div class="movie-rating">
+		<h2 class="blog-post-title">영화 평점</h2>
+		<p class="blog-post-meta"><c:forEach items="${list }" var="movie">영화 평점 : ${movie.voteAverage}</c:forEach> </p>
+		<p class="blog-post-meta">
+			참여자 평점 : <div>
 		<span class="star-2"> ★★★★★ <c:if test="${rating ne null}">
 				<span style="width:calc(18.9%*${rating })">★★★★★</span>
 			</c:if>
@@ -223,7 +246,7 @@ div#board-container label.custom-file-label {
 
 	<div>
 		5점 : <span class="star-count"> ■■■■■■■■■■ <c:if
-				test="${ starCount5 ne null}">
+					test="${ starCount5 ne null}">
 				<span style="width:calc(5%*${starCount5})">■■■■■■■■■■</span>
 			</c:if>
 		</span> (
@@ -232,7 +255,7 @@ div#board-container label.custom-file-label {
 	</div>
 	<div>
 		4점 : <span class="star-count"> ■■■■■■■■■■ <c:if
-				test="${ starCount5 ne null}">
+					test="${ starCount5 ne null}">
 				<span style="width:calc(5%*${starCount4})">■■■■■■■■■■</span>
 			</c:if>
 		</span>(
@@ -241,7 +264,7 @@ div#board-container label.custom-file-label {
 	</div>
 	<div>
 		3점 : <span class="star-count"> ■■■■■■■■■■ <c:if
-				test="${ starCount5 ne null}">
+					test="${ starCount5 ne null}">
 				<span style="width:calc(5%*${starCount3})">■■■■■■■■■■</span>
 			</c:if>
 		</span>(
@@ -250,7 +273,7 @@ div#board-container label.custom-file-label {
 	</div>
 	<div>
 		2점 : <span class="star-count"> ■■■■■■■■■■ <c:if
-				test="${ starCount5 ne null}">
+					test="${ starCount5 ne null}">
 				<span style="width:calc(5%*${starCount2})">■■■■■■■■■■</span>
 			</c:if>
 		</span>(
@@ -259,7 +282,7 @@ div#board-container label.custom-file-label {
 	</div>
 	<div>
 		1점 : <span class="star-count"> ■■■■■■■■■■ <c:if
-				test="${ starCount5 ne null}">
+					test="${ starCount5 ne null}">
 				<span style="width:calc(5%*${starCount1})">■■■■■■■■■■</span>
 			</c:if>
 		</span>(
@@ -285,9 +308,9 @@ div#board-container label.custom-file-label {
 						<li class="list-group-item" id="comment-li">
 							<div class="form-inline mb-2">
 								<label for="replyId"><i
-									class="fa fa-user-circle-o fa-2x"> <input type="text"
-										class="id-detail movie-detail" name="id" id="id"
-										value="${loginMember.nickname}" readonly /></i> </label>
+										class="fa fa-user-circle-o fa-2x"> <input type="text"
+											class="id-detail movie-detail" name="id" id="id"
+											value="${loginMember.nickname}" readonly /></i> </label>
 							</div>
 
 							<form id="insertCommentFrm">
@@ -295,17 +318,19 @@ div#board-container label.custom-file-label {
 								<!-- api 코드 -->
 								<input type="hidden" name="apiCode" value="${apiCode}" />
 								<%-- <input type="hidden" name="id" value="${loginMember.id}" /> --%>
-								<input type="hidden" name="id"
-									value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
-								<!-- 댓글인 경우 1 -->
+									<input type="hidden" name="id"
+				value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
+			<!-- 댓글인 경우 1 -->
 								<input type="hidden" name="commentLevel" value="1" />
 								<!-- 대댓글인 경우 써여져야함 -->
 								<input type="hidden" name="commentRef" value="" /> <label
-									for="star" class="col-sm-2 col-form-label">평점 : </label>
-								<div class="col-sm-10">
+				for="star" class="col-sm-2 col-form-label">평점 : </label>
+								
+	
+		<div class="col-sm-10">
 									<input type="hidden" class="form-control" name=""> <select
-										id="category-select" class="form-control" name="star"
-										aria-label="Default select example">
+											id="category-select" class="form-control" name="star"
+											aria-label="Default select example">
 										<option selected>0</option>
 										<option value="1">1</option>
 										<option value="2">2</option>
@@ -316,13 +341,13 @@ div#board-container label.custom-file-label {
 
 								</div>
 								<textarea name="content" cols="60" rows="3" id="content"
-									class="form-control"></textarea>
+										class="form-control"></textarea>
 
 								<button type="submit" id="btn-comment-enroll1"
-									class="btn btn-outline-primary"
-									onClick="fn_comment('${apiCode}')">등록</button>
+										class="btn btn-outline-primary"
+										onClick="fn_comment('${apiCode}')">등록</button>
 								<input type="hidden" name="${_csrf.parameterName}"
-									value="${_csrf.token}" />
+										value="${_csrf.token}" />
 							</form>
 
 						</li>
@@ -348,10 +373,10 @@ div#board-container label.custom-file-label {
 								<li class="list-group-item" id="commentList">
 									<div class="form-inline mb-2">
 										<label for="replyId"> <i
-											class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
+												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
 										</label> &nbsp;&nbsp;
 										<fmt:formatDate value="${comment.regDate}"
-											pattern="yyyy-MM-dd HH:mm" />
+												pattern="yyyy-MM-dd HH:mm" />
 									</div>
 
 									<div class="col-sm-10">
@@ -359,11 +384,11 @@ div#board-container label.custom-file-label {
 										<input type="hidden" class="form-control" name="star">
 
 										<select id="category-select-commentList" class="form-control"
-											aria-label="Default select example">
+												aria-label="Default select example">
 											<option selected>${comment.star}</option>
 										</select>
 									</div> <textarea class="form-control"
-										id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
 
 									<%-- 회원일때만 답글 버튼이 나타남 --%>
 									<div class="row float-right">
@@ -375,8 +400,8 @@ div#board-container label.custom-file-label {
 											<form id="deleteCommentFrm">
 												<input type="hidden" name="code" value="${comment.code}"></input>
 												<button type="submit"
-													class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
-													id="deleteComment-btn" value="${comment.code}">삭제</button>
+														class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
+														id="deleteComment-btn" value="${comment.code}">삭제</button>
 											</form>
 											&nbsp;
 											
@@ -384,9 +409,9 @@ div#board-container label.custom-file-label {
 											<form id="findUpdateComment">
 												<input type="hidden" name="code" value="${comment.code}" />
 												<button type="button"
-													class="btn btn-outline-dark updateCommmentBtn"
-													data-toggle="modal" data-target="#updateComment"
-													value="${comment.code}">수정</button>
+														class="btn btn-outline-dark updateCommmentBtn"
+														data-toggle="modal" data-target="#updateComment"
+														value="${comment.code}">수정</button>
 											</form>
 										</c:if>
 
@@ -407,14 +432,14 @@ div#board-container label.custom-file-label {
 
 <!-- 댓글 수정 Modal -->
 <div class="modal fade" id="updateComment" tabindex="-1" role="dialog"
-	aria-labelledby="updateCommentTitle" aria-hidden="true">
+		aria-labelledby="updateCommentTitle" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLongTitle">Comment
 					update</h5>
 				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
+						aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
@@ -427,7 +452,7 @@ div#board-container label.custom-file-label {
 							<input type="hidden" class="form-control">
 							<div class="review  make_star">
 								<select id="category-select" class="form-control makeStar"
-									name="star" aria-label="Default select example" id="makeStar">
+										name="star" aria-label="Default select example" id="makeStar">
 									<option value="">평점</option>
 									<option value="1">1</option>
 									<option value="2">2</option>
@@ -449,7 +474,7 @@ div#board-container label.custom-file-label {
 
 					<input type="hidden" name="code" value="${comment.code}" readonly />
 					<input type="hidden" name="apiCode" value="${apiCode}" /> <input
-						type="hidden" name="id" value="${loginMember.id}" />
+							type="hidden" name="id" value="${loginMember.id}" />
 					<!-- 댓글인 경우 1 -->
 					<input type="hidden" name="commentLevel" value="1" />
 					<!-- 대댓글인 경우 써여져야함 -->
@@ -457,9 +482,9 @@ div#board-container label.custom-file-label {
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">취소</button>
+							data-dismiss="modal">취소</button>
 					<button type="submit" class="btn btn-outline-dark"
-						id="updateComment-btn" value="${comment.code}">수정</button>
+							id="updateComment-btn" value="${comment.code}">수정</button>
 				</div>
 			</form>
 

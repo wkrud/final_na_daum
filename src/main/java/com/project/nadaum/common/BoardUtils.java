@@ -26,30 +26,28 @@ public class BoardUtils {
 	
 
 	public static String getPagebar(int cPage, int numPerPage, int totalContents, String url) {
+		
 		StringBuilder pagebar = new StringBuilder();
 		
-		// 전체페이지수 
-		int totalPage = (int) Math.ceil((double) totalContents / numPerPage);
 		
 		// 페이지번호를 클릭했을때 링크
-		String delimeter = url.contains("?") ? "&" : "?";
-		url = url + delimeter + "cPage="; // /spring/board/boardList.do?cPage=
+//				String delimeter = url.contains("?") ? "&" : "?";
+				url = url +   "?cPage="; // /spring/board/boardList.do?cPage=
+				
+				
 		// 페이지바크기 
-		int pagebarSize = 5;
-		
-		/* 
-		 		1 2 3 4 5 >>
-		 		
+		int pagebarSize = 3;
+		// 전체페이지수 
+		int totalPage = (int) Math.ceil((double) totalContents / numPerPage);		
+			/*  1 2 3 4 5 >>
 		 	<<	6 7 8 9 10 >>
-		 	
 		 	<< 11 12
-		 	
 		 	pageStart : 시작하는 pageNo
 		 		- cPage와 pagebarSize에 의해 결정
 		 */
 		int pageStart = (cPage - 1) / pagebarSize * pagebarSize + 1;
 		int pageEnd = pageStart + pagebarSize - 1;
-		
+		pageEnd = totalPage < pageEnd ? totalPage : pageEnd;
 		int pageNo = pageStart;
 		
 		/*
