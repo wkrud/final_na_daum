@@ -234,12 +234,13 @@ public class BoardController {
 	//게시물 상세보기
 	@GetMapping("/boardDetail.do")
 	public String boardDetail(@AuthenticationPrincipal Member member,
-			@RequestParam String code, 
+			@RequestParam Map<String,Object> map, 
 			Model model,
 //			@CookieValue(value="boardCount", required=false, defaultValue="0") String value,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		
+			String code = (String) map.get("code");
 			log.debug("code={}",code);
 		try {
 			// 상세보기를 요청하면, 해당글에 대한 boardCookie가 존재하지 않을때 조회수를 1증가한다. 
@@ -295,12 +296,14 @@ public class BoardController {
 			List<Map<String, Object>> friends = memberService.selectAllFriend(member);
 			List<Member> memberList = memberService.selectAllNotInMe(member);
 			
+			log.debug("map ={}", map);
+			
 			model.addAttribute("memberList", memberList);
 			model.addAttribute("friends", friends);
 			model.addAttribute("board", board);
 			model.addAttribute("boardriot",boardriot);
 			model.addAttribute("commentList", commentList);
-			
+			model.addAttribute("check", map);
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -410,7 +413,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/boardSchedule.do")
-	public ResponseEntity<?> insertSchedule(@RequestParam Map<String,Object> map){
+	public ResponseEntity<?> insertSchedule(@RequestParam Map<String,Object> map,Model model){
 		
 		log.debug("map = {}", map);
 		
@@ -424,8 +427,11 @@ public class BoardController {
 			map.put("result", result);
 			map.put("msg", msg);
 			
+		
 			System.out.println(map);
 				if(result == 1) {
+					
+					
 		            return ResponseEntity.ok(map);
 		        } 
 		        else {
@@ -436,6 +442,7 @@ public class BoardController {
 				log.error(e.getMessage(), e);
 				return ResponseEntity.badRequest().build();
 			}
+		
 	}
 	
 	
