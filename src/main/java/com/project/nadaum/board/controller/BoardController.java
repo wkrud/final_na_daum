@@ -392,7 +392,7 @@ public class BoardController {
 	}
 	
 	@PostMapping(value="/deleteSummernoteImageFile.do")
-	public ResponseEntity<?> deleteSummernoteImageFile(@RequestParam Map<String, Object> map)  {
+	public ResponseEntity<?> deleteSummernoteImageFile(@RequestParam Map<String, Object> map,Model model)  {
 		log.debug("map = {}", map);
 		
 			String fileRoot = application.getRealPath("/resources/upload/board/img");
@@ -426,6 +426,7 @@ public class BoardController {
 			
 			System.out.println(map);
 				if(result == 1) {
+					
 		            return ResponseEntity.ok(map);
 		        } 
 		        else {
