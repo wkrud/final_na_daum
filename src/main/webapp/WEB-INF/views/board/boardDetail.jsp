@@ -204,9 +204,14 @@ div.col>.detail {
 		        <input type="text" />
 		         <span>약속일</span>
 		         <input type="date" id="schedule-date" />
+		         <br>
+		         <span>듀오신청할 친구 닉네임</span>
+		         <input type="text" name="friendId" />
 		         <br />
 		         <br />
-		      
+		     				<input type="hidden" name="apiCode" value="${board.code}" />
+							<input type="hidden" name="allDay" value="0" />
+							<input type="hidden" name="id" value="${loginMember.id}" />
 		        <div class="modal-footer">
 		          <button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>

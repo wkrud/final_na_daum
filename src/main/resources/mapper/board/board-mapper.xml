@@ -19,7 +19,7 @@
 		insert 
 		into 
 			schedule 
-		values(concat('ri-',seq_schedule_no.nextval), #{friendId}, default, default, #{startDate}, #{allDay}, #{id}, #{title})
+		values(concat('ri-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
 	</insert>
 	
 	
