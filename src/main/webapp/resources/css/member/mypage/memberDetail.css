@@ -119,6 +119,14 @@
 	cursor: pointer;
 }
 
+
+/* 마이페이지 알림 */
+.more-alarm-btn-wrap{
+	margin-top: 10px;
+	text-align:center;
+}
+
+
 /* helpDetail */
 .help-detail-wrap{
 	display: flex;
