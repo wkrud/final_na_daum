@@ -28,7 +28,10 @@
 	cultureWidgetInfo();
    }
    	if (document.querySelector('.audio-widget') != null) {
-	AudiobookWidgetInfo();
+	audiobookWidgetInfo();
+   }
+   if (document.querySelector('.movie-widget') != null) {
+	movieWidgetInfo();
    }
    
  })
@@ -152,21 +155,7 @@ const drop = (ev) => {
  	else if(widgetName == 'movie-widget') {
  		if(document.querySelector('.movie-widget') == null) {
 	        insertWidget(); 
-	      
-	      $.ajax({
-		 	url : $contextPath+"/movie/widgetMovie.do",
-		 	method : 'GET',
-	     	contentType : "application/json; charset=UTF-8",
-	     	dataType : "json",
-	     	success(data) {
-				console.log(data);
-			},
-			error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
-			}
-		});
-	      
+	      	movieWidgetInfo
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -177,7 +166,6 @@ const drop = (ev) => {
  		if(document.querySelector('.game-widget') == null) {
 			insertWidget();
 		    gameWidgetInfo();
- 		 
  		 } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -187,7 +175,7 @@ const drop = (ev) => {
  	else if(widgetName == 'audio-widget') {
  		if(document.querySelector('.audio-widget') == null) {
 	        insertWidget(); 
-	        AudiobookWidgetInfo();
+	        audiobookWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -382,7 +370,7 @@ const calendarWidgetInfo = () => {
 
 
 //오디오북
-const AudiobookWidgetInfo = () => {
+const audiobookWidgetInfo = () => {
 	$.ajax({
 		url : $contextPath+"/audiobook/widget",
 		method : 'POST',
@@ -396,6 +384,32 @@ const AudiobookWidgetInfo = () => {
 				<p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p>
 				`
 				$(".audio-widget").append(content);
+			}
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+     	
+	});
+}
+
+
+//영화 
+const movieWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/movie/widgetMovie.do",
+		method : 'GET',
+		contentType : "application/json; charset=UTF-8",
+     	dataType : "json",
+     	headers : headers,
+     	success(resp) {
+			console.log(resp);
+			for(data in resp) {
+				let content = `
+				<p>영화랄라라랄</p><p>영화랄라라랄</p><p>영화랄라라랄</p><p>영화랄라라랄</p><p>영화랄라라랄</p>
+				`
+				$(".movie-widget").append(content);
 			}
 		}, 
 	 	error(xhr, testStatus, err) {
