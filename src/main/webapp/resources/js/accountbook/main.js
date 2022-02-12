@@ -15,7 +15,7 @@
 	headers[csrfHeader] = csrfToken;*/
 	
 	// 유닉스 시간 -> 타임스탬프 -> 기존 date 변환
-	function timeConvert(t){
+	const timeConvert = (t) => {
 		var unixTime = Math.floor(t / 1000);
 	    var date = new Date(unixTime*1000);
 	    var year = date.getFullYear();
@@ -42,7 +42,7 @@
 	})
 		
 	//수입 지출 변환 함수
-	function IE(x) {
+	const IE = (x) => {
 		if(x == 'I')
 			return "수입";
 		else if(x == 'E')
@@ -50,16 +50,16 @@
 	}
 	
 	//페이지 처음 로딩시 실행 함수
-	window.onload = function() {
+	window.onload = $(() => {
 		//가계부 insert 모달창에 date 기본값 오늘 날짜로 뜨게 설정
 		today = new Date();
 		today = today.toISOString().slice(0, 10);
 		bir = document.getElementById("regDate");
 		bir.value = today;
-	}
+	});
 
 	//원화표시 정규식
-	function numberWithCommas(n) {
+	const numberWithCommas = (n) => {
     	return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
 
@@ -105,7 +105,7 @@
 	});
 	
    //가계부 전체 리스트 조회
-  function AllList() {	
+  const AllList = () => {	
  	$.ajax({
 		url: $contextPath+"/accountbook/selectAllAccountList.do",
 		type: "GET",
@@ -124,7 +124,7 @@
 	});
 }
 	//삭제
-	function deleteDetail(code) {
+	const deleteDetail = (code) => {
 		var code = {"code" : code};
   		$.ajax ({
 			url : $contextPath+"/accountbook/accountDelete.do",
@@ -144,7 +144,7 @@
 	};
 	
 	//수정
-	function updateDetail(code) {
+	const updateDetail = (code) => {
 		$.ajax ({
 			url : $contextPath+"/accountbook/selectOneAccount",
 			type : "Get",
@@ -232,7 +232,7 @@
 	google.charts.setOnLoadCallback(drawIncomeChart);
 	
 	//차트 그리는 함수
-	function drawExpenseChart() {
+	const drawExpenseChart = () => {
 		var firstData = {"incomeExpense" : "E", date : $today};
 		//차트에 구성되는 데이터는 [['Header','Header']['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//Header는 각 배열을 설명할 수 있는 필수값. ['String', 'String']
@@ -272,7 +272,7 @@
 	
 	
 	//차트 그리는 함수
-	function drawIncomeChart() {
+	const drawIncomeChart = () => {
 		var firstData = {"incomeExpense" : "I", date : $today};
 		//차트에 구성되는 데이터 [['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//json 데이터 ajax로 받아오기
@@ -316,17 +316,17 @@
 	});
 
 //datepicker
-	$(function(){
-		$("#excelDate1").datepicker();
-		$("#excelDate2").datepicker();
-	});
+$(() => {
+	$("#excelDate1").datepicker();
+	$("#excelDate2").datepicker();
+});
 	
 // 월별 조회 ㅠㅠ
 let year = $today.slice(0, 4);
 let month = $today.slice(5, 7);
 let searchDay = "";
 
-function monthly(m) {
+const monthly = (m) => {
 	if(m == "before") {
 		if( 1 < month) {
 			month = parseInt(month) -1;

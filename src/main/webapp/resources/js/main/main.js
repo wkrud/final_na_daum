@@ -5,9 +5,9 @@
 
 //클릭시 커지게
  let addWidget = document.querySelector('.add-widget');
- addWidget.onclick = function() {
+ addWidget.onclick = $(() => {
 	 addWidget.classList.toggle('enlargement');
- }
+ });
 
  //홈 진입시 draggable 속성 추가, 만들어진 위젯 존재하면 띄워주기
  $(() => {
@@ -38,30 +38,18 @@
 		}
 	});
  })
- 
- //위젯 sortable
- $(function() {
-	$("#dragZone").sortable({
-		//드래그 앤 드롭 단위 css 선택자
-		connectWith : "#dragZone",
-		//드래그 앤 드롭으로 움직일 박스
-		handle : ".widget_form"
-	});
-	//widget 하위의 모든 것의 이동을 막음
-	$("#dragZone .widget_form").disableSelection();
-});
 
  //드래그 이벤트
- function drag(ev) {
+const drag = (ev) => {
    ev.dataTransfer.setData("text", ev.target.id);
  }
  
- function dragOver(ev) {
+const dragOver = (ev) => {
    ev.preventDefault();
  }
 
  //드롭하면서 생기는 이벤트
- function drop(ev) {
+const drop = (ev) => {
    ev.preventDefault();
    var widgetName = ev.dataTransfer.getData("text");
    console.log(widgetName);
@@ -307,7 +295,7 @@
  }
  
  //투두리스트 삭제
- function delTodoList(no) {
+const delTodoList = (no) => {
 	 $.ajax({
     	url : $contextPath+"/main/deleteTodoList.do",
      	method : 'POST',
@@ -364,7 +352,7 @@
 	
  
 //수입 지출 변환 함수
-function IE(x) {
+const IE = (x) => {
 	if(x == 'income')
 		return "수입";
 	else if(x == 'expense')
@@ -372,12 +360,12 @@ function IE(x) {
 }
 
 //원화표시 정규식
-function numberWithCommas(n) {
+const numberWithCommas = (n) => {
 	return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 //시간 변환
-function timeConvert(t){
+const timeConvert = (t) => {
 	var unixTime = Math.floor(t / 1000);
     var date = new Date(unixTime*1000);
     var year = date.getFullYear();
