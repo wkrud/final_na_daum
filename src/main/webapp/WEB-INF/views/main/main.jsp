@@ -55,4 +55,13 @@
 <input type="hidden" id="id" value="${loginMember.id}" />
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
 <script src='${pageContext.request.contextPath}/resources/js/main/main.js'></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/vendor/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/vendor/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/vendor/moment.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/vendor/fullcalendar.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/vendor/ko.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/vendor/select2.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/vendor/bootstrap-datetimepicker.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/main.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/calendar/etcSetting.js"></script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
