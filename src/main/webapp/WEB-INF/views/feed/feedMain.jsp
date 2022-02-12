@@ -326,14 +326,12 @@ var loading = false;
 var page = 2;
 
 /* 페이징 id, page */
-const addFeedPage = (id, page) => {
-	
+const addFeedPageMain = (page) => {
 	$.ajax({
-		url: '${pageContext.request.contextPath}/feed/addFeedMain.do',
-		data: {id, page},
+		url: '${pageContext.request.contextPath}/feed/addFeedPageMain.do',
+		data: {page},
 		success(resp){
 			const $resp = $(resp);
-			const memberId = ${loginMember.id};
 			let feedDiv = ``;	
 			let like = ``;
 			let moreBtn = ``;
@@ -442,6 +440,9 @@ const addFeedPage = (id, page) => {
 				$(".commentBtn").click((e) => {
 					feedDetailModalView(e);
 				});
+				
+				likeH(CODE, WRITER, NICKNAME);
+				console.log(CODE, WRITER, NICKNAME);
 							
 			});
 			console.log(page);
@@ -462,14 +463,14 @@ $(".contentWrapper").scroll(function(){
 			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.6)){
 				if(!loading){
 					loading = true;
-					addFeedPage('${member.id}', page++);
+					addFeedPageMain(page++);
 				}
 			}
 		}else {
 			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.2)){
 				if(!loading){
 					loading = true;
-					addFeedPage('${member.id}', page++);
+					addFeedPageMain(page++);
 				}
 			}
 		}
@@ -479,14 +480,14 @@ $(".contentWrapper").scroll(function(){
 			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.15)){
 				if(!loading){
 					loading = true;
-					addFeedPage('${member.id}', page++);
+					addFeedPageMain(page++);
 				}
 			}
 		}else {
 			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * 0.1)){
 				if(!loading){
 					loading = true;
-					addFeedPage('${member.id}', page++);
+					addFeedPageMain(page++);
 				}
 			}
 		}
@@ -512,6 +513,47 @@ const feedDetailModalView = (e) => {
 	selectedFeed(id, code);
 };
 
+const likeH = (code, writer, guestNickname) => {
+	$("#like").on('change',function(){
+	
+		console.log('like!');
+		let ranNo = Math.floor(Math.random() * 10000);
+		let alarmCode = 'fe-' + ranNo;
+		let content = '';
+		
+		let check = '';
+		if($("#like").is(':checked')){
+			console.log($("#like").is(':checked'));
+			check = '1';
+			$("label[for='like']").html('<i class="fas fa-heart"></i>');
+			$("#like").prop("checked", true);
+			
+			content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>${guestNickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
+			sendAndInsertAlarm('I',writer,alarmCode,content);
+		}else {
+			console.log($("#like").is(':checked'));
+			check = '0';
+			$("label[for='like']").html('<i class="far fa-heart"></i>');
+			$("#like").prop("checked", false);
+		}		
+		feedLikeChanged(check, code);		
+	});
+};
+
+const feedLikeChanged = (check, code) => {
+	
+	$.ajax({
+		url: '/nadaum/feed/feedLikeChange.do',		
+		data: {check, code},
+		type: "POST",
+		headers: headers,
+		success(resp){
+			if(resp > 0)
+				console.log('success');
+		},
+		error: console.log
+	});
+};
 
  
 </script>
