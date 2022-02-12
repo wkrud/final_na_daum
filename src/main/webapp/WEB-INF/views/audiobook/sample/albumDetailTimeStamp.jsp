@@ -1026,14 +1026,30 @@ var iconImage = 'http://funkyimg.com/i/21pX5.png';
 $(function(){
 	console.log("hi");
 });
+
 $(()=> {
-	let cs= document.getElementById(code);
-	console.log(cs);
+});
+
+
+
+AP.init({
 	
-	const code =$('#code').value;
-	console.log(code);
+	const csrfHeader = "${_csrf.headerName}";
+	const csrfToken = "${_csrf.token}";
+	const headers = {};
+	headers[csrfHeader] = csrfToken;
+	
+	playList: [
+        { 'icon': iconImage, 'title': 'Recital', 'file': 'https://docs.google.com/uc?export=open&id=1-LennS20yQSBr0Ualiu_12J1HjmtI5ef' }       
+    ]
 	$.ajax({
-		url:'${pageContext.request.contextPath}/audiobook/playList',
+		const code =$('#code').value;
+		console.log(code);
+		const csrfHeader = "${_csrf.headerName}";
+		const csrfToken = "${_csrf.token}";
+		const headers = {};
+		headers[csrfHeader] = csrfToken; 
+		url:'${pageContext.request.contextPath}/audiobook/sample/playList',
 		contentType: 'application/json; charset=UTF-8',
 		headers: headers,
 		dataType:"json",
@@ -1045,17 +1061,8 @@ $(()=> {
 			alert("전송완료.");
 		}
 	});
-});
-
-
-
-AP.init({
 	
-	const csrfHeader = "${_csrf.headerName}";
-	const csrfToken = "${_csrf.token}";
-	const headers = {};
-	headers[csrfHeader] = csrfToken; 
-	
+	/*
 	$.ajax({
 		
 		url:'${pageContext.request.contextPath}/audiobook/album/sample/ajax',
@@ -1064,7 +1071,7 @@ AP.init({
 			console.log("success");
 		},
 		error : console.log
-		/* contentType: 'application/json; charset=UTF-8',
+		 contentType: 'application/json; charset=UTF-8',
 		headers: headers,
 		dataType:"json",
 		success(resp){
@@ -1073,12 +1080,10 @@ AP.init({
 		error: console.log,
 		complete(){
 			alert("전송완료.");
-		} */
-	});
+		
+	});} */
 	
-    playList: [
-        { 'icon': iconImage, 'title': 'Recital', 'file': 'https://docs.google.com/uc?export=open&id=1-LennS20yQSBr0Ualiu_12J1HjmtI5ef' }       
-    ]
+    
 });
 
 // TEST: update playlist

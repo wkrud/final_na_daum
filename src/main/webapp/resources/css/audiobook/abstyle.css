@@ -8,7 +8,7 @@ body {
 
 /********** 전체컨테이너 **********/
 
-
+.navbar{vertical-align:middle;}
 /********** header **********/
 header div#header-container {height:80px;}
 header div#header-container h2 	{margin:30px 10px 0px 10px;}

@@ -89,10 +89,15 @@ public class AlbumDaoImpl implements AlbumDao {
 	public int updateAlbumTracks(List<AlbumTrack> trackList) {
 		return session.update("album.updateAlbumTracks",trackList);
 	}
-	//--작업중
+	
 	@Override
-	public int deleteAlbumTrack(int[] delArray) {
+	public int deleteAlbumTracks(int[] delArray) {
 		return session.delete("album.deleteAlbumTrack",delArray);
+	}
+
+	@Override
+	public int deleteAllAlbumTracks(String code) {
+		return session.delete("album.deleteAllAlbumTracks",code);
 	}
 	
 	@Override
@@ -223,5 +228,31 @@ public class AlbumDaoImpl implements AlbumDao {
 	public List<Map<String, Object>> selectListAlbumInfoByKindMain(String kind) {
 		return session.selectList("album.selectListAlbumInfoByKindMain",kind);
 	}
+
+	@Override
+	public int updateAlbumTrackList(List<AlbumTrack> newAlbumTrackList) {
+		return session.update("album.updateAlbumTrackList",newAlbumTrackList);
+	}
+
+	@Override
+	public int updateAlbumImgList(List<AlbumImg> newAlbumImgList) {
+		return session.update("album.updateAlbumImgList",newAlbumImgList);
+	}
+
+	@Override
+	public int deleteAlbumImgByCode(String albumCode) {
+		return session.delete("album.deleteAlbumImgByCode",albumCode);
+	}
+
+	@Override
+	public int deleteAlbumTrackByCode(String albumCode) {
+		return session.delete("album.deleteAlbumTrackByCode",albumCode);
+	}
+
+	@Override
+	public int deleteAllAlbumImgs(String code) {
+		return session.delete("album.deleteAllAlbumImgs",code);
+	}
+
 
 }

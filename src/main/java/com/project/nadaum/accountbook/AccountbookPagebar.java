@@ -1,7 +1,8 @@
 package com.project.nadaum.accountbook;
 
 public class AccountbookPagebar {
-public static String getPagebar(int cPage, int limit, int totalContent, String url, String incomeExpense, String category, String detail) {
+
+		public static String getPagebar(int cPage, int limit, int totalContent, String url, String incomeExpense, String category, String detail) {
 		
 		StringBuilder pagebar = new StringBuilder();
 		
