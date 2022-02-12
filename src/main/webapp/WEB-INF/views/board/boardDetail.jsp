@@ -206,39 +206,7 @@ div.col>.detail {
 		         <input type="date" id="schedule-date" />
 		         <br />
 		         <br />
-		        <%--  <div>
-		         	<div class="friend-list-wrap">
-						<div class="friends-list">
-							<div class="friend">
-								<span>친구</span>
-							</div>
-							<div class="input-group mb-3">
-								<div class="input-group-prepend">
-									<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
-									<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
-								</div>
-							</div>
-							<div class="search-result-list">
-								<div class="list-group">
-								</div>
-							</div>
-							<hr />
-							<div class="friends-section">
-								<c:forEach items="${memberList}" var="ml">
-									<c:forEach items="${friends}" var="fr">
-										<c:if test="${ml.id eq fr.friendId}">
-											<div class="friend-wrap">
-												<div class="friend-name-wrap">
-													<span class="friend-name">${ml.nickname}</span>								
-												</div>		
-											</div>
-										</c:if>
-									</c:forEach>
-								</c:forEach>
-							</div>
-						</div>
-		         </div>
-		        </div> --%>
+		      
 		        <div class="modal-footer">
 		          <button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
