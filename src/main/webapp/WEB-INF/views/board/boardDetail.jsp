@@ -182,11 +182,72 @@ div.col>.detail {
 					onclick="location.href ='${pageContext.request.contextPath}/board/boardUpdateView.do?code=${board.code}'">
 				<input type="button" class="btn btn-warning" id="deletebtn"
 					value="삭제" onclick="deleteBoard()">
+				<button type="button" class="btn btn-secondary" data-toggle="modal"
+					data-target="#add-calander">듀오약속잡기&raquo;</button>
 			</c:if>
 		</div>
 
 	</div>
 	<hr style="margin-top: 30px;" />
+	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog" aria-labelledby="add-calander" aria-hidden="true">
+		  <form id="promiseFrm">
+		    <div class="modal-dialog modal-dialog-centered" role="document">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+		          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		            <span aria-hidden="true">&times;</span>
+		          </button>
+		        </div>
+		        <div class="modal-body">
+		        <span>제목</span>
+		        <input type="text" />
+		         <span>약속일</span>
+		         <input type="date" id="schedule-date" />
+		         <br />
+		         <br />
+		         <div>
+		         	<div class="friend-list-wrap">
+						<div class="friends-list">
+							<div class="friend">
+								<span>친구</span>
+							</div>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
+									<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
+								</div>
+							</div>
+							<div class="search-result-list">
+								<div class="list-group">
+								</div>
+							</div>
+							<hr />
+							<div class="friends-section">
+								<c:forEach items="${memberList}" var="ml">
+									<c:forEach items="${friends}" var="fr">
+										<c:if test="${ml.id eq fr.friendId}">
+											<div class="friend-wrap">
+												<div class="friend-name-wrap">
+													<span class="friend-name">${ml.nickname}</span>								
+												</div>		
+											</div>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
+							</div>
+						</div>
+		         </div>
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+		          <button type="button" class="btn btn-primary">추가</button>
+		        </div>
+		      </div>
+		    </div>
+		    </div>
+		  </form>
+		</div>
 
 	<!-- 댓글 -->
 	<div class="comment-container">
@@ -652,6 +713,54 @@ $(".btn-reply").click((e) => {
 	
 	
 });
+
+ var dest = '${loginMember.nickname}';
+	const $search = $("#searchFriend");
+	$search.on('keyup', function(e){
+		if($search.val() != ''){
+			if(e.key === 'Enter' || e.keyCode === 13){
+				$("#search-friend-start").trigger('click');
+			}
+		}
+	});
+	$("#search-friend-start").click((e) => {
+		if($("#searchFriend").val() == ''){
+			alert("닉네임을 입력해주세요");
+			return false;
+		};
+		let friend = $("#searchFriend").val();
+		$.ajax({
+			url: `${pageContext.request.contextPath}/member/mypage/searchStartFriend.do?friend=\${friend}`,
+			success(resp){
+				let searched = '';
+				const $resultDiv = $(".search-result-list").find("div");
+				$resultDiv.empty();
+				if(resp == '0'){
+					searched = `<span>그런 친구는 없어요</span>`;
+					$resultDiv.append(searched);
+					return;
+				}else{
+					if(resp.check == 'friend'){
+						searched = `<span>\${resp.nickname}</span>
+							<button type="button" class="btn btn-success btn-sm friend">친구</button>`;
+					}else if(resp.check == 'follower'){
+						searched = `<span>\${resp.nickname}</span>
+							<button type="button" class="btn btn-outline-warning btn-sm follower">맞팔하기</button>`;
+					}else if(resp.check == 'following'){
+						searched = `<span>\${resp.nickname}</span>
+							<button type="button" class="btn btn-warning btn-sm following">친구신청중</button>`;
+					}else if(resp.check == 'free'){
+						searched = `<span>\${resp.nickname}</span>
+							<button type="button" class="btn btn-outline-warning btn-sm free">친구추가</button>`;
+					}
+				}
+				
+				$resultDiv.append(searched);
+				
+			},
+			error: console.log
+		});
+	});
 
 $("#likeButton").click((e) => {
 	

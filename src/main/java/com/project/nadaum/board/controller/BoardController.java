@@ -32,6 +32,8 @@ import com.project.nadaum.board.model.vo.Likes;
 import com.project.nadaum.common.BoardUtils;
 import com.project.nadaum.common.NadaumUtils;
 import com.project.nadaum.member.model.vo.Member;
+import com.project.nadaum.member.model.service.MemberService;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +48,8 @@ public class BoardController {
 	@Autowired
 	private ServletContext application;
 	
+	@Autowired
+	private MemberService memberService;
 	
 	
 	//추천수
@@ -229,7 +233,7 @@ public class BoardController {
 	
 	//게시물 상세보기
 	@GetMapping("/boardDetail.do")
-	public String boardDetail(
+	public String boardDetail(@AuthenticationPrincipal Member member,
 			@RequestParam String code, 
 			Model model,
 //			@CookieValue(value="boardCount", required=false, defaultValue="0") String value,
@@ -287,6 +291,12 @@ public class BoardController {
 			//int selectCountLikes = boardService.selectCountLikes(code); 
 			log.debug("boardDetail board ={}", board);
 			//model.addAttribute("selectCountLikes",selectCountLikes);
+			
+			List<Map<String, Object>> friends = memberService.selectAllFriend(member);
+			List<Member> memberList = memberService.selectAllNotInMe(member);
+			
+			model.addAttribute("memberList", memberList);
+			model.addAttribute("friends", friends);
 			model.addAttribute("board", board);
 			model.addAttribute("boardriot",boardriot);
 			model.addAttribute("commentList", commentList);
