@@ -7,7 +7,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page
-	import="com.project.nadaum.culture.movie.controller.GetMovieDetailApi"%>
+	import="com.project.nadaum.culture.show.controller.CultureController"%>
 
 <script
 	src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -203,7 +203,6 @@ div#board-container label.custom-file-label {
 
 		<!-- 스크랩 버튼 -->
 
-		<c:if test="${ loginMember.id != null }">
 			<!-- scrap.api_code eq apiCode -->
 			<form id="likeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
@@ -215,7 +214,7 @@ div#board-container label.custom-file-label {
 			<button type="button" class="btn btn-secondary" data-toggle="modal"
 				data-target="#add-calander">캘린더&raquo;</button>
 
-		</c:if>
+
 
 
 
@@ -306,258 +305,286 @@ div#board-container label.custom-file-label {
 
 	<hr class="featurette-divider" />
 
-	<!-- 총 영화 댓글 -->
-	<div class="movie-comments">
-		<!-- 댓글 작성 부분 -->
-		<div class="comment-container">
-			<div class="comment-editor">
-				<div class="card mb-2">
-					<div class="card-header bg-light">
-						<i class="fa fa-comment fa"></i> 댓글 작성
-					</div>
-					<div class="card-body">
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item" id="comment-li">
-								<div class="form-inline mb-2">
-									<label for="replyId"><i
-										class="fa fa-user-circle-o fa-2x"> <input type="text"
-											class="id-detail movie-detail" name="id" id="id"
-											value="${loginMember.nickname}" readonly /></i> </label>
-								</div>
 
-								<form id="insertCommentFrm">
 
-									<!-- api 코드 -->
-									<input type="hidden" name="apiCode" value="${apiCode}" />
-									<%-- <input type="hidden" name="id" value="${loginMember.id}" /> --%>
-									<input type="hidden" name="id"
-										value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
-									<!-- 댓글인 경우 1 -->
-									<input type="hidden" name="commentLevel" value="1" />
-									<!-- 대댓글인 경우 써여져야함 -->
-									<input type="hidden" name="commentRef" value="" /> <label
-										for="star" class="col-sm-2 col-form-label">평점 : </label>
-									<div class="col-sm-10">
-										<input type="hidden" class="form-control" name=""> <select
-											id="category-select" class="form-control" name="star"
-											aria-label="Default select example">
-											<option selected>0</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select>
-
-									</div>
-									<textarea name="content" cols="60" rows="3" id="content"
-										class="form-control"></textarea>
-
-									<button type="submit" id="btn-comment-enroll1"
-										class="btn btn-outline-primary"
-										onClick="fn_comment('${apiCode}')">등록</button>
-									<input type="hidden" name="${_csrf.parameterName}"
-										value="${_csrf.token}" />
-								</form>
-
-							</li>
-						</ul>
-					</div>
+<!-- 총 영화 댓글 -->
+<div class="movie-comments">
+	<!-- 댓글 작성 부분 -->
+	<div class="comment-container">
+		<div class="comment-editor">
+			<div class="card mb-2">
+				<div class="card-header bg-light">
+					<i class="fa fa-comment fa"></i> 댓글 작성
 				</div>
-			</div>
+				<div class="card-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item" id="comment-li">
+							<div class="form-inline mb-2">
+								<label for="replyId"><i
+									class="fa fa-user-circle-o fa-2x"> <input type="text"
+										class="id-detail movie-detail" name="id" id="id"
+										value="${loginMember.nickname}" readonly /></i> </label>
+							</div>
 
+							<form id="insertCommentFrm">
 
-			<!-- 댓글 목록 시작 -->
-			<c:if test="${null ne commentList  && not empty commentList}">
-				<div class="card mb-2">
-					<div class="card-header bg-light">
-						<i class="fa fa-comment fa"></i> 댓글 목록
-					</div>
-					<div class="card-body">
-
-						<%-- 댓글이 하나가 되었다면 if구문으로 들어올꺼임 for문 돌면서 level1, ldecel2 태그를 고르고 출력--%>
-						<c:forEach items="${commentList}" var="comment">
-							<%-- 댓글 1단계 --%>
-							<c:if test="${comment.commentLevel eq 1 }">
-								<ul class="list-group list-group-flush" id="level1">
-									<li class="list-group-item" id="commentList">
-										<div class="form-inline mb-2">
-											<label for="replyId"> <i
-												class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
-											</label> &nbsp;&nbsp;
-											<fmt:formatDate value="${comment.regDate}"
-												pattern="yyyy-MM-dd HH:mm" />
-										</div>
-
-										<div class="col-sm-10">
-											<label for="star" class="col-sm-2 col-form-label">평점
-												:</label> <input type="hidden" class="form-control" name="star">
-
-											<select id="category-select-commentList" class="form-control"
-												aria-label="Default select example">
-												<option selected>${comment.star}</option>
-											</select>
-										</div> <textarea class="form-control"
-											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
-
-										<%-- 회원일때만 답글 버튼이 나타남 --%>
-										<div class="row float-right">
-											&nbsp;
-											<%-- 회원이고 글쓴이 본인일 경우 댓글 삭제/수정 버튼--%>
-											<c:if test="${comment.id eq loginMember.id}">
-
-												<%-- 댓글 삭제 --%>
-												<form id="deleteCommentFrm">
-													<input type="hidden" name="code" value="${comment.code}"></input>
-													<button type="submit"
-														class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
-														id="deleteComment-btn" value="${comment.code}">삭제</button>
-												</form>
-											&nbsp;
-											
-												<!-- 댓글 수정 -->
-												<form id="findUpdateComment">
-													<input type="hidden" name="code" value="${comment.code}" />
-													<button type="button"
-														class="btn btn-outline-dark updateCommmentBtn"
-														data-toggle="modal" data-target="#updateComment"
-														value="${comment.code}">수정</button>
-												</form>
-											</c:if>
-
-
-										</div>
-
-									</li>
-								</ul>
-							</c:if>
-						</c:forEach>
-					</div>
-				</div>
-			</c:if>
-		</div>
-	</div>
-	<!-- 댓글 목록 끝 -->
-
-	<!-- 댓글 수정 Modal -->
-	<div class="modal fade" id="updateComment" tabindex="-1" role="dialog"
-		aria-labelledby="updateCommentTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLongTitle">Comment
-						update</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-
-				<form id="updateCommentFrm">
-					<div class="modal-body">
-						<div class="form-group row">
-							<label for="star" class="col-sm-2 col-form-label">평점</label>
-							<div class="col-sm-10">
-								<input type="hidden" class="form-control">
-								<div class="review  make_star">
-									<select id="category-select" class="form-control makeStar"
-										name="star" aria-label="Default select example" id="makeStar">
-										<option value="">평점</option>
+								<!-- api 코드 -->
+								<input type="hidden" name="apiCode" value="${apiCode}" />
+								<%-- <input type="hidden" name="id" value="${loginMember.id}" /> --%>
+								<input type="hidden" name="id"
+									value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
+								<!-- 댓글인 경우 1 -->
+								<input type="hidden" name="commentLevel" value="1" />
+								<!-- 대댓글인 경우 써여져야함 -->
+								<input type="hidden" name="commentRef" value="" /> <label
+									for="star" class="col-sm-2 col-form-label">평점 : </label>
+								<div class="col-sm-10">
+									<input type="hidden" class="form-control" name=""> <select
+										id="category-select" class="form-control" name="star"
+										aria-label="Default select example">
+										<option selected>0</option>
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
 										<option value="4">4</option>
 										<option value="5">5</option>
 									</select>
+
 								</div>
+								<textarea name="content" cols="60" rows="3" id="content"
+									class="form-control"></textarea>
+
+								<button type="submit" id="btn-comment-enroll1"
+									class="btn btn-outline-primary"
+									onClick="fn_comment('${apiCode}')">등록</button>
+								<input type="hidden" name="${_csrf.parameterName}"
+									value="${_csrf.token}" />
+							</form>
+
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+
+			<div class="card mb-2">
+				<div class="card-header bg-light">
+					<i class="fa fa-comment fa"></i> 댓글 목록
+				</div>
+				<div class="card-body">
+
+					<%-- 댓글이 하나가 되었다면 if구문으로 들어올꺼임 for문 돌면서 level1, ldecel2 태그를 고르고 출력--%>
+					<c:forEach items="${commentList}" var="comment">
+							<ul class="list-group list-group-flush" id="level1">
+								<li class="list-group-item" id="commentList">
+									<div class="form-inline mb-2">
+										<label for="replyId"> <i
+											class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
+										</label> &nbsp;&nbsp;
+										<fmt:formatDate value="${comment.regDate}"
+											pattern="yyyy-MM-dd HH:mm" />
+									</div>
+
+									<div class="col-sm-10">
+										<label for="star" class="col-sm-2 col-form-label">평점 :</label>
+										<input type="hidden" class="form-control" name="star">
+
+										<select id="category-select-commentList" class="form-control"
+											aria-label="Default select example">
+											<option selected>${comment.star}</option>
+										</select>
+									</div> <textarea class="form-control"
+										id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+
+									<%-- 회원일때만 답글 버튼이 나타남 --%>
+									<div class="row float-right">
+										&nbsp;
+										<%-- 회원이고 글쓴이 본인일 경우 댓글 삭제/수정 버튼--%>
+										<c:if test="${comment.id eq loginMember.id}">
+
+											<%-- 댓글 삭제 --%>
+											<form id="deleteCommentFrm">
+												<input type="hidden" name="code" value="${comment.code}"></input>
+												<button type="submit"
+													class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
+													id="deleteComment-btn" value="${comment.code}">삭제</button>
+											</form>
+											&nbsp;
+											
+												<!-- 댓글 수정 -->
+											<form id="findUpdateComment">
+												<input type="hidden" name="code" value="${comment.code}" />
+												<button type="button"
+													class="btn btn-outline-dark updateCommmentBtn"
+													data-toggle="modal" data-target="#updateComment"
+													value="${comment.code}">수정</button>
+											</form>
+										</c:if>
+
+
+									</div>
+
+								</li>
+							</ul>
+					</c:forEach>
+				</div>
+			</div>
+	</div>
+</div>
+<!-- 댓글 목록 끝 -->
+
+<!-- 댓글 수정 Modal -->
+<div class="modal fade" id="updateComment" tabindex="-1" role="dialog"
+	aria-labelledby="updateCommentTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Comment
+					update</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<form id="updateCommentFrm">
+				<div class="modal-body">
+					<div class="form-group row">
+						<label for="star" class="col-sm-2 col-form-label">평점</label>
+						<div class="col-sm-10">
+							<input type="hidden" class="form-control">
+							<div class="review  make_star">
+								<select id="category-select" class="form-control makeStar"
+									name="star" aria-label="Default select example" id="makeStar">
+									<option value="">평점</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
 							</div>
 						</div>
-
-						<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">내용</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="content">
-							</div>
-						</div>
-
-
-						<input type="hidden" name="code" value="${comment.code}" readonly />
-						<input type="hidden" name="apiCode" value="${apiCode}" /> <input
-							type="hidden" name="id" value="${loginMember.id}" />
-						<!-- 댓글인 경우 1 -->
-						<input type="hidden" name="commentLevel" value="1" />
-						<!-- 대댓글인 경우 써여져야함 -->
-						<input type="hidden" name="commentRef" value="" />
 					</div>
+
+					<div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label">내용</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="content">
+						</div>
+					</div>
+
+
+					<input type="hidden" name="code" value="${comment.code}" readonly />
+					<input type="hidden" name="apiCode" value="${apiCode}" /> <input
+						type="hidden" name="id" value="${loginMember.id}" />
+					<!-- 댓글인 경우 1 -->
+					<input type="hidden" name="commentLevel" value="1" />
+					<!-- 대댓글인 경우 써여져야함 -->
+					<input type="hidden" name="commentRef" value="" />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">취소</button>
+					<button type="submit" class="btn btn-outline-dark"
+						id="updateComment-btn" value="${comment.code}">수정</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+
+<hr class="featurette-divider" />
+
+</div>
+
+<!-- 캘린더 Modal -->
+<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
+	aria-labelledby="add-calander" aria-hidden="true">
+	<form id="scheduleFrm">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				
+				
+				<!-- 모달 내용 시작 -->
+				<div class="modal-body">
+				
+					<div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label" >제목</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="title" name="title"
+								placeholder="제목을 입력해주세요" required>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label" >약속일</label>
+						<div class="col-sm-10">
+							<input type="date" class="form-control" id="startDate" name="startDate" required>
+						</div>
+					</div>
+						<div class="friend-list-wrap">
+							<div class="friends-list">
+							<input type="hidden" name="apiCode" value="${apiCode}" />
+							<input type="hidden" name="friendId" value="wkrud" />
+							<input type="hidden" name="allDay" value="T" />
+							<input type="hidden" name="id" value="${loginMember.id}" />
+							
+								<%-- <div class="friend">
+									<div class="form-group row">
+										<label for="title" class="col-sm-2 col-form-label">친구</label>
+										<div class="col-sm-10">
+											<div class="input-group mb-3">
+												<div class="input-group-prepend">
+												<input id="searchFriend" type="text" name="nickname" class="form-control" placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1" required>
+												<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								<div class="search-result-list">
+									<div class="list-group"></div>
+								</div>
+								<hr />
+								<!-- 친구닉네임 검색 -->
+								<div class="friends-section">
+									<c:forEach items="${memberList}" var="ml">
+										<c:forEach items="${friends}" var="fr">
+											<c:if test="${ml.id eq fr.friendId}">
+												<div class="friend-wrap">
+													<div class="friend-name-wrap">
+														<span class="friend-name">${ml.nickname}</span>
+													</div>
+												</div>
+											</c:if>
+										</c:forEach>
+									</c:forEach>
+								</div>
+								
+							</div>
+						</div>
+					</div> --%>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
-						<button type="submit" class="btn btn-outline-dark"
-							id="updateComment-btn" value="${comment.code}">수정</button>
+						<button type="submit" class="btn btn-primary">추가</button>
 					</div>
-				</form>
-
-			</div>
-		</div>
-	</div>
-
-	<hr class="featurette-divider" />
-	<!-- Modal -->
-	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
-		aria-labelledby="add-calander" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<!--Schedule Form 시작 -->
-					<form id="scheduleFrm">
-						<div class="modal-body">
-							<span>제목</span> <input type="text" name="title" />
-							 <span>약속일</span> <input type="date" name="startDate" id="schedule-date" />
-							<br /> <br />
-							<div>
-								<div class="friend-list-wrap">
-									<div class="friends-list">
-										<div class="friend">
-											<span>친구</span>
-										</div>
-										<div class="input-group mb-3">
-											<div class="input-group-prepend">
-												<input id="searchFriend" type="text" name="title"
-													class="form-control" required placeholder="닉네임을 입력하세요"
-													aria-label="" aria-describedby="basic-addon1">
-												<button id="search-friend-start"
-													class="btn btn-outline-secondary" type="button">검색</button>
-											</div>
-										</div>
-										<div class="search-result-list">
-											<div class="list-group">
-											<input type="hidden" name="friendId"value="wkrud" />
-											<input type="hidden" name="apiCode" value="${apiCode}" /> 
-											<input type="hidden" name="id" value="${loginMember.id}" />
-											</div>
-										</div>
-										<hr />
-									</div>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary"
-									data-dismiss="modal">취소</button>
-								<button type="submit" class="btn btn-primary">추가</button>
-							</div>
-						</div>
-					</form>
 				</div>
+				<!-- 모달 내용 끌 -->
 			</div>
-		
-	</div>
-</div>
+			</div>
+				</div>
+				</form>
+				</div>
 <script>
 
 /* 댓글 등록 */
@@ -570,7 +597,7 @@ $(insertCommentFrm).submit((e) => {
     headers[csrfHeader] = csrfToken;
     
 	$.ajax({
-		url: `${pageContext.request.contextPath}/board/view/${apiCode}`,
+		url: `${pageContext.request.contextPath}/culture/board/view/${apiCode}`,
 		method: "POST",
 		headers : headers,
 		data: $(insertCommentFrm).serialize(),
@@ -600,7 +627,7 @@ $(insertCommentFrm).submit((e) => {
 					var data = {"code" : code};
 			        
 					$.ajax({
-						url:`${pageContext.request.contextPath}/board/view/${apiCode}/\${code}`,
+						url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/\${code}`,
 						method: "DELETE",
 						headers : headers, 
 						type : "POST",
@@ -649,7 +676,7 @@ $(insertCommentFrm).submit((e) => {
      	const jsonStr = JSON.stringify(obj);
      	
 		$.ajax({
-			url: `${pageContext.request.contextPath}/movie/movieDetail/${apiCode}`,
+			url: `${pageContext.request.contextPath}/culture/boar/view${apiCode}`,
 			method: "PUT",
 			headers : headers,
 			data: jsonStr,
@@ -700,7 +727,8 @@ $(insertCommentFrm).submit((e) => {
  	
  	
  	//스크랩===========================================================================================
-	$(likeFrm).submit((e) => {
+
+ 		$(likeFrm).submit((e) => {
 		e.preventDefault();
 
 		const csrfHeader = "${_csrf.headerName}";
@@ -714,8 +742,10 @@ $(insertCommentFrm).submit((e) => {
 				headers : headers, 
 				data : $(likeFrm).serialize(),
 				success(resp){
+					console.log(resp);
+					location.reload();
 					alert(resp.msg);
-					},
+				},
 				error: console.log
 				});
 		});
@@ -732,8 +762,9 @@ $(insertCommentFrm).submit((e) => {
 				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
 				method: "POST",
 				headers : headers, 
-				data : $(culture-scheduleFrm).serialize(),
+				data : $(scheduleFrm).serialize(),
 				success(resp){
+					location.reload();
 					alert(resp.msg);
 					},
 				error: console.log

@@ -45,7 +45,7 @@
 		insert 
 		into 
 			schedule 
-		values(concat('pr-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay} #{id}, #{title})
+		values(concat('pr-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
 	</insert>
 	<!-- 평점 평균 -->
 	<select id="avgRating" resultType = "double">
