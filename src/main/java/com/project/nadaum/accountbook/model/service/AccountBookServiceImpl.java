@@ -1,5 +1,6 @@
 package com.project.nadaum.accountbook.model.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,11 @@ public class AccountBookServiceImpl implements AccountBookService {
 	public int insertAccount(AccountBook account) {
 		return accountBookDao.insertAccount(account);
 	}
+	
+	@Override
+	public String searchToday(Map<String, Object> param) {
+		return accountBookDao.searchToday(param);
+	}
 
 	@Override
 	public List<AccountBook> selectAllAccountList(Map<String, Object> param) {
@@ -37,15 +43,15 @@ public class AccountBookServiceImpl implements AccountBookService {
 	public int deleteAccount(Map<String, Object> code) {
 		return accountBookDao.deleteAccount(code);
 	}
-
+	
 	@Override
-	public List<Map<String, Object>> monthlyTotalIncome(String id) {
-		return accountBookDao.monthlyTotalIncome(id);
+	public List<Map<String, Object>> monthlyTotalIncome(Map<String, Object> param) {
+		return accountBookDao.monthlyTotalIncome(param);
 	}
 
 	@Override
-	public String monthlyAccount(String id) {
-		return accountBookDao.monthlyAccount(id);
+	public String monthlyAccount(Map<String, Object> param) {
+		return accountBookDao.monthlyAccount(param);
 	}
 
 	@Override

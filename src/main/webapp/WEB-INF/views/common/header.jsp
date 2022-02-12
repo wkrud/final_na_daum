@@ -36,10 +36,6 @@
 	crossorigin="anonymous"></script>
 <!-- 제이쿼리 ui js -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!-- 제이쿼리 style css -->
-<link rel="stylesheet" href="/resources/demos/style.css">
-<!-- 제이쿼리 ui css -->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!-- datepicker css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/datepicker.css" /> 
 <!-- datepicker bcg img -->
@@ -133,12 +129,6 @@
           <span class="nav-title">캘린더</span>
         </a>
       </li>
-      <li class="nav-list">
-        <a href="${pageContext.request.contextPath}/board/boardList.do">
-          <span class="nav-icon"><i class="fas fa-book-open header-icon"></i></span>
-          <span class="nav-title">게시판</span>
-        </a>
-      </li>
       <li class="nav-list personal-main contain-li">
           <span class="nav-icon"><i class="far fa-address-book header-icon"></i></span>
           <span class="nav-title">퍼스널</span>
@@ -179,12 +169,26 @@
             </li>
           </ul>
         </div>
-      <li class="nav-list">
-        <a href="${pageContext.request.contextPath}/riot/riotheader.do">
+      <li class="nav-list game-main contain-li">
           <span class="nav-icon"><i class="fas fa-gamepad header-icon"></i></span>
           <span class="nav-title">게임</span>
-        </a>
       </li>
+      	<div class="game-sub">
+          <ul>
+            <li class="nav-list">
+              <a href="${pageContext.request.contextPath}/riot/riotheader.do">      
+                <span class="nav-icon"></span>
+                <span class="nav-title">롤 전적 검색</span>
+              </a>
+            </li>
+            <li class="nav-list">
+		        <a href="${pageContext.request.contextPath}/board/boardList.do">
+		          <span class="nav-icon"></span>
+		          <span class="nav-title">게시판</span>
+		        </a>
+		    </li>
+          </ul>
+        </div>
       <li class="nav-list">
         <a href="${pageContext.request.contextPath}/audiobook/">
           <span class="nav-icon"><i class="far fa-play-circle header-icon"></i></span>
@@ -296,6 +300,10 @@
     
     $(".culture-main").click((e) => {
     	$(".culture-sub").slideToggle();
+    });
+    
+    $(".game-main").click((e) => {
+    	$(".game-sub").slideToggle();
     });
     
     //알림

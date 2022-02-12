@@ -1,5 +1,6 @@
 package com.project.nadaum.accountbook.model.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,10 @@ public interface AccountBookService {
 
 	int deleteAccount(Map<String, Object> code);
 
-	List<Map<String, Object>> monthlyTotalIncome(String id);
+//	List<Map<String, Object>> monthlyTotalIncome(String id);
+	List<Map<String, Object>> monthlyTotalIncome(Map<String, Object> param);
 
-	String monthlyAccount(String id);
+	String monthlyAccount(Map<String, Object> param);
 
 	List<AccountBook> incomeExpenseFilter(Map<String, Object> map);
 
@@ -40,6 +42,8 @@ public interface AccountBookService {
 	List<AccountBook> selectOneAccount(Map<String, Object> param);
 
 	int updateAccount(AccountBook account);
+
+	String searchToday(Map<String, Object> param);
 
 
 
