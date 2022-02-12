@@ -36,10 +36,6 @@
 	crossorigin="anonymous"></script>
 <!-- 제이쿼리 ui js -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!-- 제이쿼리 style css -->
-<link rel="stylesheet" href="/resources/demos/style.css">
-<!-- 제이쿼리 ui css -->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!-- datepicker css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/datepicker.css" /> 
 <!-- datepicker bcg img -->

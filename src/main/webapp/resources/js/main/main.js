@@ -215,7 +215,7 @@
  	else if(widgetName == 'game-widget') {
  		if(document.querySelector('.game-widget') == null) {
 	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
-		    data = {"member_id" : $id}; 
+		    data = { "member_id" : $id}; 
 	        $.ajax({
 		    	url : $contextPath+"/riot/riotWidget.do",
 		     	method : 'POST',
