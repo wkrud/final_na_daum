@@ -146,6 +146,12 @@ public class BoardServiceImpl implements BoardService {
 		
 		return boardDao.selectOneRiotBoard(code);
 	}
+
+	@Override
+	public int insertSchedule(Map<String, Object> map) {
+		
+		return boardDao.insertSchedule(map);
+	}
 	
 
 	
