@@ -12,11 +12,14 @@ public interface MainService {
 
 	int insertTodoList(Map<String, Object> param);
 
+	int deleteWidet(Map<String, Object> map);
+
 	List<TodoList> userTodoList(Map<String, Object> param);
 
 	int deleteTodoList(Map<String, Object> map);
 
 	int insertWidget(Map<String, Object> param);
+
 
 
 }

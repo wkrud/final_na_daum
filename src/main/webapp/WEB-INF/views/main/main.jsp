@@ -44,7 +44,11 @@
 			</span>
 		</div>
 		<c:forEach items="${widgetList}" var="widget">
-			<div class="widget_form ${widget.widgetName}">${widget.widgetName}${widget.no}</div>
+			<div class="widget_form ${widget.widgetName}">
+				<button class="delWidgetBtn" onclick="delWidget(${widget.no})">삭제하기</button>
+				<p>${widget.widgetName}${widget.no}</p>
+			</div>
+			
 		</c:forEach>
 	</section>
 </article>

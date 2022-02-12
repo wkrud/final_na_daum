@@ -20,6 +20,16 @@ public class MainServiceImpl implements MainService {
 	public List<Widget> allWidgetList(Map<String, Object> param) {
 		return mainDao.allWidgetList(param);
 	}
+	
+	@Override
+	public int insertWidget(Map<String, Object> param) {
+		return mainDao.insertWidget(param);
+	}
+	
+	@Override
+	public int deleteWidet(Map<String, Object> map) {
+		return mainDao.deleteWidget(map);
+	}
 
 	@Override
 	public int insertTodoList(Map<String, Object> param) {
@@ -36,10 +46,6 @@ public class MainServiceImpl implements MainService {
 		return mainDao.deleteTodoList(map);
 	}
 
-	@Override
-	public int insertWidget(Map<String, Object> param) {
-		return mainDao.insertWidget(param);
-	}
 	
 	
 	

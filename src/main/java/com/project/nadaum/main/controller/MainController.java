@@ -64,6 +64,17 @@ public class MainController {
 		return insertWidget;
 	}
 	
+	//위젯 삭제
+	@ResponseBody
+	@PostMapping(value="/deleteWidget.do")
+	public Map<String, Object> deleteWidget (@AuthenticationPrincipal Member member, int no) {
+		log.info("no={}",no);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("no", no);
+		int result = mainService.deleteWidet(map);
+		return map;
+	}
+	
 	//투두리스트 생성
 	@ResponseBody
 	@GetMapping(value="/insertTodoList.do")

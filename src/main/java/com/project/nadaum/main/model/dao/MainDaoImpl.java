@@ -19,6 +19,16 @@ public class MainDaoImpl implements MainDao {
 	public List<Widget> allWidgetList(Map<String, Object> param) {
 		return session.selectList("main.allWidgetList", param);
 	}
+	
+	@Override
+	public int insertWidget(Map<String, Object> param) {
+		return session.insert("main.insertWidget", param);
+	}
+
+	@Override
+	public int deleteWidget(Map<String, Object> map) {
+		return session.delete("main.deleteWidget", map);
+	}
 
 	@Override
 	public int insertTodoList(Map<String, Object> param) {
@@ -35,10 +45,6 @@ public class MainDaoImpl implements MainDao {
 		return session.delete("main.deleteTodoList", map);
 	}
 
-	@Override
-	public int insertWidget(Map<String, Object> param) {
-		return session.insert("main.insertWidget", param);
-	}
 	
 	
 

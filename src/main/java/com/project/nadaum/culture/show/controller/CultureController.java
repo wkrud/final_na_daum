@@ -16,9 +16,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.poi.util.SystemOutLogger;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -525,6 +524,7 @@ public class CultureController {
 		     return "/culture/likes";
 		}
 		
+		@ResponseBody
 		@PostMapping("/widget.do")
 	      public List<Object> cultureWidget(@AuthenticationPrincipal Member member, Model model){
 	         String id = member.getId();   
