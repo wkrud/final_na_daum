@@ -91,6 +91,11 @@ public class CultureServiceImpl implements CultureService {
 	public int insertSchedule(Map<String, Object> map) {
 		return cultureDao.insertSchedule(map);
 	}
+
+	@Override
+	public List<Scrap> selectCultureWidget(String id) {
+		return cultureDao.selectCultureWidget(id);
+	}
 	
 
 

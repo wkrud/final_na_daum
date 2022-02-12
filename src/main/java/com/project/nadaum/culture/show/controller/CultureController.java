@@ -443,7 +443,7 @@ public class CultureController {
 						urlBuilder.append("&" + URLEncoder.encode("seq", "UTF-8") + "=" + URLEncoder.encode(apiCode, "UTF-8"));
 						
 						URL url = new URL(urlBuilder.toString());
-						
+						log.debug("url={}", url);
 						
 						HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 						conn.setRequestMethod("GET");
@@ -477,7 +477,8 @@ public class CultureController {
 						});
 						Map<String, Object> response = (Map<String, Object>) map.get("response");
 						Map<String, Object> msgBody = (Map<String, Object>) response.get("msgBody");
-
+						log.debug("msgBody={}",response);
+						log.debug("response={}", msgBody);
 						
 						//결과가 한개면 오류나서 List <Map<>>이었는데 List 뺌
 							perforInfo = (Map<String, Object>) msgBody.get("perforInfo");
@@ -524,6 +525,120 @@ public class CultureController {
 		     return "/culture/likes";
 		}
 		
+		@PostMapping("/widget.do")
+	      public List<Object> cultureWidget(@AuthenticationPrincipal Member member, Model model){
+	         String id = member.getId();   
+	         
+	         List<Scrap> list = cultureService.selectCultureWidget(id);
+	          
+	           //apiCode만 쏙 빼와서 저장
+	           List<Object> resultList = new ArrayList<>();
+	           
+	           for (int i = 0; i < list.size(); i++) {
+	               String apiCode = list.get(i).getApiCode();
+	               resultList.add(apiCode);
+	           }
+	           
+	         Map<String, Object> perforInfo = null;
+	         List<Object> scrapList = new ArrayList<>();
+	         
+	           for (int i = 0; i < resultList.size(); i++) {
+	               String apiCode = resultList.get(i).toString();
+	               log.debug("apiCode={}",apiCode);
+	               
+	               try {
+	                  StringBuilder urlBuilder = new StringBuilder();
+	                  
+	                     urlBuilder = new StringBuilder
+	                           ("http://www.culture.go.kr/openapi/rest/publicperformancedisplays/d/"); 
+	               
+	                  urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8")
+	                  + "=p%2B16HHPYFEvCkanGQCoGc9CAAG7x66tc5u3xrBmJpM8avVLTGiJ%2FjJaIvItRCggk79J9k%2Byn47IjYUHr%2FdzlgA%3D%3D"); 
+	                  urlBuilder.append("&" + URLEncoder.encode("seq", "UTF-8") + "=" + URLEncoder.encode(apiCode, "UTF-8"));
+	                  
+	                  URL url = new URL(urlBuilder.toString());
+	                  
+	                  log.debug("url={}", url);
+	                  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	                  conn.setRequestMethod("GET");
+	                  conn.setRequestProperty("Content-type", "application/json");
+	                  BufferedReader rd;
+
+	                  if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+	                     rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	                  } else {
+	                     rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+	                  }
+	                  StringBuilder sb = new StringBuilder();
+	                  String line;
+	                  while ((line = rd.readLine()) != null) {
+	                     sb.append(line);
+	                  }
+	                  rd.close();
+	                  conn.disconnect();
+
+	                  // =================================================================================
+	                  // xml -> json
+
+	                  org.json.JSONObject xmlJSONObj = XML.toJSONObject(sb.toString());
+
+	                  String xmlJSONObjString = xmlJSONObj.toString();
+	                  ObjectMapper objectMapper = new ObjectMapper();
+
+	                  // map에 data담기
+	                  Map<String, Object> map = new HashMap<>();
+	                  map = objectMapper.readValue(xmlJSONObjString, new TypeReference<Map<String, Object>>() {
+	                  });
+	                  Map<String, Object> response = (Map<String, Object>) map.get("response");
+	                  Map<String, Object> msgBody = (Map<String, Object>) response.get("msgBody");
+
+	                  log.debug("response={}",response);
+	                  log.debug("msgBody={}",msgBody);
+	                  
+	                  //결과가 한개면 오류나서 List <Map<>>이었는데 List 뺌
+	                     perforInfo = (Map<String, Object>) msgBody.get("perforInfo");
+	                     log.debug("perforInfo={}",perforInfo);
+
+	                     Map<String, Object> map2 = new HashMap<>();
+	                     for (int j = 0; j < resultList.size(); j++) {
+	                        String title = perforInfo.get("title").toString();
+	                        String startDate = perforInfo.get("startDate").toString();
+	                        String endDate = perforInfo.get("endDate").toString();
+	                        String price = perforInfo.get("price").toString();
+	                        String place = perforInfo.get("place").toString();
+	                        String placeAddr = perforInfo.get("placeAddr").toString();
+	                        String realmName = perforInfo.get("realmName").toString();
+	                        String area = perforInfo.get("area").toString();
+	                        String phone = perforInfo.get("phone").toString();
+	                        String imgUrl = perforInfo.get("imgUrl").toString();
+	                           
+	                        
+	                        
+	                        map2.put("title", title);
+	                        map2.put("startDate", startDate);
+	                        map2.put("endDate", endDate);
+	                        map2.put("area", area);
+	                        map2.put("place", place);
+	                        map2.put("realmName", realmName);
+	                        map2.put("imgUrl", imgUrl);
+	                        map2.put("price", price);
+	                        map2.put("placeAddr", placeAddr);
+	                        map2.put("phone", phone);
+	                        
+	                        }
+	                     //apicode 1개의 정보
+	                     log.debug("map2={}",map2);
+	                     scrapList.add(map2);
+	               } catch (JSONException | IOException e) {
+	                  e.printStackTrace();
+	               }
+	               //scrap한 apiCode의 정보 (여러개)
+	               model.addAttribute("scrapList", scrapList);
+	               log.debug("scrapList={}",scrapList);
+	           }
+	           
+	           return scrapList;
+	      }
 		//좋아요
 		@PostMapping("/board/view/{apiCode}/likes")
 		public ResponseEntity<?> insertLikes(@RequestParam Map<String,Object> map){

@@ -93,5 +93,10 @@ public class CultureDaoImpl implements CultureDao {
 		return session.insert("culture.insertSchedule", map);
 	}
 
+	@Override
+	public List<Scrap> selectCultureWidget(String id) {
+		return session.selectList("culture.selectCultureWidget", id);
+	}
+
 	
 }
