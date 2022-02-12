@@ -18,18 +18,18 @@ public class MovieDaoImpl implements MovieDao {
 	private SqlSessionTemplate session;
 
 	@Override
-	public int checkScrap(Map<String, Object> map) {
-		return session.selectOne("movie.checkScrap", map);
+	public int checkScrap(Map<String, Object> param) {
+		return session.selectOne("movie.checkScrap", param);
 	}
 
 	@Override
-	public int insertScrap(Map<String, Object> map) {
-		return session.insert("movie.insertScrap", map);
+	public int insertScrap(Map<String, Object> param) {
+		return session.insert("movie.insertScrap", param);
 	}
 
 	@Override
-	public int deleteScrap(Map<String, Object> map) {
-		return session.delete("movie.deleteScrap", map);
+	public int deleteScrap(Map<String, Object> param) {
+		return session.delete("movie.deleteScrap", param);
 	}
 
 	@Override

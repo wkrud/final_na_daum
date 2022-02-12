@@ -51,6 +51,8 @@ public interface BoardService {
 	
 	Board selectOneRiotBoard(String code);
 
+	int insertSchedule(Map<String, Object> map);
+
 
 
 

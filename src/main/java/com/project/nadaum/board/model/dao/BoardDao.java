@@ -50,6 +50,8 @@ public interface BoardDao {
 
 	int boardLikeDelete(Map<String, Object> param);
 
+	int insertSchedule(Map<String, Object> map);
+
 	
 
 

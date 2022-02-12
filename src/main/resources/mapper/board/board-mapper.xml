@@ -15,6 +15,14 @@
 		select count(*) from board
 	</select>
 	
+	<insert id="insertSchedule">
+		insert 
+		into 
+			schedule 
+		values(concat('ri-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
+	</insert>
+	
+	
 	<insert id="insertBoard">
 		insert into 
 			board (code, title, id, content, category)

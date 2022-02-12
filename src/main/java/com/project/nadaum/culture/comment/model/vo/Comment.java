@@ -25,4 +25,9 @@ public class Comment implements Serializable {
 	private Date regDate;
 	private int star; //별점
 	private String id;
+	
+	private String nickname;
+	private String profile;
+    private String loginType;
+    private String profileStatus;
 }
