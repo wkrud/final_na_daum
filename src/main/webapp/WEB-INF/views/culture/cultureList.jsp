@@ -224,7 +224,7 @@ $(() => {
 			<div class="container">
 				<div class="row hidden-md-up">
 					<!-- api 꺼내기 위한 반복문 시작 -->
-					<c:forEach var="culture" items="${perforList}">
+					<c:forEach var="culture" items="${list}">
 						<div class="col-md-4">
 							<div class="card mb-3 shadow-sm">
 								<img src="${culture.thumbnail}"
@@ -245,6 +245,31 @@ $(() => {
 
 			</div>
 		</div>
+	</div>
+
+	<div class="paging">
+		<ul>
+			<c:if test="${page != 1}">
+				<li><a
+					href="${pageContext.request.contextPath}/culture/board/1">첫 페이지</a></li>
+			</c:if>
+			<c:if test="${page-1 != 0}">
+				<li><a
+					href="${pageContext.request.contextPath}/culture/board/${page-1}">이전
+						페이지</a></li>
+			</c:if>
+			<li>${page}/20</li>
+			<c:if test="${page+1 < 21}">
+				<li><a
+					href="${pageContext.request.contextPath}/culture/board/${page+1}">다음
+						페이지</a></li>
+			</c:if>
+			<c:if test="${page != 20}">
+				<li><a
+					href="${pageContext.request.contextPath}/culture/board/20">마지막
+						페이지</a></li>
+			</c:if>
+		</ul>
 	</div>
 </div>
 </body>
