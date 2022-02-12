@@ -13,29 +13,10 @@
  $(() => {
    $(".accept-drag").attr('draggable', 'true');
    $(".accept-drag").attr('ondragstart', 'drag(event)');
+   gameWidgetInfo();
+   todoListWidgetInfo();
+   accountbookWidgetInfo();
    
-   //정보 로딩
-   member_Id = {"member_Id" : $id};
-   $.ajax({
-		url : $contextPath+"/riot/riotWidget.do",
-	 	method : 'POST',
-	 	contentType : "application/json; charset=UTF-8",
-	 	dataType : "json",
-	 	headers : headers,
-	 	data : JSON.stringify(member_Id),
-	 	success(resp) { 
-	 		console.log(resp);
-	 		for(data in resp) {
-				let content = `
-				<p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p>
-				`
-				$(".game-widget").append(content);
-			}
-	 	}, error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
-	});
  })
 
  //드래그 이벤트
@@ -52,6 +33,26 @@ const drop = (ev) => {
    ev.preventDefault();
    var widgetName = ev.dataTransfer.getData("text");
    console.log(widgetName);
+   
+   const insertWidget = () => {
+	//내려놓을 때 db 등록
+	  	$.ajax({
+	    	url : $contextPath+"/main/insertWidget.do",
+	     	method : 'GET',
+	     	data : {
+	     		"widgetName" : widgetName
+	     	},
+	     	contentType : "application/json; charset=UTF-8",
+	     	dataType : "json",
+	     	success(data) {
+	     		console.log(data);
+	     		alert("등록 성공");
+	     	}, error(xhr, testStatus, err) {
+					console.log("error", xhr, testStatus, err);
+					alert("위젯 등록에 실패했습니다.");
+				}
+ 			});
+	}
 	
    	//피드
    if(widgetName == 'feed-widget') {
@@ -167,33 +168,9 @@ const drop = (ev) => {
    	//가계부
    else if(widgetName == 'account-widget') {
 	   if(document.querySelector('.account-widget') == null) {
+		   insertWidget();
 		   widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)"><button onclick="delWidget(`+widgetName+`)">삭제하기</button></div>`
-			  
-		   $.ajax({
-	    	url : $contextPath+"/accountbook/widget",
-	     	method : 'GET',
-	     	contentType : "application/json; charset=UTF-8",
-	     	dataType : "json",
-	     	success(data) { `
-	        <table style="margin : auto;">
-	          <tr>
-	            <td colspan="2" style="text-align : center; font-size : 20px;">${loginMember.name}님의 이번 달 미니 가계부</td>
-	          </tr>`
-	          for(const list in data) {
-	   		let accountList = `
-			  <tr>
-				<td style="font-size : 20px; text-align : center;">`+IE(list)+` : `+numberWithCommas(data[list])+`</td>   				
-	    	  </tr>
-	          }
-			</table>`
-	   	$('.account-widget').append(accountList);
-	       }
-	        
-	     	},error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
-			}
-	     });
+		   accountbookWidgetInfo();
 	   } else {
 		   alert('위젯은 하나만 생성할 수 있습니다.');
 	       return;
@@ -235,40 +212,9 @@ const drop = (ev) => {
  	//게임
  	else if(widgetName == 'game-widget') {
  		if(document.querySelector('.game-widget') == null) {
-			//내려놓을 때 db 등록
-		  	$.ajax({
-		    	url : $contextPath+"/main/insertWidget.do",
-		     	method : 'GET',
-		     	data : {
-		     		"widgetName" : widgetName
-		     	},
-		     	contentType : "application/json; charset=UTF-8",
-		     	dataType : "json",
-		     	success(data) {
-		     		console.log(data);
-		     		alert("등록 성공");
-		     	}, error(xhr, testStatus, err) {
-    					console.log("error", xhr, testStatus, err);
-    					alert("위젯 등록에 실패했습니다.");
-    				}
-     			});
-			
+			insertWidget();
 	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
-		    data = { "member_id" : $id}; 
-	        $.ajax({
-		    	url : $contextPath+"/riot/riotWidget.do",
-		     	method : 'POST',
-		     	contentType : "application/json; charset=UTF-8",
-		     	dataType : "json",
-		     	headers : headers,
-		     	data : JSON.stringify(data),
-		     	success(resp) { 
-		     		console.log(resp);
-		     	}, error(xhr, testStatus, err) {
-					console.log("error", xhr, testStatus, err);
-					alert("조회에 실패했습니다.");
-				}
-		    }); 
+		    gameWidgetInfo();
  		 
  		 } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
@@ -286,6 +232,7 @@ const drop = (ev) => {
    } 
  	//생성한 내용을 dragZone에 추가
    $("#dragZone").append(widget);
+
  }
  
  //위젯 delete
@@ -363,6 +310,81 @@ const delTodoList = (no) => {
 	 });
 	};
 
+
+//위젯 정보 로딩용
+
+//게임
+const gameWidgetInfo = () => {
+	//정보 로딩
+   member_Id = {"member_Id" : $id};
+   $.ajax({
+		url : $contextPath+"/riot/riotWidget.do",
+	 	method : 'POST',
+	 	contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+	 	headers : headers,
+	 	data : JSON.stringify(member_Id),
+	 	success(resp) { 
+	 		console.log(resp);
+	 		for(data in resp) {
+				let content = `
+				<p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p>
+				`
+				$(".game-widget").append(content);
+			}
+	 	}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	});
+}
+
+//투두리스트
+const todoListWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/main/userTodoList.do",
+		method : 'GET',
+	 	contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+	 	success(resp) {
+	 		console.log(resp);
+	 		console.log(resp.length);
+	 		for(data in resp) {
+				let content = `
+				<p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p>
+				`
+				$(".todo-widget").append(content);
+			}
+	 	}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	});
+}
+
+//가계부
+const accountbookWidgetInfo = () => {
+	$.ajax({
+    	url : $contextPath+"/accountbook/widget",
+     	method : 'GET',
+     	contentType : "application/json; charset=UTF-8",
+     	dataType : "json",
+     	success(resp) {
+			for(data in resp) {
+				let content = `
+				<p>가계부우우우우우</p><p>욜마부우우우우우우</p><p>가계부우우우우우</p><p>욜마부우우우우우우</p><p>가계부우우우우우</p><p>욜마부우우우우우우</p>
+				`
+				$(".account-widget").append(content);
+			}
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	});
+}
 	
  
 //수입 지출 변환 함수
