@@ -18,18 +18,18 @@ public class MovieDaoImpl implements MovieDao {
 	private SqlSessionTemplate session;
 
 	@Override
-	public int checkScrap(Map<String, Object> map) {
-		return session.selectOne("movie.checkScrap", map);
+	public int checkScrap(Map<String, Object> param) {
+		return session.selectOne("movie.checkScrap", param);
 	}
 
 	@Override
-	public int insertScrap(Map<String, Object> map) {
-		return session.insert("movie.insertScrap", map);
+	public int insertScrap(Map<String, Object> param) {
+		return session.insert("movie.insertScrap", param);
 	}
 
 	@Override
-	public int deleteScrap(Map<String, Object> map) {
-		return session.delete("movie.deleteScrap", map);
+	public int deleteScrap(Map<String, Object> param) {
+		return session.delete("movie.deleteScrap", param);
 	}
 
 	@Override
@@ -71,36 +71,6 @@ public class MovieDaoImpl implements MovieDao {
 	public int totalStarCount(String apiCode) {
 		return session.selectOne("movie.totalStarCount", apiCode);
 	}
-
-
-//	@Override
-//	public List<Movie> selectMovieList() {
-//		return session.selectList("movie.selectMovieList");
-//	}
-
-//	@Override
-//	public Movie selectOneMovie(String code) {
-//		return session.selectOne("movie.selectOneMovie", code);
-//	}
-
-//	@Override
-//	public List<Movie> selectMovieList(Map<String, Object> param) {
-//		int offset = (int) param.get("offset");
-//		int limit = (int) param.get("limit");
-//		RowBounds rowBounds = new RowBounds(offset, limit);
-//		return session.selectList("board.selectMovieList", null, rowBounds);
-//	}
-	
-	
-//	@Override
-//	public int selectTotalContent() {
-//		return session.selectOne("movie.selectTotalContent");
-//	}
-
-//	@Override
-//	public Movie selectOneMovieCollection(String code) {
-//		return session.selectOne("movie.selectOneMovieCollection", code);
-//	}
 
 	
 

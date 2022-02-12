@@ -7,11 +7,11 @@ import com.project.nadaum.culture.movie.model.vo.Movie;
 
 public interface MovieService {
 
-	int checkScrap(Map<String, Object> map);
+	int checkScrap(Map<String, Object> param);
 
-	int insertScrap(Map<String, Object> map);
+	int insertScrap(Map<String, Object> param);
 
-	int deleteScrap(Map<String, Object> map);
+	int deleteScrap(Map<String, Object> param);
 
 	double avgRating(String apiCode);
 
@@ -25,15 +25,6 @@ public interface MovieService {
 
 	int totalStarCount(String apiCode);
 
-//	int selectTotalContent();
-//
-//	Movie selectOneMovieCollection(String code);
-//
-//	List<Movie> selectMovieList();
-//
-//	Movie selectOneMovie(String code);
-
-//	List<Movie> selectMovieList(Map<String, Object> param);
 	
 	
 	

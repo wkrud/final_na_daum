@@ -53,11 +53,13 @@
 		select
 			*
 		from
-			comments
+			comments c
+				join member m
+				on c.id = m.id
 		where
-			api_code = #{apiCode}
+			c.api_code = #{apiCode}
 		order by 
-		    reg_date desc
+		    c.reg_date desc
 	</select>
 	
 	<select  id="selectOneComment" resultMap="CommentMap">
@@ -99,6 +101,9 @@
 		<result column="id" property="id"/>
 		<result column="api_code" property="apiCode"/>
 		<result column="star" property="star"/>
+		<result column="profile" property="profile"/>
+		<result column="login_type" property="loginType"/>
+		<result column="profile_status" property="profileStatus"/>
 	</resultMap>
 	
 </mapper>

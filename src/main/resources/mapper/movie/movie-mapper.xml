@@ -25,7 +25,7 @@
 	</select>
 	<insert id="insertScrap">
 		insert into scrap (code, id, api_code)
-		values (concat('cm-',seq_board_no.nextval), #{id}, #{apiCode}) 
+		values (concat('sm-',seq_board_no.nextval), #{id}, #{apiCode}) 
 	</insert>
 	<delete id="deleteScrap">
 		delete from scrap
