@@ -206,7 +206,7 @@ div.col>.detail {
 		         <input type="date" id="schedule-date" />
 		         <br />
 		         <br />
-		         <div>
+		        <%--  <div>
 		         	<div class="friend-list-wrap">
 						<div class="friends-list">
 							<div class="friend">
@@ -238,7 +238,7 @@ div.col>.detail {
 							</div>
 						</div>
 		         </div>
-		        </div>
+		        </div> --%>
 		        <div class="modal-footer">
 		          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 		          <button type="button" class="btn btn-primary">추가</button>
@@ -714,7 +714,7 @@ $(".btn-reply").click((e) => {
 	
 });
 
- var dest = '${loginMember.nickname}';
+ /* var dest = '${loginMember.nickname}';
 	const $search = $("#searchFriend");
 	$search.on('keyup', function(e){
 		if($search.val() != ''){
@@ -760,7 +760,7 @@ $(".btn-reply").click((e) => {
 			},
 			error: console.log
 		});
-	});
+	}); */
 
 $("#likeButton").click((e) => {
 	
