@@ -35,4 +35,6 @@ public interface CultureService {
 
 	//==========================================
 	int insertSchedule(Map<String, Object> map);
+
+	List<Scrap> selectCultureWidget(String id);
 }
