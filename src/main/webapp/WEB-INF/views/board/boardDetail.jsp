@@ -10,17 +10,10 @@
 <%@ page import="com.project.nadaum.member.model.vo.MemberEntity"%>
 <sec:authentication property="principal" var="loginMember" />
 
-<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header"
-	content="${_csrf.headerName}" />
-
-<sec:authentication property="principal" var="loginMember" />
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판상세보기" name="title" />
 </jsp:include>
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
 <sec:authentication property="principal" var="loginMember" />
 
@@ -218,7 +211,7 @@ div.col>.detail {
 						</div>
 					</div>
 		         <span>듀오신청할 친구 닉네임</span>
-		         <input type="text" name="friendId" />
+		         <input type="text" name="friendId" id="friendId" class="friendTextId"/>
 		         <br />
 		         <br />
 		     				<input type="hidden" name="apiCode" value="${board.code}" />
@@ -703,10 +696,7 @@ $(".btn-reply").click((e) => {
  $(promiseFrm).submit((e) => {
 		e.preventDefault();
 
-		const csrfHeader = "${_csrf.headerName}";
-     const csrfToken = "${_csrf.token}";
-     const headers = {};
-     headers[csrfHeader] = csrfToken;
+     
      
 			$.ajax({
 				url:`${pageContext.request.contextPath}/board/boardSchedule.do`,
@@ -716,6 +706,13 @@ $(".btn-reply").click((e) => {
 				success(resp){
 					location.reload();
 					alert(resp.msg);
+					let ranNo = Math.floor(Math.random() * 10000);
+					let code = 'riota-' + ranNo;
+					let guest = $(".friendTextId").val();
+					alert(guest);
+					let content = '';
+					content = `<a href='/nadaum/board/boardDetail.do?code=${board.code}'>${board.nickname}님이 회원님에게 듀오신청약속을 보냈습니다.</a>`
+					commonAlarmSystem(code,guest,content);
 					},
 				error: console.log
 				});
