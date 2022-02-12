@@ -62,6 +62,8 @@ public class BoardDaoImpl implements BoardDao {
 	public Board selectOneBoard(String code) {
 		return session.selectOne("board.selectOneBoard", code);
 	}
+	
+	
 
 	//여러건조회
 //	@Override
@@ -121,6 +123,12 @@ public class BoardDaoImpl implements BoardDao {
 	public int selectIdCountLikes(Map<String, Object> param) {
 		
 		return session.selectOne("board.selectIdCountLikes", param);
+	}
+
+	@Override
+	public Board selectOneRiotBoard(String code) {
+		
+		return session.selectOne("board.selectOneRiotBoard", code);
 	}
 
 	
