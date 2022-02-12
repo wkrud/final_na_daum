@@ -131,6 +131,10 @@
 		]]>
 	</select>
 
-
+	
+	<delete id="deleteFeed">
+		delete from feed where code = #{code}
+	</delete>
+	
 </mapper>
 
