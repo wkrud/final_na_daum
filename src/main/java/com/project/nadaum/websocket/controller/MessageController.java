@@ -158,6 +158,12 @@ public class MessageController {
 		template.convertAndSend("/topic/" + message.getRoom(), new Gson().toJson(message));
 	}
 	
+	@MessageMapping("/chat/commonAlarm/{guest}")
+	@SendTo("/topid/{guest}")
+	public void commonAlarm(@Payload Alarm alarm) {
+		template.convertAndSend("/topic/" + alarm.getGuest(), new Gson().toJson(alarm));
+	}
+	
 	
 	
 	
