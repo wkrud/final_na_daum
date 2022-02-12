@@ -201,11 +201,20 @@ div.col>.detail {
 		          </button>
 		        </div>
 		        <div class="modal-body">
-		        <span>제목</span>
-		        <input type="text" />
-		         <span>약속일</span>
-		         <input type="date" id="schedule-date" />
-		         <br>
+		        <div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label" >제목</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="title" name="title"
+								placeholder="제목을 입력해주세요" required>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label" >약속일</label>
+						<div class="col-sm-10">
+							<input type="date" class="form-control" id="startDate" name="startDate" required>
+						</div>
+					</div>
 		         <span>듀오신청할 친구 닉네임</span>
 		         <input type="text" name="friendId" />
 		         <br />
@@ -701,7 +710,7 @@ $(".btn-reply").click((e) => {
 				url:`${pageContext.request.contextPath}/board/boardSchedule.do`,
 				method: "POST",
 				headers : headers, 
-				data : $(scheduleFrm).serialize(),
+				data : $(promiseFrm).serialize(),
 				success(resp){
 					location.reload();
 					alert(resp.msg);
