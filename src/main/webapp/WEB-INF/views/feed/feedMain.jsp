@@ -103,8 +103,7 @@
     width: 200px;
 }
 .commentBtn{cursor: pointer;}
-.likeBtn{cursor: pointer;}
-#like{display: none;}
+
 </style>
 
 <script>
@@ -241,7 +240,8 @@ $(document).ready(function (e){
 		<div class="feedItem" id="${feed.CODE}">
 			<div class="feedHeader">
 				<div class="user" data-user="${feed.WRITER}">
-					<div class="userPic">               
+					<div class="userPic"> 
+					<a href='/nadaum/feed/socialFeed.do?id=${feed.WRITER}'>              
                         <c:if test="${feed.LOGINTYPE eq 'K'}">
                             <img src="${feed.PROFILE}" alt=""/>
                         </c:if>
@@ -255,21 +255,11 @@ $(document).ready(function (e){
                                     src="${pageContext.request.contextPath}/resources/upload/member/profile/${feed.PROFILE}"/>
                             </c:if>
                         </c:if>
+                    </a>
                     </div>
 					<div class="userInfo">
 						<div class="userNickname">${feed.NICKNAME}</div>
 						<div class="userUploadDate"><fmt:formatDate value="${feed.REGDATE}" pattern="yyyy-MM-dd"/></div>
-					</div>
-				</div>
-				<div class="moreBtn">
-					<a class="btn" role="button" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false"> <i
-						class="fa fa-ellipsis-h"></i>
-					</a>
-					<!-- dropdown-menu -->
-					<div class="dropdown-menu dropdown-menu-right"
-						aria-labelledby="dropdownMenuLink">
-						<a class="dropdown-item feedReport">신고하기</a>
 					</div>
 				</div>
 			</div>
@@ -287,11 +277,11 @@ $(document).ready(function (e){
 				<input type="hidden" class="id" value="${feed.WRITER}"/>
 					<div class="likeBtn like">
 					<input type="hidden" class="code" value="${feed.CODE}"/>
-						<c:if test="${feed.LIKEID == loginMember.id}">	
+						<c:if test="${not empty feed.LIKEID}">	
 							<label for="like"><i class="fas fa-heart"></i></label>
 							<input type="checkbox" id="like" checked/>					
 						</c:if>
-						<c:if test="${feed.LIKEID != loginMember.id}">
+						<c:if test="${empty feed.LIKEID}">
 							<label for="like"><i class="far fa-heart"></i></label>
 							<input type="checkbox" id="like" />			
 						</c:if>
@@ -343,10 +333,12 @@ const addFeedPage = (id, page) => {
 		data: {id, page},
 		success(resp){
 			const $resp = $(resp);
+			const memberId = ${loginMember.id};
 			let feedDiv = ``;	
-			memberId = ${loginMember.id};
+			let like = ``;
+			let moreBtn = ``;
 			
-			$resp.each((i,{CODE,WRITER,NICKNAME,CONTENT,REGDATE,PROFILE,FILENAME,COMMENTS,LIKES,LOGINTYPE,PROFILESTATUS,LIKEID}) => {
+			$resp.each((i,{CODE,WRITER,NICKNAME,CONTENT,REGDATE,PROFILE,FILENAME,COMMENTS,LIKES,LOGINTYPE,PROFILESTATUS,LIKECHECK}) => {
 				let rd = new Date(REGDATE);
 				feedDate = getFormatDate(rd);
 				
@@ -362,7 +354,7 @@ const addFeedPage = (id, page) => {
 					}
 				}
 				
-				if(LIKEID == memberId){
+				if(LIKECHECK == 1){
 					like = `<label for="like"><i class="fas fa-heart"></i></label>
 						<input type="checkbox" id="like" checked/>`;
 				}
@@ -370,6 +362,7 @@ const addFeedPage = (id, page) => {
 					like = `<label for="like"><i class="far fa-heart"></i></label>
 						<input type="checkbox" id="like" />`;
 				}
+				
 
 				if(FILENAME != null){
 					feedDiv = `
@@ -378,24 +371,16 @@ const addFeedPage = (id, page) => {
 							<div class="feedHeader">
 								<div class="user" data-user="\${WRITER}">
 									<div class="userPic">
-									\${profile}						
+									<a href='${pageContext.request.contextPath}/feed/socialFeed.do?id=\${WRITER}'>  
+									\${profile}	
+									</a>
 									</div>
 									<div class="userInfo">
 										<div class="userNickname">\${NICKNAME}</div>
 										<div class="userUploadDate">\${feedDate}</div>
 									</div>
 								</div>
-								<div class="moreBtn">
-									<a class="btn" role="button" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false"> <i
-										class="fa fa-ellipsis-h"></i>
-									</a>
-									<!-- dropdown-menu -->
-									<div class="dropdown-menu dropdown-menu-right"
-										aria-labelledby="dropdownMenuLink">
-										<a class="dropdown-item feedReport">신고하기</a>
-									</div>
-								</div>
+								\${moreBtn}
 							</div>
 							<div class="feedBody">
 								<div class="feedPic">
@@ -423,22 +408,13 @@ const addFeedPage = (id, page) => {
 								<div class="feedHeader">
 									<div class="user" data-user="\${WRITER}">
 										<div class="userPic">
+										<a href='${pageContext.request.contextPath}/feed/socialFeed.do?id=\${WRITER}'>  
 										\${profile}
+										</a>
 										</div>
 										<div class="userInfo">
 											<div class="userNickname">\${NICKNAME}</div>
 											<div class="userUploadDate">\${feedDate}</div>
-										</div>
-									</div>
-									<div class="moreBtn">
-										<a class="btn" role="button" data-toggle="dropdown"
-											aria-haspopup="true" aria-expanded="false"> <i
-											class="fa fa-ellipsis-h"></i>
-										</a>
-										<!-- dropdown-menu -->
-										<div class="dropdown-menu dropdown-menu-right"
-											aria-labelledby="dropdownMenuLink">
-											<a class="dropdown-item feedReport">신고하기</a>
 										</div>
 									</div>
 								</div>
@@ -466,11 +442,7 @@ const addFeedPage = (id, page) => {
 				$(".commentBtn").click((e) => {
 					feedDetailModalView(e);
 				});
-				
-				/* $("#like").click((e) => {
-					likeHtml(CODE, WRITER, NICKNAME);
-				}); */
-				
+							
 			});
 			console.log(page);
 			loading = false;
@@ -540,47 +512,7 @@ const feedDetailModalView = (e) => {
 	selectedFeed(id, code);
 };
 
-/* const likeHtml = (code, writer, guestNickname) => {
-	$("#like").on('change',function(){
-	
-		console.log('hi');
-		let ranNo = Math.floor(Math.random() * 10000);
-		let alarmCode = 'flike-' + ranNo;
-		let content = '';
-		
-		let check = '';
-		if($("#like").is(':checked')){
-			console.log($("#like").is(':checked'));
-			check = '1';
-			$("label[for='like']").html('좋아요<i class="fas fa-heart"></i>');
-			$("#like").prop("checked", true);
-			
-			content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>${guestNickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
-			sendAndInsertAlarm('I',writer,alarmCode,content);
-		}else {
-			console.log($("#like").is(':checked'));
-			check = '0';
-			$("label[for='like']").html('좋아요<i class="far fa-heart"></i>');
-			$("#like").prop("checked", false);
-		}		
-		feedLikeChange(check,code);		
-	});
-}; */
 
-/* const feedLikeChange = (check, code) => {
-	
-	$.ajax({
-		url: '/nadaum/feed/feedLikeChange.do',		
-		data: {check, code},
-		type: "POST",
-		headers: headers,
-		success(resp){
-			if(resp > 0)
-				console.log('success');
-		},
-		error: console.log
-	});
-}; */
  
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

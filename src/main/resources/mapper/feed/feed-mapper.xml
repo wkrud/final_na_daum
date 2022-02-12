@@ -96,18 +96,20 @@
 			m.nickname nickname,
 			m.profile profile,
 			m.login_type loginType,
+			m.profile_status profileStatus,
 			(select count(*) from feed_comment where f_code = f.code) comments,
-			(select count(*) from likes where code = f.code) likes
+			(select count(*) from likes where code = f.code) likes,
+			(select 1 as likeCheck from(select * from likes where id = #{id} and code = f.code)) likecheck
 		from
-			feed f left join attachment a
+			feed f 
+				left join attachment a
 				on f.code = a.code
 				left join member m
 				on f.writer = m.id 
 		order by
 			f.reg_date desc
 	</select>
-	<select id="feedMain" resultType="map">
-		<![CDATA[
+	<select id="feedMain" resultType="map">	
 		select * from
 		(select 
 			f.code code,
@@ -118,17 +120,19 @@
 			m.nickname nickname,
 			m.profile profile,
 			m.login_type loginType,
+			m.profile_status profileStatus,
 			(select count(*) from feed_comment where f_code = f.code) comments,
-			(select count(*) from likes where code = f.code) likes
+			(select count(*) from likes where code = f.code) likes,
+			(select 1 as likeCheck from(select * from likes where id = #{id} and code = f.code)) likecheck
 		from
-			feed f left join attachment a
+			feed f 
+				left join attachment a
 				on f.code = a.code
 				left join member m
 				on f.writer = m.id 
 		order by
 			f.reg_date desc)
-		where rownum <= 2
-		]]>
+		where rownum <![CDATA[<=]]> 2	
 	</select>
 
 	
