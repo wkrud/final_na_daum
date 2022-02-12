@@ -209,7 +209,7 @@ public class FeedController {
     }
 	
 	@GetMapping("/addFeedMain.do")
-	public ResponseEntity<?> addFeedMain(@RequestParam Map<String, Object> map){
+	public ResponseEntity<?> addFeedMain(@RequestParam Map<String, Object> map, Model model, @AuthenticationPrincipal Member guest){
 		log.debug("map = {}", map);
 		int page = Integer.parseInt((String) map.get("page"));
 		int limit = 2;
@@ -219,7 +219,7 @@ public class FeedController {
 		
 		List<Map<String, Object>> addFeed = feedService.addFeedMain(map);
 		log.debug("addFeed = {}", addFeed);
-		
+
 		return ResponseEntity.ok(addFeed);
 	}
 	
