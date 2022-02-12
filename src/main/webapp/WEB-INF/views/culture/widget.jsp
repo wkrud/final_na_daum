@@ -18,7 +18,7 @@ div#culture-container{width:100%; margin:0 auto;text-align:center;}
 #culture_code{
 	display:none;
 }
-.card{
+.culture-list{
 height: 300px;
 padding: 15px;
 }
