@@ -1,5 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -27,144 +26,79 @@ div#board-container label.custom-file-label {
 </style>
 
 <script>
-$(document).ready(function() {
-    $("#add").click(function() {
-    	var lastField = $(".trk-input:last");
-        var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
-        var fileWrapper = $("<div class=\"input-group mb-3 trk-input\" style=\"padding:0px; margin-bottom:15px;\" name=\"track\" id=\"track" + intId + "\"><div class=\"input-group-prepend\" style=\"padding: 0px;\"><span class=\"input-group-text\" style=\"height:38px;\">트랙"+"</span></div>");
-        fileWrapper.data("idx", intId);
-        /* var fName = $("<input type=\"text\" class=\"fieldname\" />"); */
-        
-        //트랙이름
-        /* <span class=\"input-group-text\">음원파일</span> */
-        var tName = $("<div class=\"input-group-prepend\" style=\"padding:0px;\"><input type=\"text\" name=class=\"form-control\" placeholder=\"트랙이름\"></div>");
-        
-        // file
-        var tFile = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\" name=\"trkFile\" id=\"trkFile"+intId+"\"><label for=\"trkFile"+intId+"\" class=\"custom-file-label\">파일을 선택하세요</label></div>");
-        
-        /* var fType = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\">); */
-        //삭제버튼
-        var removeButton = $("<input type=\"button\" class=\"removeAttach btn btn-xs btn-danger\" value=\"Χ\"></div>");
-        
-        removeButton.click(function() {
-            $(this).parent().remove();
-        });
-        let lastLen=$(".trk-input").length;
-        if(lastLen<11){
-        	fileWrapper.append(tName);
-        	fileWrapper.append(tFile);
-        	fileWrapper.append(removeButton);
-        	$(".trk-bg").append(fileWrapper);
-    	} else {alert("최대 10개까지만 추가 가능합니다");}
-    });
-    
-    //동적으로 현재 입력한 폼 보여주기
-    $("#preview").click(function() {
-        $("#yourform").remove();
-        var fieldSet = $("<fieldset id=\"yourform\"><legend>Your Form</legend></fieldset>");
-        $("#buildyourform div").each(function() {
-            var id = "input" + $(this).attr("id").replace("field","");
-            var label = $("<label for=\"" + id + "\">" + $(this).find("input.fieldname").first().val() + "</label>");
-            var input;
-            switch ($(this).find("select.fieldtype").first().val()) {
-                case "checkbox":
-                    input = $("<input type=\"checkbox\" id=\"" + id + "\" name=\"" + id + "\" />");
-                    break;
-                case "textbox":
-                    input = $("<input type=\"text\" id=\"" + id + "\" name=\"" + id + "\" />");
-                    break;
-                case "textarea":
-                    input = $("<textarea id=\"" + id + "\" name=\"" + id + "\" ></textarea>");
-                    break;    
-            }
-            fieldSet.append(label);
-            fieldSet.append(input);
-        });
-        $("body").append(fieldSet);
-    });
-});
 </script>
 
 <div id="board-container">
-	<form name="albumFrm"
-		action="${pageContext.request.contextPath}/audiobook/album/update?${_csrf.parameterName}=${_csrf.token}"
-		method="post" enctype="multipart/form-data"
-		onsubmit="return albumValidate();">
-		<input type="text" class="form-control" placeholder="제목" name="title"id="title" value="${albumInfo.title}" required> 
-		<input type="text" class="form-control" placeholder="제작사" name="provider" id="provider" value="${albumInfo.provider}" required> 
-		<input type="text" class="form-control" placeholder="크리에이터" name="creator" id="creator" value="${albumInfo.creator}" required> 
-		<input type="text"class="form-control" placeholder="장르" name="kind" id="kind" value="${albumInfo.kind}" required>
-		<input type="text" class="form-control" placeholder="코드" name="code" id="code" value="${albumInfo.code}" required readonly>
-		
-	<c:forEach items="${oldAlbumImgList}" var="img" varStatus="status">
-		<c:choose>
-			<c:when test="${not empty oldAlbumImgList && null ne oldAlbumImgList}">
-				<div class="input-group mb-3 al-cover"style="padding: 0px; margin-bottom: 15px;">
-					<div class="input-group-prepend" style="padding: 0px;">
-						<span class="input-group-text">앨범커버</span>
-					</div>
-				<div class="custom-file">
-					<input type="file" class="custom-file-input" name="imgFile" id="imgFile"> 
-					<label class="custom-file-label"for="imgFile">${img.originalFilename}</label>
-				</div>
-				</div>
-			</c:when>
-			<c:otherwise>
-				<div class="input-group mb-3 al-cover" style="padding: 0px; margin-bottom:15px;">
-					<div class="input-group-prepend" style="padding: 0px;">
-						<span class="input-group-text" >앨범커버</span>
-					</div>
-					<div class="custom-file">
-						<input type="file" class="custom-file-input" name="imgFile" id="imgFile"> 
-						<label class="custom-file-label" for="imgFile">파일을 선택하세요</label>
-					</div>
-				</div>
-			</c:otherwise>
-		</c:choose>
-	</c:forEach>
-			
-	<c:forEach items="${oldAlbumTrackList}" var="track" varStatus="status">
-		<div class="input-group mb-3 trk-input"
-			style="padding: 0px; margin-bottom: 15px;" name="track"
-			id="track${status.index}">
-			<div class="input-group-prepend" style="padding: 0px;">
-				<span class="input-group-text" style="height: 38px;">트랙</span>
-			</div>
-			<div class="input-group-prepend" style="padding: 0px;">
-				<input type="text" name="track name" class="form-control"
-					placeholder="트랙이름">
-			</div>
-			<div class="custom-file">
-				<input type="file" class="custom-file-input" name="trkFile"
-					id="trkFile${status.index}"> 
-				<label for="trkFile${status.index}" class="custom-file-label">${track.originalFilename} </label>
-			</div>
-			<input type="button" class="removeAttach btn btn-xs btn-danger"
-				value="Χ">
-		</div>
-	</c:forEach>
-	<div class="input-gruop-prepend" style="padding: 0px;">
-		<input type="button" value="트랙추가" class="add" id="add" />
-	</div>
+	<form name="albumFrm" action="${pageContext.request.contextPath}/audiobook/album/updateTest?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data" onsubmit="return albumValidate();">
+		<input type="text" class="form-control" placeholder="코드" name="code" id="code" value="${oldAlbumInfo.code}" required readonly> 
+		<input type="text" class="form-control" placeholder="제목" name="title" id="title" value="${oldAlbumInfo.title}" required> 
+		<input type="text" class="form-control" placeholder="제작사" name="provider" id="provider" value="${oldAlbumInfo.provider}" required> 
+		<input type="text" class="form-control" placeholder="크리에이터" name="creator" id="creator" value="${oldAlbumInfo.creator}" required> 
+		<input type="text" class="form-control" placeholder="장르" name="kind" id="kind" value="${oldAlbumInfo.kind}" required> 
+		<input type="text" class="form-control" placeholder="뮤직비디오링크" name="mvLink" value="${oldAlbumInfo.mvLink}" id="mvLink">
 
-	
-	<textarea class="form-control" name="content" placeholder="내용"required>
+		<c:forEach items="${oldImgList}" var="img" varStatus="status">
+			<c:choose>
+				<c:when test="${not empty oldImgList && null ne oldImgList}">
+					<div class="input-group mb-3 al-cover" style="padding: 0px; margin-bottom: 15px;">
+						<div class="input-group-prepend" style="padding: 0px;">
+							<span class="input-group-text">앨범커버</span>
+						</div>
+						<div class="custom-file">
+							<input type="file" class="custom-file-input" name="imgFile" id="imgFile"> 
+							<label class="custom-file-label" for="imgFile">${img.originalFilename}</label>
+							<%--<input type="hidden"  name="imgOriginalFileName" id="imgOriginalFileName${status.index}" value="${img.originalFilename}" readonly>
+							<input type="hidden"  name="imgRenamedFileName" id="imgRenamedFileName${status.index}" value="${img.renamedFilename}" readonly> --%>
+						</div>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="input-group mb-3 al-cover" style="padding: 0px; margin-bottom: 15px;">
+						<div class="input-group-prepend" style="padding: 0px;">
+							<span class="input-group-text">앨범커버</span>
+						</div>
+						
+						<div class="custom-file">
+							<input type="file" class="custom-file-input" name="imgFile" id="imgFile" required> 
+							<label class="custom-file-label" for="imgFile">파일을 선택하세요</label>
+						</div>
+					</div>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		
+		<c:forEach items="${oldTrackList}" var="track" varStatus="status">
+			<div class="input-group mb-3 trk-input" style="padding: 0px; margin-bottom: 15px;" name="track" id="track${status.index}">
+				<div class="input-group-prepend" style="padding: 0px;">
+					<span class="input-group-text" style="height: 38px;">트랙</span>
+				</div>
+				<div class="custom-file">
+					<%--<input type="file" class="custom-file-input" name="trkFile" id="trkFile${status.index}" readonly>--%>
+					<input type="hidden"  name="trkOriginalFileName" id="trkOriginalFileName${status.index}" value="${track.originalFilename}" >
+					<input type="hidden"  name="trkRenamedFileName" id="trkRenamedFileName${status.index}" value="${track.renamedFilename}" > 
+					<label for="trkFile${status.index}" class="custom-file-label">${track.originalFilename}</label>
+				</div>
+				<input type="button" class="removeAttach btn btn-xs btn-danger" value="Χ">
+			</div>
+		</c:forEach>
+		<div class="input-group trk-bg" style ="margin-bottom:15px; padding:0px;"></div>
+		<div class="input-group-prepend justify-content-center" style="padding: 0px;text-align:center;">
+			<input type="button" value="트랙추가" class="add" id="add" />
+		</div>
+		
+		<textarea class="form-control" name="content" placeholder="내용" required>
 		<c:if test="${not empty albumInfo.content}">
 			${albumInfo.content}
 		</c:if>
 	</textarea>
-	<br/> 
-	<input type="hidden" name="${_csrf.parameterName}"
-		value="${_csrf.token}" /> 
-	<input type="submit"
-		class="btn btn-outline-success" value="수정">
+		<br /> <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> <input type="submit" class="btn btn-outline-success" value="수정">
 	</form>
 </div>
 
 
 
 <script>
-
+    
 function albumValidate(){
 	
 	var $content = $("[name=content]");
@@ -173,18 +107,20 @@ function albumValidate(){
 		return false;
 	}
 	if(!trackValid()){
+		alert("잘못된 확장자입니다.");
 		return false;
 	}
 	if(!imgValid()){
+		alert("잘못된 확장자입니다.");
 		return false;
 	}
 	return true;
 }
 
-const trackValid = function trackValid(){
+/* const trackValid = function trackValid(){
 	var $trkFile =$("[name=trkFile]");
 	console.log($trkFile.val());
-	/* for(int i=0; i<trkFile.length;i++){
+	 for(int i=0; i<trkFile.length;i++){
 		const file = $(trkFile).prop('files')[i];
 		let fileLen = file.name.length;
 		console.log(fileLen);
@@ -195,12 +131,12 @@ const trackValid = function trackValid(){
 		console.log(check); 
 		validArr.push(check);
 		console.log(check);
-	} */
+	}  
 	return check;
-}
+} */
 
 /*img파일은 확장성을 위해 list로 받았지만 현재는 front에서 단일파일입력으로 정책설정*/
-
+/*
 const imgValid = function imgValid(){
 	var $imgFile = $("[name=imgFile]");
 	const file1 = $(imgFile).prop('files')[0];
@@ -216,7 +152,7 @@ const imgValid = function imgValid(){
 	console.log(check1);
 	validArr.push(check1);
 	return check1;
-}
+} */
 
 /* const fnValid = function fileNameValid(){
 	$("[id=upFile1]").change((e) => {
@@ -234,6 +170,7 @@ const imgValid = function imgValid(){
 	});
 } */
 
+
 $(() => {
 	/**
 	 * 파일명 표시하기
@@ -248,7 +185,6 @@ $(() => {
 			$label.html(file.name);
 		else
 			$label.html("파일을 선택하세요.");
-		
 		if($label.html!="파일을 선택하세요."){
 			console.log(file.name);	
 		}
@@ -256,68 +192,80 @@ $(() => {
 	});
 	
 	
-	$(document).on('click','input[id=add]',function(){
-		console.log(this);
-		var lastField = $(".trk-input:last");
-		console.log(lastField.attr());
-        var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
-        var fileWrapper = $("<div class=\"input-group mb-3 trk-input\" style=\"padding:0px; margin-bottom:15px;\" name=\"track\" id=\"track" + intId + "\"><div class=\"input-group-prepend\" style=\"padding: 0px;\"><span class=\"input-group-text\" style=\"height:38px;\">트랙"+"</span></div>");
-        fileWrapper.data("idx", intId);
-        /* var fName = $("<input type=\"text\" class=\"fieldname\" />"); */
-        
-        //트랙이름
-        /* <span class=\"input-group-text\">음원파일</span> */
-        var tName = $("<div class=\"input-group-prepend\" style=\"padding:0px;\"><input type=\"text\" name=class=\"form-control\" placeholder=\"트랙이름\"></div>");
-        
-        // file
-        var tFile = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\" name=\"trkFile\" id=\"trkFile"+intId+"\"><label for=\"trkFile"+intId+"\" class=\"custom-file-label\">파일을 선택하세요</label></div>");
-        
-        /* var fType = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\">); */
-        //삭제버튼
-        var removeButton = $("<input type=\"button\" class=\"removeAttach btn btn-xs btn-danger\" value=\"Χ\"></div>");
-        
-        removeButton.click(function() {
-            $(this).parent().remove();
-        });
-        
-        let lastLen=$("input.trk-input").length;
-        if(lastLen<11){
-        	fileWrapper.append(tName);
-        	fileWrapper.append(tFile);
-        	fileWrapper.append(removeButton);
-        	$(".trk-bg").append(fileWrapper);
-    	} else {alert("최대 10개까지만 추가 가능합니다");} 
+	$(document).on({'click':function(e){
+		console.log($(e.target).prop('tagName'));
+		console.log($(e.target));
+		console.log($(e.target).prop('value')); 
+		var removeBtn='Χ';
+		var addBtn='트랙추가'
+		if(removeBtn===$(e.target).prop('value')){
+			console.log('it is removeBtn');
+			let remove = $(e.target).prop('value');
+			let $parent = $(e.target).prop('parentElement');
+			console.log($parent);
+			console.log(remove);
+			$parent.remove();
+			
+		} else if(addBtn==$(e.target).prop('value')){
+			/* console.log('it is add Btn'); 
+			let $parent = $(e.target).prop('parentElement');
+			/* console.log(parent); */
+			let lastLen=$(".trk-input").length; 
+			if(lastLen==0){
+	    		$(".custom-file").append(fileWrapper);
+	    		
+	    		var nextNum = 0;
+	    		var fileWrapper = $("<div class=\"input-group mb-3 trk-input\" style=\"padding:0px; margin-bottom:15px;\" name=\"track\" id=\"track" + nextNum + "\"><div class=\"input-group-prepend\" style=\"padding: 0px;\"><span class=\"input-group-text\" style=\"height:38px;\">트랙"+"</span></div>");
+	 	        fileWrapper.data("idx",nextNum);
+	 	        console.log(fileWrapper);
+	 	        var tFile = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\" name=\"trkFile\" id=\"trkFile"+nextNum+"\"><label for=\"trkFile"+nextNum+"\" class=\"custom-file-label\">파일을 선택하세요</label></div>");
+	 	        var removeButton = $("<input type=\"button\" class=\"removeAttach btn btn-xs btn-danger\" value=\"Χ\"></div>");
+ 				//fileWrapper.append(tName);
+	        	fileWrapper.append(tFile);
+	        	fileWrapper.append(removeButton);
+	        	/* console.log(fileWrapper); */
+	        	console.log($(".trk-bg"));
+	        	$(".trk-bg:last").append(fileWrapper);
+		    	return;
+			}
+			
+			var lastField = $(".trk-input:last");
+			/* console.log(lastField); */
+			/* console.log(lastField.prop('id')); */
+			/* console.log(typeof(lastField.prop('id'))); */
+			var curId= lastField.attr('id');
+			/* console.log(curId); */
+			var curNum=Number(curId.substr(5));
+			/* console.log(curNum); */
+	        var nextNum = (null||''||undefined)!=curNum?(curNum+ 1):1;
+	        console.log(nextNum);
+	        
+	        var fileWrapper = $("<div class=\"input-group mb-3 trk-input\" style=\"padding:0px; margin-bottom:15px;\" name=\"track\" id=\"track" + nextNum + "\"><div class=\"input-group-prepend\" style=\"padding: 0px;\"><span class=\"input-group-text\" style=\"height:38px;\">트랙"+"</span></div>");
+	        fileWrapper.data("idx",nextNum);
+	        console.log(fileWrapper);
+	        var tFile = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\" name=\"trkFile\" id=\"trkFile"+nextNum+"\"><label for=\"trkFile"+nextNum+"\" class=\"custom-file-label\">파일을 선택하세요</label></div>");
+	        var removeButton = $("<input type=\"button\" class=\"removeAttach btn btn-xs btn-danger\" value=\"Χ\"></div>");
+	        
+	        removeButton.click(function() {
+	            $(this).parent().remove();
+	        });
+	        
+	        lastLen=$(".trk-input").length;
+	        /* console.log(lastLen); */
+	        if(lastLen<11&&lastLen>0){
+	        	//fileWrapper.append(tName);
+	        	fileWrapper.append(tFile);
+	        	fileWrapper.append(removeButton);
+	        	/* console.log(fileWrapper); */
+	        	console.log($(".trk-bg"));
+	        	$(".trk-bg:last").append(fileWrapper);
+	    	} else {
+	    		alert("최대 10개까지만 추가 가능합니다");
+	    	}
+		}		
+		/* const file = $(e.target).prop('files')[0]; */
+		}
 	});
-	
-	$("#add").click(function() {
-    	var lastField = $(".trk-input:last");
-        var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
-        var fileWrapper = $("<div class=\"input-group mb-3 trk-input\" style=\"padding:0px; margin-bottom:15px;\" name=\"track\" id=\"track" + intId + "\"><div class=\"input-group-prepend\" style=\"padding: 0px;\"><span class=\"input-group-text\" style=\"height:38px;\">트랙"+"</span></div>");
-        fileWrapper.data("idx", intId);
-        /* var fName = $("<input type=\"text\" class=\"fieldname\" />"); */
-        
-        //트랙이름
-        /* <span class=\"input-group-text\">음원파일</span> */
-        var tName = $("<div class=\"input-group-prepend\" style=\"padding:0px;\"><input type=\"text\" name=class=\"form-control\" placeholder=\"트랙이름\"></div>");
-        
-        // file
-        var tFile = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\" name=\"trkFile\" id=\"trkFile"+intId+"\"><label for=\"trkFile"+intId+"\" class=\"custom-file-label\">파일을 선택하세요</label></div>");
-        
-        /* var fType = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\">); */
-        //삭제버튼
-        var removeButton = $("<input type=\"button\" class=\"removeAttach btn btn-xs btn-danger\" value=\"Χ\"></div>");
-        
-        removeButton.click(function() {
-            $(this).parent().remove();
-        });
-        /* let lastLen=$(".trk-input").length; */
-        if(intId<11){
-        	fileWrapper.append(tName);
-        	fileWrapper.append(tFile);
-        	fileWrapper.append(removeButton);
-        	$(".trk-bg").append(fileWrapper);
-    	} else {alert("최대 10개까지만 추가 가능합니다");}
-    });
 	
 	
 	$(document).on({'change':function(e) {
@@ -354,8 +302,6 @@ $(() => {
 		}
 	});
 	
-	
-	
 	//검증
 	$("[id=imgFile]").change((e) => {
 		const file1 = $(e.target).prop('files')[0];
@@ -387,7 +333,6 @@ $(() => {
 		console.log(check2); 
 		return check2;
 	});
-
 });
 </script>
 

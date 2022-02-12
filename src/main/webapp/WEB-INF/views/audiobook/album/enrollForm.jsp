@@ -105,8 +105,8 @@ $(document).ready(function() {
 			</div>
 			<div class="custom-file">
 				<input type="file" class="custom-file-input" name="imgFile"
-					id="imgFile" required> <label class="custom-file-label"
-					for="imgFile">파일을 선택하세요</label>
+					id="imgFile" required> 
+				<label class="custom-file-label" for="imgFile">파일을 선택하세요</label>
 			</div>
 		</div>
 		<div class="input-group trk-bg" style ="margin-bottom:15px; padding:0px;"></div>
@@ -120,7 +120,7 @@ $(document).ready(function() {
 					for="upFile2">파일을 선택하세요</label>
 			</div>
 		</div> -->
-		<div class="input-gruop-prepend" style="padding: 0px;">
+		<div class="input-group-prepend justify-content-center" style="padding: 0px;text-align:center;">
 			<input type="button" value="트랙추가" class="add" id="add" />
 		</div>
 

@@ -90,6 +90,7 @@ input[id="switch"] {
 	<div id="container">
 		<header>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
 				<div class="container-fluid">
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
@@ -105,8 +106,7 @@ input[id="switch"] {
 					</div>
 				</div>
 				<ul class="navbar-nav justify-content-end">
-					<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<sec:authorize access="isAuthenticated()">
 								<a class="dropdown-item" href="${pageContext.request.contextPath}/main/main.do">메인</a>
@@ -128,8 +128,7 @@ input[id="switch"] {
 								<a class="dropdown-item" href="${pageContext.request.contextPath}/riot/riotheader.do">롤전적</a>
 								<a class="dropdown-item" href="${pageContext.request.contextPath}/audiobook/">오디오북</a>
 							</sec:authorize>
-						</div>
-						</li>
+						</div></li>
 				</ul>
 				<ul class="navbar-nav justify-content-end">
 					<li class="nav-item">
@@ -139,10 +138,8 @@ input[id="switch"] {
 					</li>
 				</ul>
 				<ul class="navbar-nav justify-content-end">
-					<form class="d-flex">
-						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-dark" type="submit">Search</button>
-					</form>
+
+
 					<button id="profile" type="button" class="btn btn-primary position-relative bg-light border-light rounded-circle">
 						<svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github">
 						    <path fill-rule="evenodd"
@@ -150,12 +147,17 @@ input[id="switch"] {
 					</svg>
 						<!-- <span id="bg-alarm" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 9 </span> -->
 					</button>
+
 				</ul>
+				<form name="subSearchFrm" action="${pageContext.request.contextPath}/audiobook/search/list/select?" method="get" class="subSearchFrm navbar-nav justify-content-end">
+					<input id="search" type="search" name="searchType" value="content" hidden /> 
+					<input id="searh" class="form-control me-2" type="search" name="searchKeyword" placeholder="Search" aria-label="Search">
+					<button class="btn btn-dark" type="submit">Search</button>
+				</form>
 				<ul class="navbar-nav justify-content-end">
-					<li class="nav-item">
-					
-					</li>
+					<li class="nav-item"></li>
 				</ul>
+
 				<ul class="navbar-nav justify-content-end">
 					<li class="nav-item">
 						<%-- <form action="${pageContext.request.contextPath}/member/memberLogout.do">
@@ -166,8 +168,7 @@ input[id="switch"] {
 						<path d="M14 7V5.1736C14 4.00352 12.9999 3.08334 11.8339 3.18051L3.83391 3.84717C2.79732 3.93356 2 4.80009 2 5.84027V18.1597C2 19.1999 2.79733 20.0664 3.83391 20.1528L11.8339 20.8195C12.9999 20.9167 14 19.9965 14 18.8264V17" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 							</svg>
 					</a>
-					</form> --%>
-						<%-- <form name="logoutFrm" method="POST" action="${pageContext.request.contextPath}/member/memberLogout.do">
+					</form> --%> <%-- <form name="logoutFrm" method="POST" action="${pageContext.request.contextPath}/member/memberLogout.do">
 							<button id="sign-out" class="nav-link" type="submit">
 								<i class="fas fa-sign-out-alt"></i>
 							</button>
@@ -180,11 +181,9 @@ input[id="switch"] {
 
 		</header>
 		<script>
-
 			$("#profile").click(function() {
 				location.href
 			});
-			
 
 			/* 비동기 통신할 영역
 			    - 알람보낼부분이 없거나 사용자 클릭시 .css("display","none");
@@ -193,6 +192,5 @@ input[id="switch"] {
 			 */
 
 			/*비동기 통신하고 알람영역 보이게 할때 다음 함수 적용하세요  */
-			
 		</script>
 		<section id="content">

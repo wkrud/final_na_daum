@@ -44,10 +44,14 @@ public interface AlbumService {
 	int insertAlbumTrack(AlbumTrack altrk);
 
 	int insertAlbumTracks(List<AlbumTrack> list);
+	
+	int updateAlbumTrackList(List<AlbumTrack> newAlbumTrackList);
 
 	int updateAlbumTrack(AlbumTrack altrk);
 
-	int deleteAlbumTrack(int[] no);
+	int deleteAlbumTracks(int[] delArray);
+	
+	int deleteAllAlbumTracks(String code);
 
 	AlbumTrack selectOneAlbumTrack(Map<String, Object> param);
 
@@ -63,11 +67,15 @@ public interface AlbumService {
 
 	int updateAlbumImg(AlbumImg attach);
 
+	int updateAlbumImgList(List<AlbumImg> newAlbumImgList);
+
 	int deleteAlbumImg(AlbumImg attach);
 
 	AlbumImg selectOneAlbumImg(AlbumImg imgAttach);
 
 	List<AlbumImg> selectListAlbumImg(String code);
+	
+	int deleteAllAlbumImgs(String code);
 
 	// Album Comment
 
@@ -100,5 +108,11 @@ public interface AlbumService {
 	List<Map<String, Object>> selectListAlbumInfoByKindMain(String string);
 
 	List<Map<String, Object>> selectListAlbumInfoRecentMain();
+
+	
+
+	
+
+	
 
 }

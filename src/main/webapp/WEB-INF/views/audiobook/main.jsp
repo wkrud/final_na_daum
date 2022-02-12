@@ -134,7 +134,9 @@ span{
 				<div class="card h-100">
 					<input id="code" name="code" type="hidden" value="${album.code}" />
 					<%-- <img src="resources/upload/audiobook/img/${album.renamedFilename}"  class="card-img-top" alt=""> --%>
-					<a href="${pageContext.request.contextPath}/audiobook/detail?code=${album.code}"><img src="${contextPath}${imgPath}${album.renamedFilename}" class="card-img-top" alt=""></a>
+					<a href="${pageContext.request.contextPath}/audiobook/detail?code=${album.code}">
+					<img src="${contextPath}${imgPath}${album.renamedFilename}" class="card-img-top" alt="">
+					</a>
 					<div class="card-body">
 						<h5 class="card-title"><span> ${album.title}</span></h5>
 						<p class="card-text"></p>
@@ -151,7 +153,9 @@ span{
 				<div class="card h-100">
 					<input id="code" name="code" type="hidden" value="${album.code}" />
 					<%-- <img src="resources/upload/audiobook/img/${album.renamedFilename}"  class="card-img-top" alt=""> --%>
-					<a href="${pageContext.request.contextPath}/audiobook/detail?code=${album.code}"><img src="${contextPath}${imgPath}${album.renamedFilename}" class="card-img-top" alt=""></a>
+					<a href="${pageContext.request.contextPath}/audiobook/detail?code=${album.code}">
+					<img src="${contextPath}${imgPath}${album.renamedFilename}" class="card-img-top" alt="">
+					</a>
 					<div class="card-body">
 						<h5 class="card-title"><span>${album.title}</span></h5>
 						<p class="card-text"></p>

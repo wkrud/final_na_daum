@@ -92,31 +92,49 @@
 	<!--트랙-->
 	<insert id="insertAlbumTrack" parameterType="albumTrack">
 		insert into
-			album_track(no, album_code, original_filename, renamed_filename, time_stamp)
+			album_track(no, album_code, original_filename, renamed_filename)
 		values(
 			seq_album_track_no.nextval,
 			#{albumCode},
 			#{originalFilename},
-			#{renamedFilename},
-			#{timeStamp}
+			#{renamedFilename}
 		)
 	</insert>
 	
 	<!--배치 -->
 	<insert id="insertAlbumTracks">
+		<foreach collection="list" item="track" >
 		insert into
-			album_track(no,album_code,original_filename,renamed_filename, time_stamp)
-		<foreach collection="list" item="track" separator=",">
-			values(seq_album_track_no.nextval,#{track.albumCode},#{track.originalFilename},#{track.renamedFilename},#{track.timeStamp})
+			album_track(no, album_code, original_filename, renamed_filename)
+		values
+		(
+			seq_album_track_no.nextval,
+			'${track.albumCode}',
+			'${track.originalFilename}',
+			'${track.renamedFilename}'
+		),
 		</foreach>;
 	</insert>
+	<!-- 작동안된 부분 
+	<insert id="insertAlbumTracks">
+		insert into
+			album_track(no, album_code, original_filename, renamed_filename)
+		
+		<foreach collection="list" item="track" separator=",">
+		values (
+			seq_album_track_no.nextval,
+			'${track.albumCode}',
+			'${track.originalFilename}',
+			'${track.renamedFilename}'
+		)
+		</foreach>
+	</insert> -->
 	
 	<update id="updateAlbumTrack">
 		update album_track set
 		 album_code=#{albumCode},
 		 original_filename=#{originalFilename},
 		 renamed_filename=#{renamedFilename},
-		 time_stamp=#{timeStamp},
 		 status=#{status}
 		where no=#{no}
 	</update>
@@ -128,14 +146,36 @@
 			 no = #{no}
 	</delete>
 	
-	<delete id="deleteAlbumTracks">
+	<delete id="deleteAlbumTrackByCode">
+		delete from
+			album_track
+		where
+			album_code =#{albumCode}
+	</delete>
+	
+	 <delete id="deleteAlbumTracks">
+		<foreach collection="list" separator=";">
 		delete from 
 			album_track 
-		<where>
-			<foreach collection="delArray" item="no" separator=",">
-			 no = #{no}
+		where
+			 no = #{list.no} 
 			</foreach>
-		</where> 
+	</delete> 
+	
+	<!-- <delete id="deleteAlbumTracks">
+		<foreach collection="array" item="no" index="index" separator=";">
+		delete from
+			album_track
+		where
+			no=#{array[index]}		
+		</foreach>
+	</delete> -->
+	
+	<delete id="deleteAllAlbumTracks">
+		delete from
+			album_track
+		where
+			album_code=#{code}
 	</delete>
 	
 	<select id= "selectOneAlbumTrack" resultType="albumTrack">
@@ -170,11 +210,11 @@
 	
 	<!--# problem 배치 -->
 	<insert id="insertAlbumImgs">
+		<foreach collection="list" item="img" separator=";">
 		insert into album_img (no,album_code, original_filename, renamed_filename)
 		values
-		<foreach collection="list" item="img" separator=",">
 			(seq_album_img_no.nextval,#{img.albumCode},#{img.originalFilename},#{img.renamedFilename})
-		</foreach>;
+		</foreach>
 	</insert>
 	
 	<update id="updateAlbumImg" parameterType="albumImg">
@@ -184,7 +224,6 @@
 			album_code=#{albumCode},
 		 	original_filename=#{originalFilename},
 		 	renamed_filename=#{renamedFilename},
-		 	time_stamp=#{timeStamp},
 		 	status=#{status}
 			where no=#{no}
 	</update>
@@ -196,7 +235,6 @@
 			album_code=#{albumCode},
 		 	original_filename=#{originalFilename},
 		 	renamed_filename=#{renamedFilename},
-		 	time_stamp=#{timeStamp},
 		 	status=#{status}
 			where no=#{no}
 		</foreach>
@@ -217,6 +255,20 @@
 			no=#{img.no}		
 		</foreach>
 		</where>
+	</delete>
+	
+	<delete id="deleteAlbumImgByCode">
+		delete from
+			album_img
+		where
+			album_code =#{albumCode}
+	</delete>
+	
+	<delete id="deleteAllAlbumImgs">
+		delete from
+			album_img
+		where
+			album_code =#{code}
 	</delete>
 	
 	<select id="selectOneAlbumImg" parameterType="albumImg">
