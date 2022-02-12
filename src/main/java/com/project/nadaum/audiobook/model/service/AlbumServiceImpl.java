@@ -72,10 +72,15 @@ public class AlbumServiceImpl implements AlbumService {
 
 	@Override
 	public int updateAlbum(Album album) {
-		int result = albumDao.updateAlbumInfo((AlbumInfo) album);
-		result = albumDao.updateAlbumImgs(album.getAlbumImgs());
-		result = albumDao.updateAlbumTracks(album.getAlbumTracks());
-		return result;
+		int result1 = albumDao.updateAlbumInfo((AlbumInfo) album);
+		int result2 = albumDao.updateAlbumImgs(album.getAlbumImgs());
+		int result3 = albumDao.updateAlbumTracks(album.getAlbumTracks());
+		if(1==result1&&1==result2&&1==result3) 
+			return 1;
+		else { 
+			//rollback 처리 필요 
+			return 0;
+		}
 	}
 
 	@Override
@@ -117,8 +122,13 @@ public class AlbumServiceImpl implements AlbumService {
 	}
 
 	@Override
-	public int deleteAlbumTrack(int[] no) {
-		return albumDao.deleteAlbumTrack(no);
+	public int deleteAlbumTracks(int[] delArray) {
+		return albumDao.deleteAlbumTracks(delArray);
+	}
+	
+	@Override
+	public int deleteAllAlbumTracks(String code) {
+		return albumDao.deleteAllAlbumTracks(code);
 	}
 
 	@Override
@@ -150,6 +160,11 @@ public class AlbumServiceImpl implements AlbumService {
 	@Override
 	public int deleteAlbumImg(AlbumImg imgAttach) {
 		return albumDao.deleteAlbumImg(imgAttach);
+	}
+	
+	@Override
+	public int deleteAllAlbumImgs(String code) {
+		return albumDao.deleteAllAlbumImgs(code);
 	}
 
 	@Override
@@ -234,5 +249,40 @@ public class AlbumServiceImpl implements AlbumService {
 	public List<Map<String, Object>> selectListAlbumInfoRecentMain() {
 		return albumDao.selectListAlbumInfoRecentMain();
 	}
+
+	@Override
+	public int updateAlbumTrackList(List<AlbumTrack> newAlbumTrackList) {
+		
+		int result1=0;
+		int result2=0;
+		try {
+			if(null==newAlbumTrackList.get(0).getAlbumCode()) 
+				return 1;
+			result1 = albumDao.deleteAlbumTrackByCode(newAlbumTrackList.get(0).getAlbumCode());
+			result2 = albumDao.insertAlbumTracks(newAlbumTrackList);
+		} catch (Exception e) {
+			log.debug("error={}","오류");
+		}
+		return 1==result1&&1==result2?1:0;
+	}
+
+	@Override
+	public int updateAlbumImgList(List<AlbumImg> newAlbumImgList) {
+		int result1=0;
+		int result2=0;
+		try {
+			if(null==newAlbumImgList.get(0).getAlbumCode()) 
+				return 1;
+			result1 = albumDao.deleteAlbumImgByCode(newAlbumImgList.get(0).getAlbumCode());
+			result2 = albumDao.insertAlbumImgs(newAlbumImgList);
+		} catch (Exception e) {
+			log.debug("error={}","오류");
+		}
+		return 1==result1&&1==result2?1:0;
+	}
+
+	
+
+	
 
 }

@@ -29,10 +29,13 @@ div#board-container label.custom-file-label {
 </script>
 
 <div id="board-container">
-	<form name="albumFrm" action="${pageContext.request.contextPath}/audiobook/album/update?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data" onsubmit="return albumValidate();">
-		<input type="text" class="form-control" placeholder="코드" name="code" id="code" value="${oldAlbumInfo.code}" required readonly> <input type="text" class="form-control" placeholder="제목" name="title" id="title" value="${oldAlbumInfo.title}" required> <input type="text"
-			class="form-control" placeholder="제작사" name="provider" id="provider" value="${oldAlbumInfo.provider}" required> <input type="text" class="form-control" placeholder="크리에이터" name="creator" id="creator" value="${oldAlbumInfo.creator}" required> <input type="text" class="form-control"
-			placeholder="장르" name="kind" id="kind" value="${oldAlbumInfo.kind}" required> <input type="text" class="form-control" placeholder="뮤직비디오링크" name="mvLink" value="${oldAlbumInfo.mvLink}" id="mvLink">
+	<form name="albumFrm" action="${pageContext.request.contextPath}/audiobook/album/updateTest?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data" onsubmit="return albumValidate();">
+		<input type="text" class="form-control" placeholder="코드" name="code" id="code" value="${oldAlbumInfo.code}" required readonly> 
+		<input type="text" class="form-control" placeholder="제목" name="title" id="title" value="${oldAlbumInfo.title}" required> 
+		<input type="text" class="form-control" placeholder="제작사" name="provider" id="provider" value="${oldAlbumInfo.provider}" required> 
+		<input type="text" class="form-control" placeholder="크리에이터" name="creator" id="creator" value="${oldAlbumInfo.creator}" required> 
+		<input type="text" class="form-control" placeholder="장르" name="kind" id="kind" value="${oldAlbumInfo.kind}" required> 
+		<input type="text" class="form-control" placeholder="뮤직비디오링크" name="mvLink" value="${oldAlbumInfo.mvLink}" id="mvLink">
 
 		<c:forEach items="${oldImgList}" var="img" varStatus="status">
 			<c:choose>
@@ -42,7 +45,10 @@ div#board-container label.custom-file-label {
 							<span class="input-group-text">앨범커버</span>
 						</div>
 						<div class="custom-file">
-							<input type="file" class="custom-file-input" name="imgFile" id="imgFile"> <label class="custom-file-label" for="imgFile">${img.originalFilename}</label>
+							<input type="file" class="custom-file-input" name="imgFile" id="imgFile"> 
+							<label class="custom-file-label" for="imgFile">${img.originalFilename}</label>
+							<%--<input type="hidden"  name="imgOriginalFileName" id="imgOriginalFileName${status.index}" value="${img.originalFilename}" readonly>
+							<input type="hidden"  name="imgRenamedFileName" id="imgRenamedFileName${status.index}" value="${img.renamedFilename}" readonly> --%>
 						</div>
 					</div>
 				</c:when>
@@ -51,10 +57,10 @@ div#board-container label.custom-file-label {
 						<div class="input-group-prepend" style="padding: 0px;">
 							<span class="input-group-text">앨범커버</span>
 						</div>
-						<input type="hidden" name="form-control" name="imgOriginalFileName" id="imgOriginalFileName${status.index}" value="${img.originalFilename}" >
-						<input type="hidden" name="form-control" name="imgRenamedFileName" id="imgRenamedFileName${status.index}" value="${img.renamedFilename}" >
+						
 						<div class="custom-file">
-							<input type="file" class="custom-file-input" name="imgFile" id="imgFile"> <label class="custom-file-label" for="imgFile">파일을 선택하세요</label>
+							<input type="file" class="custom-file-input" name="imgFile" id="imgFile" required> 
+							<label class="custom-file-label" for="imgFile">파일을 선택하세요</label>
 						</div>
 					</div>
 				</c:otherwise>
@@ -67,9 +73,9 @@ div#board-container label.custom-file-label {
 					<span class="input-group-text" style="height: 38px;">트랙</span>
 				</div>
 				<div class="custom-file">
-					<input type="file" class="custom-file-input" name="trkFile" id="trkFile${status.index}">
-					<input type="hidden" name="form-control" name="trkOriginalFileName" id="trkOriginalFileName${status.index}" value="${track.originalFilename}" >
-					<input type="hidden" name="form-control" name="trkRenamedFileName" id="trkRenamedFileName${status.index}" value="${track.renamedFilename}" >
+					<%--<input type="file" class="custom-file-input" name="trkFile" id="trkFile${status.index}" readonly>--%>
+					<input type="hidden"  name="trkOriginalFileName" id="trkOriginalFileName${status.index}" value="${track.originalFilename}" >
+					<input type="hidden"  name="trkRenamedFileName" id="trkRenamedFileName${status.index}" value="${track.renamedFilename}" > 
 					<label for="trkFile${status.index}" class="custom-file-label">${track.originalFilename}</label>
 				</div>
 				<input type="button" class="removeAttach btn btn-xs btn-danger" value="Χ">
@@ -79,8 +85,7 @@ div#board-container label.custom-file-label {
 		<div class="input-group-prepend justify-content-center" style="padding: 0px;text-align:center;">
 			<input type="button" value="트랙추가" class="add" id="add" />
 		</div>
-
-
+		
 		<textarea class="form-control" name="content" placeholder="내용" required>
 		<c:if test="${not empty albumInfo.content}">
 			${albumInfo.content}
@@ -94,8 +99,6 @@ div#board-container label.custom-file-label {
 
 <script>
     
-
-
 function albumValidate(){
 	
 	var $content = $("[name=content]");
@@ -104,18 +107,20 @@ function albumValidate(){
 		return false;
 	}
 	if(!trackValid()){
+		alert("잘못된 확장자입니다.");
 		return false;
 	}
 	if(!imgValid()){
+		alert("잘못된 확장자입니다.");
 		return false;
 	}
 	return true;
 }
 
-const trackValid = function trackValid(){
+/* const trackValid = function trackValid(){
 	var $trkFile =$("[name=trkFile]");
 	console.log($trkFile.val());
-	/* for(int i=0; i<trkFile.length;i++){
+	 for(int i=0; i<trkFile.length;i++){
 		const file = $(trkFile).prop('files')[i];
 		let fileLen = file.name.length;
 		console.log(fileLen);
@@ -126,12 +131,12 @@ const trackValid = function trackValid(){
 		console.log(check); 
 		validArr.push(check);
 		console.log(check);
-	} */
+	}  
 	return check;
-}
+} */
 
 /*img파일은 확장성을 위해 list로 받았지만 현재는 front에서 단일파일입력으로 정책설정*/
-
+/*
 const imgValid = function imgValid(){
 	var $imgFile = $("[name=imgFile]");
 	const file1 = $(imgFile).prop('files')[0];
@@ -147,7 +152,7 @@ const imgValid = function imgValid(){
 	console.log(check1);
 	validArr.push(check1);
 	return check1;
-}
+} */
 
 /* const fnValid = function fileNameValid(){
 	$("[id=upFile1]").change((e) => {
@@ -164,6 +169,7 @@ const imgValid = function imgValid(){
 		return check;
 	});
 } */
+
 
 $(() => {
 	/**
@@ -187,9 +193,9 @@ $(() => {
 	
 	
 	$(document).on({'click':function(e){
-		/* console.log($(e.target).prop('tagName'));
+		console.log($(e.target).prop('tagName'));
 		console.log($(e.target));
-		console.log($(e.target).prop('value')); */
+		console.log($(e.target).prop('value')); 
 		var removeBtn='Χ';
 		var addBtn='트랙추가'
 		if(removeBtn===$(e.target).prop('value')){
@@ -204,6 +210,24 @@ $(() => {
 			/* console.log('it is add Btn'); 
 			let $parent = $(e.target).prop('parentElement');
 			/* console.log(parent); */
+			let lastLen=$(".trk-input").length; 
+			if(lastLen==0){
+	    		$(".custom-file").append(fileWrapper);
+	    		
+	    		var nextNum = 0;
+	    		var fileWrapper = $("<div class=\"input-group mb-3 trk-input\" style=\"padding:0px; margin-bottom:15px;\" name=\"track\" id=\"track" + nextNum + "\"><div class=\"input-group-prepend\" style=\"padding: 0px;\"><span class=\"input-group-text\" style=\"height:38px;\">트랙"+"</span></div>");
+	 	        fileWrapper.data("idx",nextNum);
+	 	        console.log(fileWrapper);
+	 	        var tFile = $("<div class=\"custom-file\"><input type=\"file\" class=\"custom-file-input\" name=\"trkFile\" id=\"trkFile"+nextNum+"\"><label for=\"trkFile"+nextNum+"\" class=\"custom-file-label\">파일을 선택하세요</label></div>");
+	 	        var removeButton = $("<input type=\"button\" class=\"removeAttach btn btn-xs btn-danger\" value=\"Χ\"></div>");
+ 				//fileWrapper.append(tName);
+	        	fileWrapper.append(tFile);
+	        	fileWrapper.append(removeButton);
+	        	/* console.log(fileWrapper); */
+	        	console.log($(".trk-bg"));
+	        	$(".trk-bg:last").append(fileWrapper);
+		    	return;
+			}
 			
 			var lastField = $(".trk-input:last");
 			/* console.log(lastField); */
@@ -226,16 +250,18 @@ $(() => {
 	            $(this).parent().remove();
 	        });
 	        
-	        let lastLen=$(".trk-input").length;
+	        lastLen=$(".trk-input").length;
 	        /* console.log(lastLen); */
-	        if(lastLen<11){
+	        if(lastLen<11&&lastLen>0){
 	        	//fileWrapper.append(tName);
 	        	fileWrapper.append(tFile);
 	        	fileWrapper.append(removeButton);
 	        	/* console.log(fileWrapper); */
 	        	console.log($(".trk-bg"));
 	        	$(".trk-bg:last").append(fileWrapper);
-	    	} else {alert("최대 10개까지만 추가 가능합니다");}
+	    	} else {
+	    		alert("최대 10개까지만 추가 가능합니다");
+	    	}
 		}		
 		/* const file = $(e.target).prop('files')[0]; */
 		}
@@ -275,7 +301,6 @@ $(() => {
 		return check;
 		}
 	});
-
 	
 	//검증
 	$("[id=imgFile]").change((e) => {
@@ -308,7 +333,6 @@ $(() => {
 		console.log(check2); 
 		return check2;
 	});
-
 });
 </script>
 

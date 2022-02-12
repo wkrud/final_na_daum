@@ -44,8 +44,12 @@ public interface AlbumDao {
 	int updateAlbumTrack(AlbumTrack altrk);
 	
 	int updateAlbumTracks(List<AlbumTrack> list);
+	
+	int updateAlbumTrackList(List<AlbumTrack> newAlbumTrackList);
 
-	int deleteAlbumTrack(int[] no);
+	int deleteAlbumTracks(int[] delArray);
+	
+	int deleteAllAlbumTracks(String code);
 
 	AlbumTrack selectOneAlbumTrack(Map<String, Object> param);
 
@@ -54,14 +58,22 @@ public interface AlbumDao {
 	// 앨범 이미지
 
 	int insertAlbumImg(AlbumImg imgAttach);
-
-	int insertAlbumImgs(List<AlbumImg> imgList);
-
-	int updateAlbumImg(AlbumImg imgAttach);
 	
+	int insertAlbumImgs(List<AlbumImg> imgList);
+	
+	int updateAlbumImg(AlbumImg imgAttach);
+
 	int updateAlbumImgs(List<AlbumImg> imgAttach);
+	
+	int updateAlbumImgList(List<AlbumImg> newAlbumImgList);
 
 	int deleteAlbumImg(AlbumImg imgAttach);
+	
+	int deleteAllAlbumImgs(String code);
+	
+	int deleteAlbumImgByCode(String albumCode);
+
+	int deleteAlbumTrackByCode(String albumCode);
 
 	AlbumImg selectOneAlbumImg(AlbumImg imgAttach);
 	
@@ -98,5 +110,6 @@ public interface AlbumDao {
 	List<Map<String, Object>> selectListAlbumInfoRecentMain();
 
 	List<Map<String, Object>> selectListAlbumInfoByKindMain(String kind);
+
 
 }
