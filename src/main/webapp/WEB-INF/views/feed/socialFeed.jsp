@@ -83,11 +83,11 @@
 									${f.commentCount}
 								</div>
 							</div>
-							<div class="feed-area">
-								<img class="change-profile" src="${pageContext.request.contextPath}/resources/${f.attachments[0].renamedFilename}" alt="" />
+							<div class="feed-area feed-img-area">
+								<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/feed/img/${f.attachments[0].renamedFilename}" alt="" />
 							</div>
 						</div>
-					</c:if>
+					</c:if>					
 					<!-- 사진이 없다면 -->
 					<c:if test="${empty f.attachments}">
 						<div class="one-feed">

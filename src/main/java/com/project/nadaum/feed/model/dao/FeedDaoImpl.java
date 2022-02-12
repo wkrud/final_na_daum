@@ -113,6 +113,13 @@ public class FeedDaoImpl implements FeedDao {
 	public List<Feed> feedMain() {
 		return session.selectList("feed.feedMain");
 	}
+
+	@Override
+	public void deleteFeed(Map<String, Object> map) {
+		session.delete("feed.deleteFeed",map);
+	}
+	
+	
 	
 	
 }

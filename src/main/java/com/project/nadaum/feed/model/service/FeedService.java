@@ -32,6 +32,10 @@ public interface FeedService {
 
 	List<Feed> feedMain();
 
+	void deleteFeed(Map<String, Object> map);
+
+	List<Feed> selectFeedMainLikesCheck(Map<String, Object> param);
+
 	
 
 }
