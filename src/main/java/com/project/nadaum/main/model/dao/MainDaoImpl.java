@@ -8,11 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.nadaum.main.model.vo.TodoList;
+import com.project.nadaum.main.model.vo.Widget;
 
 @Repository
 public class MainDaoImpl implements MainDao {
 	@Autowired
 	private SqlSessionTemplate session;
+
+	@Override
+	public List<Widget> allWidgetList(Map<String, Object> param) {
+		return session.selectList("main.allWidgetList", param);
+	}
 
 	@Override
 	public int insertTodoList(Map<String, Object> param) {

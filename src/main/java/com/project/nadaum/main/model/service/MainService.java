@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.project.nadaum.main.model.vo.TodoList;
+import com.project.nadaum.main.model.vo.Widget;
 
 public interface MainService {
+
+	List<Widget> allWidgetList(Map<String, Object> param);
 
 	int insertTodoList(Map<String, Object> param);
 
@@ -14,5 +17,6 @@ public interface MainService {
 	int deleteTodoList(Map<String, Object> map);
 
 	int insertWidget(Map<String, Object> param);
+
 
 }

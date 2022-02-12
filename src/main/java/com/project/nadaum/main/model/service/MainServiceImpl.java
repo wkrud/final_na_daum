@@ -8,12 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.project.nadaum.main.model.dao.MainDao;
 import com.project.nadaum.main.model.vo.TodoList;
+import com.project.nadaum.main.model.vo.Widget;
 
 @Service
 public class MainServiceImpl implements MainService {
 	
 	@Autowired
 	private MainDao mainDao;
+
+	@Override
+	public List<Widget> allWidgetList(Map<String, Object> param) {
+		return mainDao.allWidgetList(param);
+	}
 
 	@Override
 	public int insertTodoList(Map<String, Object> param) {

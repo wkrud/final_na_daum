@@ -45,6 +45,9 @@
 				<i class="far fa-play-circle"></i>
 			</span>
 		</div>
+		<c:forEach items="${widgetList}" var="widget">
+			<div class="widget_form ${widget.widgetName}">${widget.widgetName}${widget.no}</div>
+		</c:forEach>
 	</section>
 </article>
 <input type="hidden" id="id" value="${loginMember.id}" />

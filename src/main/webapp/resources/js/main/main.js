@@ -3,8 +3,6 @@
  let $id = $("#id").val();
  let $contextPath = $("#contextPath").val();
 
-
-
 //클릭시 커지게
  let addWidget = document.querySelector('.add-widget');
  addWidget.onclick = function() {
@@ -15,7 +13,43 @@
  $(() => {
    $(".accept-drag").attr('draggable', 'true');
    $(".accept-drag").attr('ondragstart', 'drag(event)');
+   $(".widget-form").attr('ondragstart', 'drag(widget)');
+   
+   //정보 로딩
+   data = { "member_Id" : $id};
+   $.ajax({
+		url : $contextPath+"/riot/riotWidget.do",
+	 	method : 'POST',
+	 	contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+	 	headers : headers,
+	 	data : JSON.stringify(data),
+	 	success(resp) { 
+	 		console.log(resp);
+	 		for(data in resp) {
+				let content = `
+				<p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p>
+				`
+				$(".game-widget").append(content);
+			}
+	 	}, error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	});
  })
+ 
+ //위젯 sortable
+ $(function() {
+	$("#dragZone").sortable({
+		//드래그 앤 드롭 단위 css 선택자
+		connectWith : "#dragZone",
+		//드래그 앤 드롭으로 움직일 박스
+		handle : ".widget_form"
+	});
+	//widget 하위의 모든 것의 이동을 막음
+	$("#dragZone .widget_form").disableSelection();
+});
 
  //드래그 이벤트
  function drag(ev) {
@@ -214,6 +248,24 @@
  	//게임
  	else if(widgetName == 'game-widget') {
  		if(document.querySelector('.game-widget') == null) {
+			//내려놓을 때 db 등록
+		  	$.ajax({
+		    	url : $contextPath+"/main/insertWidget.do",
+		     	method : 'GET',
+		     	data : {
+		     		"widgetName" : widgetName
+		     	},
+		     	contentType : "application/json; charset=UTF-8",
+		     	dataType : "json",
+		     	success(data) {
+		     		console.log(data);
+		     		alert("등록 성공");
+		     	}, error(xhr, testStatus, err) {
+    					console.log("error", xhr, testStatus, err);
+    					alert("위젯 등록에 실패했습니다.");
+    				}
+     			});
+			
 	        widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">`+widgetName+`</div>`
 		    data = { "member_id" : $id}; 
 	        $.ajax({
