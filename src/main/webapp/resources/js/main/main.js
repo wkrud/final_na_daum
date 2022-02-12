@@ -384,7 +384,7 @@ const calendarWidgetInfo = () => {
 //오디오북
 const AudiobookWidgetInfo = () => {
 	$.ajax({
-		url : $contextPath+"/audiobook/widget.do",
+		url : $contextPath+"/audiobook/widget",
 		method : 'POST',
 		contentType : "application/json; charset=UTF-8",
      	dataType : "json",
@@ -395,7 +395,7 @@ const AudiobookWidgetInfo = () => {
 				let content = `
 				<p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p>
 				`
-				$(".culture-widget").append(content);
+				$(".audio-widget").append(content);
 			}
 		}, 
 	 	error(xhr, testStatus, err) {

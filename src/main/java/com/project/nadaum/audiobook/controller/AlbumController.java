@@ -86,9 +86,9 @@ public class AlbumController {
 	
 	
 	@ResponseBody
-	@PostMapping("/widget")
-	public Map<String,Object> audiobookWidget(@RequestBody Map<String,Object> map){
-		
+	@PostMapping(value = "/widget", produces = "application/json; charset=UTF-8")
+	public Map<String,Object> audiobookWidget(){
+		Map<String, Object> map = new HashMap<>();
 		try {
 			AlbumInfo albumInfo = albumService.selectWidgetAlbumInfo(map);
 			String imgLink = application.getRealPath("/resources/upload/audiobook")
