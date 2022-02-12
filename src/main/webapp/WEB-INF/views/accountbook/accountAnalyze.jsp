@@ -27,10 +27,11 @@
 <!-- 본문 영역 -->
 	<div class="analyze-account box">
 		<!-- 헤더 -->
-		<div class="analyze-account-header">
-			<button class="defaultBtn" onclick="count('minus')"><i class="fas fa-arrow-left"></i></button>
+		<div type="submit" class="analyze-account-header">
+			<a href="${pageContext.request.contextPath}/accountbook/accountbook.do" style="display:block;">돌아가기</a>
+			<button class="defaultBtn" onclick="monthly('before')"><i class="fas fa-arrow-left"></i></button>
 			<p>${today}월의 나:다운 가계부</p>
-			<button class="defaultBtn" onclick="count('plus')"><i class="fas fa-arrow-right"></i></button>
+			<button type="submit" class="defaultBtn" onclick="monthly('next')"><i class="fas fa-arrow-right"></i></button>
 		</div>
 		<!-- 수입 -->
 		<div class="incomeArea">
@@ -109,6 +110,7 @@
 		</div>
 	</div>
 </div>
+<input type="hidden" name="today" id="today" value="${today}" />
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
 <script src='${pageContext.request.contextPath}/resources/js/accountbook/chart.js'></script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" /> 

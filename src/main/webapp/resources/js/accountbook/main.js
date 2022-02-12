@@ -232,7 +232,7 @@
 	google.charts.setOnLoadCallback(drawIncomeChart);
 	
 	//차트 그리는 함수
-	const drawExpenseChart = () => {
+	function drawExpenseChart() {
 		var firstData = {"incomeExpense" : "E", date : $today};
 		//차트에 구성되는 데이터는 [['Header','Header']['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//Header는 각 배열을 설명할 수 있는 필수값. ['String', 'String']
@@ -272,7 +272,7 @@
 	
 	
 	//차트 그리는 함수
-	const drawIncomeChart = () => {
+	function drawIncomeChart() {
 		var firstData = {"incomeExpense" : "I", date : $today};
 		//차트에 구성되는 데이터 [['', ''], ['','']] 타입으로 배열의 배열 형식. 
 		//json 데이터 ajax로 받아오기

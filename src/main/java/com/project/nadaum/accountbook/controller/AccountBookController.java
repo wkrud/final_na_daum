@@ -141,12 +141,12 @@ public class AccountBookController {
 		param2.put("monthly", monthly);
 		param2.put("id", member.getId());
 		param2.put("incomeExpense", "E");
-		param.put("date", date);
+		param2.put("date", date);
 		// 지출 카테고리 베스트3
 		List<Map<String, Object>> categoryList_E = accountBookService.categoryChart(param2);
+		log.debug("Clist_E={}", categoryList_E);
 		// 현금, 카드 건수
 		List<Map<String, Object>> paymentList_E = accountBookService.paymentList(param2);
-		log.debug("list_E={}", paymentList_E);
 
 		model.addAttribute("categoryList_I", categoryList_I);
 		model.addAttribute("categoryList_E", categoryList_E);

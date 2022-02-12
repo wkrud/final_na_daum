@@ -270,16 +270,7 @@
 		    nvl(sum(case when income_expense='E' then price end), 0) as expense
 		from (
 			select
-				<choose>
-	                  <when test="date != null and date != ''">
-	                    and
-	                    to_char(reg_date, 'yyyy-mm') = #{date} as monthly,
-	                  </when>
-	                  <otherwise>
-	                    and
-	                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm') as monthly,
-	                  </otherwise>
-	             </choose>
+				to_char(reg_date,'yy-mm') as monthly,
 			    price,
 			    income_expense
 			from
@@ -330,16 +321,7 @@
 		    sum(price) as sum
 		from
 		    (select
-		    	<choose>
-                  <when test="date != null and date != ''">
-                    and
-                    to_char(reg_date, 'yyyy-mm') = #{date} as monthly,
-                  </when>
-                  <otherwise>
-                    and
-                    to_char(reg_date, 'yyyy-mm') = to_char((sysdate), 'yyyy-mm') as monthly,
-                  </otherwise>
-                 </choose>
+		    	to_char(reg_date, 'yyyy-mm') as monthly,
 		        category,
 		        price
 		    from
