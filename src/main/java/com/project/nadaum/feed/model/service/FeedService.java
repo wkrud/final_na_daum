@@ -35,5 +35,4 @@ public interface FeedService {
 	void deleteFeed(Map<String, Object> map);
 
 	
-
 }

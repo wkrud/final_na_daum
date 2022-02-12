@@ -16,9 +16,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.poi.util.SystemOutLogger;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -155,7 +154,7 @@ public class CultureController {
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
-		return "/culture/cultureBoardList";
+		return "/culture/cultureList";
 	}
 	
 	@PostMapping("/search.do")
@@ -334,6 +333,9 @@ public class CultureController {
 							String bookingUrl = getTagValue("url", eElement);
 							String imgUrl = getTagValue("imgUrl", eElement);
 							String placeUrl = getTagValue("placeUrl", eElement);
+							String contents1 = getTagValue("contents1", eElement);
+							String contents2 = getTagValue("contents2", eElement);
+
 							Map<String, Object> map = new HashMap<>();
 							
 							map.put("title", title);
@@ -348,6 +350,9 @@ public class CultureController {
 							map.put("bookingUrl", bookingUrl);
 							map.put("imgUrl", imgUrl);
 							map.put("placeUrl", placeUrl);
+							map.put("contents1",contents1);
+							map.put("contents2",contents2);
+							
 							
 							list.add(map);
 							
@@ -362,6 +367,40 @@ public class CultureController {
 						List<Member> memberList = memberService.selectAllNotInMe(member);
 						model.addAttribute("memberList", memberList);
 						model.addAttribute("friends", friends);
+						
+						//평점 평균
+						List<Integer> star = cultureService.listStar(apiCode); //star 불어오기
+						log.debug("star{}", star);
+
+						int totalStartComment = cultureService.totalStarCount(apiCode);
+						
+//						int sum = 0; // 평점 합계 구하는 변수 0으로 초기화
+//						double avg = 0; // 평점 평균 구하는 변수 0으로 초기화
+//						sum = star.stream().mapToInt(Integer::intValue).sum();
+//						System.out.println("starSum : " + sum);
+//						int arraysize = star.size();
+//						avg = sum / arraysize;
+//						System.out.println("avgStar : " + avg);
+//						log.debug("avg{}", avg);
+//						model.addAttribute("avg", avg);
+						
+						double rating = cultureService.avgRating(apiCode);
+						int starCount1 = cultureService.starCount1(apiCode);
+						int starCount2 = cultureService.starCount2(apiCode);
+						int starCount3 = cultureService.starCount3(apiCode);
+						int starCount4 = cultureService.starCount4(apiCode);
+						int starCount5 = cultureService.starCount5(apiCode);
+						log.debug("rating{}", rating);
+						
+						model.addAttribute("rating", rating);
+						
+						model.addAttribute("starCount1", starCount1);
+						model.addAttribute("starCount2", starCount2);
+						model.addAttribute("starCount3", starCount3);
+						model.addAttribute("starCount4", starCount4);
+						model.addAttribute("starCount5", starCount5);
+						
+						model.addAttribute("totalStartComment", totalStartComment);
 						
 				} catch (Exception e) {
 					  e.printStackTrace();
@@ -403,7 +442,7 @@ public class CultureController {
 						urlBuilder.append("&" + URLEncoder.encode("seq", "UTF-8") + "=" + URLEncoder.encode(apiCode, "UTF-8"));
 						
 						URL url = new URL(urlBuilder.toString());
-						
+						log.debug("url={}", url);
 						
 						HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 						conn.setRequestMethod("GET");
@@ -437,7 +476,8 @@ public class CultureController {
 						});
 						Map<String, Object> response = (Map<String, Object>) map.get("response");
 						Map<String, Object> msgBody = (Map<String, Object>) response.get("msgBody");
-
+						log.debug("msgBody={}",response);
+						log.debug("response={}", msgBody);
 						
 						//결과가 한개면 오류나서 List <Map<>>이었는데 List 뺌
 							perforInfo = (Map<String, Object>) msgBody.get("perforInfo");
@@ -484,6 +524,121 @@ public class CultureController {
 		     return "/culture/likes";
 		}
 		
+		@ResponseBody
+		@PostMapping("/widget.do")
+	      public List<Object> cultureWidget(@AuthenticationPrincipal Member member, Model model){
+	         String id = member.getId();   
+	         
+	         List<Scrap> list = cultureService.selectCultureWidget(id);
+	          
+	           //apiCode만 쏙 빼와서 저장
+	           List<Object> resultList = new ArrayList<>();
+	           
+	           for (int i = 0; i < list.size(); i++) {
+	               String apiCode = list.get(i).getApiCode();
+	               resultList.add(apiCode);
+	           }
+	           
+	         Map<String, Object> perforInfo = null;
+	         List<Object> scrapList = new ArrayList<>();
+	         
+	           for (int i = 0; i < resultList.size(); i++) {
+	               String apiCode = resultList.get(i).toString();
+	               log.debug("apiCode={}",apiCode);
+	               
+	               try {
+	                  StringBuilder urlBuilder = new StringBuilder();
+	                  
+	                     urlBuilder = new StringBuilder
+	                           ("http://www.culture.go.kr/openapi/rest/publicperformancedisplays/d/"); 
+	               
+	                  urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8")
+	                  + "=p%2B16HHPYFEvCkanGQCoGc9CAAG7x66tc5u3xrBmJpM8avVLTGiJ%2FjJaIvItRCggk79J9k%2Byn47IjYUHr%2FdzlgA%3D%3D"); 
+	                  urlBuilder.append("&" + URLEncoder.encode("seq", "UTF-8") + "=" + URLEncoder.encode(apiCode, "UTF-8"));
+	                  
+	                  URL url = new URL(urlBuilder.toString());
+	                  
+	                  log.debug("url={}", url);
+	                  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	                  conn.setRequestMethod("GET");
+	                  conn.setRequestProperty("Content-type", "application/json");
+	                  BufferedReader rd;
+
+	                  if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+	                     rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	                  } else {
+	                     rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+	                  }
+	                  StringBuilder sb = new StringBuilder();
+	                  String line;
+	                  while ((line = rd.readLine()) != null) {
+	                     sb.append(line);
+	                  }
+	                  rd.close();
+	                  conn.disconnect();
+
+	                  // =================================================================================
+	                  // xml -> json
+
+	                  org.json.JSONObject xmlJSONObj = XML.toJSONObject(sb.toString());
+
+	                  String xmlJSONObjString = xmlJSONObj.toString();
+	                  ObjectMapper objectMapper = new ObjectMapper();
+
+	                  // map에 data담기
+	                  Map<String, Object> map = new HashMap<>();
+	                  map = objectMapper.readValue(xmlJSONObjString, new TypeReference<Map<String, Object>>() {
+	                  });
+	                  Map<String, Object> response = (Map<String, Object>) map.get("response");
+	                  Map<String, Object> msgBody = (Map<String, Object>) response.get("msgBody");
+
+	                  log.debug("response={}",response);
+	                  log.debug("msgBody={}",msgBody);
+	                  
+	                  //결과가 한개면 오류나서 List <Map<>>이었는데 List 뺌
+	                     perforInfo = (Map<String, Object>) msgBody.get("perforInfo");
+	                     log.debug("perforInfo={}",perforInfo);
+
+	                     Map<String, Object> map2 = new HashMap<>();
+	                     for (int j = 0; j < resultList.size(); j++) {
+	                        String title = perforInfo.get("title").toString();
+	                        String startDate = perforInfo.get("startDate").toString();
+	                        String endDate = perforInfo.get("endDate").toString();
+	                        String price = perforInfo.get("price").toString();
+	                        String place = perforInfo.get("place").toString();
+	                        String placeAddr = perforInfo.get("placeAddr").toString();
+	                        String realmName = perforInfo.get("realmName").toString();
+	                        String area = perforInfo.get("area").toString();
+	                        String phone = perforInfo.get("phone").toString();
+	                        String imgUrl = perforInfo.get("imgUrl").toString();
+	                           
+	                        
+	                        
+	                        map2.put("title", title);
+	                        map2.put("startDate", startDate);
+	                        map2.put("endDate", endDate);
+	                        map2.put("area", area);
+	                        map2.put("place", place);
+	                        map2.put("realmName", realmName);
+	                        map2.put("imgUrl", imgUrl);
+	                        map2.put("price", price);
+	                        map2.put("placeAddr", placeAddr);
+	                        map2.put("phone", phone);
+	                        
+	                        }
+	                     //apicode 1개의 정보
+	                     log.debug("map2={}",map2);
+	                     scrapList.add(map2);
+	               } catch (JSONException | IOException e) {
+	                  e.printStackTrace();
+	               }
+	               //scrap한 apiCode의 정보 (여러개)
+	               model.addAttribute("scrapList", scrapList);
+	               log.debug("scrapList={}",scrapList);
+	           }
+	           
+	           return scrapList;
+	      }
 		//좋아요
 		@PostMapping("/board/view/{apiCode}/likes")
 		public ResponseEntity<?> insertLikes(@RequestParam Map<String,Object> map){
@@ -546,5 +701,6 @@ public class CultureController {
 					return ResponseEntity.badRequest().build();
 				}
 		}
+		
 		
 }

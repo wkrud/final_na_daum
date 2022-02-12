@@ -45,4 +45,58 @@ public class CultureDaoImpl implements CultureDao {
 
 	}
 
+	//============================================
+	@Override
+	public double avgRating(String apiCode) {
+		return session.selectOne("culture.avgRating", apiCode);
+	}
+
+	@Override
+	public List<Integer> listStar(String apiCode) {
+		return session.selectList("culture.listStar", apiCode);
+	}
+
+	@Override
+	public int starCount1(String apiCode) {
+		return session.selectOne("culture.starCount1",apiCode);
+	}
+
+	@Override
+	public int starCount2(String apiCode) {
+		return session.selectOne("culture.starCount2",apiCode);
+	}
+
+	@Override
+	public int starCount3(String apiCode) {
+		return session.selectOne("culture.starCount3",apiCode);
+	}
+
+	@Override
+	public int starCount4(String apiCode) {
+		return session.selectOne("culture.starCount4",apiCode);
+	}
+
+	@Override
+	public int starCount5(String apiCode) {
+		return session.selectOne("culture.starCount5", apiCode);
+	}
+
+	@Override
+	public int totalStarCount(String apiCode) {
+		return session.selectOne("culture.totalStarCount", apiCode);
+	}
+	
+	//==========================================
+
+	@Override
+	public int insertSchedule(Map<String, Object> map) {
+		return session.insert("culture.insertSchedule", map);
+	}
+
+	@Override
+	public List<Scrap> selectCultureWidget(String id) {
+		return session.selectList("culture.selectCultureWidget", id);
+	}
+
+	
 }

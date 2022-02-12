@@ -162,13 +162,14 @@ public class FeedController {
 	}
 
 	@GetMapping("/addFeedPage.do")
-	public ResponseEntity<?> addFeedPage(@RequestParam Map<String, Object> map){
+	public ResponseEntity<?> addFeedPage(@RequestParam Map<String, Object> map, @AuthenticationPrincipal Member member){
 		log.debug("map = {}", map);
 		int page = Integer.parseInt((String) map.get("page"));
 		int limit = 8;		
 		int offset = (page - 1) * limit;
 		map.put("limit", limit);
 		map.put("offset", offset);
+		map.put("id", member.getId());
 		
 		List<Map<String, Object>> addFeed = feedService.selectAddFeed(map);
 		log.debug("addFeed = {}", addFeed);
@@ -209,17 +210,19 @@ public class FeedController {
     }
 	
 	@GetMapping("/addFeedMain.do")
-	public ResponseEntity<?> addFeedMain(@RequestParam Map<String, Object> map){
+	public ResponseEntity<?> addFeedMain(@RequestParam Map<String, Object> map, Model model, @AuthenticationPrincipal Member member){
 		log.debug("map = {}", map);
 		int page = Integer.parseInt((String) map.get("page"));
 		int limit = 2;
 		int offset = (page - 1) * limit;
 		map.put("limit", limit);
 		map.put("offset", offset);
+		map.put("id", member.getId());
 		
 		List<Map<String, Object>> addFeed = feedService.addFeedMain(map);
 		log.debug("addFeed = {}", addFeed);
 		
+		model.addAttribute("addFeed", addFeed);
 		return ResponseEntity.ok(addFeed);
 	}
 	

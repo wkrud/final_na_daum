@@ -8,7 +8,7 @@
 		into 
 			scrap
 		values
-			(concat('sc-',seq_culture_no.nextval), #{id}, sysdate, #{apiCode})
+			(concat('sc-',seq_scrap_no.nextval), #{id}, sysdate, #{apiCode})
 	</insert>
 	
 	<delete id="deleteCultureLike">
@@ -28,8 +28,33 @@
 			scrap
 		where 
 			id = #{id} 
+		and
+			code like 'sc' || '%'
 		order by
 			reg_date desc
+	</select>
+	
+	<select id="selectCultureWidget" resultType="scrap">
+		select
+		*
+		from
+			(select
+			*
+			from
+				scrap
+			where
+				id = #{id}
+			and
+				code like 'sc' || '%'
+			order by
+				reg_date desc)
+		where
+			rownum 
+		<![CDATA[
+		<=
+		]]>  
+		3
+		
 	</select>
 	
 	<select id="selectCountLikes" resultType="int">
@@ -40,5 +65,47 @@
 		where
 			code = #{apiCode}
 	</select>
+	
+	<insert id="insertSchedule">
+		insert 
+		into 
+			schedule 
+		values(concat('pr-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
+	</insert>
+	<!-- 평점 평균 -->
+	<select id="avgRating" resultType = "double">
+		select  round(avg(star),1) as rating from comments where api_code = #{apiCode} group by api_code
+	</select>
+	
+	<select id="listStar" resultType = "_int">
+		select star from comments where api_code = #{apiCode}
+	</select>
+	
+	<!-- 각 평점을 등록한 수 -->
+	<select id="starCount1" resultType = "_int">
+		select count(*) from comments where star = 1 and api_code = #{apiCode}
+	</select>
+	
+	<select id="starCount2" resultType = "_int">
+		select count(*) from comments where star = 2 and api_code = #{apiCode}
+	</select>
+	
+	<select id="starCount3" resultType = "_int">
+		select count(*) from comments where star = 3 and api_code = #{apiCode}
+	</select>
+	
+	<select id="starCount4" resultType = "_int">
+		select count(*) from comments where star = 4 and api_code = #{apiCode}
+	</select>
+
+	<select id="starCount5" resultType = "_int">
+		select count(*) from comments where star = 5 and api_code = #{apiCode}
+	</select>
+	
+	<select id="totalStarCount" resultType = "_int">
+		select  count(star) from comments where api_code = #{apiCode}
+	</select>
+	
+	
 </mapper>
 

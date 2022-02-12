@@ -17,10 +17,8 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <%
 	Date date = new Date();
-	SimpleDateFormat sdf = new SimpleDateFormat("M월");
-	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	String today = sdf.format(date);
-	String today2 = sdf2.format(date);
 %>
 
 <div class="accountWrapper">
@@ -30,8 +28,8 @@
 		<p class="excel-ment">기간을 선택하세요.</p>
 		<button class="modalCloseBtn defaultBtn"><i class="fas fa-sign-in-alt"></i></button>
 		<form action="${pageContext.request.contextPath}/accountbook/excel">
-			<input type="text" name="startDate" id="excelDate1" class="excelbox" readonly value="<%=today2%>"/>
-			<input type="text" name="endDate" id="excelDate2" class="excelbox" readonly value="<%=today2%>"/>
+			<input type="text" name="startDate" id="excelDate1" class="excelbox" readonly value="<%=today%>"/>
+			<input type="text" name="endDate" id="excelDate2" class="excelbox" readonly value="<%=today%>"/>
 			<button id="excelDownlaodBtn" class="defaultBtn"><i class="fas fa-download"></i></button>
 		</form>
 	</div>
@@ -200,12 +198,20 @@
 	<!-- 사용자별 가계부 월별 금액 -->
 	<section class="infoSection">
 		<div class="account">
+			<div>
+ 				<button type="submit" onclick="monthly('before')">
+					<i class="fas fa-angle-left"></i>
+				</button>
+				<button type="submit" onclick="monthly('next')">
+					<i class="fas fa-angle-right"></i>
+				</button>
+			</div>
 			<table class="account-info">
 				<tr>
 					<td colspan="2">${loginMember.name}님의</td>
 				</tr>
 				<tr>
-					<td colspan="2"><%= today %> 총 자산</td>
+					<td colspan="2">${today}월 총 자산</td>
 				</tr>
 				<tr id="total_income">
 					<td colspan="2" style="font-size:40px"><fmt:formatNumber value="${monthlyAccount}" type="number"/>원</td>
@@ -230,6 +236,7 @@
 	</section>
 </div>
 
+<input type="hidden" name="today" id="today" value="${today}" />
 <input type="hidden" id="chartData" value="${chartData}" />
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
 <script src='${pageContext.request.contextPath}/resources/js/accountbook/main.js'></script>

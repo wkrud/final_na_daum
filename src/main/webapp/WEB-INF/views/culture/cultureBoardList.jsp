@@ -68,7 +68,7 @@ padding-left: 20px;
 			<!-- 썸네일 그림, 타이틀  -->
 			<img src="${pageContext.request.contextPath}/resources/images/culture/festival.jpg" alt="문화썸네일" />
 			<h1 class="title">Culture</h1>
-			<form class="form-inline" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}" method="post">
+			<form class="form-inline search-form" id="searchFrm" action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}" method="post">
 			 <input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
 				 	
 				  <div class="form-group" id="period">

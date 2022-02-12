@@ -923,14 +923,11 @@ public class MemberController {
 		if("N".equals((String)map.get("type"))) {
 			Member member = memberService.selectOneMemberNickname((String) map.get("id"));
 			map.put("id", member.getId());
+		}else if("C".equals((String)map.get("type"))){
+			Member member = memberService.selectOneMemberNickname((String) map.get("guest"));
+			map.put("id", member.getId());
 		}
 		int result = memberService.insertAlarm(map);
-		return ResponseEntity.ok(1);
-	}
-	
-	@GetMapping()
-	public ResponseEntity<?> myFriendWidget(@AuthenticationPrincipal Member member){
-		
 		return ResponseEntity.ok(1);
 	}
 	

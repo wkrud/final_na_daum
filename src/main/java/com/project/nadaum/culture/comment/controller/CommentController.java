@@ -107,7 +107,7 @@ public class CommentController{
 			Map<String, Object> resultMap = new HashMap<>();
 			resultMap.put("msg", "댓글 수정 성공!");
 			resultMap.put("result", result);
-			return ResponseEntity.ok(map);
+			return ResponseEntity.ok(resultMap);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return ResponseEntity.badRequest().build();

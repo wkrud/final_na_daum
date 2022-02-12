@@ -36,10 +36,6 @@
 	crossorigin="anonymous"></script>
 <!-- 제이쿼리 ui js -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!-- 제이쿼리 style css -->
-<link rel="stylesheet" href="/resources/demos/style.css">
-<!-- 제이쿼리 ui css -->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!-- datepicker css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/datepicker.css" /> 
 <!-- datepicker bcg img -->
@@ -72,6 +68,7 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 <!-- 스톰프 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/common/checkAlarmJs.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/member/stomp.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/member/info.js"></script>
 
@@ -132,12 +129,6 @@
           <span class="nav-title">캘린더</span>
         </a>
       </li>
-      <li class="nav-list">
-        <a href="${pageContext.request.contextPath}/board/boardList.do">
-          <span class="nav-icon"><i class="fas fa-book-open header-icon"></i></span>
-          <span class="nav-title">게시판</span>
-        </a>
-      </li>
       <li class="nav-list personal-main contain-li">
           <span class="nav-icon"><i class="far fa-address-book header-icon"></i></span>
           <span class="nav-title">퍼스널</span>
@@ -178,12 +169,26 @@
             </li>
           </ul>
         </div>
-      <li class="nav-list">
-        <a href="${pageContext.request.contextPath}/riot/riotheader.do">
+      <li class="nav-list game-main contain-li">
           <span class="nav-icon"><i class="fas fa-gamepad header-icon"></i></span>
           <span class="nav-title">게임</span>
-        </a>
       </li>
+      	<div class="game-sub">
+          <ul>
+            <li class="nav-list">
+              <a href="${pageContext.request.contextPath}/riot/riotheader.do">      
+                <span class="nav-icon"></span>
+                <span class="nav-title">롤 전적 검색</span>
+              </a>
+            </li>
+            <li class="nav-list">
+		        <a href="${pageContext.request.contextPath}/board/boardList.do">
+		          <span class="nav-icon"></span>
+		          <span class="nav-title">게시판</span>
+		        </a>
+		    </li>
+          </ul>
+        </div>
       <li class="nav-list">
         <a href="${pageContext.request.contextPath}/audiobook/">
           <span class="nav-icon"><i class="far fa-play-circle header-icon"></i></span>
@@ -246,7 +251,11 @@
             </c:if>								
           </div>						    
         </button>
-        <div class="collapse" id="alarmList"></div>
+        <div class="collapse" id="alarmList">
+        	<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>
+        	<div class="alarms-wrap"></div>
+        	<div class="card card-body my-feed"><a href="javascript:void(0);" onclick="checkBadge(0);">알림 모두비우기</a></div>
+        </div>
       </div>
     </div>
     <!-- 도움말 창 -->
@@ -262,7 +271,7 @@
 			</iframe>
 		</div>
 	</div>
-  <script>
+  <script>  	
     //메뉴 토글
     let toggle = document.querySelector('.nav-toggle');
     let nav = document.querySelector('.nadaum-nav');
@@ -293,6 +302,10 @@
     	$(".culture-sub").slideToggle();
     });
     
+    $(".game-main").click((e) => {
+    	$(".game-sub").slideToggle();
+    });
+    
     //알림
     $(() => {	
 		connect();
@@ -304,19 +317,17 @@
 	$("#sign-out").click(function(){
 		alert("로그아웃되었습니다.");
 	});
-	 const countBedge = () => {
+	const countBedge = () => {
     	$.ajax({
 			url: `${pageContext.request.contextPath}/websocket/wsCountAlarm.do`,
 			success(resp){
-				const $alarmList = $("#alarmList");
+				const $alarmList = $(".alarms-wrap");
 				const $badgeWrap = $(".badge-wrap");
+				let alarmDiv = '';
 				
 				$alarmList.empty();
 				$badgeWrap.empty();
-				
-				let alarmDiv = `<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>`;
-				$alarmList.append(alarmDiv);
-				
+								
 				let count = 0;
 				$(resp).each((i, v) => {
 					const {no, code, id, status, content, regDate} = v;
@@ -333,6 +344,8 @@
 						\${content}</div>`;
 					}else if(code.substring(0,4) == 'chat' || code.substring(0,4) == 'fcom' || code.substring(0,4) == 'flik'){
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
+					}else{
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;
 					}
 					$alarmList.append(alarmDiv);
 					
@@ -348,29 +361,12 @@
 				
 				$(".alarmContent").click((e) => {
 			    	let no = $(".alarmContent").find('input').val();
-			    	checkBedge(no);
+			    	checkBadge(no);
 			    });
 																			
 			},
 			error: console.log
 		});		
-    };
-    
-    const alarmReload = () => {
-    	$("#alarmList").load(window.location.href + ' #alarmList');
-    };
-    
-    const checkBedge = (no) => {
-    	$.ajax({
-			url: `${pageContext.request.contextPath}/websocket/checkAlarm.do`,
-			method:'POST',
-			data: {no},
-			headers:headers,
-			success(resp){
-				countBedge();
-			},
-			error: console.log
-		});	
     };
     
     /* iframe보이기 */

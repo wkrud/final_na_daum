@@ -7,6 +7,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:requestEncoding value="utf-8" />
 <link href='${pageContext.request.contextPath}/resources/css/main/main.css' rel='stylesheet' />
+<script src="${pageContext.request.contextPath}/resources/js/feed/socialFeed.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeed.css" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 feed" name="title"/>
 </jsp:include>
@@ -101,7 +103,7 @@
     width: 200px;
 }
 .commentBtn{cursor: pointer;}
-.likeBtn{cursor: pointer;}
+
 </style>
 
 <script>
@@ -191,31 +193,31 @@ $(document).ready(function (e){
 		</div>
 		<!-- 피드 작성하기 : 프로필 사진과 피드 내용 -->
 		<div class="writeFeedBody">
-			<div class="pic">
-				<div class="thumbnail-wrap"
-					style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
-					<c:if test="${loginMember.loginType eq 'K'}">
-						<img src="${loginMember.profile}" alt=""
-							style="width: 45px; height: 45px; object-fit: cover;" />
-					</c:if>
-					<c:if test="${loginMember.loginType eq 'D'}">
-						<c:if test="${loginMember.profileStatus eq 'N'}">
-							<img
-								src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
-								alt="" style="width: 45px; height: 45px; object-fit: cover;" />
-						</c:if>
-						<c:if test="${loginMember.profileStatus eq 'Y'}">
-							<img
-								src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}"
-								alt="" style="width: 45px; height: 45px; object-fit: cover;" />
-						</c:if>
-					</c:if>
-				</div>
-			</div>
-			<div class="text">
-				<textarea id="writeFeedTextArea" name="content" cols="30" rows="3"
-					placeholder="사람들과 소통하세요! (최대 1000글자)" spellcheck="false"></textarea>
-			</div>
+            <div class="pic">
+                <div class="thumbnail-wrap"
+                    style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+                    <c:if test="${loginMember.loginType eq 'K'}">
+                        <img src="${loginMember.profile}" alt=""
+                            style="width: 45px; height: 45px; object-fit: cover;" />
+                    </c:if>
+                    <c:if test="${loginMember.loginType eq 'D'}">
+                        <c:if test="${loginMember.profileStatus eq 'N'}">
+                            <img
+                                src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+                                alt="" style="width: 45px; height: 45px; object-fit: cover;" />
+                        </c:if>
+                        <c:if test="${loginMember.profileStatus eq 'Y'}">
+                            <img
+                                src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}"
+                                alt="" style="width: 45px; height: 45px; object-fit: cover;" />
+                        </c:if>
+                    </c:if>
+                </div>
+            </div>
+            <div class="text">
+                <textarea id="writeFeedTextArea" name="content" cols="30" rows="3"
+                    placeholder="사람들과 소통하세요! (최대 1000글자)" spellcheck="false"></textarea>
+            </div>
 		</div>
 		<!-- 피드 작성하기 : 푸터 -->
 		<div class="writeFeedFooter">
@@ -238,29 +240,26 @@ $(document).ready(function (e){
 		<div class="feedItem" id="${feed.CODE}">
 			<div class="feedHeader">
 				<div class="user" data-user="${feed.WRITER}">
-					<div class="userPic">
-					<c:if test="${not empty feed.PROFILE}">
-						<img
-							src="${feed.PROFILE}">
-					</c:if>
-					<c:if test="${empty feed.PROFILE}">
-						<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" />
-					</c:if>
-					</div>
+					<div class="userPic"> 
+					<a href='/nadaum/feed/socialFeed.do?id=${feed.WRITER}'>              
+                        <c:if test="${feed.LOGINTYPE eq 'K'}">
+                            <img src="${feed.PROFILE}" alt=""/>
+                        </c:if>
+                        <c:if test="${feed.LOGINTYPE eq 'D'}">
+                            <c:if test="${feed.PROFILESTATUS eq 'N'}">
+                                <img
+                                    src="${pageContext.request.contextPath}/resources/upload/member/profile/image.png"/>
+                            </c:if>
+                            <c:if test="${feed.PROFILESTATUS eq 'Y'}">
+                                <img
+                                    src="${pageContext.request.contextPath}/resources/upload/member/profile/${feed.PROFILE}"/>
+                            </c:if>
+                        </c:if>
+                    </a>
+                    </div>
 					<div class="userInfo">
 						<div class="userNickname">${feed.NICKNAME}</div>
 						<div class="userUploadDate"><fmt:formatDate value="${feed.REGDATE}" pattern="yyyy-MM-dd"/></div>
-					</div>
-				</div>
-				<div class="moreBtn">
-					<a class="btn" role="button" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false"> <i
-						class="fa fa-ellipsis-h"></i>
-					</a>
-					<!-- dropdown-menu -->
-					<div class="dropdown-menu dropdown-menu-right"
-						aria-labelledby="dropdownMenuLink">
-						<a class="dropdown-item feedReport">신고하기</a>
 					</div>
 				</div>
 			</div>
@@ -274,26 +273,37 @@ $(document).ready(function (e){
 					</c:if>	
 				</div>
 				<div class="feedBodyBtn">
+				<input type="hidden" class="code" value="${feed.CODE}"/>
+				<input type="hidden" class="id" value="${feed.WRITER}"/>
 					<div class="likeBtn like">
-						<i class="fa fa-thumbs-up"></i>
+					<input type="hidden" class="code" value="${feed.CODE}"/>
+						<c:if test="${not empty feed.LIKEID}">	
+							<label for="like"><i class="fas fa-heart"></i></label>
+							<input type="checkbox" id="like" checked/>					
+						</c:if>
+						<c:if test="${empty feed.LIKEID}">
+							<label for="like"><i class="far fa-heart"></i></label>
+							<input type="checkbox" id="like" />			
+						</c:if>
 						<div class="likeNum">${feed.LIKES}</div>
 					</div>
 					<div class="commentBtn">댓글(${feed.COMMENTS})</div>
 				</div>
+				<!-- content -->
 				<div class="feedContent">${feed.CONTENT}</div>
 			</div>
 		</div> 
 	</c:forEach>
 	<div class="feedList" id="feedList">
 	<!-- 피드 출력되는 부분 --> 	 
-	</div>	 
-		
-	<!-- 피드 읽기 모달 -->
-	<div class="modal fade" id="readFeedModal" tabindex="-1" role="dialog"
-		aria-labelledby="readFeedModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content readFeedModal">
-				<div class="feedContent"></div>
+	</div>	 		
+	<!-- 게시물 상세보기 모달 -->
+	<div class="modal fade" id="feedViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body feed-detail-modal-body">
+					
+				</div>
 			</div>
 		</div>
 	</div>
@@ -323,11 +333,36 @@ const addFeedPage = (id, page) => {
 		data: {id, page},
 		success(resp){
 			const $resp = $(resp);
-			let feedDiv = ``;
+			const memberId = ${loginMember.id};
+			let feedDiv = ``;	
+			let like = ``;
+			let moreBtn = ``;
 			
-			$resp.each((i,{CODE,WRITER,NICKNAME,CONTENT,REGDATE,PROFILE,FILENAME,COMMENTS,LIKES,LOGINTYPE}) => {
+			$resp.each((i,{CODE,WRITER,NICKNAME,CONTENT,REGDATE,PROFILE,FILENAME,COMMENTS,LIKES,LOGINTYPE,PROFILESTATUS,LIKECHECK}) => {
 				let rd = new Date(REGDATE);
 				feedDate = getFormatDate(rd);
+				
+				if(LOGINTYPE == 'K'){
+					profile = `<img src="\${PROFILE}" alt="" />`;
+				}
+				else {
+					if(PROFILESTATUS == 'N'){
+						profile = `<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/image.png" alt="" />`;
+					}
+					else {
+						profile = `<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/\${PROFILE}" alt="" />`;
+					}
+				}
+				
+				if(LIKECHECK == 1){
+					like = `<label for="like"><i class="fas fa-heart"></i></label>
+						<input type="checkbox" id="like" checked/>`;
+				}
+				else {
+					like = `<label for="like"><i class="far fa-heart"></i></label>
+						<input type="checkbox" id="like" />`;
+				}
+				
 
 				if(FILENAME != null){
 					feedDiv = `
@@ -336,43 +371,16 @@ const addFeedPage = (id, page) => {
 							<div class="feedHeader">
 								<div class="user" data-user="\${WRITER}">
 									<div class="userPic">
-									<c:if test="\${LOGINTYPE eq 'K'}">
-										<img src="\${PROFILE}" alt="" />
-									</c:if>
-									<c:if test="\${LOGINTYPE eq 'D'}">
-										<c:if test="\${PROFILE eq 'N'}">							
-											<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png" alt="" />
-										</c:if>
-										<c:if test="${member.profileStatus eq 'Y'}">
-											<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/member/profile/${member.profile}" alt="" />
-										</c:if>
-									</c:if>	
-									
-									<c:choose>
-								        <c:when test="${empty PROFILE}">
-								        	<img src="\${PROFILE}" />
-								        </c:when>         
-								        <c:otherwise>
-								       	 	<img src="${pageContext.request.contextPath}/resources/upload/member/profile/image.png" alt="" />
-								         </c:otherwise>
-								    </c:choose>							
+									<a href='${pageContext.request.contextPath}/feed/socialFeed.do?id=\${WRITER}'>  
+									\${profile}	
+									</a>
 									</div>
 									<div class="userInfo">
 										<div class="userNickname">\${NICKNAME}</div>
 										<div class="userUploadDate">\${feedDate}</div>
 									</div>
 								</div>
-								<div class="moreBtn">
-									<a class="btn" role="button" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false"> <i
-										class="fa fa-ellipsis-h"></i>
-									</a>
-									<!-- dropdown-menu -->
-									<div class="dropdown-menu dropdown-menu-right"
-										aria-labelledby="dropdownMenuLink">
-										<a class="dropdown-item feedReport">신고하기</a>
-									</div>
-								</div>
+								\${moreBtn}
 							</div>
 							<div class="feedBody">
 								<div class="feedPic">
@@ -381,8 +389,11 @@ const addFeedPage = (id, page) => {
 								</div>
 							</div>
 								<div class="feedBodyBtn">
+								<input type="hidden" class="code" value="\${CODE}"/>
+								<input type="hidden" class="id" value="\${WRITER}"/>
 									<div class="likeBtn like">
-										<i class="fa fa-thumbs-up"></i>
+									<input type="hidden" class="code" value="\${CODE}"/>
+										\${like}
 										<div class="likeNum">\${LIKES}</div>
 									</div>
 									<div class="commentBtn">댓글(\${COMMENTS})</div>
@@ -397,29 +408,13 @@ const addFeedPage = (id, page) => {
 								<div class="feedHeader">
 									<div class="user" data-user="\${WRITER}">
 										<div class="userPic">
-										<c:choose>
-									        <c:when test="${empty PROFILE}">
-									        	<img src="\${PROFILE}" />
-									        </c:when>         
-									        <c:otherwise>
-									       	 	<img src="${pageContext.request.contextPath}/resources/upload/member/profile/image.png" alt="" />
-									         </c:otherwise>
-								    	</c:choose>
+										<a href='${pageContext.request.contextPath}/feed/socialFeed.do?id=\${WRITER}'>  
+										\${profile}
+										</a>
 										</div>
 										<div class="userInfo">
 											<div class="userNickname">\${NICKNAME}</div>
 											<div class="userUploadDate">\${feedDate}</div>
-										</div>
-									</div>
-									<div class="moreBtn">
-										<a class="btn" role="button" data-toggle="dropdown"
-											aria-haspopup="true" aria-expanded="false"> <i
-											class="fa fa-ellipsis-h"></i>
-										</a>
-										<!-- dropdown-menu -->
-										<div class="dropdown-menu dropdown-menu-right"
-											aria-labelledby="dropdownMenuLink">
-											<a class="dropdown-item feedReport">신고하기</a>
 										</div>
 									</div>
 								</div>
@@ -428,8 +423,11 @@ const addFeedPage = (id, page) => {
 									</div>
 								</div>
 									<div class="feedBodyBtn">
+									<input type="hidden" class="code" value="\${CODE}"/>
+									<input type="hidden" class="id" value="\${WRITER}"/>
 										<div class="likeBtn like">
-											<i class="fa fa-thumbs-up"></i>
+										<input type="hidden" class="code" value="\${CODE}"/>
+											\${like}
 											<div class="likeNum">\${LIKES}</div>
 										</div>
 										<div class="commentBtn">댓글(\${COMMENTS})</div>
@@ -444,6 +442,7 @@ const addFeedPage = (id, page) => {
 				$(".commentBtn").click((e) => {
 					feedDetailModalView(e);
 				});
+							
 			});
 			console.log(page);
 			loading = false;
@@ -493,6 +492,25 @@ $(".contentWrapper").scroll(function(){
 		}
 	}
 });
+
+let $hidden = $(".feedBodyBtn");
+$(".commentBtn").click((e) => {
+	feedDetailModalView(e);
+});
+
+const feedDetailModalView = (e) => {
+	let code = '';
+	let id = '';
+	if($(e.target).attr('class') != 'feedBodyBtn'){
+		code = $(e.target).parent().parent().find("input.code").val();
+		id = $(e.target).parent().parent().find("input.id").val();
+	}else{
+		code = $(e.target).find("input.code").val();
+		id = $(e.target).find("input.id").val();
+	}
+	console.log(id + " " + code);
+	selectedFeed(id, code);
+};
 
 
  
