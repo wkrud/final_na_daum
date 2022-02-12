@@ -8,12 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.project.nadaum.main.model.dao.MainDao;
 import com.project.nadaum.main.model.vo.TodoList;
+import com.project.nadaum.main.model.vo.Widget;
 
 @Service
 public class MainServiceImpl implements MainService {
 	
 	@Autowired
 	private MainDao mainDao;
+
+	@Override
+	public List<Widget> allWidgetList(Map<String, Object> param) {
+		return mainDao.allWidgetList(param);
+	}
 
 	@Override
 	public int insertTodoList(Map<String, Object> param) {
@@ -28,6 +34,11 @@ public class MainServiceImpl implements MainService {
 	@Override
 	public int deleteTodoList(Map<String, Object> map) {
 		return mainDao.deleteTodoList(map);
+	}
+
+	@Override
+	public int insertWidget(Map<String, Object> param) {
+		return mainDao.insertWidget(param);
 	}
 	
 	
