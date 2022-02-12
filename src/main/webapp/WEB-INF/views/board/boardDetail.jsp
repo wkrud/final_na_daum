@@ -723,7 +723,7 @@ $(".btn-reply").click((e) => {
      headers[csrfHeader] = csrfToken;
      
 			$.ajax({
-				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
+				url:`${pageContext.request.contextPath}/board/boardSchedule.do`,
 				method: "POST",
 				headers : headers, 
 				data : $(scheduleFrm).serialize(),
@@ -735,53 +735,7 @@ $(".btn-reply").click((e) => {
 				});
 	});
 
- /* var dest = '${loginMember.nickname}';
-	const $search = $("#searchFriend");
-	$search.on('keyup', function(e){
-		if($search.val() != ''){
-			if(e.key === 'Enter' || e.keyCode === 13){
-				$("#search-friend-start").trigger('click');
-			}
-		}
-	});
-	$("#search-friend-start").click((e) => {
-		if($("#searchFriend").val() == ''){
-			alert("닉네임을 입력해주세요");
-			return false;
-		};
-		let friend = $("#searchFriend").val();
-		$.ajax({
-			url: `${pageContext.request.contextPath}/member/mypage/searchStartFriend.do?friend=\${friend}`,
-			success(resp){
-				let searched = '';
-				const $resultDiv = $(".search-result-list").find("div");
-				$resultDiv.empty();
-				if(resp == '0'){
-					searched = `<span>그런 친구는 없어요</span>`;
-					$resultDiv.append(searched);
-					return;
-				}else{
-					if(resp.check == 'friend'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-success btn-sm friend">친구</button>`;
-					}else if(resp.check == 'follower'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-outline-warning btn-sm follower">맞팔하기</button>`;
-					}else if(resp.check == 'following'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-warning btn-sm following">친구신청중</button>`;
-					}else if(resp.check == 'free'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-outline-warning btn-sm free">친구추가</button>`;
-					}
-				}
-				
-				$resultDiv.append(searched);
-				
-			},
-			error: console.log
-		});
-	}); */
+ 
 
 
 

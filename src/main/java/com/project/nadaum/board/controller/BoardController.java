@@ -409,4 +409,36 @@ public class BoardController {
 		return ResponseEntity.ok(1);
 	}
 	
+	@PostMapping("/boardSchedule.do")
+	public ResponseEntity<?> insertSchedule(@RequestParam Map<String,Object> map){
+		
+		log.debug("map = {}", map);
+		
+		try{
+			int result = boardService.insertSchedule(map);
+			
+
+			log.debug("result={}", result);
+			String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";	
+			
+			map.put("result", result);
+			map.put("msg", msg);
+			
+			System.out.println(map);
+				if(result == 1) {
+		            return ResponseEntity.ok(map);
+		        } 
+		        else {
+		        	return ResponseEntity.status(404).build();
+		        }
+		
+			}catch (Exception e) {
+				log.error(e.getMessage(), e);
+				return ResponseEntity.badRequest().build();
+			}
+	}
+	
+	
+	
+	
 }
