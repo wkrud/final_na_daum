@@ -165,13 +165,6 @@ div#board-container label.custom-file-label {
 				data-target="#add-calander">캘린더&raquo;</button>
 		<button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button>
 
-<script>
-
-$("#scheduleAccept-btn").click((e) => {
-	const spec = "left=500px, top=200px, width=265px, height=100px";
-	const popup = open('${pageContext.request.contextPath}/culture/scheduleAccept.do', '수락여부', spec);
-});
-</script>
 
 
 		<!-- 영화 줄거리 -->
@@ -711,7 +704,7 @@ $(insertCommentFrm).submit((e) => {
 					alert(guest);
 					let content = '';
 					 console.log(date);
-					content = `<a href='/nadaum/culture/board/view/${apiCode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a>`
+					content = `<a href='/nadaum/culture/board/view/${apiCode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a><a><button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button></a>`
 					console.log(content);
 					commonAlarmSystem(code,guest,content);
 					},
@@ -719,6 +712,14 @@ $(insertCommentFrm).submit((e) => {
 				});
  	});
  	
+</script>
+
+<script>
+$(document).on("click","#scheduleAccept-btn",function(){
+	const spec = "left=500px, top=200px, width=265px, height=100px";
+	const popup = open('${pageContext.request.contextPath}/culture/scheduleAccept.do', '수락여부', spec);
+});
+
 </script>
 <script>
 
