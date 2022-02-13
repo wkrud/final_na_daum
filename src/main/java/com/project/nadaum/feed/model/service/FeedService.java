@@ -18,8 +18,6 @@ public interface FeedService {
 
 	int selectFeedLikesCheck(Map<String, Object> guestInfo);
 
-	FeedComment selectOneFeedComment(Map<String, Object> map);
-
 	FeedComment insertFeedComment(Map<String, Object> map);
 
 	int deleteComment(Map<String, Object> map);
