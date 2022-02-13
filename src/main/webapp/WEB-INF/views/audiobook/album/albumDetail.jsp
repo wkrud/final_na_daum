@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/audiobook/common/audioBookHeader.jsp">
 	<jsp:param value="Le Café Livres" name="title" />
@@ -12,6 +13,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="imgPath" value="/resources/upload/audiobook/img/" />
 <c:set var="imgName" value="${img.renamedFilename}" />
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/audiobook/track.css" />
 <link rel="script" href="${pageContext.request.contextPath}/resources/js/audiobook/player.js" />
 <div class="row row-cols-lg-12 mb-2 justify-content-center relative sub-menu">
@@ -40,7 +42,13 @@
 					<td></td>
 				</tr>
 				<tr>
+					<sec:authorize access="isAuthenticated()">
 					<td><a href="" style="text-decoration: none; color: black;">찜하기</a></td>
+					</sec:authorize>
+					
+					<sec:authorize access="isAnonymous()">
+					<td> </td>
+					</sec:authorize>
 				</tr>
 				<tr>
 					<td style="vertical-align: middle;"> 
@@ -107,7 +115,7 @@ $(document).on(function() {
 	})
 	// close
 	$('#myModal').on('hide.bs.modal', function (e) {
-	 // a poor man's stop video
+	//stop video
 	    $("#video").attr('src',$videoSrc); 
 	})     
 	});

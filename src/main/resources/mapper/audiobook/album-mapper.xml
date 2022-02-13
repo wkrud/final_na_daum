@@ -432,7 +432,7 @@
 			(select * from album_info order by reg_date desc) a
 				left join album_img i
 					on a.code= i.album_code	
-		where rownum <![CDATA[ < ]]> 5
+		where rownum <![CDATA[ < ]]> 6
 	</select>
 	
 	
@@ -446,7 +446,7 @@
 				left join album_img i
 					on a.code= i.album_code
 		where kind=#{kind} and 
-			rownum <![CDATA[ < ]]> 5	
+			rownum <![CDATA[ < ]]> 6	
 	</select>
 	
 	
