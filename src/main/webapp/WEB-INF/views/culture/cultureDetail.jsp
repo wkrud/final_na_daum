@@ -153,12 +153,11 @@ div#board-container label.custom-file-label {
 
 		<!-- 스크랩 버튼 -->
 
-			<!-- scrap.api_code eq apiCode -->
 			<form id="likeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
-				<button type="submit" class="btn btn-success" id="like-btn">
-					스크랩<i class="fas fa-check-double ml-1"></i>
+				<button type="submit" class="btn btn-success" id="likeButton" data-like-yes-no="${likeYesNo}">
+					스크랩${selectCountLikes}<i class="fas fa-check-double ml-1"></i>
 				</button>
 			</form>
 			<button type="button" class="btn btn-secondary" data-toggle="modal"
@@ -166,14 +165,7 @@ div#board-container label.custom-file-label {
 		<button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button>
 
 
-
-		<!-- 영화 줄거리 -->
 		<hr />
-		<h2 class="blog-post-title"></h2>
-		<p class="blog-post-meta">
-			January 1, 2014 by <a href="#">Mark</a>
-		</p>
-
 		<p>${culture.contents1}</p>
 		<p>${culture.contents2}</p>
 
@@ -269,10 +261,35 @@ div#board-container label.custom-file-label {
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item" id="comment-li">
 							<div class="form-inline mb-2">
-								<label for="replyId"><i
-									class="fa fa-user-circle-o fa-2x"> <input type="text"
+								<div class="profileimg1">
+									<div class="profileimg-detail1"
+										style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+										<c:if test="${loginMember.loginType eq 'K'}">
+											<img src="${loginMember.profile}" alt=""
+												style="width: 45px; height: 45px; object-fit: cover;" />
+										</c:if>
+										<c:if test="${loginMember.loginType eq 'D'}">
+											<c:if test="${loginMember.profileStatus eq 'N'}">
+												<img
+													src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+													alt=""
+													style="width: 45px; height: 45px; object-fit: cover;" />
+											</c:if>
+											<c:if test="${loginMember.profileStatus eq 'Y'}">
+												<img
+													src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}"
+													alt=""
+													style="width: 45px; height: 45px; object-fit: cover;" />
+											</c:if>
+										</c:if>
+									</div>
+
+								</div>
+								<div class="profileimg2">
+									<input type="text"
 										class="id-detail movie-detail" name="id" id="writerId"
-										value="${loginMember.nickname}" readonly /></i> </label>
+										value="${loginMember.nickname}" readonly />
+								</div>
 							</div>
 
 							<form id="insertCommentFrm">
@@ -327,6 +344,7 @@ div#board-container label.custom-file-label {
 					<c:forEach items="${commentList}" var="comment">
 							<ul class="list-group list-group-flush" id="level1">
 								<li class="list-group-item" id="commentList">
+								
 									<div class="form-inline mb-2">
 										<label for="replyId"> <i
 											class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
@@ -660,7 +678,6 @@ $(insertCommentFrm).submit((e) => {
 
  		$(likeFrm).submit((e) => {
 		e.preventDefault();
-
 		const csrfHeader = "${_csrf.headerName}";
         const csrfToken = "${_csrf.token}";
         const headers = {};
@@ -701,7 +718,6 @@ $(insertCommentFrm).submit((e) => {
 					let guest = $("[name=friendId]").val();
 					alert(guest);
 					let content = '';
-					 console.log(date);
 					content = `<a href='/nadaum/culture/board/view/${apiCode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a><a><button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button></a>`
 					console.log(content);
 					commonAlarmSystem(code,guest,content);

@@ -241,6 +241,9 @@ $(() => {
 							</div>
 						</div>
 					</c:forEach>
+					<c:if test="${empty perforList}">
+					<h1>해당하는 값이 없습니다.</h1>
+					</c:if>
 				</div>
 
 			</div>

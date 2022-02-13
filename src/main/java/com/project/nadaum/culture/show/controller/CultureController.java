@@ -158,7 +158,7 @@ public class CultureController {
 	}
 	
 	@PostMapping("/search.do")
-	public List<Map<String, Object>> Search(
+	public void Search(
 			@RequestParam (value="keyword", defaultValue="") String keyword, 
 			@DateTimeFormat(pattern="yyyy-MM-dd") Date startDate, @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate, 
 			@RequestParam (value="searchArea", defaultValue="") String searchArea, 
@@ -247,41 +247,46 @@ public class CultureController {
 				perforList = (List<Map<String, Object>>) msgBody.get("perforList");
 				log.debug("perforList = {}", perforList);
 				
+				if (perforList != null && !perforList.isEmpty()) {
+					List<Object> searchList = new ArrayList<>();
 
-				List<Object> searchList = new ArrayList<>();
-
-				for (int i = 0; i < perforList.size(); i++) {
-					String seq = perforList.get(i).get("seq").toString();
-					String title = perforList.get(i).get("title").toString();
-					String area = perforList.get(i).get("area").toString();
-					String place = perforList.get(i).get("place").toString();
-					String thumbnail = perforList.get(i).get("thumbnail").toString();
-					String start = perforList.get(i).get("startDate").toString();
-					String end = perforList.get(i).get("endDate").toString();
-					String realmName = perforList.get(i).get("realmName").toString();
+					for (int i = 0; i < perforList.size(); i++) {
+						String seq = perforList.get(i).get("seq").toString();
+						String title = perforList.get(i).get("title").toString();
+						String area = perforList.get(i).get("area").toString();
+						String place = perforList.get(i).get("place").toString();
+						String thumbnail = perforList.get(i).get("thumbnail").toString();
+						String start = perforList.get(i).get("startDate").toString();
+						String end = perforList.get(i).get("endDate").toString();
+						String realmName = perforList.get(i).get("realmName").toString();
+						
+						  Map<String, Object> map2 = new HashMap<>();
+							map2.put("seq", seq);
+							map2.put("title", title);
+							map2.put("startDate", start);
+							map2.put("endDate", end);
+							map2.put("area", area);
+							map2.put("place", place);
+							map2.put("thumbnail", thumbnail);
+							map2.put("realmName", realmName);
+							
+							searchList.add(map2);
+							
+						  System.out.println(map2);
+						}
 					
-					  Map<String, Object> map2 = new HashMap<>();
-						map2.put("seq", seq);
-						map2.put("title", title);
-						map2.put("startDate", start);
-						map2.put("endDate", end);
-						map2.put("area", area);
-						map2.put("place", place);
-						map2.put("thumbnail", thumbnail);
-						map2.put("realmName", realmName);
-						
-						searchList.add(map2);
-						
-					  System.out.println(map2);
-					}
+					model.addAttribute("perforList", perforList);
+					System.out.println(perforList);
+				}
+
+				else {
+					System.out.println("perforList는 널입니다.");
+				}
 				
-				model.addAttribute("perforList", perforList);
-				System.out.println(perforList);
 			
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
-		return perforList;
 	}
 	
     // tag값의 정보를 가져오는 메소드
@@ -702,5 +707,21 @@ public class CultureController {
 				}
 		}
 		
-		
+		//좋아요
+				@GetMapping("/board/view/{apiCode}/likes")
+				public Map<String, Object> boardLikeTotalAdd(@RequestParam Map<String,Object> map) {
+					
+					// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
+					int selectCountLikes = cultureService.selectCountLikes(map); 
+					
+					Map<String, Object> resultMap = new HashMap<>();
+					
+					resultMap.put("selectCountLikes", selectCountLikes);
+					
+					
+					
+					return resultMap;
+				}
+		@GetMapping("/scheduleAccept.do")
+		public void memberFindFriend() {}
 }
