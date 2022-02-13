@@ -30,19 +30,17 @@
 				</div>
 			</div>
 			<div class="question-list-body">
-				<c:if test="${checkHelp.ME > 0}">
-					<div class="me-wrap">
-						<span>메모</span>
+				<c:if test="${checkHelp.CA > 0}">
+					<div class="ca-wrap">
+						<span>캘린더</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
-								<c:forEach items="${helpMeList}" var="help">
-									<c:if test="${help.category eq 'me'}">
-										<li class="list-group-item">
-											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
-											</a>
-										</li>
-									</c:if>
+								<c:forEach items="${helpListCa}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
 								</c:forEach>
 							</ul>
 						</div>
@@ -56,14 +54,12 @@
 						<span>다이어리</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
-								<c:forEach items="${helpDyList}" var="help">
-									<c:if test="${help.category eq 'dy'}">
-										<li class="list-group-item">
-											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
-											</a>
-										</li>											
-									</c:if>
+								<c:forEach items="${helpListDy}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>		
 								</c:forEach>
 							</ul>
 						</div>
@@ -77,14 +73,12 @@
 						<span>가계부</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
-								<c:forEach items="${helpAbList}" var="help">
-									<c:if test="${help.category eq 'ab'}">
-										<li class="list-group-item">
-											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
-											</a>
-										</li>
-									</c:if>
+								<c:forEach items="${helpListAb}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
 								</c:forEach>
 							</ul>
 						</div>
@@ -98,14 +92,12 @@
 						<span>친구</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
-								<c:forEach items="${helpFrList}" var="help">
-									<c:if test="${help.category eq 'fr'}">
-										<li class="list-group-item">
-											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
-											</a>
-										</li>
-									</c:if>
+								<c:forEach items="${helpListFr}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
 								</c:forEach>		
 							</ul>
 						</div>
@@ -119,14 +111,12 @@
 						<span>문화</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
-								<c:forEach items="${helpCuList}" var="help">
-									<c:if test="${help.category eq 'cu'}">
-										<li class="list-group-item">
-											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
-											</a>
-										</li>
-									</c:if>
+								<c:forEach items="${helpListCu}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
 								</c:forEach>		
 							</ul>
 						</div>
@@ -140,14 +130,69 @@
 						<span>피드</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
-								<c:forEach items="${helpCuList}" var="help">
-									<c:if test="${help.category eq 'fe'}">
-										<li class="list-group-item">
-											<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
-												${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
-											</a>
-										</li>
-									</c:if>
+								<c:forEach items="${helpListFe}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
+								</c:forEach>		
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=cu">더보기</a>
+						</div>
+					</div>
+				</c:if>
+				<c:if test="${checkHelp.AU > 0}">
+					<div class="au-wrap">
+						<span>오디오북</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpListAu}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
+								</c:forEach>		
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=cu">더보기</a>
+						</div>
+					</div>
+				</c:if>
+				<c:if test="${checkHelp.LOL > 0}">
+					<div class="lol-wrap">
+						<span>게임</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpListLol}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
+								</c:forEach>		
+							</ul>
+						</div>
+						<div class="help-list-footer">
+							<a href="${pageContext.request.contextPath}/member/mypage/memberHelpOneCategory.do?category=cu">더보기</a>
+						</div>
+					</div>
+				</c:if>
+				<c:if test="${checkHelp.FE > 0}">
+					<div class="fe-wrap">
+						<span>피드</span>
+						<div class="help-list-main all-category">
+							<ul class="list-group list-group-flush">
+								<c:forEach items="${helpListFe}" var="help" begin="0" end="3">
+									<li class="list-group-item">
+										<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${help.code}" class="list-group-item list-group-item-action">
+											${help.title}<c:if test="${help.status == 'T'}">&nbsp;-&nbsp;<i class="fa fa-check" aria-hidden="true"></i></c:if>
+										</a>
+									</li>
 								</c:forEach>		
 							</ul>
 						</div>

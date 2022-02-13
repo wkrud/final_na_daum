@@ -19,7 +19,12 @@
 			<option selected>카테고리</option>
 			<option value="dy">다이어리</option>
 			<option value="ab">가계부</option>
-			<option value="mo">영화</option>
+			<option value="cu">문화</option>
+			<option value="au">오디오북</option>
+			<option value="lol">게임</option>
+			<option value="ca">캘린더</option>
+			<option value="fr">친구</option>
+			<option value="fe">피드</option>
 		</select>
 		<textarea name="content" id="help-content-summernote" required></textarea>
 		<div><span id="limite_normal"></span><span id="limite_vermelho" style="color:red"></span>/500</div>
@@ -138,10 +143,6 @@ $(document).ready(function() {
 });
 const deleteImg = (url) => {
 	let val = "";
-	const csrfHeader = "${_csrf.headerName}";
-	const csrfToken = "${_csrf.token}";
-	const headers = {};
-	headers[csrfHeader] = csrfToken;
 	
 	$.ajax({
 		url: '${pageContext.request.contextPath}/member/mypage/deleteSummernoteImageFile.do',

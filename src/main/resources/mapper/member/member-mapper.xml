@@ -212,24 +212,14 @@
 	
 	<select id="selectAllMembersQuestions" resultType="help">
 		select
-			*
+			h.*
 		from(
-			select 
-				* 
-			from 
+			select
+				*
+			from
 				help
-			<where>
-				<if test="category != 'all'">
-					category = #{category}
-				</if>
-			</where>
 			order by
-				reg_date desc
-		)
-		<if test="category != 'all'">
-		where
-			rownum <![CDATA[<=]]> 4
-		</if>
+				reg_date desc) h
 	</select>
 	
 	<select id="selectAllHelpTitle" resultType="string">
