@@ -108,7 +108,7 @@ img {
 		<a class="btn btn-outline-info" href="${pageContext.request.contextPath}/audiobook/search/list/select?searchType=kind&searchKeyword=Classic" role="button">#클래식</a> 
 		<a class="btn btn-outline-info" href="${pageContext.request.contextPath}/audiobook/search/list/select?searchType=kind&searchKeyword=Novel"role="button">#소설</a> 
 		<a class="btn btn-outline-info" href="${pageContext.request.contextPath}/audiobook/search/list/select?searchType=kind&searchKeyword=ASMR" role="button">#ASMR</a> 
-		<a class="btn btn-outline-info" href="${pageContext.request.contextPath}/audiobook/search/list/select?searchType=creator&searchKeyword=페퍼톤스" role="button">#페퍼톤스</a>
+		<a class="btn btn-outline-info" href="${pageContext.request.contextPath}/audiobook/search/list/select?searchType=kind&searchKeyword=Fairy" role="button">#동화책</a>
 	</div>
 </div>
 
