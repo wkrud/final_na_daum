@@ -458,7 +458,6 @@ const audiobookWidgetInfo = () => {
 				let content = `
 				<p>`+resp.albumInfo.kind+` 장르의 이런 오디오북 감상은 어떠세요?</p>
 				<p>이미지 링크: `+resp.imgLink+`</p>
-				<p>링크는 잘 불러오는데 제 컴터에 사진이 안 올라와서 안 떠여~~</p>
 				<img src=`+resp.imgLink+`>
 				<p>제목 : `+resp.albumInfo.title+`</p>
 				<p>creator : `+resp.albumInfo.creator+`</p>
