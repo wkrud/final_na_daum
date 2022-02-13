@@ -12,6 +12,7 @@ import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
 import com.project.nadaum.board.model.vo.BoardEntity;
 import com.project.nadaum.board.model.vo.Likes;
+import com.project.nadaum.board.model.vo.RiotSchedule;
 
 @Repository
 public class BoardDaoImpl implements BoardDao {
@@ -132,9 +133,27 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public int insertSchedule(Map<String, Object> map) {
+	public int insertSchedule(RiotSchedule riotSchedule) {
 		
-		return session.insert("board.insertSchedule", map);
+		return session.insert("board.insertSchedule", riotSchedule);
+	}
+
+	@Override
+	public RiotSchedule selectOneboardScheduleCheck(String schedulecode) {
+		
+		return session.selectOne("board.selectOneboardScheduleCheck",schedulecode);
+	}
+
+	@Override
+	public int insertFinalSchedule(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return session.insert("board.insertFinalSchedule", map);
+	}
+
+	@Override
+	public int insertFinalSecondSchedule(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return session.insert("board.insertFinalSecondSchedule", map);
 	}
 
 	
