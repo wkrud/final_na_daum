@@ -7,14 +7,9 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-
 <%@ page import="com.project.nadaum.member.model.vo.MemberEntity"%>
 <sec:authentication property="principal" var="loginMember" />
-<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header"
-	content="${_csrf.headerName}" />
 
-<sec:authentication property="principal" var="loginMember" />
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판상세보기" name="title" />
@@ -182,11 +177,57 @@ div.col>.detail {
 					onclick="location.href ='${pageContext.request.contextPath}/board/boardUpdateView.do?code=${board.code}'">
 				<input type="button" class="btn btn-warning" id="deletebtn"
 					value="삭제" onclick="deleteBoard()">
+				<button type="button" class="btn btn-secondary" data-toggle="modal"
+					data-target="#add-calander">듀오약속잡기&raquo;</button>
 			</c:if>
 		</div>
 
 	</div>
+
 	<hr style="margin-top: 30px;" />
+	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
+		aria-labelledby="add-calander" aria-hidden="true">
+		<form id="promiseFrm">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">제목</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="title" name="title"
+									placeholder="제목을 입력해주세요" required>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">약속일</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" id="startDate"
+									name="startDate" required>
+							</div>
+						</div>
+						<span>듀오신청할 친구 닉네임</span> <input type="text" name="friendId"
+							id="friendId" class="friendTextId" /> <br /> <br /> <input
+							type="hidden" name="apiCode" value="${board.code}" /> <input
+							type="hidden" name="allDay" value="0" /> <input type="hidden"
+							name="id" value="${loginMember.id}" />
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">취소</button>
+							<button type="submit" class="btn btn-primary">추가</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 
 	<!-- 댓글 -->
 	<div class="comment-container">
@@ -379,7 +420,7 @@ div.col>.detail {
 															value="&nbsp;&nbsp;${comment.nickname}" />
 														</label>
 													</div>
-													</div>
+												</div>
 											</label> &nbsp;&nbsp;
 											<fmt:formatDate value="${comment.regDate}"
 												pattern="yyyy-MM-dd HH:mm" />
@@ -402,8 +443,8 @@ div.col>.detail {
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
-					</div>
-					</div>
+				</div>
+			</div>
 		</c:if>
 	</div>
 </div>
@@ -426,11 +467,17 @@ div.col>.detail {
 	name="boardCommentDelFrm" method="POST">
 	<input type="hidden" name="commentCode" value="${comment.commentCode}" />
 	<input type="hidden" name="code" value="${board.code}" /> <input
-		type="hidden" name="id" id="commentdeleteid" value="${loginMember.id}" /> <input
-		type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		type="hidden" name="id" id="commentdeleteid" value="${loginMember.id}" />
+	<input type="hidden" name="${_csrf.parameterName}"
+		value="${_csrf.token}" />
 </form>
 <script>
 $(document).ready(function() {
+	
+	<c:if test="${check.guest eq 'guest'}">
+		console.log('${check.guest}');
+	</c:if>
+	
 	const $code = $('#countcode').val();
 	const $id = $('#id').val();
 	console.log($code);
@@ -465,6 +512,8 @@ $(document).ready(function() {
 				alert("에러");
 		}
 	});
+	
+	
 	
 	
 });
@@ -653,38 +702,32 @@ $(".btn-reply").click((e) => {
 	
 });
 
-$("#likeButton").click((e) => {
-	
-});
-/* ajax 비동기로 처리 */
-/*  $(insertCommentFrm).submit((e) => {
-				e.preventDefault();
-				
-				const csrfHeader = "${_csrf.headerName}";
-		        const csrfToken = "${_csrf.token}";
-		        const headers = {};
-		        headers[csrfHeader] = csrfToken;
-				$.ajax({
-					headers : headers,
-					url: `${pageContext.request.contextPath}/board/boardCommentEnroll.do`,
-					method: "POST",
-					data: $(insertCommentFrm).serialize(),
-					success(resp){
-						console.log(resp)
-						location.reload();
-						alert(resp.msg);
-						
+ $(promiseFrm).submit((e) => {
+		e.preventDefault();
+
+     
+     
+			$.ajax({
+				url:`${pageContext.request.contextPath}/board/boardSchedule.do`,
+				method: "POST",
+				headers : headers, 
+				data : $(promiseFrm).serialize(),
+				success(resp){
+					location.reload();
+					alert(resp.msg);
+					let ranNo = Math.floor(Math.random() * 10000);
+					let code = 'riota-' + ranNo;
+					let guest = $(".friendTextId").val();
+					let content = '';
+					content = `<a href='/nadaum/board/boardDetail.do?code=${board.code}&guest=guest'>${board.nickname}님이 회원님에게 듀오신청약속을 보냈습니다.</a>`
+					commonAlarmSystem(code,guest,content);
 					},
-					error: console.log
+				error: console.log
 				});
-				
-			}); */
-/**
- * 초기 페이지 로딩시 댓글 불러오기
- */
-$(function(){    
-    getCommentList();  
-});
+	});
+
+ 
+
 
 
 

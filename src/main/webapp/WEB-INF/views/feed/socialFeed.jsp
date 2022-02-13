@@ -71,7 +71,7 @@
 				<c:forEach items="${feed}" var="f" begin="0" end="7">
 					<!-- 사진이 있다면 -->
 					<c:if test="${not empty f.attachments}">
-						<div class="one-feed">
+						<div class="one-feed" onclick="feedDetailModalView(this);">
 							<div class="hidden-likes-comment">
 								<input type="hidden" class="code" value="${f.code}"/>
 								<div class="likes-count">
@@ -90,7 +90,7 @@
 					</c:if>					
 					<!-- 사진이 없다면 -->
 					<c:if test="${empty f.attachments}">
-						<div class="one-feed">
+						<div class="one-feed" onclick="feedDetailModalView(this);">
 							<div class="hidden-likes-comment">
 								<input type="hidden" class="code" value="${f.code}"/>
 								<div class="likes-count">
@@ -152,7 +152,7 @@ const addFeedPage = (id, page) => {
 												
 				if(resp.attachments != ''){
 					feedDiv = `
-					<div class="one-feed">
+					<div class="one-feed" onclick="feedDetailModalView(this);">
 						<div class="hidden-likes-comment">
 							<input type="hidden" class="code" value="\${CODE}"/>
 							<div class="likes-count">
@@ -170,7 +170,7 @@ const addFeedPage = (id, page) => {
 					</div>`;
 				}else{
 					feedDiv = `
-					<div class="one-feed">
+					<div class="one-feed" onclick="feedDetailModalView(this);">
 						<div class="hidden-likes-comment">
 							<input type="hidden" class="code" value="\${CODE}"/>
 							<div class="likes-count">
@@ -190,10 +190,8 @@ const addFeedPage = (id, page) => {
 				
 				$feedArea.append(feedDiv);
 				
-				$(".one-feed").click((e) => {
-					feedDetailModalView(e);
-				});
 			});
+
 			console.log(page);
 			loading = false;
 			if($resp.length === 0){
@@ -264,18 +262,10 @@ $chatRoom.click((e) => {
 
 
 let $hidden = $(".hidden-likes-comment");
-$(".one-feed").click((e) => {
-	feedDetailModalView(e);
-});
 
 const feedDetailModalView = (e) => {
-	let code = '';
-	if($(e.target).attr('class') != 'hidden-likes-comment'){
-		code = $(e.target).parent().parent().find("input.code").val();
-	}else{
-		code = $(e.target).find("input.code").val();
-	}
-	console.log('${member.id}' + " " + code);
+	console.dir(e);
+	let code = $(e).find('input.code').val()
 	selectedFeed('${member.id}',code);
 };
 </script>	

@@ -32,6 +32,8 @@ import com.project.nadaum.board.model.vo.Likes;
 import com.project.nadaum.common.BoardUtils;
 import com.project.nadaum.common.NadaumUtils;
 import com.project.nadaum.member.model.vo.Member;
+import com.project.nadaum.member.model.service.MemberService;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +48,8 @@ public class BoardController {
 	@Autowired
 	private ServletContext application;
 	
+	@Autowired
+	private MemberService memberService;
 	
 	
 	//추천수
@@ -229,13 +233,14 @@ public class BoardController {
 	
 	//게시물 상세보기
 	@GetMapping("/boardDetail.do")
-	public String boardDetail(
-			@RequestParam String code, 
+	public String boardDetail(@AuthenticationPrincipal Member member,
+			@RequestParam Map<String,Object> map, 
 			Model model,
 //			@CookieValue(value="boardCount", required=false, defaultValue="0") String value,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		
+			String code = (String) map.get("code");
 			log.debug("code={}",code);
 		try {
 			// 상세보기를 요청하면, 해당글에 대한 boardCookie가 존재하지 않을때 조회수를 1증가한다. 
@@ -287,10 +292,18 @@ public class BoardController {
 			//int selectCountLikes = boardService.selectCountLikes(code); 
 			log.debug("boardDetail board ={}", board);
 			//model.addAttribute("selectCountLikes",selectCountLikes);
+			
+			List<Map<String, Object>> friends = memberService.selectAllFriend(member);
+			List<Member> memberList = memberService.selectAllNotInMe(member);
+			
+			log.debug("map ={}", map);
+			
+			model.addAttribute("memberList", memberList);
+			model.addAttribute("friends", friends);
 			model.addAttribute("board", board);
 			model.addAttribute("boardriot",boardriot);
 			model.addAttribute("commentList", commentList);
-			
+			model.addAttribute("check", map);
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -382,7 +395,7 @@ public class BoardController {
 	}
 	
 	@PostMapping(value="/deleteSummernoteImageFile.do")
-	public ResponseEntity<?> deleteSummernoteImageFile(@RequestParam Map<String, Object> map)  {
+	public ResponseEntity<?> deleteSummernoteImageFile(@RequestParam Map<String, Object> map,Model model)  {
 		log.debug("map = {}", map);
 		
 			String fileRoot = application.getRealPath("/resources/upload/board/img");
@@ -398,5 +411,41 @@ public class BoardController {
 		
 		return ResponseEntity.ok(1);
 	}
+	
+	@PostMapping("/boardSchedule.do")
+	public ResponseEntity<?> insertSchedule(@RequestParam Map<String,Object> map,Model model){
+		
+		log.debug("map = {}", map);
+		
+		try{
+			int result = boardService.insertSchedule(map);
+			
+
+			log.debug("result={}", result);
+			String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";	
+			
+			map.put("result", result);
+			map.put("msg", msg);
+			
+		
+			System.out.println(map);
+				if(result == 1) {
+					
+					
+		            return ResponseEntity.ok(map);
+		        } 
+		        else {
+		        	return ResponseEntity.status(404).build();
+		        }
+		
+			}catch (Exception e) {
+				log.error(e.getMessage(), e);
+				return ResponseEntity.badRequest().build();
+			}
+		
+	}
+	
+	
+	
 	
 }
