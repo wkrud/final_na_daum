@@ -214,9 +214,17 @@
 				
 				<script>
 				$(() => {
+					$.ajax({
+						url: '/nadaum/member/mypage/memberFriendWidget.do',
+						success(resp){
+							console.log(resp);
+						},
+						error: console.log
+					});
+					
 					$("#birthday").datepicker({
 						showAnim: "fold",
-						duration: "normal"
+						duration: "normal"						
 					});
 					/* db에서 불러온 소개에서 <br/>을 \r\n으로 변경하여 코드가 보이지 않도록 수정 */
 					$intro.val($intro.val().split('<br/>').join('\r\n'));
