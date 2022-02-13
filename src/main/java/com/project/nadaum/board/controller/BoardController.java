@@ -443,12 +443,19 @@ public class BoardController {
 		RiotSchedule checkresult = boardService.selectOneboardScheduleCheck(schedulecode);
 		char accept = checkresult.getAccept();
 		int allDay = checkresult.getAllDay();
-		checkresult.getFriendId();
-		String id = checkresult.getId();
+		String friendnickname = checkresult.getFriendId();
+		String mynickname = checkresult.getId();
 		Date startDate = checkresult.getStartDate();
-		String title = checkresult.getTitle();
+		String content = checkresult.getTitle();
 		
-		param.put("checkresult", checkresult);
+		param.put("accept", accept);
+		param.put("allDay", allDay);
+		param.put("friendnickname", friendnickname);
+		param.put("mynickname", mynickname);
+		param.put("startDate", startDate);
+		param.put("content", content);
+		
+		
 
 		
 

@@ -169,6 +169,8 @@ div.col>.detail {
 		<div id="btn-container">
 			<input type="button" class="btn btn-warning" id="listbtn" value="목록 "
 				onclick="location.href ='${pageContext.request.contextPath}/board/boardList.do'">
+			<button type="button" class="btn btn-secondary" data-toggle="modal"
+					data-target="receive-calander">듀오약속확인&raquo;</button>
 
 			<%-- 작성자와 마지막행 수정/삭제버튼이 보일수 있게 할 것 --%>
 			<c:if test="${loginMember.id eq board.id}">
@@ -177,8 +179,9 @@ div.col>.detail {
 					onclick="location.href ='${pageContext.request.contextPath}/board/boardUpdateView.do?code=${board.code}'">
 				<input type="button" class="btn btn-warning" id="deletebtn"
 					value="삭제" onclick="deleteBoard()">
-				<button type="button" class="btn btn-secondary" data-toggle="modal"
+				<button type="button" class="btn btn-secondary" data-toggle="modal2"
 					data-target="#add-calander">듀오약속잡기&raquo;</button>
+					
 			</c:if>
 		</div>
 
@@ -228,8 +231,9 @@ div.col>.detail {
 			</div>
 		</form>
 	</div>
-
-	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
+	
+	<!-- 받을모달 -->
+	<div class="modal2 fade" id="receive-calander" tabindex="-1" role="dialog"
 		aria-labelledby="add-calander" aria-hidden="true">
 		<form id="promiseReceiveFrm">
 			<div class="modal-dialog modal-dialog-centered" role="document">
@@ -243,10 +247,9 @@ div.col>.detail {
 					</div>
 					<div class="modal-body">
 						<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">제목</label>
+							<label for="title" class="col-sm-2 col-form-label">내용</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="title" name="title"
-									placeholder="제목을 입력해주세요" required>
+								<input type="text" class="form-control" id="title" name="title">
 							</div>
 						</div>
 
@@ -254,14 +257,18 @@ div.col>.detail {
 							<label for="title" class="col-sm-2 col-form-label">약속일</label>
 							<div class="col-sm-10">
 								<input type="date" class="form-control" id="startDate"
-									name="startDate" required>
+									name="startDate">
+									<input type="date" name="endDate" />
 							</div>
 						</div>
-						<span>듀오신청할 친구 닉네임</span> <input type="text" name="friendId"
-							id="friendId" class="friendTextId" /> <br /> <br /> <input
-							type="hidden" name="apiCode" value="${board.code}" /> <input
-							type="hidden" name="allDay" value="0" /> <input type="hidden"
-							name="id" value="${loginMember.id}" />
+						<span>듀오신청온 친구 닉네임</span> <input type="text"
+							name="mynickname"  />
+							 <br /> <br /> <input
+							type="hidden" name="allDay"  /> 
+							<input type="hidden" name="type"  value="lol"/>
+							<input type="hidden" name="borderColor"  value="lol"/>
+							<input type="hidden" name="backgroundColor"  value="lol"/>
+							<input type="hidden" name="textColor"  value="lol"/>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">취소</button>
@@ -532,8 +539,35 @@ $(document).ready(function() {
 					
 				},
 				success(data){
-					const result = data["checkresult"];
-					console.log('result');
+					const accept = data["accept"];
+					const allDay = data["allDay"];
+					const friendnickname = data["friendnickname"];
+					const mynickname = data["mynickname"];
+					const startDate = data["startDate"];
+					const content = data["content"];
+					
+					
+					
+					
+					
+					 $(promiseReceiveFrm).submit((e) => {
+							e.preventDefault();
+					
+					     
+								$.ajax({
+									url:`${pageContext.request.contextPath}/board/boardReceiveSchedule.do`,
+									method: "POST",
+									headers : headers, 
+									data : $(promiseReceiveFrm).serialize(),
+									success(resp){
+										location.reload();
+										alert(resp.msg);
+										
+										},
+									error: console.log
+									});
+						}); 
+					
 					
 					
 						
@@ -550,23 +584,7 @@ $(document).ready(function() {
 			
 			
 			
-			/* $(promiseReceiveFrm).submit((e) => {
-				e.preventDefault();
-		
-		     
-					$.ajax({
-						url:`${pageContext.request.contextPath}/board/boardReceiveSchedule.do`,
-						method: "POST",
-						headers : headers, 
-						data : $(promiseReceiveFrm).serialize(),
-						success(resp){
-							location.reload();
-							alert(resp.msg);
-							
-							},
-						error: console.log
-						});
-			}); */
+			
 
 		
 	</c:if>
