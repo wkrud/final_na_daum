@@ -91,7 +91,7 @@ public class AlbumController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			AlbumInfo albumInfo = albumService.selectWidgetAlbumInfo(map);
-			String imgLink = application.getRealPath("/resources/upload/audiobook")
+			String imgLink = application.getRealPath("/resources/upload/audiobook/")
 							+ albumService.selectListAlbumImg(albumInfo.getCode()).get(0).getRenamedFilename();
 			map.put("albumInfo", albumInfo);// albumInfo.title, albumInfo.kind...
 			map.put("imgLink", imgLink); //이미지 표시하시면 img src에 붙여 쓰시면됩니다.
