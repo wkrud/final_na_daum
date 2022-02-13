@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 	</section>
 	<footer>
-		<p>&lt;Copyright 2022-2030 <strong>나:다움</strong>. All rights reserved.&gt;</p>
+		<p>Copyright 2022-2030 <strong>나:다움</strong>. All rights reserved.</p>
 	</footer>
 	
 </div>
