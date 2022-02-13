@@ -21,7 +21,7 @@
     if(document.querySelector('.game-widget') != null) {
  	  gameWidgetInfo();
    } 
-	if (document.querySelector('.todo-widget') != null) {
+	if (document.querySelector('.alret-widget') != null) {
   	 todoListWidgetInfo();	
    } 
     if (document.querySelector('.account-widget') != null) {
@@ -38,6 +38,12 @@
    }
    if (document.querySelector('.memo-widget') != null) {
 	memoWidgetInfo();
+   }
+   if (document.querySelector('.alert-widget') != null) {
+	alertWidgetInfo();
+   }
+   if (document.querySelector('.friend-widget') != null) {
+	friendWidgetInfo();
    }
    
    
@@ -81,10 +87,11 @@ const drop = (ev) => {
 	}
 	
 	//위젯 생성
-   	//피드
-   if(widgetName == 'feed-widget') {
-	   if(document.querySelector('.feed-widget') == null) {
+   	//친구
+   if(widgetName == 'friend-widget') {
+	   if(document.querySelector('.friend-widget') == null) {
 	        insertWidget(); 
+	        friendWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -99,29 +106,11 @@ const drop = (ev) => {
 	        return;
 	      }
    } 
-   //투두리스트
-   else if(widgetName == 'todo-widget') {
-	   if(document.querySelector('.todo-widget') == null) {
+   //알림 불러오기
+   else if(widgetName == 'alert-widget') {
+	   if(document.querySelector('.alert-widget') == null) {
 		   insertWidget();   
-			//투두리스트 자동 등록
-			$.ajax({
-		    	url : $contextPath+"/main/insertTodoList.do",
-		     	method : 'GET',
-		     	contentType : "application/json; charset=UTF-8",
-		     	dataType : "json",
-		     	success(data) {
-		     		console.log(data);
-		     		//투두리스트 insert 성공시 리스트 로딩
-		     		if(data == 1) {
-		     			todoListWidgetInfo();
-		     		} else {
-		     			alert("위젯 등록에 실패했습니다.");
-		     		} //success 끝
-		     	},error(xhr, testStatus, err) {
-					console.log("error", xhr, testStatus, err);
-					alert("조회에 실패했습니다.");
-				}
-		     });
+		   alertWidgetInfo();
 	   } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -229,65 +218,52 @@ const drop = (ev) => {
 			alert("위젯 로딩에 실패했습니다.");
 		}
 	});
-	}
- 
- //투두리스트 삭제
-const delTodoList = (no) => {
-	 $.ajax({
-    	url : $contextPath+"/main/deleteTodoList.do",
-     	method : 'POST',
-     	data : {
-     		"no" : no,
-     	},
-		headers : headers,
-     	success(data) {
-			//div 새고하니까 날라가는데?????????
-				$('.todo-widget').load(location.href+' .todo-widget');
-				$.ajax({
-     				url : $contextPath+"/main/userTodoList.do",
-     				method : 'GET',
-    		     	contentType : "application/json; charset=UTF-8",
-    		     	dataType : "json",
-    		     	success(resp) {
-    		     		console.log(resp);
-    		     		console.log(resp.length);
-
-    		     		let todoList = "";
-		    		   	todoList = `<ul class="todoListRoom">
-		    		   					<li><input type="text" name="title" id="title" value="`+resp[0].title+`" /></li>
-		    		   					<li><input type="text" name="regDate" value="`+timeConvert(resp[0].regDate)+`" /></li>
-		    		   				</ul>
-		    		   					`
-		    		   				$(".widget_form").append(todoList);
-    		     		//for문으로 투두리스트 목록
-		   				for(let i = 0; i < resp.length; i++) {		    		     			
-    		     		todoList = `
-    		     			<li>
-    		     				<input type="checkbox" name="no" id="" value="`+resp[i].no+`" />
-    		     				<input type="text" name="content" id="" value="`+resp[i].content+`" />
-    		     				<button onclick="delTodoList(`+resp[i].no+`)">삭제하기</button>
-    		     			</li>
-    		     		`
-	     					$(".todoListRoom").append(todoList);
-	     					}
-		   				//버튼 추가
-		   				todoList = `<button class="`+resp[0].title+`">+ 일정을 추가하세요</button>`
-		   				$(".todoListRoom").append(todoList);
-    		     	},error(xhr, testStatus, err) {
-    					console.log("error", xhr, testStatus, err);
-    					alert("위젯 로딩에 실패했습니다.");
-    				}
-     			});
-		}, 
-		error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
-	 });
-	};
+}
 
 
 //위젯 정보 로딩용
+//친구 위젯
+const friendWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/member/mypage/memberFriendWidget.do",
+		method : 'GET',
+		contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+		success(resp) {
+			console.log(resp);
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}	
+	})
+}
+
+//알림 불러오기
+const alertWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/websocket/wsCountAlarm.do",
+		method : 'GET',
+		contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+		success(resp) {
+			let content = "";
+			for(let i = 0; i < 5; i++) {				
+			content = `
+				<div>
+					<p>`+resp[i].content+`</p>
+					<p>`+timeConvert(resp[i].regDate)+`</p>
+				</div>
+			`
+			$(".alert-widget").append(content);
+			}
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	})
+}
 
 //메모
 const memoWidgetInfo = () => {
@@ -332,17 +308,15 @@ const gameWidgetInfo = () => {
 	 	headers : headers,
 	 	data : JSON.stringify(member_Id),
 	 	success(resp) { 
-	 		console.log(resp);
-	 		console.log(resp.widgetinfo.leaguePoints);
 				let content = `
 				<table>
 					<tr>
 						<td>닉네임 : `+resp.widgetinfo.name+`</td>
-						<td>리그포인트 : `+resp.widgetinfo.leaguePoints+`</td>
+						<td>티어 : `+resp.widgetinfo.tier+`</td>
 						<td>랭크 : `+resp.widgetinfo.rank+`</td>
 					</tr>
 					<tr>
-						<td>티어 : `+resp.widgetinfo.tier+`</td>
+						<td>리그포인트 : `+resp.widgetinfo.leaguePoints+`</td>
 						<td>승 : `+resp.widgetinfo.wins+`</td>
 						<td>패 : `+resp.widgetinfo.losses+`</td>
 					</tr>

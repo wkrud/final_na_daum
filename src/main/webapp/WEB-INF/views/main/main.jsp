@@ -15,14 +15,14 @@
 <article class="mainWrapper">
 	<section class="main box" id="dragZone" droppable="true" ondrop="drop(event)" ondragover="dragOver(event)">
 		<div class="add-widget">
-			<span style="--i:0;--x:-1;--y:0" class="accept-drag" id="feed-widget">
+			<span style="--i:0;--x:-1;--y:0" class="accept-drag" id="friend-widget">
 				<i class="far fa-comments"></i>
 			</span>
 			<span style="--i:1;--x:1;--y:0" class="accept-drag" id="calendar-widget">
 				<i class="far fa-calendar-alt"></i>
 			</span>
-			<span style="--i:2;--x:0;--y:-1" class="accept-drag" id="todo-widget">
-				<i class="fas fa-clipboard-list"></i>
+			<span style="--i:2;--x:0;--y:-1" class="accept-drag" id="alert-widget">
+				<i class="far fa-bell"></i>
 			</span>
 			<span style="--i:3;--x:0;--y:1" class="accept-drag" id="memo-widget">
 				<i class="far fa-edit"></i>

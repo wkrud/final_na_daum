@@ -130,13 +130,10 @@ const monthly = (m) => {
 		dataType : "json",
 		headers : headers,
 		success(resp) {
-			console.log(resp);
 			let array = [];
 			for(obj in resp) {
 				array.push(resp[obj].monthly);
 			}
-			console.log(array);
-			console.log(array.length);
 			if(m == "before") {
 				if($today === array[0]) {
 					alert("기록에 없는 데이터는 조회할 수 없습니다.");
