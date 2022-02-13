@@ -230,7 +230,35 @@ const friendWidgetInfo = () => {
 		contentType : "application/json; charset=UTF-8",
 	 	dataType : "json",
 		success(resp) {
-			console.log(resp);
+			let content = "";
+			content = `
+				<div class="friendTogetherInfo">
+				</div>
+				<div class="friendStraightInfo">
+				</div>
+			`
+			$(".friend-widget").append(content);
+			//맞팔
+			for(let i = 0; i < resp.widgetFriends.length; i++) {
+				content = `
+					<div class="activeWithFriends">
+					<img style = "width : 100px; height : 100px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
+					<span>`+resp.widgetFriends[i].nickname+`</span>
+					</div>
+				`;
+				$(".friendTogetherInfo").append(content);
+			}
+			//팔로워
+			for(let i = 0; i < resp.widgetFollowers.length; i++) {
+				content = `
+					<div class="activeWithFriends">
+					<img style = "width : 100px; height : 100px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>
+					<span>`+resp.widgetFollowers[i].nickname+`</span>
+					</div>
+				`;
+				$(".friendStraightInfo").append(content);
+			}
+			
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -528,7 +556,11 @@ const movieWidgetInfo = () => {
 $(".clearWidgetBtn").on('click', function(){
 		$(".delWidgetBtn").toggle();
 	});
-	
+
+//친구 누르면 창 뜨게
+$(document).on("click", ".activeWithFriends", function() {
+	console.log("찍히냐?");
+});
  
 //수입 지출 변환 함수
 const IE = (x) => {
