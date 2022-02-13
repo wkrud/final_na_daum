@@ -901,6 +901,51 @@ public class MemberController {
 			throw e;
 		}
 	}
+	
+	@GetMapping("/mypage/memberFriendWidget.do")
+	public ResponseEntity<?> memberFriendWidget(@AuthenticationPrincipal Member member){
+		Map<String, Object> friendWidget = new HashMap<>();
+		try {
+			List<Map<String, Object>> friends = memberService.selectAllFriend(member);
+			List<Map<String, Object>> follower = memberService.selectAllRequestFriend(member);
+			List<Member> memberList = memberService.selectAllNotInMe(member);
+			
+			List<Map<String, Object>> widgetFriends = new ArrayList<>();
+			List<Map<String, Object>> widgetFollowers = new ArrayList<>();
+			Map<String, Object> param = new HashMap<>();
+			for(Member m : memberList) {
+				for(int i = 0; i < friends.size(); i++) {
+					if(m.getId().equals(friends.get(i).get("friendId"))) {
+						param.put("nickname", m.getNickname());
+						param.put("loginType", m.getLoginType());
+						param.put("profile", m.getProfile());
+						param.put("profileStatus", m.getProfileStatus());
+						param.put("id", m.getId());
+						
+						widgetFriends.add(param);
+					}
+				}
+				for(int i = 0; i < follower.size(); i++) {
+					if(m.getId().equals(follower.get(i).get("followerId"))) {
+						param.put("nickname", m.getNickname());
+						param.put("loginType", m.getLoginType());
+						param.put("profile", m.getProfile());
+						param.put("profileStatus", m.getProfileStatus());
+						param.put("id", m.getId());
+						
+						widgetFollowers.add(param);
+					}
+				}
+			}
+			friendWidget.put("widgetFriends", widgetFriends);
+			friendWidget.put("widgetFollowers", widgetFollowers);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}	
+		
+		return ResponseEntity.ok(friendWidget);
+	}
 
 	@GetMapping("/mypage/memberFindFriend.do")
 	public void memberFindFriend() {}
