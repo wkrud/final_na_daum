@@ -33,22 +33,7 @@ public class MovieCommentController{
 	@Autowired
 	private CommentService commentService;
 
-	
-	//평점
-	
-//	@GetMapping("/movieDetail/{apiCode}")
-////	@ResponseBody
-//	public ModelAndView movieRating (@PathVariable String apiCode) {
-//		
-//		int result = movieService.fiveRatingCounts(code);
-//		
-//		Map<String, Object> map = new HashMap<>();
-//		
-//		return null;
-//		
-//	}
-	
-	
+
 	//============================= 댓  글 =================================================
 	
 	///등록

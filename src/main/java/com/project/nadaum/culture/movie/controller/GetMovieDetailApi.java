@@ -9,10 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.project.nadaum.culture.comment.model.service.CommentService;
 import com.project.nadaum.culture.comment.model.vo.Comment;
 import com.project.nadaum.culture.movie.model.service.MovieService;
+import com.project.nadaum.member.model.service.MemberService;
+import com.project.nadaum.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,15 +42,25 @@ public class GetMovieDetailApi {
 	@Autowired
 	private CommentService commentService;
 	
+	@Autowired
+	private ServletContext application;
+	
+	@Autowired
+	private MemberService memberService;
+	
 	// 인증키
 	final static String SERVICEKEY = "5640ea577618caa1d5cefe4b2fea1683";
 	
 	// 영화 상세정보API
 		@GetMapping("/movieDetail/{apiCode}")
-		public ModelAndView getMovieDetailApi(@PathVariable String apiCode, Model model) {
+		public ModelAndView getMovieDetailApi(
+				@AuthenticationPrincipal Member member,
+				@PathVariable String apiCode, 
+				Model model) {
+			
 			log.debug("apiCode = {} ", apiCode);
 			
-			  // TMDB api
+			// TMDB api
 			List<Map<String, Object>> list = new ArrayList<>();
 			Map<String, Object> map = new HashMap<>();			
 	        
@@ -125,7 +140,11 @@ public class GetMovieDetailApi {
 	            //댓글목록 불러오기
 	            List<Comment> commentList = commentService.selectMovieCommentList(apiCode);
 				model.addAttribute("commentList",commentList);
-
+				
+				//약속 친구리스트 불러오기
+				List<Map<String, Object>> friends = memberService.selectAllFriend(member);
+				List<Member> memberList = memberService.selectAllNotInMe(member);
+				
 				//평점 평균
 				int totalStartComment = movieService.totalStarCount(apiCode); //총 star를 준 사람의 수
 				if (totalStartComment != 0) {
