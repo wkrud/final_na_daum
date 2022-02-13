@@ -229,6 +229,51 @@ div.col>.detail {
 		</form>
 	</div>
 
+	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
+		aria-labelledby="add-calander" aria-hidden="true">
+		<form id="promiseReceiveFrm">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">제목</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="title" name="title"
+									placeholder="제목을 입력해주세요" required>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">약속일</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" id="startDate"
+									name="startDate" required>
+							</div>
+						</div>
+						<span>듀오신청할 친구 닉네임</span> <input type="text" name="friendId"
+							id="friendId" class="friendTextId" /> <br /> <br /> <input
+							type="hidden" name="apiCode" value="${board.code}" /> <input
+							type="hidden" name="allDay" value="0" /> <input type="hidden"
+							name="id" value="${loginMember.id}" />
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">취소</button>
+							<button type="submit" class="btn btn-primary">추가</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
 	<!-- 댓글 -->
 	<div class="comment-container">
 		<div class="comment-editor">
@@ -475,7 +520,25 @@ div.col>.detail {
 $(document).ready(function() {
 	
 	<c:if test="${check.guest eq 'guest'}">
-		console.log('${check.guest}');
+			$(promiseReceiveFrm).submit((e) => {
+				e.preventDefault();
+		
+		     
+					$.ajax({
+						url:`${pageContext.request.contextPath}/board/boardReceiveSchedule.do`,
+						method: "POST",
+						headers : headers, 
+						data : $(promiseReceiveFrm).serialize(),
+						success(resp){
+							location.reload();
+							alert(resp.msg);
+							
+							},
+						error: console.log
+						});
+			});
+
+		
 	</c:if>
 	
 	const $code = $('#countcode').val();
@@ -719,7 +782,7 @@ $(".btn-reply").click((e) => {
 					let code = 'riota-' + ranNo;
 					let guest = $(".friendTextId").val();
 					let content = '';
-					content = `<a href='/nadaum/board/boardDetail.do?code=${board.code}&guest=guest'>${board.nickname}님이 회원님에게 듀오신청약속을 보냈습니다.</a>`
+					content = `<a href='/nadaum/board/boardDetail.do?code=${board.code}&guest=guest'>${board.nickname}님이 회원님에게 [듀오신청약속]을 보냈습니다. &#128233;</a>`
 					commonAlarmSystem(code,guest,content);
 					},
 				error: console.log
