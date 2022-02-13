@@ -3,6 +3,8 @@
  let $id = $("#id").val();
  let $contextPath = $("#contextPath").val();
  let $nickName = $("#nickName").val();
+ let $csrfToken = $("#csrfToken").val();
+ let $csrfParameterName = $("#csrfParameterName").val();
 
 //클릭시 커지게
  let addWidget = document.querySelector('.add-widget');
@@ -34,6 +36,10 @@
    if (document.querySelector('.movie-widget') != null) {
 	movieWidgetInfo();
    }
+   if (document.querySelector('.memo-widget') != null) {
+	memoWidgetInfo();
+   }
+   
    
  })
 
@@ -125,6 +131,25 @@ const drop = (ev) => {
    else if(widgetName == 'memo-widget') {
 	   if(document.querySelector('.memo-widget') == null) {
 	        insertWidget(); 
+	        //메모 자동 등록
+			$.ajax({
+		    	url : $contextPath+"/main/insertMemo.do",
+		     	method : 'GET',
+		     	contentType : "application/json; charset=UTF-8",
+		     	dataType : "json",
+		     	success(data) {
+		     		console.log(data);
+		     		//메모 insert 성공시 리스트 로딩
+		     		if(data == 1) {
+		     			memoWidgetInfo();
+		     		} else {
+		     			alert("위젯 등록에 실패했습니다.");
+		     		} //success 끝
+		     	},error(xhr, testStatus, err) {
+					console.log("error", xhr, testStatus, err);
+					alert("조회에 실패했습니다.");
+				}
+		     });
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -263,6 +288,37 @@ const delTodoList = (no) => {
 
 
 //위젯 정보 로딩용
+
+//메모
+const memoWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/main/userMemoList.do",
+		method : 'GET',
+	 	contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+	 	success(resp) {
+	 		console.log(resp);
+	 		console.log(resp.length);
+	 		let content = `
+	 			<div class="memoContentDiv">
+	 			<form 
+	 				action="`+$contextPath+`/main/updateMemoList.do"
+	 				method="POST">
+	 				<textarea name="content" id="memoBox" cols="20" rows="10" style="resize:none;">`+resp[0].content+`</textarea>
+	 				<input type="hidden" id ="csrfToken" name="`+$csrfParameterName+`" value="`+$csrfToken+`"/>
+	 				<input type="hidden" name="code" value="`+resp[0].code+`">
+	 			<button type="submit">메모 저장</button>
+	 			</form>
+	 			</div>
+	 		`
+	 		$(".memo-widget").append(content);
+	 	}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	});
+}
 
 //게임
 const gameWidgetInfo = () => {

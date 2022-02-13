@@ -123,19 +123,24 @@ let month = $today.slice(5, 7);
 let searchDay = "";
 
 const monthly = (m) => {
-	if(m == "before") {
-		if( 1 < month) {
-			month = parseInt(month) -1;
-		} else {
-			month = 12;
-			year = parseInt(year) - 1;
-		}
-	} else if(m == "next") {
-		if(month < 12) {
-			month = parseInt(month) + 1;
-		} else {
-			month = 1;
-			year = parseInt(year) + 1;
+	if($today == null || $today == "") {
+		alert("기록이 없는 데이터는 조회할 수 없습니다.");
+		return;
+	} else {
+		if(m == "before") {
+			  if( 1 < month) {
+				month = parseInt(month) -1;
+			} else {
+				month = 12;
+				year = parseInt(year) - 1;
+			}
+		} else if(m == "next") {
+			if(month < 12) {
+				month = parseInt(month) + 1;
+			} else {
+				month = 1;
+				year = parseInt(year) + 1;
+			}
 		}
 	}
 	searchDay = year+'-'+(month >= 10? month : '0'+month);

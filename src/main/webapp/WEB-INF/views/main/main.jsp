@@ -47,12 +47,13 @@
 			<div class="widget_form ${widget.widgetName}">
 				<button class="delWidgetBtn" onclick="delWidget(${widget.no})">삭제하기</button>
 			</div>
-			
 		</c:forEach>
 	</section>
 </article>
 <input type="hidden" id="id" value="${loginMember.id}" />
 <input type="hidden" id="nickName" value="${loginMember.nickname}" />
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
+<input type="hidden" id ="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
+<input type="hidden" id ="csrfParameterName" value="${_csrf.parameterName}"/>	
 <script src='${pageContext.request.contextPath}/resources/js/main/main.js'></script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

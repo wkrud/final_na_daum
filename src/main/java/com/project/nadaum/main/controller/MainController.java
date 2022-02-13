@@ -119,4 +119,47 @@ public class MainController {
 		int result = mainService.deleteTodoList(map);
 		return map;
 	}
+	
+	//메모 insert
+	@ResponseBody
+	@GetMapping(value="/insertMemo.do")
+	public int insertMemo(@AuthenticationPrincipal Member member, Model model) {
+		String id = member.getId();
+		String content = "메모를 입력하세요.";
+		Map<String, Object> param = new HashMap<>(); 
+		param.put("id", id);
+		param.put("content", content);
+		
+		int insertMemo = mainService.insertMemo(param);
+		
+		return insertMemo;
+	}
+	
+	//메모 목록 조회
+		@ResponseBody
+		@RequestMapping(value="/userMemoList.do")
+		public List<TodoList> userMemoList(@AuthenticationPrincipal Member member, Model model) {
+			String id = member.getId();
+			Map<String, Object> param = new HashMap<>(); 
+			param.put("id", id);
+
+			//로그인한 아이디로 등록된 메모
+			List<TodoList> allMemoList = mainService.userMemoList(param);
+			log.debug("allMemo={}",allMemoList);
+
+			return allMemoList;
+		}
+	//메모 업데이트
+		@PostMapping(value="/updateMemoList.do")
+		public String updateMemoList(@AuthenticationPrincipal Member member, @RequestParam String content, @RequestParam String code) {
+			String id = member.getId();
+			Map<String, Object> param = new HashMap<>(); 
+			param.put("id", id);
+			param.put("content", content);
+			param.put("code", code);
+			
+			int updateMemoList = mainService.updateMemoList(param);
+			
+			return "redirect:/main/main.do";
+		}
 }

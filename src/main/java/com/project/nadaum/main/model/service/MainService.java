@@ -20,6 +20,12 @@ public interface MainService {
 
 	int insertWidget(Map<String, Object> param);
 
+	int insertMemo(Map<String, Object> param);
+
+	List<TodoList> userMemoList(Map<String, Object> param);
+
+	int updateMemoList(Map<String, Object> param);
+
 
 
 }

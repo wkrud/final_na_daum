@@ -63,6 +63,7 @@ public class AccountBookController {
 		
 		//이달의 월 조회
 		String today = accountBookService.searchToday(param);
+		
 		// 로그인한 아이디로 등록된 가계부 전체 목록
 		List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
 

@@ -59,6 +59,39 @@
 		where
 			no = #{no}
 	</delete>
+	
+	<!-- memoInsert -->
+	<insert id="insertMemo">
+		insert into 
+				memo
+			values(
+				concat('me-', seq_memo_no.nextval),
+				#{content},
+				#{id}
+			)
+	</insert>
+	
+	<!-- 메모 목록 -->
+	<select id="userMemoList" resultType="com.project.nadaum.main.model.vo.Memo">
+		select 
+		    * 
+		from 
+		    memo
+		where
+		    id = #{id}
+	</select>
+	
+	<!-- 메모 수정 -->
+	<update id="updateMemoList">
+		update 
+			memo
+		set
+			content = #{content}
+		where
+			code = #{code}
+			and
+			id = #{id}
+	</update>
 
 </mapper>
 

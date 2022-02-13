@@ -45,6 +45,21 @@ public class MainDaoImpl implements MainDao {
 		return session.delete("main.deleteTodoList", map);
 	}
 
+	@Override
+	public int insertMemo(Map<String, Object> param) {
+		return session.insert("main.insertMemo", param);
+	}
+
+	@Override
+	public List<TodoList> userMemoList(Map<String, Object> param) {
+		return session.selectList("main.userMemoList", param);
+	}
+
+	@Override
+	public int updateMemoList(Map<String, Object> param) {
+		return session.update("main.updateMemoList", param);
+	}
+
 	
 	
 
