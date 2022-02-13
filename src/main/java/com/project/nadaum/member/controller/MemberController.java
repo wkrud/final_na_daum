@@ -910,35 +910,42 @@ public class MemberController {
 			List<Map<String, Object>> follower = memberService.selectAllRequestFriend(member);
 			List<Member> memberList = memberService.selectAllNotInMe(member);
 			
-			List<Map<String, Object>> widgetFriends = new ArrayList<>();
-			List<Map<String, Object>> widgetFollowers = new ArrayList<>();
+			List<Member> widgetFriends = new ArrayList<>();
+			List<Member> widgetFollowers = new ArrayList<>();
 			Map<String, Object> param = new HashMap<>();
 			for(Member m : memberList) {
 				for(int i = 0; i < friends.size(); i++) {
 					if(m.getId().equals(friends.get(i).get("friendId"))) {
-						param.put("nickname", m.getNickname());
-						param.put("loginType", m.getLoginType());
-						param.put("profile", m.getProfile());
-						param.put("profileStatus", m.getProfileStatus());
-						param.put("id", m.getId());
+						Member mem = new Member();
+						mem.setNickname(m.getNickname());
+						mem.setProfile(m.getProfile());
+						mem.setLoginType(m.getLoginType());
+						mem.setProfileStatus(m.getProfileStatus());
+						mem.setId(m.getId());
 						
-						widgetFriends.add(param);
+						widgetFriends.add(mem);
+						
 					}
 				}
 				for(int i = 0; i < follower.size(); i++) {
 					if(m.getId().equals(follower.get(i).get("followerId"))) {
-						param.put("nickname", m.getNickname());
-						param.put("loginType", m.getLoginType());
-						param.put("profile", m.getProfile());
-						param.put("profileStatus", m.getProfileStatus());
-						param.put("id", m.getId());
+						Member mem = new Member();
+						mem.setNickname(m.getNickname());
+						mem.setProfile(m.getProfile());
+						mem.setLoginType(m.getLoginType());
+						mem.setProfileStatus(m.getProfileStatus());
+						mem.setId(m.getId());
 						
-						widgetFollowers.add(param);
+						widgetFollowers.add(mem);
+						
 					}
 				}
 			}
-			friendWidget.put("widgetFriends", widgetFriends);
-			friendWidget.put("widgetFollowers", widgetFollowers);
+			
+			friendWidget.put("widgetFriends",widgetFriends);
+			friendWidget.put("widgetFollowers",widgetFollowers);
+			
+			log.debug("wwwwwwwwwwwwwwwww = {}", friendWidget);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw e;
