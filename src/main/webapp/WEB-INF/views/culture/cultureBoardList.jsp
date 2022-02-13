@@ -94,7 +94,7 @@ padding-left: 20px;
 				        <option value="D000">미술</option><!-- D 미술  -->
 				      </select>
 				  </div>
-				  <button type="submit" class="btn orange btn-default" id="search-btn" >Search</button>
+				  <button type="submit" class="btn culture-btn orange btn-default" id="search-btn" >Search</button>
 			</form>
 			<form action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}" method="post">
 				<input type="hidden" name="id" value="${loginMember.id}" />
