@@ -470,11 +470,22 @@ public class BoardController {
 	}
 
 	@PostMapping("/boardReceiveSchedule.do")
-	public ResponseEntity<?> insertReceiveSchedule(@RequestParam Map<String, Object> map ) {
+	public ResponseEntity<?> insertReceiveSchedule(@RequestParam Map<String, Object> map ) throws ParseException {
 
 		log.debug("map = {}", map);
 		String id = (String) map.get("id");
 		String friendid = (String) map.get("friendid");
+		String a  = (String) map.get("startDate");
+		String b  = (String) map.get("endDate");
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date startDate = sdf.parse(a);
+		Date endDate = sdf.parse(b);
+		
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
 		
 	
 		try {
