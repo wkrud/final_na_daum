@@ -608,7 +608,7 @@ public class MemberController {
 					if("dy".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListDy.add(help);
 					}					
 				}
@@ -619,7 +619,7 @@ public class MemberController {
 					if("ab".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListAb.add(help);
 					}
 				}
@@ -630,7 +630,7 @@ public class MemberController {
 					if("cu".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListCu.add(help);
 					}
 				}
@@ -641,7 +641,7 @@ public class MemberController {
 					if("au".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListAu.add(help);
 					}
 				}
@@ -652,7 +652,7 @@ public class MemberController {
 					if("lol".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListLol.add(help);
 					}
 				}
@@ -663,7 +663,7 @@ public class MemberController {
 					if("ca".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListCa.add(help);
 					}
 				}
@@ -674,7 +674,7 @@ public class MemberController {
 					if("fr".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListFr.add(help);
 					}
 				}
@@ -685,7 +685,7 @@ public class MemberController {
 					if("fe".equals(he.getCategory())) {
 						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
 								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
-								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount());
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
 						helpListFe.add(help);
 					}
 				}

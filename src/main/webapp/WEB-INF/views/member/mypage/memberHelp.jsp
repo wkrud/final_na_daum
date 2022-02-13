@@ -31,7 +31,7 @@
 			</div>
 			<div class="question-list-body">
 				<c:if test="${checkHelp.CA > 0}">
-					<div class="ca-wrap">
+					<div class="ca-wrap common-help-wrap">
 						<span>캘린더</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -50,7 +50,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.DY > 0}">
-					<div class="dy-wrap">
+					<div class="dy-wrap common-help-wrap">
 						<span>다이어리</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -69,7 +69,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.AB > 0}">
-					<div class="ab-wrap">
+					<div class="ab-wrap common-help-wrap">
 						<span>가계부</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -88,7 +88,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.FR > 0}">
-					<div class="fr-wrap">
+					<div class="fr-wrap common-help-wrap">
 						<span>친구</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -107,7 +107,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.CU > 0}">
-					<div class="cu-wrap">
+					<div class="cu-wrap common-help-wrap">
 						<span>문화</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -126,7 +126,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.FE > 0}">
-					<div class="cu-wrap">
+					<div class="cu-wrap common-help-wrap">
 						<span>피드</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -145,7 +145,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.AU > 0}">
-					<div class="au-wrap">
+					<div class="au-wrap common-help-wrap">
 						<span>오디오북</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -164,7 +164,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.LOL > 0}">
-					<div class="lol-wrap">
+					<div class="lol-wrap common-help-wrap">
 						<span>게임</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">
@@ -183,7 +183,7 @@
 					</div>
 				</c:if>
 				<c:if test="${checkHelp.FE > 0}">
-					<div class="fe-wrap">
+					<div class="fe-wrap common-help-wrap">
 						<span>피드</span>
 						<div class="help-list-main all-category">
 							<ul class="list-group list-group-flush">

@@ -270,7 +270,11 @@
 			(SELECT count(category) FROM help WHERE category = 'dy') dy,
 			(SELECT count(category) FROM help WHERE category = 'ab') ab,
 			(SELECT count(category) FROM help WHERE category = 'fr') fr,
-			(SELECT count(category) FROM help WHERE category = 'fe') fe
+			(SELECT count(category) FROM help WHERE category = 'fe') fe,
+			(SELECT count(category) FROM help WHERE category = 'cu') cu,
+			(SELECT count(category) FROM help WHERE category = 'au') au,
+			(SELECT count(category) FROM help WHERE category = 'lol') lol,
+			(SELECT count(category) FROM help WHERE category = 'ca') ca
 		from
 			help
 		where

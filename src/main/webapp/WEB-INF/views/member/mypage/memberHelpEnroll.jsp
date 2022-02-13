@@ -10,27 +10,28 @@
 	<jsp:param value="나:다움 질문 등록" name="title"/>
 </jsp:include>
 <div class="member-body">
-
-	<form method="POST">
-		<label for="title">제목</label>						
-		<input type="text" class="form-control" name="title" id="title"	placeholder="제목을 입력해주세요" required>
-		<input type="hidden" name="category" />
-		<select id="category-select" class="form-select" aria-label="Default select example">
-			<option selected>카테고리</option>
-			<option value="dy">다이어리</option>
-			<option value="ab">가계부</option>
-			<option value="cu">문화</option>
-			<option value="au">오디오북</option>
-			<option value="lol">게임</option>
-			<option value="ca">캘린더</option>
-			<option value="fr">친구</option>
-			<option value="fe">피드</option>
-		</select>
-		<textarea name="content" id="help-content-summernote" required></textarea>
-		<div><span id="limite_normal"></span><span id="limite_vermelho" style="color:red"></span>/500</div>
-		<button type="submit" id="help-submit-btn" class="btn btn-success">등록</button>
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	</form>
+	<div class="help-enroll-frm-wrap">
+		<form method="POST">
+			<label for="title">제목</label>						
+			<input type="text" class="form-control" name="title" id="title"	placeholder="제목을 입력해주세요" required>
+			<input type="hidden" name="category" />
+			<select id="category-select" class="form-select" aria-label="Default select example">
+				<option selected>카테고리</option>
+				<option value="dy">다이어리</option>
+				<option value="ab">가계부</option>
+				<option value="cu">문화</option>
+				<option value="au">오디오북</option>
+				<option value="lol">게임</option>
+				<option value="ca">캘린더</option>
+				<option value="fr">친구</option>
+				<option value="fe">피드</option>
+			</select>
+			<textarea name="content" id="help-content-summernote" required></textarea>
+			<div><span id="limite_normal"></span><span id="limite_vermelho" style="color:red"></span>/500</div>
+			<button type="submit" id="help-submit-btn" class="btn btn-success">등록</button>
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		</form>
+	</div>
 </div>
 <script>
 $("#category-select").change((e) => {	
@@ -119,10 +120,6 @@ $(document).ready(function() {
 	
 	function uploadSummernoteImageFile(file, el){
 		
-		const csrfHeader = "${_csrf.headerName}";
-		const csrfToken = "${_csrf.token}";
-		const headers = {};
-		headers[csrfHeader] = csrfToken;
 		console.log('시작');
 		data = new FormData();
 		data.append("file", file);

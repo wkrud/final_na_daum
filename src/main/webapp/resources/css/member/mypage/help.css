@@ -2,6 +2,11 @@
 	width: 700px;
 }
 
+.help-enroll-frm-wrap{
+	display: flex;
+	justify-content: center;
+}
+
 
 .question-list-wrap{
 	display:flex;
@@ -21,6 +26,9 @@
 	width: 1024px;
 	flex-wrap: wrap;
 	justify-content: center;
+}
+.common-help-wrap{
+	border: 1px solid #ededed;
 }
 .help-search-btn-wrap{
 	display: flex;

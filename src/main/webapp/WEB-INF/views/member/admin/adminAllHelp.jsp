@@ -19,9 +19,11 @@
 			<thead>
 				<tr>
 					<th>번호</th>
+					<th>카테고리</th>
 					<th>제목</th>
 					<th>작성자</th>
 					<th>공감수</th>
+					<th>조회수</th>
 					<th>등록일</th>
 					<th>답변</th>
 					<th>답변공감수</th>
@@ -32,9 +34,11 @@
 				<c:forEach items="${listMap}" var="list" varStatus="vs">
 					<tr>
 						<td>${vs.count}</td>
+						<td>${list.category}</td>
 						<td><a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=${list.code}">${list.title}</a></td>
 						<td>${list.id}</td>
-						<td>${list.count}</td>
+						<td>${list.likes}</td>
+						<td>${list.readCount}</td>
 						<td><fmt:formatDate value="${list.regDate}" pattern="yyyy/MM/dd"/></td>
 						<td>
 							<c:if test="${list.status eq 'F'}">
@@ -44,7 +48,7 @@
 								<button id="modifyAnswer" type="button" class="btn btn-warning" onclick="location.href='${pageContext.request.contextPath}/member/admin/adminEnrollFrm.do?check=help&code=${list.code}&flag=modify'">답변수정</button>
 							</c:if>
 						</td>
-						<td>${list.ACount}</td>
+						<td>${list.ALikes}</td>
 						<td>
 							<form method="POST" action="${pageContext.request.contextPath}/member/admin/delete.do">
 								<input type="hidden" name="code" value="${list.code}"/>

@@ -12,7 +12,7 @@
 <div class="member-body">
 	<div class="help-detail-wrap">
 		<div class="help-detail-body">
-			<span class="help-title">${helpDetail.title} + ${helpDetail.readCount}</span>
+			<span class="help-title">${helpDetail.title}</span>
 			<section class="question-wrap">
 				<div class="q-date-wrap"><span>등록일: <fmt:formatDate value="${helpDetail.regDate}" pattern="yyyy-MM-dd"/></span></div>
 				<div class="q-content-wrap">
