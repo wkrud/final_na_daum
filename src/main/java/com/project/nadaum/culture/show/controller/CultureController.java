@@ -240,16 +240,24 @@ public class CultureController {
 			Map<String, Object> response = (Map<String, Object>) map.get("response");
 			Map<String, Object> msgBody = (Map<String, Object>) response.get("msgBody");
 
+			String count = msgBody.get("totalCount").toString();
 			log.debug("response={}", response);
 			log.debug("msgBody={}", msgBody);
+			log.debug("count={}",count);
 			
 			
+			if(count.equals("1")) {
+				System.out.println("결과값 한개");
+				
+			}
+			else {
 				perforList = (List<Map<String, Object>>) msgBody.get("perforList");
 				log.debug("perforList = {}", perforList);
 				
+				
 				if (perforList != null && !perforList.isEmpty()) {
 					List<Object> searchList = new ArrayList<>();
-
+					
 					for (int i = 0; i < perforList.size(); i++) {
 						String seq = perforList.get(i).get("seq").toString();
 						String title = perforList.get(i).get("title").toString();
@@ -260,28 +268,30 @@ public class CultureController {
 						String end = perforList.get(i).get("endDate").toString();
 						String realmName = perforList.get(i).get("realmName").toString();
 						
-						  Map<String, Object> map2 = new HashMap<>();
-							map2.put("seq", seq);
-							map2.put("title", title);
-							map2.put("startDate", start);
-							map2.put("endDate", end);
-							map2.put("area", area);
-							map2.put("place", place);
-							map2.put("thumbnail", thumbnail);
-							map2.put("realmName", realmName);
-							
-							searchList.add(map2);
-							
-						  System.out.println(map2);
-						}
+						Map<String, Object> map2 = new HashMap<>();
+						map2.put("seq", seq);
+						map2.put("title", title);
+						map2.put("startDate", start);
+						map2.put("endDate", end);
+						map2.put("area", area);
+						map2.put("place", place);
+						map2.put("thumbnail", thumbnail);
+						map2.put("realmName", realmName);
+						
+						searchList.add(map2);
+						
+						System.out.println(map2);
+					}
 					
 					model.addAttribute("perforList", perforList);
 					System.out.println(perforList);
 				}
-
+				
 				else {
 					System.out.println("perforList는 널입니다.");
 				}
+				
+			}
 				
 			
 		} catch (JSONException | IOException e) {

@@ -322,7 +322,7 @@ div#board-container label.custom-file-label {
 
 								<button type="submit" id="btn-comment-enroll1"
 									class="btn btn-outline-primary"
-									onClick="fn_comment('${apiCode}')">등록</button>
+									>등록</button>
 								<input type="hidden" name="${_csrf.parameterName}"
 									value="${_csrf.token}" />
 							</form>
@@ -334,72 +334,105 @@ div#board-container label.custom-file-label {
 		</div>
 
 
-			<div class="card mb-2">
-				<div class="card-header bg-light">
-					<i class="fa fa-comment fa"></i> 댓글 목록
-				</div>
-				<div class="card-body">
+	
+				<div class="card mb-2">
+					<div class="card-header bg-light">
+						<i class="fa fa-comment fa"></i> 댓글 목록
+					</div>
+					<div class="card-body">
 
-					<%-- 댓글이 하나가 되었다면 if구문으로 들어올꺼임 for문 돌면서 level1, ldecel2 태그를 고르고 출력--%>
-					<c:forEach items="${commentList}" var="comment">
-							<ul class="list-group list-group-flush" id="level1">
-								<li class="list-group-item" id="commentList">
-								
-									<div class="form-inline mb-2">
-										<label for="replyId"> <i
-											class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
-										</label> &nbsp;&nbsp;
-										<fmt:formatDate value="${comment.regDate}"
-											pattern="yyyy-MM-dd HH:mm" />
-									</div>
+						<%-- 댓글이 하나가 되었다면 if구문으로 들어올꺼임 for문 돌면서 level1, ldecel2 태그를 고르고 출력--%>
+						<c:forEach items="${commentList}" var="comment">
+							
+								<ul class="list-group list-group-flush" id="level1">
+									<li class="list-group-item" id="commentList">
+										<div class="form-inline mb-2">
+											<label for="replyId">
+												<div class="form-inline mb-2">
+													<div class="profileimg1">
+														<div class="profileimg-detail1"
+															style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+															<c:if test="${comment.loginType eq 'K'}">
+																<img src="${comment.profile}" alt=""
+																	style="width: 45px; height: 45px; object-fit: cover;" />
+															</c:if>
+															<c:if test="${comment.loginType eq 'D'}">
+																<c:if test="${comment.profileStatus eq 'N'}">
+																	<img
+																		src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+																		alt=""
+																		style="width: 45px; height: 45px; object-fit: cover;" />
+																</c:if>
+																<c:if test="${comment.profileStatus eq 'Y'}">
+																	<img
+																		src="${pageContext.request.contextPath}/resources/upload/member/profile/${comment.profile}"
+																		alt=""
+																		style="width: 45px; height: 45px; object-fit: cover;" />
+																</c:if>
+															</c:if>
+														</div>
 
-									<div class="col-sm-10">
-										<label for="star" class="col-sm-2 col-form-label">평점 :</label>
-										<input type="hidden" class="form-control" name="star">
+													</div>
+													
+													<div class="profileimg2">
+														<input type="text"
+															class="id-detail movie-detail" name="id" id="writerId"
+															value="${comment.nickname}" readonly />
+													</div>
+												</div>
 
-										<select id="category-select-commentList" class="form-control"
-											aria-label="Default select example">
-											<option selected>${comment.star}</option>
-										</select>
-									</div> <textarea class="form-control"
-										id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+											</label> &nbsp;&nbsp;
+											<fmt:formatDate value="${comment.regDate}"
+												pattern="yyyy-MM-dd HH:mm" />
+										</div>
 
-									<%-- 회원일때만 답글 버튼이 나타남 --%>
-									<div class="row float-right">
-										&nbsp;
-										<%-- 회원이고 글쓴이 본인일 경우 댓글 삭제/수정 버튼--%>
-										<c:if test="${comment.id eq loginMember.id}">
+										<div class="col-sm-10">
+											<label for="star" class="col-sm-2 col-form-label">평점
+												:</label> <input type="hidden" class="form-control" name="star">
 
-											<%-- 댓글 삭제 --%>
-											<form id="deleteCommentFrm">
-												<input type="hidden" name="code" value="${comment.code}"></input>
-												<button type="submit"
-													class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
-													id="deleteComment-btn" value="${comment.code}">삭제</button>
-											</form>
+											<select id="category-select-commentList" class="form-control"
+												aria-label="Default select example">
+												<option selected>${comment.star}</option>
+											</select>
+										</div> <textarea class="form-control"
+											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+
+										<%-- 회원일때만 답글 버튼이 나타남 --%>
+										<div class="row float-right">
+											&nbsp;
+											<%-- 회원이고 글쓴이 본인일 경우 댓글 삭제/수정 버튼--%>
+											<c:if test="${loginMember.id eq comment.id}">
+
+												<%-- 댓글 삭제 --%>
+												<form id="deleteCommentFrm">
+													<input type="hidden" name="code" value="${comment.code}"></input>
+													<button type="submit"
+														class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
+														id="deleteComment-btn" value="${comment.code}">삭제</button>
+												</form>
 											&nbsp;
 											
 												<!-- 댓글 수정 -->
-											<form id="findUpdateComment">
-												<input type="hidden" name="code" value="${comment.code}" />
-												<button type="button"
-													class="btn btn-outline-dark updateCommmentBtn"
-													data-toggle="modal" data-target="#updateComment"
-													value="${comment.code}">수정</button>
-											</form>
-										</c:if>
+												<form id="findUpdateComment">
+													<input type="hidden" name="code" value="${comment.code}" />
+													<button type="button"
+														class="btn btn-outline-dark updateCommmentBtn"
+														data-toggle="modal" data-target="#updateComment"
+														value="${comment.code}">수정</button>
+												</form>
+											</c:if>
 
 
-									</div>
+										</div>
 
-								</li>
-							</ul>
-					</c:forEach>
+									</li>
+								</ul>
+						</c:forEach>
+					</div>
 				</div>
-			</div>
+		</div>
 	</div>
-</div>
-<!-- 댓글 목록 끝 -->
+	<!-- 댓글 목록 끝 -->
 
 <!-- 댓글 수정 Modal -->
 <div class="modal fade" id="updateComment" tabindex="-1" role="dialog"
@@ -754,6 +787,13 @@ function friendAlarm(type, status, myNickname, friendNickname){
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=457ac91e7faa203823d1c0761486f8d7&libraries=services"></script>
 <script>
+/* <c:forEach var="culture" items="${list}">
+	<c:if test="${comment.id eq loginMember.id}">
+		placeList.push("${culture.place}");
+		placeList.push("${culture.placeAddr}");
+	</c:if>
+</c:forEach> */
+
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
