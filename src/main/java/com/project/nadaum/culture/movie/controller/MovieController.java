@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.nadaum.culture.movie.model.service.MovieService;
-import com.project.nadaum.culture.movie.model.vo.Schedule;
-import com.project.nadaum.culture.show.model.vo.Scrap;
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
 import com.project.nadaum.member.model.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;

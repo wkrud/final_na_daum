@@ -3,7 +3,7 @@ package com.project.nadaum.culture.movie.model.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.project.nadaum.culture.movie.model.vo.*;
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
 import com.project.nadaum.culture.show.model.vo.Scrap;
 
 public interface MovieDao {

@@ -241,6 +241,9 @@ $(() => {
 							</div>
 						</div>
 					</c:forEach>
+					<c:if test="${empty perforList}">
+					<h1>원하시는 전시회가 없어요 😥</h1>
+					</c:if>
 				</div>
 
 			</div>

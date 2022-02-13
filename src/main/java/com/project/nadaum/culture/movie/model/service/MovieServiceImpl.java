@@ -5,11 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.project.nadaum.culture.movie.model.dao.MovieDao;
-import com.project.nadaum.culture.movie.model.vo.Movie;
-import com.project.nadaum.culture.movie.model.vo.Schedule;
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
 import com.project.nadaum.culture.show.model.vo.Scrap;
 
 import lombok.extern.slf4j.Slf4j;
