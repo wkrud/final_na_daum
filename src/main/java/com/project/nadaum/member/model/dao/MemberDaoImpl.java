@@ -281,21 +281,6 @@ public class MemberDaoImpl implements MemberDao {
 	}
 
 	@Override
-	public List<Help> selectAllMembersDyQuestions(Map<String, Object> map) {
-		return session.selectList("member.selectAllMembersQuestions", map);
-	}
-
-	@Override
-	public List<Help> selectAllMembersAbQuestions(Map<String, Object> map) {
-		return session.selectList("member.selectAllMembersQuestions", map);
-	}
-
-	@Override
-	public List<Help> selectAllMembersFrQuestions(Map<String, Object> map) {
-		return session.selectList("member.selectAllMembersQuestions", map);
-	}
-
-	@Override
 	public List<Help> selectAllMembersQuestions(Map<String, Object> map) {
 		return session.selectList("member.selectAllMembersQuestions", map);
 	}
