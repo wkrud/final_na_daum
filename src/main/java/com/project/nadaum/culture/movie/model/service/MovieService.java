@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.project.nadaum.culture.movie.model.vo.Movie;
+import com.project.nadaum.culture.movie.model.vo.Schedule;
+import com.project.nadaum.culture.show.model.vo.Scrap;
 
 public interface MovieService {
 
@@ -12,6 +14,8 @@ public interface MovieService {
 	int insertScrap(Map<String, Object> param);
 
 	int deleteScrap(Map<String, Object> param);
+
+	List<Scrap> selectMovieScrap(String id);
 
 	double avgRating(String apiCode);
 
@@ -25,16 +29,17 @@ public interface MovieService {
 
 	int totalStarCount(String apiCode);
 
-//	int selectTotalContent();
-//
-//	Movie selectOneMovieCollection(String code);
-//
-//	List<Movie> selectMovieList();
-//
-//	Movie selectOneMovie(String code);
+	int insertSchedule(Map<String, Object> map);
 
-//	List<Movie> selectMovieList(Map<String, Object> param);
-	
+//	Map<String, Object> selectOneSchedule(String code);
+
+	Schedule selectOneSchedule(String code);
+
+	int insertCalendarMovie(Map<String, Object> map);
+
+	int updateAccept(String code);
+
+
 	
 	
 }

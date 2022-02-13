@@ -7,6 +7,8 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page import="com.project.nadaum.culture.movie.controller.GetMovieApi"%>
+<%@ page import="com.project.nadaum.member.model.vo.MemberEntity"%>
+<%@ page import="com.project.nadaum.culture.movie.model.vo.*"%>
 
 <sec:authentication property="principal" var="loginMember" />
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
@@ -354,9 +356,7 @@ div#board-container label.custom-file-label {
 
 									<!-- api 코드 -->
 									<input type="hidden" name="apiCode" value="${apiCode}" />
-									<%-- <input type="hidden" name="id" value="${loginMember.id}" /> --%>
-									<input type="hidden" name="id"
-										value="<c:if test="${loginMember ne null}">${loginMember.id}</c:if>" />
+									<input type="hidden" name="id" value="${loginMember.id}" />
 									<!-- 댓글인 경우 1 -->
 									<input type="hidden" name="commentLevel" value="1" />
 									<!-- 대댓글인 경우 써여져야함 -->
@@ -381,10 +381,8 @@ div#board-container label.custom-file-label {
 										class="form-control"></textarea>
 
 									<button type="submit" id="btn-comment-enroll1"
-										class="btn btn-outline-primary"
-										onClick="fn_comment('${apiCode}')">등록</button>
-									<input type="hidden" name="${_csrf.parameterName}"
-										value="${_csrf.token}" />
+										class="btn btn-outline-primary">등록</button>
+									
 								</form>
 
 							</li>
@@ -553,7 +551,7 @@ div#board-container label.custom-file-label {
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
 						<button type="submit" class="btn btn-outline-dark"
-							id="updateComment-btn" value="${comment.code}">수정</button>
+							id="updateCommmentBtn" value="${comment.code}">수정</button>
 					</div>
 				</form>
 
@@ -580,21 +578,24 @@ div#board-container label.custom-file-label {
 				</div>
 				<!-- 모달 내용 시작 -->
 				<div class="modal-body">
-					<div class="form-group row">
-						<label for="title" class="col-sm-2 col-form-label">제목</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="title" name="title"
-								placeholder="제목을 입력해주세요" required>
-						</div>
-					</div>
-
+				
 					<div class="form-group row">
 						<label for="title" class="col-sm-2 col-form-label">약속일</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control" id="alarmDate"
-								name="alarmDate" required>
+							<input type="date" class="form-control" id="startDate"
+								name="startDate" required>
 						</div>
 					</div>
+					
+					<div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label">내용</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="title" name="title"
+								placeholder="내용을 입력해주세요" required>
+						</div>
+					</div>
+
+					
 					<div class="friend-list-wrap">
 						<div class="friends-list">
 							<div class="friend">
@@ -603,11 +604,11 @@ div#board-container label.custom-file-label {
 									<div class="col-sm-10">
 										<div class="input-group mb-3">
 											<div class="input-group-prepend">
-												<input id="searchFriend" type="text" name="nickname"
-													class="form-control" placeholder="닉네임을 입력하세요" aria-label=""
-													aria-describedby="basic-addon1" required>
-												<button id="search-friend-start"
-													class="btn btn-outline-secondary" type="button">검색</button>
+												<input id="friendId" type="text" name="friendId" class="form-control friendTextId" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
+												<input type="hidden" name="apiCode" value="${apiCode}" /> 
+												<input type="hidden" name="allDay" value="0" /> 
+												<input type="hidden" name="id" value="${loginMember.id}" />
+												<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
 											</div>
 										</div>
 									</div>
@@ -635,9 +636,9 @@ div#board-container label.custom-file-label {
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary">추가</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+						<button type="submit" class="btn btn-primary schedule-btn">추가</button>
+						<button type="submit" class="btn btn-primary add-calendar-btn">캘린더 추가</button>
 					</div>
 				</div>
 				<!-- 모달 내용 끌 -->
@@ -645,6 +646,7 @@ div#board-container label.custom-file-label {
 		</div>
 	</form>
 </div>
+
 <script>
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
@@ -859,58 +861,49 @@ $(document).on('click', '#scrapButton', function(e) {
 }); //끝 괄호
 
 </script>
-<script>
-	//친구검색	========================================================================================
-	var dest = '${loginMember.nickname}';
-	const $search = $("#searchFriend");
-	$search.on('keyup', function(e){
-		if($search.val() != ''){
-			if(e.key === 'Enter' || e.keyCode === 13){
-				$("#search-friend-start").trigger('click');
-			}
-		}
-	});
-	$("#search-friend-start").click((e) => {
-		if($("#searchFriend").val() == ''){
-			alert("닉네임을 입력해주세요");
-			return false;
-		};
-		let friend = $("#searchFriend").val();
-		$.ajax({
-			url: `${pageContext.request.contextPath}/member/mypage/searchStartFriend.do?friend=\${friend}`,
-			success(resp){
-				let searched = '';
-				const $resultDiv = $(".search-result-list").find("div");
-				$resultDiv.empty();
-				if(resp == '0'){
-					searched = `<span>그런 친구는 없어요</span>`;
-					$resultDiv.append(searched);
-					return;
-				}else{
-					if(resp.check == 'friend'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-success btn-sm friend">친구</button>`;
-					}else if(resp.check == 'follower'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-outline-warning btn-sm follower">맞팔하기</button>`;
-					}else if(resp.check == 'following'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-warning btn-sm following">친구신청중</button>`;
-					}else if(resp.check == 'free'){
-						searched = `<span>\${resp.nickname}</span>
-							<button type="button" class="btn btn-outline-warning btn-sm free">친구추가</button>`;
-					}
-				}
-				
-				$resultDiv.append(searched);
-				
-			},
-			error: console.log
-		});
-	});
-
-</script>
 <script src="${pageContext.request.contextPath}/resources/js/movie/rating.js"></script>
+<script>
+$(promiseFrm).submit((e) => {
+	e.preventDefault();
+	
+	const csrfHeader = "${_csrf.headerName}";
+    const csrfToken = "${_csrf.token}";
+    const headers = {};
+    headers[csrfHeader] = csrfToken;
+ 
+		$.ajax({
+			url:`${pageContext.request.contextPath}/movie/movieDetail/{apiCode}/schedule`,
+			method: "POST",
+			headers : headers, 
+			data : $(promiseFrm).serialize(),
+			success(resp){
+				location.reload();
+				alert(resp.msg);
+				let ranNo = Math.floor(Math.random() * 10000);
+				let code = 'movie-' + ranNo;
+				let guest = $(".friendTextId").val();
+				let content = '';
+				content = `<a href='/nadaum/movie/movieDetail/${apiCode}&guest=guest'>🎬${loginMember.nickname}님이 회원님에게 [영화]약속을 보냈습니다.</a>
+					<button type="button" class="btn btn-light schedule-detail-btn" data-toggle="modal" data-target="#detail-calender" id="schedule-detail" name="code" value=\"\$\{schedule\.code\}\">더보기</button>`
+				commonAlarmSystem(code,guest,content);
+				},
+			error: console.log
+			});
+});
 
+$(."add-calendar-btn").click((e) => {
+	e.preventDefault();
+	
+	
+	
+	const csrfHeader = "${_csrf.headerName}";
+    const csrfToken = "${_csrf.token}";
+    const headers = {};
+    headers[csrfHeader] = csrfToken;
+    
+	
+})
+</script>
 
+<jsp:include page="/WEB-INF/views/common/movieScheduleDetail.jsp"></jsp:include>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
