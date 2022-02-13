@@ -81,7 +81,8 @@ span{
 	</ul> -->
 	<div class="carousel-inner">
 		<div class="carousel-item active">
-			<img src="https://img.sbs.co.kr/newimg/news/20161117/200997114_1280.jpg" id="center-image" alt="배너1" class="d-block mx-auto mt-5" />
+			<img src="https://img.sbs.co.kr/newimg/news/20161117/200997114_1280.jpg" id="center-image" alt="배너1" class="d-block mx-auto mt-5" 
+			onclick="location.href='${pageContext.request.contextPath}/audiobook/detail?code=${album.code}'"/>
 			<div class="carousel-caption d-none d-md-block">
 				<h3></h3>
 				<p></p>
@@ -91,14 +92,14 @@ span{
 			<img src="https://img.sbs.co.kr/newimg/news/20161117/200997114_1280.jpg" id="center-image" alt="배너2" class="d-block mx-auto mt-5">
 			<div class="carousel-caption">
 				<h3>.</h3>
-				<p>리사이틀 공연</p>
+				<p></p>
 			</div>
 		</div>
 		<div class="carousel-item">
 			<img src="https://img.sbs.co.kr/newimg/news/20161117/200997114_1280.jpg" id="center-image" alt="배너3" class="d-block mx-auto mt-5">
 			<div class="carousel-caption">
 				<h3>.</h3>
-				<p>New Jersey</p>
+				<p></p>
 			</div>
 		</div>
 	</div>

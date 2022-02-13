@@ -23,13 +23,16 @@ div#board-container label.custom-file-label {
 .albumFrm {
 	margin-top: 20px;
 }
+.del-btn{
+	margin:0px 0px 15px;
+}
 </style>
 
 <script>
 </script>
 
 <div id="board-container">
-	<form name="albumFrm" action="${pageContext.request.contextPath}/audiobook/album/updateTest?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data" onsubmit="return albumValidate();">
+	<form name="albumFrm" action="${pageContext.request.contextPath}/audiobook/album/update?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data" onsubmit="return albumValidate();">
 		<input type="text" class="form-control" placeholder="코드" name="code" id="code" value="${oldAlbumInfo.code}" required readonly> 
 		<input type="text" class="form-control" placeholder="제목" name="title" id="title" value="${oldAlbumInfo.title}" required> 
 		<input type="text" class="form-control" placeholder="제작사" name="provider" id="provider" value="${oldAlbumInfo.provider}" required> 
@@ -91,8 +94,14 @@ div#board-container label.custom-file-label {
 			${albumInfo.content}
 		</c:if>
 	</textarea>
-		<br /> <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> <input type="submit" class="btn btn-outline-success" value="수정">
+		<br /> <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
+		<div class="d-flex justify-content-between">
+			<button type="button" class="btn btn-info del-btn" onclick="location.href='${pageContext.request.contextPath}/audiobook/album/enroll/list'">돌아가기</button>
+			<input type="submit" class="btn btn-success" value="수정">
+			<button type="button" class="btn btn-outline-danger del-btn" onclick="location.href='${pageContext.request.contextPath}/audiobook/album/delete?code=${album.code}'">삭제</button></div>
+		<div class="d-flex justify-content-end"></div>
 	</form>
+		
 </div>
 
 
