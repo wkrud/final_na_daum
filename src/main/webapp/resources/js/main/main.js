@@ -275,16 +275,26 @@ const alertWidgetInfo = () => {
 		contentType : "application/json; charset=UTF-8",
 	 	dataType : "json",
 		success(resp) {
+			console.log(resp);
 			let content = "";
-			for(let i = 0; i < 5; i++) {				
 			content = `
-				<div>
-					<p>`+resp[i].content+`</p>
-					<p>`+timeConvert(resp[i].regDate)+`</p>
-				</div>
+				<div style="width : 360px; padding : 10px; border-radius : 5px;" class="alertList"></div>
 			`
 			$(".alert-widget").append(content);
+			for(let i = 0; i < 5; i++) {				
+			content = `
+				<div style="border-bottom: 1px solid lightgray;">
+			      <p style="margin : 5px 0px;"><span style="color : rgb(238, 210, 88);"><i class="fas fa-bell"></i></span> 
+			       `+resp[i].content+`<br><span style="color : gray; margin-left : 20px;">`+timeConvert(resp[i].regDate)+`</span>
+			      </p>
+			    </div>
+			`
+			$(".alertList").append(content);
 			}
+			content = `
+				<span style="margin:10px; float : right;"><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/member/mypage/memberDetail.do?tPage=alarm"> + 지난 알림 보러 가기 </a></span>
+			`
+			$(".alertList").append(content);
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -336,21 +346,51 @@ const gameWidgetInfo = () => {
 	 	headers : headers,
 	 	data : JSON.stringify(member_Id),
 	 	success(resp) { 
-				let content = `
-				<table>
-					<tr>
-						<td>닉네임 : `+resp.widgetinfo.name+`</td>
-						<td>티어 : `+resp.widgetinfo.tier+`</td>
-						<td>랭크 : `+resp.widgetinfo.rank+`</td>
-					</tr>
-					<tr>
-						<td>리그포인트 : `+resp.widgetinfo.leaguePoints+`</td>
-						<td>승 : `+resp.widgetinfo.wins+`</td>
-						<td>패 : `+resp.widgetinfo.losses+`</td>
-					</tr>
-				</table>
+		console.log(resp);
+		let content = "";
+			if(resp.widgetinfo == null) {
+				content = `
+				<div>
+					<p>아직 즐겨찾기를 누른 롤 유저가 없어요 :(<br/>지금 마음에 드는 유저를 즐겨찾기 해 보는 건 어떨까요?</p>
+					<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riotheader.do">LOL 유저 검색하러 가기</a><span style="color : rgb(238, 210, 88);"> <i class="fas fa-star"></i></span></p>
+				</div>
 				`
 				$(".game-widget").append(content);
+			} else {
+				content = `
+				<div style="width : 380px; height : 150px">
+				    <div style="width : 180px; text-align: center; padding : 10px; box-sizing: border-box; float: left;" >
+				      <div>
+				        <img src="../sample/image/flower1.PNG" alt="" style="width : 100px; height: 100px; border-radius: 50%;">
+				      </div>
+				      <div>
+				        <h5 style="font-size: 18px;">`+resp.widgetinfo.name+`</h5>
+				      </div>
+				    </div>
+				    <div style="width : 200px; text-align: center; box-sizing: border-box; float: right; right : 30px;">
+				      <div style="margin-top:20px;">
+				        <div style="display: inline-flex;" class="lolLankImg"></div>
+				        <div style="display: inline-flex; position : relative; bottom : 10px; height: 50px;">
+				        	<span>`+resp.widgetinfo.tier+``+resp.widgetinfo.rank+` `+resp.widgetinfo.leaguePoints+` LP</span>
+				        </div>
+				      </div>
+				      <div style="width : 200px; display: inline-flex; font-size : 18px; margin-left : 15px;">
+				        <div style="width : 100px; height: 30px;"><span style="color : #00BFFF ">승리 : `+resp.widgetinfo.wins+`</span></div>
+				        <div style="width : 100px;"><span style="color : #CD5C5C">패배 : `+resp.widgetinfo.losses+`</span></div>
+				      </div>
+				    </div>
+				  </div>
+				`
+				$(".game-widget").append(content);
+				if(resp.widgetinfo.rank == null) {
+					content = `
+					<img src="`+$contextPath+`/resources/images/riot/unranked.png" alt="" style="width : 50px; height : 50px; margin : 5px;">`
+				} else {
+					content = `
+					<img src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="" style="width : 50px; height : 50px; margin : 5px;">`
+				}
+				$(".lolLankImg").append(content);
+			}
 	 	}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -409,26 +449,32 @@ const accountbookWidgetInfo = () => {
      	success(resp) {
 			console.log(resp);
 			let content = "";
-			content = `
-				<div>
-					<table>
-						<tr>
-							<th colspan="2">`+$nickName+`님의 이번 달 가계부</th>
-						</tr>
-						<tr class="accountList">
-						</tr>
-					</table>
-				</div>
-			`;
-			$(".account-widget").append(content);
-			for(let i = 0; i < 1; i++) {
 				content = `
-				<td>수입 : `+numberWithCommas(resp.income)+`</td>
-				<td>지출 : `+numberWithCommas(resp.expense)+`</td>
-				`
-				$(".accountList").append(content);
-			}
-		}, 
+					<div style="padding : 15px;">
+						<div style="margin : auto; text-align : center;">
+							<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/accountbook/accountbook.do">
+								<h4>`+$nickName+`님의 이번 달 가계부</h4>
+							</a>
+						</div>
+						<table style="text-align : center; font-size : 20px;">
+							<tr>
+								<td><span>수입</span></td>
+								<td><span>지출</span></td>
+							</tr>
+							<tr class="accountList">
+							</tr>
+						</table>
+					</div>
+				`;
+				$(".account-widget").append(content);
+				for(let i = 0; i < 1; i++) {
+					content = `
+					<td style="width : 150px;"><span style="color : green;">+`+numberWithCommas(resp.income)+`원</span></td>
+					<td style="width : 150px;"><span style="color : red;">-`+numberWithCommas(resp.expense)+`원</span></td>
+					`
+					$(".accountList").append(content);
+				}
+		}, //success 끝
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
