@@ -214,14 +214,6 @@
 				
 				<script>
 				$(() => {
-					$.ajax({
-						url: '/nadaum/member/mypage/memberFriendWidget.do',
-						success(resp){
-							console.log(resp);
-						},
-						error: console.log
-					});
-					
 					$("#birthday").datepicker({
 						showAnim: "fold",
 						duration: "normal"						
