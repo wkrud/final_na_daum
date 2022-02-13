@@ -46,13 +46,13 @@
 		<c:forEach items="${widgetList}" var="widget">
 			<div class="widget_form ${widget.widgetName}">
 				<button class="delWidgetBtn" onclick="delWidget(${widget.no})">삭제하기</button>
-				<p>${widget.widgetName}${widget.no}</p>
 			</div>
 			
 		</c:forEach>
 	</section>
 </article>
 <input type="hidden" id="id" value="${loginMember.id}" />
+<input type="hidden" id="nickName" value="${loginMember.nickname}" />
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
 <script src='${pageContext.request.contextPath}/resources/js/main/main.js'></script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

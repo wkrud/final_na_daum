@@ -2,6 +2,7 @@
 //기본값
  let $id = $("#id").val();
  let $contextPath = $("#contextPath").val();
+ let $nickName = $("#nickName").val();
 
 //클릭시 커지게
  let addWidget = document.querySelector('.add-widget');
@@ -49,8 +50,7 @@ const dragOver = (ev) => {
 const drop = (ev) => {
    ev.preventDefault();
    let widgetName = ev.dataTransfer.getData("text");
-   let widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">
-   				 <p>`+widgetName+`</p></div>`
+   let widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)"></div>`
 
    
 	//내려놓을 때 db 등록
@@ -155,7 +155,7 @@ const drop = (ev) => {
  	else if(widgetName == 'movie-widget') {
  		if(document.querySelector('.movie-widget') == null) {
 	        insertWidget(); 
-	      	movieWidgetInfo
+	      	movieWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -277,12 +277,22 @@ const gameWidgetInfo = () => {
 	 	data : JSON.stringify(member_Id),
 	 	success(resp) { 
 	 		console.log(resp);
-	 		for(data in resp) {
+	 		console.log(resp.widgetinfo.leaguePoints);
 				let content = `
-				<p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p>
+				<table>
+					<tr>
+						<td>닉네임 : `+resp.widgetinfo.name+`</td>
+						<td>리그포인트 : `+resp.widgetinfo.leaguePoints+`</td>
+						<td>랭크 : `+resp.widgetinfo.rank+`</td>
+					</tr>
+					<tr>
+						<td>티어 : `+resp.widgetinfo.tier+`</td>
+						<td>승 : `+resp.widgetinfo.wins+`</td>
+						<td>패 : `+resp.widgetinfo.losses+`</td>
+					</tr>
+				</table>
 				`
 				$(".game-widget").append(content);
-			}
 	 	}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -301,11 +311,27 @@ const todoListWidgetInfo = () => {
 	 	success(resp) {
 	 		console.log(resp);
 	 		console.log(resp.length);
+	 		console.log(resp[0].title);
+	 		let content = "";
+	 		content = `
+	 			<div>
+	 				<p>투두리스트 제목 : `+resp[0].title+`</p>
+	 				<p>등록일 : `+timeConvert(resp[0].regDate)+`</p>
+	 				<ul class="todoListContent">
+	 				<ul>
+	 			</div>
+	 		`
+	 		$(".todo-widget").append(content);
 	 		for(data in resp) {
-				let content = `
-				<p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p>
+				content = `
+					<li> 
+						<input type="checkbox" name="finish" id="doing" />
+						<label for="doing">
+						<p>`+resp[data].content+`</p>	
+						</label>
+					</li>
 				`
-				$(".todo-widget").append(content);
+				$(".todoListContent").append(content);
 			}
 	 	}, 
 	 	error(xhr, testStatus, err) {
@@ -323,11 +349,26 @@ const accountbookWidgetInfo = () => {
      	contentType : "application/json; charset=UTF-8",
      	dataType : "json",
      	success(resp) {
-			for(data in resp) {
-				let content = `
-				<p>가계부우우우우우</p><p>욜마부우우우우우우</p><p>가계부우우우우우</p><p>욜마부우우우우우우</p><p>가계부우우우우우</p><p>욜마부우우우우우우</p>
+			console.log(resp);
+			let content = "";
+			content = `
+				<div>
+					<table>
+						<tr>
+							<th colspan="2">`+$nickName+`님의 이번 달 가계부</th>
+						</tr>
+						<tr class="accountList">
+						</tr>
+					</table>
+				</div>
+			`;
+			$(".account-widget").append(content);
+			for(let i = 0; i < 1; i++) {
+				content = `
+				<td>수입 : `+numberWithCommas(resp.income)+`</td>
+				<td>지출 : `+numberWithCommas(resp.expense)+`</td>
 				`
-				$(".account-widget").append(content);
+				$(".accountList").append(content);
 			}
 		}, 
 	 	error(xhr, testStatus, err) {
@@ -347,9 +388,14 @@ const cultureWidgetInfo = () => {
      	headers : headers,
      	success(resp) {
 			console.log(resp);
+			let content = "";
 			for(data in resp) {
-				let content = `
-				<p>컬쳐러럴러러럴러....털그럭...</p><p>컬쳐러럴러러럴러....털그럭...</p><p>컬쳐러럴러러럴러....털그럭...</p>
+				content = `
+					<div style="text-align : center; display:inline-block;">
+						<img style="width : 300px; height : 400px"src=`+resp[data].imgUrl+`>
+						<p>`+resp[data].title+`</p>
+						<p>전시 기간 : `+resp[data].startDate+`~`+resp[data].endDate+`</p>
+					</div>
 				`
 				$(".culture-widget").append(content);
 			}
@@ -379,12 +425,16 @@ const audiobookWidgetInfo = () => {
      	headers : headers,
      	success(resp) {
 			console.log(resp);
-			for(data in resp) {
 				let content = `
-				<p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p>
+				<p>`+resp.albumInfo.kind+` 장르의 이런 오디오북 감상은 어떠세요?</p>
+				<p>이미지 링크: `+resp.imgLink+`</p>
+				<p>링크는 잘 불러오는데 제 컴터에 사진이 안 올라와서 안 떠여~~</p>
+				<img src=`+resp.imgLink+`>
+				<p>제목 : `+resp.albumInfo.title+`</p>
+				<p>creator : `+resp.albumInfo.creator+`</p>
+				<p>provider : `+resp.albumInfo.provider+`</p>				
 				`
 				$(".audio-widget").append(content);
-			}
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -405,12 +455,36 @@ const movieWidgetInfo = () => {
      	headers : headers,
      	success(resp) {
 			console.log(resp);
-			for(data in resp) {
-				let content = `
-				<p>영화랄라라랄</p><p>영화랄라라랄</p><p>영화랄라라랄</p><p>영화랄라라랄</p><p>영화랄라라랄</p>
-				`
+				let content = ""; 
+				content	= `
+				<div class="page-wrapper" style="position: relative;">
+				<div class="post-slider">
+					<h1 class="silder-title">Upcoming Movies</h1>
+					<a href="`+$contextPath+`/movie/movieList.do"
+						class="post-subject">+더보기</a> 
+					<i class="fas fa-chevron-left prev"></i>
+					<i class="fas fa-chevron-right next"></i>
+
+					<div class="post-wrapper">
+					`
 				$(".movie-widget").append(content);
-			}
+				for(data in resp) {
+					content = `<div class="card post" style="width: 18rem;">
+								<img class="card-img-top slider-image"
+									src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
+									alt="Card image cap">
+								<div class="card-body post-info">
+									<p class="card-text widget-movie-title">`+resp[data].title+`</p>
+									<p class="card-text widget-movie-rating">평점 : `+resp[data].voteAverage+`</p>
+								</div>
+							</div>`
+					$(".movie-widget").append(content);
+				}
+				content = `</div>
+						</div>
+					</div>
+				</div>`
+				$(".movie-widget").append(content);
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -444,3 +518,14 @@ const timeConvert = (t) => {
     var day = "0" + date.getDate();
     return year + "-" + month.substr(-2) + "-" + day.substr(-2);
 }
+
+
+/* 슬라이드 스크립트*/
+	$('.post-wrapper').slick({
+	  slidesToShow: 2,
+	  slidesToScroll: 1,
+	  autoplay: true,
+	  autoplaySpeed: 2000,
+	  nextArrow:$('.next'),
+	  prevArrow:$('.prev'),
+	});
