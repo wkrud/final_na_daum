@@ -19,27 +19,29 @@
 
 .banner {
 	margin-bottom: 2vw;
+	text-align:center;
 }
 
 #body{
 	justify-content: center;
 	font-family: 'Pretendard-Regular';
-	/* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); 
 	background: linear-gradient(-45deg,#3D0605,  #0A1F33, #660B09, #12536B, #3D0605);
 	background-color: #0A1F33;
     background-size: cover;
     animation: gradient 15s ease infinite;
 	
 }
-header, body, footer{
-	
-}
 /* html, body {
   width: 100%;
   height:100%;
 } */
-.carousel, .subList{
-	margin-left:10vw;
+.carousel{
+	margin-right:auto;
+	margin-right:auto;  
+}
+.subList{
+	 margin-left:10vw; 
 }
 .card-body {
 	background-color: #0A1F33;
@@ -66,39 +68,41 @@ span{
 @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 700;
+    font-weight: 800;
     font-style: normal;
 }
 
 /* width: 100%;
 	height: 100%; */
 </style>
-<div id="demo" class="carousel slide banner" data-ride="carousel">
+<div id="demo" class="carousel slide banner justify-content-center" data-ride="carousel">
 	<!-- 	<ul class="carousel-indicators">
 		<li data-target="#demo" data-slide-to="0" class="active"></li>
 		<li data-target="#demo" data-slide-to="1"></li>
 		<li data-target="#demo" data-slide-to="2"></li>
 	</ul> -->
-	<div class="carousel-inner">
+	<div class="carousel-inner justify-content-center">
 		<div class="carousel-item active">
-			<img src="https://img.sbs.co.kr/newimg/news/20161117/200997114_1280.jpg" id="center-image" alt="배너1" class="d-block mx-auto mt-5" 
-			onclick="location.href='${pageContext.request.contextPath}/audiobook/detail?code=${album.code}'"/>
+			<img src="${contextPath}${imgPath}main/Main_Jazz.jpg" id="center-image" alt="배너1" class="d-block mx-auto mt-5" 
+			onclick="location.href='${pageContext.request.contextPath}/audiobook/detail?code=jz107003'"/>
 			<div class="carousel-caption d-none d-md-block">
 				<h3></h3>
 				<p></p>
 			</div>
 		</div>
 		<div class="carousel-item">
-			<img src="https://img.sbs.co.kr/newimg/news/20161117/200997114_1280.jpg" id="center-image" alt="배너2" class="d-block mx-auto mt-5">
+			<img src="${contextPath}${imgPath}main/Main_Galaxy.jpg" id="center-image" alt="배너2" class="d-block mx-auto mt-5"
+			onclick="location.href='${pageContext.request.contextPath}/audiobook/detail?code=nv303003'"/>
 			<div class="carousel-caption">
-				<h3>.</h3>
+				<h3></h3>
 				<p></p>
 			</div>
 		</div>
 		<div class="carousel-item">
-			<img src="https://img.sbs.co.kr/newimg/news/20161117/200997114_1280.jpg" id="center-image" alt="배너3" class="d-block mx-auto mt-5">
+			<img src="${contextPath}${imgPath}main/Main_Classic.jpg" id="center-image" alt="배너3" class="d-block mx-auto mt-5"
+			onclick="location.href='${pageContext.request.contextPath}/audiobook/detail?code=cl105001'"/>
 			<div class="carousel-caption">
-				<h3>.</h3>
+				<h3></h3>
 				<p></p>
 			</div>
 		</div>

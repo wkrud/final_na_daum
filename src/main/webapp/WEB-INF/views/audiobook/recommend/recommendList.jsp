@@ -188,7 +188,7 @@ img {
 			<input id="code" name="code" type="hidden" value="${album.code}" />
 			<%-- <img src="resources/upload/audiobook/img/${album.renamedFilename}"  class="card-img-top" alt=""> --%>
 			<a href="${pageContext.request.contextPath}/audiobook/search/list/select?searchType=kind&searchKeyword=Jazz"> 
-			<img src="${contextPath}${imgPath}recommend/Recommend_MyAudioBook.gif" class="card-img-top" alt="">
+			<img src="${contextPath}${imgPath}recommend/Recommend_JazzList.gif" class="card-img-top" alt="">
 			</a>
 			<div class="card-body">
 				<h5 class="card-title">${album.title}</h5>
@@ -264,10 +264,22 @@ img {
 </div>
 
 <div class="col-lg-12 text-center mt-5">
-	<h1><a href="${contextPath}/audiobook/recommend/list" style="color: black; text-decoration:none;">인디음악</a> </h1>
+	<h1><a href="${contextPath}/audiobook/recommend/list" style="color: black; text-decoration:none;">애니메이션</a> </h1>
 </div>
 <div class="row  row-cols-md-4 g-4 list justify-content-center">
-	
+	<div class="col col-md-3 row-md-4">
+		<div class="card h-100 row-md-4">
+			<input id="code" name="code" type="hidden" value="${album.code}" />
+			<%-- <img src="resources/upload/audiobook/img/${album.renamedFilename}"  class="card-img-top" alt=""> --%>
+			<a href="${pageContext.request.contextPath}/audiobook/detail?code=an305002"> 
+			<img src="${contextPath}${imgPath}recommend/Recommend_Good Night Child.gif" class="card-img-top" alt="">
+			</a>
+			<div class="card-body">
+				<h5 class="card-title">${album.title}</h5>
+				<p class="card-text"></p>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- ajax로 페이지 새로고침 영역-->
@@ -308,4 +320,9 @@ img {
 	 }); */
 </script>
 
-<jsp:include page="/WEB-INF/views/audiobook/common/audioBookFooter.jsp"></jsp:include>
+</section>
+
+</div>
+</body>
+
+</html>
