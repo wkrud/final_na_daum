@@ -43,6 +43,7 @@
 				<i class="far fa-play-circle"></i>
 			</span>
 		</div>
+			<button class="clearWidgetBtn"><p>위젯 삭제하기</p></button>
 		<c:forEach items="${widgetList}" var="widget">
 			<div class="widget_form ${widget.widgetName}">
 				<button class="delWidgetBtn" onclick="delWidget(${widget.no})">삭제하기</button>

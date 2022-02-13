@@ -550,6 +550,11 @@ const movieWidgetInfo = () => {
 	});
 }
 
+
+//위젯 삭제 버튼
+$(".clearWidgetBtn").on('click', function(){
+		$(".delWidgetBtn").toggle();
+	});
 	
  
 //수입 지출 변환 함수

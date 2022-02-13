@@ -329,27 +329,48 @@ console.log(year);
 console.log(month);
 
 const monthly = (m) => {
-	if($today == null || $today == "") {
-		alert("기록이 없는 데이터는 조회할 수 없습니다.");
-		return;
-	} else {
-		if(m == "before") {
-			  if( 1 < month) {
-				month = parseInt(month) -1;
-			} else {
-				month = 12;
-				year = parseInt(year) - 1;
+	$.ajax({
+		url : $contextPath+'/accountbook/searchDate.do',
+		type : "POST",
+		contentType : "application/json; charset=UTF-8",
+		dataType : "json",
+		headers : headers,
+		success(resp) {
+			console.log(resp);
+			let array = [];
+			for(obj in resp) {
+				array.push(resp[obj].monthly);
 			}
-		} else if(m == "next") {
-			if(month < 12) {
-				month = parseInt(month) + 1;
-			} else {
-				month = 1;
-				year = parseInt(year) + 1;
+			console.log(array);
+			console.log(array.length);
+			if(m == "before") {
+				if($today === array[0]) {
+					alert("기록에 없는 데이터는 조회할 수 없습니다.");
+					return;
+				} else if( 1 < month) {
+					month = parseInt(month) -1;
+				} else {
+					month = 12;
+					year = parseInt(year) - 1;
+				}
+			} else if(m == "next") {
+				if($today === array[array.length-1]) {
+					alert("기록에 없는 데이터는 조회할 수 없습니다.");
+					return;
+				} else if(month < 12) {
+					month = parseInt(month) + 1;
+				} else {
+					month = 1;
+					year = parseInt(year) + 1;
+				}
 			}
+			searchDay = year+'-'+(month >= 10? month : '0'+month);
+			location.href = $contextPath+`/accountbook/accountbook.do?date=`+searchDay;
+		},
+		error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
 		}
-	}
-	searchDay = year+'-'+(month >= 10? month : '0'+month);
-	location.href = $contextPath+`/accountbook/accountbook.do?date=`+searchDay;		
+	});	
 }
     

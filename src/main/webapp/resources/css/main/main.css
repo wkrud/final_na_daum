@@ -108,3 +108,7 @@ body {
 .widget_form::after {
 	clear:both;
 }
+
+.delWidgetBtn {
+	display : none;
+}
