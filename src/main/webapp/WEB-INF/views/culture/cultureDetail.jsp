@@ -168,7 +168,7 @@ div#board-container label.custom-file-label {
 <script>
 
 $("#scheduleAccept-btn").click((e) => {
-	const spec = "left=500px, top=500px, width=265px, height=200px";
+	const spec = "left=500px, top=200px, width=265px, height=100px";
 	const popup = open('${pageContext.request.contextPath}/culture/scheduleAccept.do', '수락여부', spec);
 });
 </script>
