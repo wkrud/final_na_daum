@@ -8,18 +8,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page
 	import="com.project.nadaum.culture.show.controller.CultureController"%>
-
-<script
-	src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <sec:authentication property="principal" var="loginMember" />
-<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<meta id="_csrf_header" name="_csrf_header"
-	content="${_csrf.headerName}" />
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="나:다움 영화상세보기 " name="movieDetail" />
+	<jsp:param value="나:다움 문화상세보기 " name="cultureDetail" />
 </jsp:include>
 <style>
 .movie-detail-container {
@@ -127,70 +119,28 @@ div#board-container label.custom-file-label {
 /* .rating svg:nth-child(1){
 	color:#F05522; */
 }
+
+.culture-detail p{
+	font-size: 28px;
+}
 </style>
 
 <div class="movie-detail-container">
 	<!-- 영화상세보기 정보 -->
-	<div class="movie-detail-content">
+	<div class="movie-detail-content  culture-detail">
 
 		<!-- 상세정보 -->
 		<c:forEach var="culture" items="${list}">
-			<div class="row featurette">
+			<div class="row featurette ">
 				<div class="col-md-7 order-md-2">
-					<h2 class="featurette-heading">
-						<input type="text" class="form-control- movie-detail"
-							placeholder="제목" name="title" id="title" value="${culture.title}"
-							readonly>
-					</h2>
-					<p class="lead">
-					<div class="form-group row">
-						<label for="date" class="col-sm-2 col-form-label">시작 날짜 :
-						</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail"
-								name="openDt" title="개봉일" id="date" value="${culture.startDate}"
-								readonly>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="date" class="col-sm-2 col-form-label">종료 날짜 :
-						</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail"
-								name="openDt" title="개봉일" id="date" value="${culture.endDate}"
-								readonly>
-						</div>
-					</div>
-
-
-					<div class="form-group row">
-						<label for="genreNm" class="col-sm-2 col-form-label">장르 :
-						</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail"
-								name="genreNm" title="장르" id="genreNm"
-								value="${culture.realmName}" readonly>
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<label for="director" class="col-sm-2 col-form-label">가격 :
-						</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail"
-								name="director" title="감독" id="director"
-								value="${culture.price}" readonly>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="director" class="col-sm-2 col-form-label">주소 :
-						</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail"
-								name="director" title="감독" id="placeAddr"
-								value="${culture.placeAddr}" readonly>
-						</div>
-					</div>
+					<h1>${culture.title}</h1>
+					<p>시작날짜 : <fmt:parseDate value="${culture.startDate}" var="startDateParse" pattern="yyyyMMdd"/>
+				<fmt:formatDate value="${startDateParse}" pattern="yyyy년 MM월 dd일"/></p>
+					<p>종료날짜 : <fmt:parseDate value="${culture.endDate}" var="endDateParse" pattern="yyyyMMdd"/>
+				<fmt:formatDate value="${endDateParse}" pattern="yyyy년 MM월 dd일"/></p>
+					<p>장르 : ${culture.realmName}</p>
+					<p>가격 : ${culture.price}</p>
+					<p>장소 : ${culture.placeAddr}</p>
 					<a href="${culture.placeUrl}">${culture.placeUrl}</a>
 				</div>
 				<div class="col-md-5 order-md-1">
@@ -213,8 +163,7 @@ div#board-container label.custom-file-label {
 			</form>
 			<button type="button" class="btn btn-secondary" data-toggle="modal"
 				data-target="#add-calander">캘린더&raquo;</button>
-
-
+		<button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button>
 
 
 
@@ -322,7 +271,7 @@ div#board-container label.custom-file-label {
 							<div class="form-inline mb-2">
 								<label for="replyId"><i
 									class="fa fa-user-circle-o fa-2x"> <input type="text"
-										class="id-detail movie-detail" name="id" id="id"
+										class="id-detail movie-detail" name="id" id="writerId"
 										value="${loginMember.nickname}" readonly /></i> </label>
 							</div>
 
@@ -529,50 +478,32 @@ div#board-container label.custom-file-label {
 					<div class="form-group row">
 						<label for="title" class="col-sm-2 col-form-label" >약속일</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control" id="startDate" name="startDate" required>
+							<input type="date" class="form-control" id="scheduleDate" name="startDate" required>
 						</div>
 					</div>
 						<div class="friend-list-wrap">
 							<div class="friends-list">
-							<input type="hidden" name="apiCode" value="${apiCode}" />
-							<input type="hidden" name="friendId" value="wkrud" />
-							<input type="hidden" name="allDay" value="T" />
-							<input type="hidden" name="id" value="${loginMember.id}" />
-							
-								<%-- <div class="friend">
-									<div class="form-group row">
-										<label for="title" class="col-sm-2 col-form-label">친구</label>
-										<div class="col-sm-10">
-											<div class="input-group mb-3">
-												<div class="input-group-prepend">
-												<input id="searchFriend" type="text" name="nickname" class="form-control" placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1" required>
-												<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
-												</div>
-											</div>
+								<div class="find-friend-search">
+								<div class="find-friend-title">
+										<span>친구 찾기</span>
+									</div>
+									<div class="input-group mb-3">
+										<div class="input-group-prepend">
+											<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
+											<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
 										</div>
 									</div>
-								<div class="search-result-list">
-									<div class="list-group"></div>
+									<div class="search-result-list">
+										<div class="list-group">
+										
+										</div>
+									</div>
 								</div>
-								<hr />
-								<!-- 친구닉네임 검색 -->
-								<div class="friends-section">
-									<c:forEach items="${memberList}" var="ml">
-										<c:forEach items="${friends}" var="fr">
-											<c:if test="${ml.id eq fr.friendId}">
-												<div class="friend-wrap">
-													<div class="friend-name-wrap">
-														<span class="friend-name">${ml.nickname}</span>
-													</div>
-												</div>
-											</c:if>
-										</c:forEach>
-									</c:forEach>
-								</div>
-								
+							<input type="hidden" name="apiCode" value="${apiCode}" />
+							<input type="hidden" name="friendId" value="희연이" />
+							<input type="hidden" name="allDay" value="0" />
+							<input type="hidden" name="id" value="${loginMember.id}" />
 							</div>
-						</div>
-					</div> --%>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
@@ -590,7 +521,7 @@ div#board-container label.custom-file-label {
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
 	e.preventDefault();
-	
+
 	const csrfHeader = "${_csrf.headerName}";
     const csrfToken = "${_csrf.token}";
     const headers = {};
@@ -758,47 +689,52 @@ $(insertCommentFrm).submit((e) => {
         const headers = {};
         headers[csrfHeader] = csrfToken;
         
+        const date = $(e.target).find("#scheduleDate").val();
 			$.ajax({
 				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
 				method: "POST",
 				headers : headers, 
 				data : $(scheduleFrm).serialize(),
 				success(resp){
-					location.reload();
+					//location.reload();
 					alert(resp.msg);
+					let ranNo = Math.floor(Math.random() * 10000);
+					let code = 'culture-' + ranNo;
+					let guest = $("[name=friendId]").val();
+					alert(guest);
+					let content = '';
+					 console.log(date);
+					content = `<a href='/nadaum/culture/board/view/${apiCode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a><a><button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button></a>`
+					console.log(content);
+					commonAlarmSystem(code,guest,content);
 					},
 				error: console.log
 				});
  	});
  	
- 		
-	//친구검색	========================================================================================
-	var dest = '${loginMember.nickname}';
-	const $search = $("#searchFriend");
-	$search.on('keyup', function(e){
-		if($search.val() != ''){
-			if(e.key === 'Enter' || e.keyCode === 13){
-				$("#search-friend-start").trigger('click');
-			}
-		}
-	});
-
-	
-	//
-	var socket = new SockJS("http://localhost:9090/nadaum/chat");
-	stompClient = Stomp.over(socket);
-	function friendAlarm(type, status, myNickname, friendNickname){
-		var sendData = {
-			'type':type,
-			'status':status,
-			'myNickname':myNickname,
-			'friendNickname': friendNickname
-		};
-		stompClient.send("/nadaum/chat/friendStatus/" + friendNickname,{},JSON.stringify(sendData));
-	};
-	
 </script>
 
+<script>
+$(document).on("click","#scheduleAccept-btn",function(){
+	const spec = "left=500px, top=200px, width=265px, height=100px";
+	const popup = open('${pageContext.request.contextPath}/culture/scheduleAccept.do', '수락여부', spec);
+});
+
+</script>
+<script>
+
+var socket = new SockJS("http://localhost:9090/nadaum/chat");
+stompClient = Stomp.over(socket);
+function friendAlarm(type, status, myNickname, friendNickname){
+	var sendData = {
+		'type':type,
+		'status':status,
+		'myNickname':myNickname,
+		'friendNickname': friendNickname
+	};
+	stompClient.send("/nadaum/chat/friendStatus/" + friendNickname,{},JSON.stringify(sendData));
+};
+</script>
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=457ac91e7faa203823d1c0761486f8d7&libraries=services"></script>
 <script>
@@ -890,6 +826,49 @@ const drawStar = (target) => {
 		$("#section-rating #rating-result").val("5.0");
 	}
 }
+
+//친구 자동완성 외않되 
+$(() => {	
+	$("#searchFriend").autocomplete({
+		source: function(request, response){
+			$.ajax({
+				url: "${pageContext.request.contextPath}/member/mypage/searchFriendsByNickname.do",
+				data: {value: request.term},
+				success(data){
+					console.log(data);
+					response(
+						$.map(data, function(item){
+							console.log(item)
+							return{
+								value: item,
+							}
+						})	
+					);	
+				},
+				error:console.log				
+			});
+		},
+		select: function(event, ui){
+			console.log(ui);
+			console.log(ui.item.value);
+		},
+		focus: function(event,ui){
+			return false;
+		},
+		minLength: 1,
+		autoFocus: true,
+		classes:{
+			"ui-autocomplete":"highlight"
+		},
+		delay: 500,
+		position:{
+			my: "right top", at: "right bottom"
+		},
+		close: function(event){
+			console.log(event);
+		}
+	});
+});
 
 </script>
 

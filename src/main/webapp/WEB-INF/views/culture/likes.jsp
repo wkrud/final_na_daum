@@ -68,7 +68,9 @@ padding-left: 20px;
 		       	 </c:forEach>
 	        </div>
 	        </div>
-	</div>
+		</div>
+		
+		<button></button>
 	</div>
 </body>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
