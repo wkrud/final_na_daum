@@ -20,7 +20,19 @@
 		into 
 			schedule 
 		values(concat('ri-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
+		 <selectKey order="AFTER" resultType="string" keyProperty="code">
+            select concat('ri-',seq_schedule_no.currval) from dual
+        </selectKey>
 	</insert>
+	
+	<select id="selectOneboardScheduleCheck" resultType="riotSchedule">
+		select
+			*
+		from
+			schedule
+		where
+			code = #{code}
+	</select>
 	
 	
 	<insert id="insertBoard">

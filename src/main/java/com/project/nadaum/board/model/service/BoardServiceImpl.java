@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.nadaum.board.model.dao.BoardDao;
 import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
+import com.project.nadaum.board.model.vo.BoardEntity;
 import com.project.nadaum.board.model.vo.Likes;
+import com.project.nadaum.board.model.vo.RiotSchedule;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -148,9 +150,19 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int insertSchedule(Map<String, Object> map) {
+	public String insertSchedule(RiotSchedule riotSchedule) {
 		
-		return boardDao.insertSchedule(map);
+		int result = boardDao.insertSchedule(riotSchedule);
+		log.debug("code = {}", riotSchedule.getCode());
+		String Schedulecode = riotSchedule.getCode();
+		
+		return Schedulecode;
+	}
+
+	@Override
+	public RiotSchedule selectOneboardScheduleCheck(String schedulecode) {
+		
+		return boardDao.selectOneboardScheduleCheck(schedulecode);
 	}
 	
 

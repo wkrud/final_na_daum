@@ -7,6 +7,7 @@ import com.project.nadaum.board.model.vo.Board;
 import com.project.nadaum.board.model.vo.BoardComment;
 import com.project.nadaum.board.model.vo.BoardEntity;
 import com.project.nadaum.board.model.vo.Likes;
+import com.project.nadaum.board.model.vo.RiotSchedule;
 
 public interface BoardService {
 
@@ -51,7 +52,9 @@ public interface BoardService {
 	
 	Board selectOneRiotBoard(String code);
 
-	int insertSchedule(Map<String, Object> map);
+	String insertSchedule(RiotSchedule riotSchedule);
+
+	RiotSchedule selectOneboardScheduleCheck(String schedulecode);
 
 
 

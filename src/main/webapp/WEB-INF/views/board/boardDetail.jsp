@@ -216,7 +216,7 @@ div.col>.detail {
 						<span>듀오신청할 친구 닉네임</span> <input type="text" name="friendId"
 							id="friendId" class="friendTextId" /> <br /> <br /> <input
 							type="hidden" name="apiCode" value="${board.code}" /> <input
-							type="hidden" name="allDay" value="0" /> <input type="hidden"
+							type="hidden" name="allDay" value="1" /> <input type="hidden"
 							name="id" value="${loginMember.id}" />
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
@@ -520,7 +520,37 @@ div.col>.detail {
 $(document).ready(function() {
 	
 	<c:if test="${check.guest eq 'guest'}">
-			$(promiseReceiveFrm).submit((e) => {
+			
+	const $scheduleCheckCode ='${check.schedulecode}';
+			
+		 	var data = {"schedulecode":$scheduleCheckCode}
+			$.ajax({
+				url : "${pageContext.request.contextPath}/board/boardScheduleCheck.do",
+				method : "GET",
+				data : {
+					schedulecode : $scheduleCheckCode
+					
+				},
+				success(data){
+					const result = data["checkresult"];
+					console.log('result');
+					
+					
+						
+							
+					
+				},
+				error : function(xhr, status, err){
+					console.log(xhr, status, err);
+						alert("에러");
+				}
+			}); 
+			
+			
+			
+			
+			
+			/* $(promiseReceiveFrm).submit((e) => {
 				e.preventDefault();
 		
 		     
@@ -536,7 +566,7 @@ $(document).ready(function() {
 							},
 						error: console.log
 						});
-			});
+			}); */
 
 		
 	</c:if>
@@ -781,8 +811,10 @@ $(".btn-reply").click((e) => {
 					let ranNo = Math.floor(Math.random() * 10000);
 					let code = 'riota-' + ranNo;
 					let guest = $(".friendTextId").val();
+					let schedulecode = resp["schedulecode"];
+					
 					let content = '';
-					content = `<a href='/nadaum/board/boardDetail.do?code=${board.code}&guest=guest'>${board.nickname}님이 회원님에게 [듀오신청약속]을 보냈습니다. &#128233;</a>`
+					content = `<a href='/nadaum/board/boardDetail.do?code=${board.code}&guest=guest&schedulecode=\${schedulecode}'>${board.nickname}님이 회원님에게 [듀오신청약속]을 보냈습니다. &#128233;</a>`
 					commonAlarmSystem(code,guest,content);
 					},
 				error: console.log
