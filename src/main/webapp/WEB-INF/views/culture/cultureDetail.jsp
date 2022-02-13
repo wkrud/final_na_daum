@@ -489,7 +489,7 @@ div#board-container label.custom-file-label {
 									</div>
 									<div class="input-group mb-3">
 										<div class="input-group-prepend">
-											<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
+											<input id="searchFriend" type="text" name="friendId" value="희연이" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
 											<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
 										</div>
 									</div>
@@ -500,7 +500,6 @@ div#board-container label.custom-file-label {
 									</div>
 								</div>
 							<input type="hidden" name="apiCode" value="${apiCode}" />
-							<input type="hidden" name="friendId" value="희연이" />
 							<input type="hidden" name="allDay" value="0" />
 							<input type="hidden" name="id" value="${loginMember.id}" />
 							</div>

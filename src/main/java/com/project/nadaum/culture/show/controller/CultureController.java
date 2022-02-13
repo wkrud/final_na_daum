@@ -703,6 +703,6 @@ public class CultureController {
 		}
 		
 		@GetMapping("/scheduleAccept.do")
-		public void memberFindFriend() {}
+		public void Schedule() {}
 		
 }
