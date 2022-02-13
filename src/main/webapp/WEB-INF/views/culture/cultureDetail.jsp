@@ -163,9 +163,15 @@ div#board-container label.custom-file-label {
 			</form>
 			<button type="button" class="btn btn-secondary" data-toggle="modal"
 				data-target="#add-calander">캘린더&raquo;</button>
+		<button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button>
 
+<script>
 
-
+$("#scheduleAccept-btn").click((e) => {
+	const spec = "left=500px, top=500px, width=265px, height=200px";
+	const popup = open('${pageContext.request.contextPath}/culture/scheduleAccept.do', '수락여부', spec);
+});
+</script>
 
 
 		<!-- 영화 줄거리 -->
@@ -484,13 +490,13 @@ div#board-container label.custom-file-label {
 					</div>
 						<div class="friend-list-wrap">
 							<div class="friends-list">
-							<div class="find-friend-search">
+								<div class="find-friend-search">
 								<div class="find-friend-title">
 										<span>친구 찾기</span>
 									</div>
 									<div class="input-group mb-3">
 										<div class="input-group-prepend">
-											<input id="searchFriend" value="z"type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
+											<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
 											<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
 										</div>
 									</div>
@@ -499,17 +505,12 @@ div#board-container label.custom-file-label {
 										
 										</div>
 									</div>
-									<div class="recommend-list">
-										<div class="list-group">
-										
-										</div>
-									</div>
 								</div>
 							<input type="hidden" name="apiCode" value="${apiCode}" />
-							<input type="hidden" name="friendId" value="qwer1234" />
+							<input type="hidden" name="friendId" value="희연이" />
 							<input type="hidden" name="allDay" value="0" />
 							<input type="hidden" name="id" value="${loginMember.id}" />
-							
+							</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
@@ -520,7 +521,6 @@ div#board-container label.custom-file-label {
 			</div>
 			</div>
 				</div>
-				</div>
 				</form>
 				</div>
 <script>
@@ -528,7 +528,7 @@ div#board-container label.custom-file-label {
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
 	e.preventDefault();
-	
+
 	const csrfHeader = "${_csrf.headerName}";
     const csrfToken = "${_csrf.token}";
     const headers = {};
@@ -711,7 +711,7 @@ $(insertCommentFrm).submit((e) => {
 					alert(guest);
 					let content = '';
 					 console.log(date);
-					content = `<a href='/nadaum/culture/board/view/${apiCode}'>${loginMember.nickname}님이  [문화 생활] 데이트 신청을 했습니다 💖</a>`
+					content = `<a href='/nadaum/culture/board/view/${apiCode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a>`
 					console.log(content);
 					commonAlarmSystem(code,guest,content);
 					},
@@ -825,6 +825,49 @@ const drawStar = (target) => {
 		$("#section-rating #rating-result").val("5.0");
 	}
 }
+
+//친구 자동완성 외않되 
+$(() => {	
+	$("#searchFriend").autocomplete({
+		source: function(request, response){
+			$.ajax({
+				url: "${pageContext.request.contextPath}/member/mypage/searchFriendsByNickname.do",
+				data: {value: request.term},
+				success(data){
+					console.log(data);
+					response(
+						$.map(data, function(item){
+							console.log(item)
+							return{
+								value: item,
+							}
+						})	
+					);	
+				},
+				error:console.log				
+			});
+		},
+		select: function(event, ui){
+			console.log(ui);
+			console.log(ui.item.value);
+		},
+		focus: function(event,ui){
+			return false;
+		},
+		minLength: 1,
+		autoFocus: true,
+		classes:{
+			"ui-autocomplete":"highlight"
+		},
+		delay: 500,
+		position:{
+			my: "right top", at: "right bottom"
+		},
+		close: function(event){
+			console.log(event);
+		}
+	});
+});
 
 </script>
 
