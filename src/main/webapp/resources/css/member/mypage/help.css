@@ -98,6 +98,13 @@
 	font-size: 0.8rem;
 }
 
+.q-button input{
+	display: none;
+}
+.a-info-wrap input{
+	display: none;
+}
+
 /* 검색결과 리스트 */
 .result-box{
 	display: flex;
