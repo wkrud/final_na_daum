@@ -164,6 +164,18 @@ public class BoardServiceImpl implements BoardService {
 		
 		return boardDao.selectOneboardScheduleCheck(schedulecode);
 	}
+
+	@Override
+	public int insertFinalSchedule(Map<String, Object> map) {
+		
+		return boardDao.insertFinalSchedule(map);
+	}
+
+	@Override
+	public int insertFinalSecondSchedule(Map<String, Object> map) {
+		
+		return boardDao.insertFinalSecondSchedule(map);
+	}
 	
 
 	

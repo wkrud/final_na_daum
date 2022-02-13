@@ -34,6 +34,46 @@
 			code = #{code}
 	</select>
 	
+	<insert id="insertFinalSchedule">
+		insert into 
+			calendar 
+		values(
+			seq_calendar_no.nextval,
+			concat('riot-',seq_schedule_no.nextval),
+			'',
+			#{id},
+			#{title}, 
+			default, 
+			#{startDate}, 
+			#{endDate},
+			#{allDay},
+			#{textColor},
+			#{backgroundColor},
+			#{borderColor},
+			#{type}
+	)
+	</insert>
+	
+	<insert id="insertFinalSecondSchedule">
+		insert into 
+			calendar 
+		values(
+			seq_calendar_no.nextval,
+			concat('riot-',seq_schedule_no.nextval),
+			'',
+			#{friendid},
+			#{title}, 
+			default, 
+			#{startDate}, 
+			#{endDate},
+			#{allDay},
+			#{textColor},
+			#{backgroundColor},
+			#{borderColor},
+			#{type}
+	)
+	</insert>
+	
 	
 	<insert id="insertBoard">
 		insert into 

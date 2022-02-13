@@ -144,6 +144,18 @@ public class BoardDaoImpl implements BoardDao {
 		return session.selectOne("board.selectOneboardScheduleCheck",schedulecode);
 	}
 
+	@Override
+	public int insertFinalSchedule(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return session.insert("board.insertFinalSchedule", map);
+	}
+
+	@Override
+	public int insertFinalSecondSchedule(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return session.insert("board.insertFinalSecondSchedule", map);
+	}
+
 	
 
 

@@ -169,9 +169,7 @@ div.col>.detail {
 		<div id="btn-container">
 			<input type="button" class="btn btn-warning" id="listbtn" value="목록 "
 				onclick="location.href ='${pageContext.request.contextPath}/board/boardList.do'">
-			<button type="button" class="btn btn-secondary" data-toggle="modal"
-					data-target="receive-calander">듀오약속확인&raquo;</button>
-
+		
 			<%-- 작성자와 마지막행 수정/삭제버튼이 보일수 있게 할 것 --%>
 			<c:if test="${loginMember.id eq board.id}">
 				<input type="button" class="btn btn-warning" id=" updatebtn"
@@ -179,10 +177,12 @@ div.col>.detail {
 					onclick="location.href ='${pageContext.request.contextPath}/board/boardUpdateView.do?code=${board.code}'">
 				<input type="button" class="btn btn-warning" id="deletebtn"
 					value="삭제" onclick="deleteBoard()">
-				<button type="button" class="btn btn-secondary" data-toggle="modal2"
+				<button type="button" class="btn btn-secondary" data-toggle="modal"
 					data-target="#add-calander">듀오약속잡기&raquo;</button>
 					
 			</c:if>
+				<button type="button" class="btn btn-secondary" data-toggle="modal"
+					data-target="#add-calander2">듀오약속확인&raquo;</button>
 		</div>
 
 	</div>
@@ -233,7 +233,7 @@ div.col>.detail {
 	</div>
 	
 	<!-- 받을모달 -->
-	<div class="modal2 fade" id="receive-calander" tabindex="-1" role="dialog"
+	<div class="modal fade" id="add-calander2" tabindex="-1" role="dialog"
 		aria-labelledby="add-calander" aria-hidden="true">
 		<form id="promiseReceiveFrm">
 			<div class="modal-dialog modal-dialog-centered" role="document">
@@ -246,29 +246,36 @@ div.col>.detail {
 						</button>
 					</div>
 					<div class="modal-body">
+					<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">상대<br>닉네임</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="mynickname"  id="receive-mynickname"/>
+								<input type="hidden" class="form-control" name="friendnickname"  id="receive-friendnickname"/>
+							</div>
+						</div>
+					
 						<div class="form-group row">
 							<label for="title" class="col-sm-2 col-form-label">내용</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="title" name="title">
+								<input type="text" class="form-control" id="receive-title" name="title">
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label for="title" class="col-sm-2 col-form-label">약속일</label>
 							<div class="col-sm-10">
-								<input type="date" class="form-control" id="startDate"
+								<input type="date" class="form-control" id="receive-startDate"
 									name="startDate">
-									<input type="date" name="endDate" />
+									<input type="date" id="receive-endDate" name="endDate" style="display:none"/>
 							</div>
 						</div>
-						<span>듀오신청온 친구 닉네임</span> <input type="text"
-							name="mynickname"  />
-							 <br /> <br /> <input
-							type="hidden" name="allDay"  /> 
+							<input type="hidden" name="allDay" id="receive-allDay" /> 
 							<input type="hidden" name="type"  value="lol"/>
-							<input type="hidden" name="borderColor"  value="lol"/>
-							<input type="hidden" name="backgroundColor"  value="lol"/>
-							<input type="hidden" name="textColor"  value="lol"/>
+							<input type="hidden" name="borderColor"  value="#D25565"/>
+							<input type="hidden" name="backgroundColor"  value="#D25565"/>
+							<input type="hidden" name="textColor"  value="#ffffff"/>
+							<input type="hidden" name="id" value="${loginMember.id}" />
+							<input type="hidden" name="friendid" id="receive-friendId" />
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">취소</button>
@@ -526,6 +533,25 @@ div.col>.detail {
 <script>
 $(document).ready(function() {
 	
+	const timeConvert = (t) => {
+	    var unixTime = Math.floor(t / 1000);
+	    var date = new Date(unixTime*1000);
+	    var year = date.getFullYear();
+	    var month = "0" + (date.getMonth()+1);
+	    var day = "0" + date.getDate();
+	    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
+	}
+	
+	$('#receive-title').val("약속이 없습니다!");
+	$('#receive-mynickname').val("약속을 보낸사람이 없습니다!");
+	
+	 $(promiseReceiveFrm).submit((e) => {
+			 return false;
+				
+		});
+	
+
+	
 	<c:if test="${check.guest eq 'guest'}">
 			
 	const $scheduleCheckCode ='${check.schedulecode}';
@@ -545,8 +571,15 @@ $(document).ready(function() {
 					const mynickname = data["mynickname"];
 					const startDate = data["startDate"];
 					const content = data["content"];
+					const friendid = data["friendid"];
 					
-					
+					$('#receive-title').val(content);
+					$('#receive-startDate').val(timeConvert(startDate));
+					$('#receive-endDate').val(timeConvert(startDate));
+					$('#receive-mynickname').val(mynickname);
+					$('#receive-friendnickname').val(friendnickname);
+					$('#receive-allDay').val(allDay);
+					$('#receive-friendId').val(friendid);
 					
 					
 					
@@ -561,7 +594,8 @@ $(document).ready(function() {
 									data : $(promiseReceiveFrm).serialize(),
 									success(resp){
 										location.reload();
-										alert(resp.msg);
+										const msg = resp["msg"];
+										alert(msg);
 										
 										},
 									error: console.log

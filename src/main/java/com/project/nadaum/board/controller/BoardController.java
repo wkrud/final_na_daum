@@ -447,6 +447,7 @@ public class BoardController {
 		String mynickname = checkresult.getId();
 		Date startDate = checkresult.getStartDate();
 		String content = checkresult.getTitle();
+		String friendid = checkresult.getId();
 		
 		param.put("accept", accept);
 		param.put("allDay", allDay);
@@ -454,6 +455,8 @@ public class BoardController {
 		param.put("mynickname", mynickname);
 		param.put("startDate", startDate);
 		param.put("content", content);
+		param.put("friendid", friendid);
+		
 		
 		
 
@@ -463,19 +466,28 @@ public class BoardController {
 	}
 
 	@PostMapping("/boardReceiveSchedule.do")
-	public ResponseEntity<?> insertReceiveSchedule(@RequestParam RiotSchedule map, Model model) {
+	public ResponseEntity<?> insertReceiveSchedule(@RequestParam Map<String, Object> map ) {
 
 		log.debug("map = {}", map);
-
+		String id = (String) map.get("id");
+		String friendid = (String) map.get("friendid");
+		
+	
 		try {
-			// int result = boardService.insertSchedule(map);
-
-			// log.debug("result={}", result);
-			// String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";
-
-			int result = 1;
-
-			System.out.println(map);
+				map.remove("friendid");
+				log.debug("map = {}", map);
+			 int result = boardService.insertFinalSchedule(map);
+			 	map.put("friendid",friendid);
+			 	map.remove("id");
+			 	log.debug("map = {}", map);
+			 int result2 = boardService.insertFinalSecondSchedule(map);
+			 
+			 log.debug("result={}", result2);
+			 String msg = (result2 > 0) ? "약속수락 성공" : "약속수락 실패";
+			 map.put("msg", msg);
+			
+						
+			
 			if (result == 1) {
 
 				return ResponseEntity.ok(map);

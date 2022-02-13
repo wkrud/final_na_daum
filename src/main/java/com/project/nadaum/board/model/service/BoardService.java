@@ -56,6 +56,10 @@ public interface BoardService {
 
 	RiotSchedule selectOneboardScheduleCheck(String schedulecode);
 
+	int insertFinalSchedule(Map<String, Object> map);
+
+	int insertFinalSecondSchedule(Map<String, Object> map);
+
 
 
 
