@@ -217,10 +217,12 @@ const selectedFeed = (id, code) => {
 			});
 							
 			$(feedViewModal)
+				.modal();
+			/*$(feedViewModal)
 				.modal()
 				.on("hide.bs.modal", (e) => {
 				location.href=`/nadaum/feed/socialFeed.do?id=${resp.feed.writer}`;
-			});
+			});*/
 			
 			likeHtml(resp.feed.code, resp.feed.writer, resp.guest.nickname);			
 			
@@ -379,6 +381,7 @@ const likeHtml = (code, writer, guestNickname) => {
 			check = '1';
 			$("label[for='like']").html('좋아요<i class="fas fa-heart"></i>');
 			$("#like").prop("checked", true);
+			let i = $(".likes-count").val();
 			
 			content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>${guestNickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
 			sendAndInsertAlarm('I',writer,alarmCode,content);
@@ -389,6 +392,7 @@ const likeHtml = (code, writer, guestNickname) => {
 			$("#like").prop("checked", false);
 		}		
 		feedLikeChange(check,code);		
+		opener.document.location.reload();
 	});
 };
 
