@@ -98,7 +98,7 @@ div#board-container label.custom-file-label {
 		<div class="d-flex justify-content-between">
 			<button type="button" class="btn btn-info del-btn" onclick="location.href='${pageContext.request.contextPath}/audiobook/album/enroll/list'">돌아가기</button>
 			<input type="submit" class="btn btn-success" value="수정">
-			<button type="button" class="btn btn-outline-danger del-btn" onclick="location.href='${pageContext.request.contextPath}/audiobook/album/delete?code=${album.code}'">삭제</button></div>
+			<button type="button" class="btn btn-outline-danger del-btn" onclick="location.href='${pageContext.request.contextPath}/audiobook/album/delete?code=${oldAlbumInfo.code}'">삭제</button></div>
 		<div class="d-flex justify-content-end"></div>
 	</form>
 		

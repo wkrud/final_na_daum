@@ -50,6 +50,8 @@ public interface AlbumService {
 	int updateAlbumTrackList(List<AlbumTrack> newAlbumTrackList);
 
 	int updateAlbumTrack(AlbumTrack altrk);
+	
+	int deleteAlbumTrack(int no);
 
 	int deleteAlbumTracks(int[] delArray);
 	
@@ -111,12 +113,5 @@ public interface AlbumService {
 
 	List<Map<String, Object>> selectListAlbumInfoRecentMain();
 
-	
-
-	
-
-	
-
-	
 
 }
