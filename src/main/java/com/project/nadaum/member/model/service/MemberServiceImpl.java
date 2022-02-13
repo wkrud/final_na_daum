@@ -266,21 +266,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<Help> selectAllMembersDyQuestions(Map<String, Object> map) {
-		return memberDao.selectAllMembersDyQuestions(map);
-	}
-
-	@Override
-	public List<Help> selectAllMembersAbQuestions(Map<String, Object> map) {
-		return memberDao.selectAllMembersAbQuestions(map);
-	}
-
-	@Override
-	public List<Help> selectAllMembersFrQuestions(Map<String, Object> map) {
-		return memberDao.selectAllMembersFrQuestions(map);
-	}
-
-	@Override
 	public List<Help> selectAllMembersQuestions(Map<String, Object> map) {
 		return memberDao.selectAllMembersQuestions(map);
 	}

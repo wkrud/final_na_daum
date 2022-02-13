@@ -108,12 +108,6 @@ public interface MemberService {
 
 	int updateAlarm(Map<String, Object> map);
 
-	List<Help> selectAllMembersDyQuestions(Map<String, Object> map);
-
-	List<Help> selectAllMembersAbQuestions(Map<String, Object> map);
-
-	List<Help> selectAllMembersFrQuestions(Map<String, Object> map);
-
 	List<Help> selectAllMembersQuestions(Map<String, Object> map);
 
 	int countAllMyHelp(Member member);

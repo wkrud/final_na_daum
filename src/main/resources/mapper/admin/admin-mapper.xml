@@ -5,7 +5,11 @@
 <mapper namespace="admin">
 
 	<select id="selectAllHelp" resultType="help">
-		select * from help order by reg_date desc
+		select
+			(SELECT count(*) FROM likes WHERE code = h.code) likes,
+			(SELECT count(*) FROM likes WHERE code = h.a_code) alikes,
+			h.*
+		from help h order by reg_date desc
 	</select>
 	
 	<select id="selectHelpLikes" resultType="string">

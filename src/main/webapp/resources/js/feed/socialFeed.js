@@ -392,7 +392,6 @@ const likeHtml = (code, writer, guestNickname) => {
 			$("#like").prop("checked", false);
 		}		
 		feedLikeChange(check,code);		
-		opener.document.location.reload();
 	});
 };
 
