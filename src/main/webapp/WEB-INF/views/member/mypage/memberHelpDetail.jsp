@@ -12,7 +12,7 @@
 <div class="member-body">
 	<div class="help-detail-wrap">
 		<div class="help-detail-body">
-			<span class="help-title">${helpDetail.title} + ${helpDetail.readCount}</span>
+			<span class="help-title">${helpDetail.title}</span>
 			<section class="question-wrap">
 				<div class="q-date-wrap"><span>등록일: <fmt:formatDate value="${helpDetail.regDate}" pattern="yyyy-MM-dd"/></span></div>
 				<div class="q-content-wrap">
@@ -39,7 +39,9 @@
 						</div>
 					</div>
 					<div class="q-button">
-						<label for="empathy">공감해요</label>
+						<label for="empathy">
+							<i class="fa fa-thumbs-o-up" id="help-like-icon" aria-hidden="true"></i>공감
+						</label>
 						<input type="checkbox" name="empathy" id="empathy" 
 							<c:forEach items="${checkLikes}" var="check">
 								<c:if test="${fn:contains(check.code, 'he')}">
@@ -62,7 +64,7 @@
 						<div class="a-content"><p>${helpDetail.aContent}</p></div>
 					</div>
 					<div class="a-info-wrap">
-						<label for="good">답변이 도움이 됩니다</label>
+						<label for="good"><i class="fa fa-thumbs-o-up" id="help-like-icon" aria-hidden="true"></i>답변이 도움이 됩니다</label>
 						<input type="checkbox" name="good" id="good" 
 							<c:forEach items="${checkLikes}" var="check">
 								<c:if test="${fn:contains(check.code, 'ah')}">
@@ -83,11 +85,34 @@
 	</div>
 </div>
 <script>
+/* 
+<i class="fa fa-thumbs-o-up" id="help-like-icon" aria-hidden="true"></i>
+*/
+$(() => {
+<c:forEach items="${checkLikes}" var="check">
+	<c:if test="${fn:contains(check.code, 'he')}">
+		$(".q-button label").html(good);
+	</c:if>
+</c:forEach>
+<c:forEach items="${checkLikes}" var="check">
+	<c:if test="${fn:contains(check.code, 'ah')}">
+		$(".a-info-wrap label").html(aGood);
+	</c:if>
+</c:forEach>
+});		
+
+const $helpLikeBtn = $(".help-like-icon");
 const helpCode = '${helpDetail.code}';
+const good = `<i class='fa fa-thumbs-up' id='help-like-icon' aria-hidden='true'></i>공감`;
+const notGood = `<i class='fa fa-thumbs-o-up' id='help-like-icon' aria-hidden='true'></i>공감`;
+const aGood = `<i class='fa fa-thumbs-up' id='help-like-icon' aria-hidden='true'></i>답변이 도움이 됩니다.`;
+const aNotGood = `<i class='fa fa-thumbs-o-up' id='help-like-icon' aria-hidden='true'></i>답변이 도움이 되셨나요?`;
 $("#empathy").change((e) => {
 	if($("#empathy").is(":checked")){
+		$(".q-button label").html(good);
 		likeChange('t', helpCode);
 	}else{
+		$(".q-button label").html(notGood);
 		likeChange('f', helpCode);
 	}
 });
@@ -96,8 +121,10 @@ $("#empathy").change((e) => {
 const helpACode = '${helpDetail.aCode}';
 $("#good").change((e) => {
 	if($("#good").is(":checked")){
+		$(".a-info-wrap label").html(aGood);		
 		likeChange('t', helpACode);
 	}else{
+		$(".a-info-wrap label").html(aNotGood);
 		likeChange('f', helpACode);
 	}
 });

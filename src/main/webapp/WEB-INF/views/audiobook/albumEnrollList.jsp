@@ -58,6 +58,7 @@ $(() => {
 				</td>
 				<td>${album.playTime}</td>
 				<td>${album.kind}</td>
+				<td><button type="button" class="btn btn-danger">수정</button></td>
 			</tr>
 		</c:forEach>
 	</table>

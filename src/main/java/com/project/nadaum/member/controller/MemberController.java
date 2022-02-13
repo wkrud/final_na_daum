@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -590,21 +591,109 @@ public class MemberController {
 	
 	@GetMapping("/mypage/memberHelp.do")
 	public void memberHelp(Model model){
-		// 다이어리 dy, 가계부 ab, 문화생활 cu, 오디오북, 롤전적, 캘린더 , 친구 fr, 메모 me
+		// 다이어리 dy, 가계부 ab, 문화생활 cu, 오디오북au, 롤전적lol, 캘린더ca , 친구 fr, 피드fe
 		Map<String, Object> checkHelp = memberService.selectHelpCategoyCount();
 		Map<String, Object> map = new HashMap<>();
-		map.put("category", "dy");
-		List<Help> helpDyList = memberService.selectAllMembersDyQuestions(map);
-		map.put("category", "ab");
-		List<Help> helpAbList = memberService.selectAllMembersAbQuestions(map);
-		map.put("category", "fr");
-		List<Help> helpFrList = memberService.selectAllMembersFrQuestions(map);
-		log.debug("helpList = {}", helpDyList);
+		map.put("category", "category");
+		List<Help> helpList = memberService.selectAllMembersQuestions(map);
 		
-		model.addAttribute("checkHelp", checkHelp);
-		model.addAttribute("helpDyList", helpDyList);		
-		model.addAttribute("helpAbList", helpAbList);		
-		model.addAttribute("helpFrList", helpFrList);			
+		for(String category : checkHelp.keySet()) {
+			log.debug("key = {}, val = {}", category, checkHelp.get(category));
+			int val = Integer.parseInt(String.valueOf(checkHelp.get(category)));
+			log.debug("val = {}", val);
+			
+			if("DY".equals(category) && val > 0) {
+				List<Help> helpListDy = new ArrayList<>();
+				for(Help he : helpList) {
+					if("dy".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListDy.add(help);
+					}					
+				}
+				model.addAttribute("helpListDy", helpListDy);
+			}else if("AB".equals(category) && val > 0) {
+				List<Help> helpListAb = new ArrayList<>();
+				for(Help he : helpList) {
+					if("ab".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListAb.add(help);
+					}
+				}
+				model.addAttribute("helpListAb", helpListAb);
+			}else if("CU".equals(category) && val > 0) {
+				List<Help> helpListCu = new ArrayList<>();
+				for(Help he : helpList) {
+					if("cu".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListCu.add(help);
+					}
+				}
+				model.addAttribute("helpListCu", helpListCu);
+			}else if("AU".equals(category) && val > 0) {
+				List<Help> helpListAu = new ArrayList<>();
+				for(Help he : helpList) {
+					if("au".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListAu.add(help);
+					}
+				}
+				model.addAttribute("helpListAu", helpListAu);
+			}else if("LOL".equals(category) && val > 0) {
+				List<Help> helpListLol = new ArrayList<>();
+				for(Help he : helpList) {
+					if("lol".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListLol.add(help);
+					}
+				}
+				model.addAttribute("helpListLol", helpListLol);
+			}else if("CA".equals(category) && val > 0) {
+				List<Help> helpListCa = new ArrayList<>();
+				for(Help he : helpList) {
+					if("ca".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListCa.add(help);
+					}
+				}
+				model.addAttribute("helpListCa", helpListCa);
+			}else if("FR".equals(category) && val > 0) {
+				List<Help> helpListFr = new ArrayList<>();
+				for(Help he : helpList) {
+					if("fr".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListFr.add(help);
+					}
+				}
+				model.addAttribute("helpListFr", helpListFr);
+			}else if("FE".equals(category) && val > 0) {
+				List<Help> helpListFe = new ArrayList<>();
+				for(Help he : helpList) {
+					if("fe".equals(he.getCategory())) {
+						Help help = new Help(he.getCode(), he.getId(), he.getCategory(), he.getTitle(), 
+								he.getContent(), he.getCount(), he.getRegDate(), he.getStatus(), he.getACode(), 
+								he.getATitle(), he.getAContent(), he.getACount(), he.getARegDate(), he.getReadCount(), 0, 0);
+						helpListFe.add(help);
+					}
+				}
+				model.addAttribute("helpListFe", helpListFe);
+			}
+		}
+		log.debug("helpList = {}", helpList.size());
+		model.addAttribute("checkHelp", checkHelp);			
 	}
 	
 	@GetMapping("/mypage/searchHelpTitle.do")
@@ -811,6 +900,58 @@ public class MemberController {
 			log.error(e.getMessage(), e);
 			throw e;
 		}
+	}
+	
+	@GetMapping("/mypage/memberFriendWidget.do")
+	public ResponseEntity<?> memberFriendWidget(@AuthenticationPrincipal Member member){
+		Map<String, Object> friendWidget = new HashMap<>();
+		try {
+			List<Map<String, Object>> friends = memberService.selectAllFriend(member);
+			List<Map<String, Object>> follower = memberService.selectAllRequestFriend(member);
+			List<Member> memberList = memberService.selectAllNotInMe(member);
+			
+			List<Member> widgetFriends = new ArrayList<>();
+			List<Member> widgetFollowers = new ArrayList<>();
+			Map<String, Object> param = new HashMap<>();
+			for(Member m : memberList) {
+				for(int i = 0; i < friends.size(); i++) {
+					if(m.getId().equals(friends.get(i).get("friendId"))) {
+						Member mem = new Member();
+						mem.setNickname(m.getNickname());
+						mem.setProfile(m.getProfile());
+						mem.setLoginType(m.getLoginType());
+						mem.setProfileStatus(m.getProfileStatus());
+						mem.setId(m.getId());
+						
+						widgetFriends.add(mem);
+						
+					}
+				}
+				for(int i = 0; i < follower.size(); i++) {
+					if(m.getId().equals(follower.get(i).get("followerId"))) {
+						Member mem = new Member();
+						mem.setNickname(m.getNickname());
+						mem.setProfile(m.getProfile());
+						mem.setLoginType(m.getLoginType());
+						mem.setProfileStatus(m.getProfileStatus());
+						mem.setId(m.getId());
+						
+						widgetFollowers.add(mem);
+						
+					}
+				}
+			}
+			
+			friendWidget.put("widgetFriends",widgetFriends);
+			friendWidget.put("widgetFollowers",widgetFollowers);
+			
+			log.debug("wwwwwwwwwwwwwwwww = {}", friendWidget);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}	
+		
+		return ResponseEntity.ok(friendWidget);
 	}
 
 	@GetMapping("/mypage/memberFindFriend.do")

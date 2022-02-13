@@ -212,24 +212,14 @@
 	
 	<select id="selectAllMembersQuestions" resultType="help">
 		select
-			*
+			h.*
 		from(
-			select 
-				* 
-			from 
+			select
+				*
+			from
 				help
-			<where>
-				<if test="category != 'all'">
-					category = #{category}
-				</if>
-			</where>
 			order by
-				reg_date desc
-		)
-		<if test="category != 'all'">
-		where
-			rownum <![CDATA[<=]]> 4
-		</if>
+				reg_date desc) h
 	</select>
 	
 	<select id="selectAllHelpTitle" resultType="string">
@@ -280,7 +270,11 @@
 			(SELECT count(category) FROM help WHERE category = 'dy') dy,
 			(SELECT count(category) FROM help WHERE category = 'ab') ab,
 			(SELECT count(category) FROM help WHERE category = 'fr') fr,
-			(SELECT count(category) FROM help WHERE category = 'fe') fe
+			(SELECT count(category) FROM help WHERE category = 'fe') fe,
+			(SELECT count(category) FROM help WHERE category = 'cu') cu,
+			(SELECT count(category) FROM help WHERE category = 'au') au,
+			(SELECT count(category) FROM help WHERE category = 'lol') lol,
+			(SELECT count(category) FROM help WHERE category = 'ca') ca
 		from
 			help
 		where

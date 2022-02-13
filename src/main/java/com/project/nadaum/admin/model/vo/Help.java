@@ -31,6 +31,8 @@ public class Help implements Serializable {
 	private String aCount;
 	private Date aRegDate;
 	private int readCount;
+	private int likes;
+	private int aLikes;
 	
 	
 }

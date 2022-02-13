@@ -14,6 +14,7 @@
 </jsp:include>
 <sec:authentication property="principal" var="loginMember"/>
 <style>
+
 .userPic img {
 	border-radius: 50%; 
 	width: 45px; 
@@ -103,7 +104,6 @@
     width: 200px;
 }
 .commentBtn{cursor: pointer;}
-
 </style>
 
 <script>
@@ -229,86 +229,33 @@ $(document).ready(function (e){
 			<div class="btnSet">
 				<input type="file" class="feedWriteImgInput" id="feedWriteImgInput" name="upFile" accept=".gif, .jpg, .png, .jpeg" onchange="readURL(this);"/> 
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<input type="hidden" name="writer" value="${loginMember.id}"/>
+				<input type="hidden" name="writer" class="writer" value="${loginMember.id}"/>
+				<input type="hidden" name="nickname" class=nickname value="${loginMember.nickname}"/>
 				<button type="submit" class="btn btn-primary feedWriteBtn">작성</button>
 			</div>
 		</div>
 	</form>
 </div>
-	<!-- 피드 목록 -->
-	<c:forEach items="${feed}" var="feed">
-		<div class="feedItem" id="${feed.CODE}">
-			<div class="feedHeader">
-				<div class="user" data-user="${feed.WRITER}">
-					<div class="userPic"> 
-					<a href='/nadaum/feed/socialFeed.do?id=${feed.WRITER}'>              
-                        <c:if test="${feed.LOGINTYPE eq 'K'}">
-                            <img src="${feed.PROFILE}" alt=""/>
-                        </c:if>
-                        <c:if test="${feed.LOGINTYPE eq 'D'}">
-                            <c:if test="${feed.PROFILESTATUS eq 'N'}">
-                                <img
-                                    src="${pageContext.request.contextPath}/resources/upload/member/profile/image.png"/>
-                            </c:if>
-                            <c:if test="${feed.PROFILESTATUS eq 'Y'}">
-                                <img
-                                    src="${pageContext.request.contextPath}/resources/upload/member/profile/${feed.PROFILE}"/>
-                            </c:if>
-                        </c:if>
-                    </a>
-                    </div>
-					<div class="userInfo">
-						<div class="userNickname">${feed.NICKNAME}</div>
-						<div class="userUploadDate"><fmt:formatDate value="${feed.REGDATE}" pattern="yyyy-MM-dd"/></div>
-					</div>
-				</div>
-			</div>
-			<div class="feedBody">
-				<div class="feedPic">
-					<c:if test="${not empty feed.FILENAME}">
-						<img
-							src="${pageContext.request.contextPath}/resources/upload/feed/img/${feed.FILENAME}">
-					</c:if>
-					<c:if test="${empty feed.FILENAME}">
-					</c:if>	
-				</div>
-				<div class="feedBodyBtn">
-				<input type="hidden" class="code" value="${feed.CODE}"/>
-				<input type="hidden" class="id" value="${feed.WRITER}"/>
-					<div class="likeBtn like">
-					<input type="hidden" class="code" value="${feed.CODE}"/>
-						<c:if test="${not empty feed.LIKEID}">	
-							<label for="like"><i class="fas fa-heart"></i></label>
-							<input type="checkbox" id="like" checked/>					
-						</c:if>
-						<c:if test="${empty feed.LIKEID}">
-							<label for="like"><i class="far fa-heart"></i></label>
-							<input type="checkbox" id="like" />			
-						</c:if>
-						<div class="likeNum">${feed.LIKES}</div>
-					</div>
-					<div class="commentBtn">댓글(${feed.COMMENTS})</div>
-				</div>
-				<!-- content -->
-				<div class="feedContent">${feed.CONTENT}</div>
-			</div>
-		</div> 
-	</c:forEach>
-	<div class="feedList" id="feedList">
-	<!-- 피드 출력되는 부분 --> 	 
-	</div>	 		
-	<!-- 게시물 상세보기 모달 -->
-	<div class="modal fade" id="feedViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-body feed-detail-modal-body">
-					
-				</div>
+<div class="feedList" id="feedList">
+<!-- 피드 출력되는 부분 --> 	 
+</div>		
+<!-- 게시물 상세보기 모달 -->
+<div class="modal fade" id="feedViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body feed-detail-modal-body">
+				
 			</div>
 		</div>
 	</div>
+</div>
 </article>
 <script>
+$(document).ready(function(){ 
+	addFeedPageMain(1);
+}); 
+var id = $(".writer").val();
+var nickname = $(".nickname").val();
 
 function getFormatDate(date){
     var year = date.getFullYear();              
@@ -322,8 +269,35 @@ function getFormatDate(date){
 const $feedArea = $(".feedList");
 const $chatRoom = $("#make-chat-room");
 const $detailBody = $(".feed-detail-modal-body");
+
 var loading = false;
-var page = 2;
+var page = 1;
+
+//웹브라우저의 창을 스크롤 할 때 마다 호출되는 함수 등록
+$(window).on("scroll",function(){
+    //위로 스크롤된 길이
+    let scrollTop = $(window).scrollTop();
+    //웹브라우저의 창의 높이
+    let windowHeight = $(window).height();
+    //문서 전체의 높이
+    let documentHeight = $(document).height();
+    //바닥까지 스크롤 되었는 지 여부를 알아낸다.
+    let isBottom=scrollTop+windowHeight + 100 >= documentHeight;
+
+    if(isBottom){
+        //만일 현재 마지막 페이지라면
+        if(page == ${totalPageCount} || loading){
+            return; //함수를 여기서 끝낸다.
+        }
+
+        loading = true;
+        page++;
+        console.log("scroll" + page);
+        
+        addFeedPageMain(page);
+    }; 
+});
+
 
 /* 페이징 id, page */
 const addFeedPageMain = (page) => {
@@ -353,18 +327,31 @@ const addFeedPageMain = (page) => {
 				}
 				
 				if(LIKECHECK == 1){
-					like = `<label for="like"><i class="fas fa-heart"></i></label>
-						<input type="checkbox" id="like" checked/>`;
+					like = `<span> <a idx="\${CODE}" href="javascript:"
+	                    class="heart-click heart_icon\${CODE}"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-suit-heart-fill"
+                        viewBox="0 0 16 16">
+                              <path
+                            d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
+                            </svg></a>
+            		</span>`;
 				}
 				else {
-					like = `<label for="like"><i class="far fa-heart"></i></label>
-						<input type="checkbox" id="like" />`;
+					like = `<span> <a idx="\${CODE}" href="javascript:"
+	                    class="heart-click heart_icon\${CODE}"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-suit-heart"
+                        viewBox="0 0 16 16">
+                              <path
+                            d="M8 6.236l-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z" />
+                            </svg></a>
+           			 </span>`;
 				}
 				
 
 				if(FILENAME != null){
 					feedDiv = `
-					<div class="paginaiton"></div>
 						<div class="feedItem" id="\${CODE}">
 							<div class="feedHeader">
 								<div class="user" data-user="\${WRITER}">
@@ -389,10 +376,10 @@ const addFeedPageMain = (page) => {
 								<div class="feedBodyBtn">
 								<input type="hidden" class="code" value="\${CODE}"/>
 								<input type="hidden" class="id" value="\${WRITER}"/>
-									<div class="likeBtn like">
+									<div class="likeBtn">
 									<input type="hidden" class="code" value="\${CODE}"/>
 										\${like}
-										<div class="likeNum">\${LIKES}</div>
+										<span id="m_heart\${CODE}">\${LIKES}</span>	
 									</div>
 									<div class="commentBtn">댓글(\${COMMENTS})</div>
 								</div>
@@ -401,7 +388,6 @@ const addFeedPageMain = (page) => {
 						</div> `;
 				} else {
 					feedDiv = `
-						<div class="paginaiton"></div>
 							<div class="feedItem" id="\${CODE}">
 								<div class="feedHeader">
 									<div class="user" data-user="\${WRITER}">
@@ -423,10 +409,10 @@ const addFeedPageMain = (page) => {
 									<div class="feedBodyBtn">
 									<input type="hidden" class="code" value="\${CODE}"/>
 									<input type="hidden" class="id" value="\${WRITER}"/>
-										<div class="likeBtn like">
+										<div class="likeBtn">
 										<input type="hidden" class="code" value="\${CODE}"/>
 											\${like}
-											<div class="likeNum">\${LIKES}</div>
+											<span id="m_heart\${CODE}">\${LIKES}</span>	
 										</div>
 										<div class="commentBtn">댓글(\${COMMENTS})</div>
 									</div>
@@ -437,12 +423,92 @@ const addFeedPageMain = (page) => {
 				
 				$feedArea.append(feedDiv);
 				
-				$(".commentBtn").click((e) => {
-					feedDetailModalView(e);
+				$(".heart-click").on("click",function(){
+				    // idx로 전달받아 저장
+				    let code = $(this).attr('idx');
+				    /* let id = ${loginMember.id}; */
+				    console.log("heart-click");
+
+				    // 빈하트를 눌렀을때
+				    if($(this).children('svg').attr('class') == "bi bi-suit-heart"){
+				        console.log("빈하트 클릭" + code);
+
+				        $.ajax({
+				            url : '${pageContext.request.contextPath}/feed/feedMainLikeSave.do',
+				            type : 'get',
+				            data : {
+				                code : code
+				            },
+				            success : function(e) {
+				                //페이지 새로고침
+				                //document.location.reload(true);
+
+				                let heart = e.likes;
+				                console.log(e);
+				                console.log("heart = " + heart);
+
+				                // 페이지에 하트수 갱신
+				                $('#m_heart'+code).text(heart);
+				                //$('#heart'+code).text(heart);
+				                
+				                let ranNo = Math.floor(Math.random() * 10000);
+				    			let alarmCode = 'fe-' + ranNo;
+				    			let content = '';
+				    			let writer = $(".writer").val();
+				    			let nickname = $(".nickname").val();
+				    	        content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>\${nickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
+				    	        sendAndInsertAlarm('I',writer,alarmCode,content);
+				                console.log("하트추가 성공");
+				            },
+				            error : function() {
+				                alert('서버 에러');
+				            }
+				        });
+				        console.log("꽉찬하트!");
+
+				        // 꽉찬하트로 바꾸기
+				        $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-suit-heart-fill' viewBox='0 0 16 16'><path d='M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z'/></svg>");
+				        //$('.heart_icon'+code).html("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-suit-heart-fill' viewBox='0 0 16 16'><path d='M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z'/></svg>");
+
+				    // 꽉찬 하트를 눌렀을 때
+				    }else if($(this).children('svg').attr('class') == "bi bi-suit-heart-fill"){
+				        console.log("꽉찬하트 클릭" + code);
+
+				        $.ajax({
+				            url : '${pageContext.request.contextPath}/feed/feedMainLikeRemove.do',
+				            type : 'get',
+				            data : {
+				                code : code
+				            },
+				            success : function(e) {
+				                //페이지 새로고침
+				                //document.location.reload(true);
+								
+				                console.log(e);
+				                let heart = e.likes;
+				                console.log("heart = " + heart);
+				                // 페이지에 하트수 갱신
+				                $('#m_heart'+code).text(heart);
+				                //$('#heart'+code).text(heart);
+
+				                console.log("하트삭제 성공");
+				            },
+				            error : function() {
+				                alert('서버 에러');
+				            }
+				        });
+				        console.log("빈하트");
+
+				        // 빈하트로 바꾸기
+				        $(this).html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16"><path d="M8 6.236l-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z" /></svg>');
+				        //$('.heart_icon'+code).html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16"><path d="M8 6.236l-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z" /></svg>');
+				    }
+
 				});
 				
-				likeH(CODE, WRITER, NICKNAME);
-				console.log(CODE, WRITER, NICKNAME);
+				$(".commentBtn").click((e) => {
+					feedDetailModalView(e);
+				});	
 							
 			});
 			console.log(page);
@@ -456,44 +522,26 @@ const addFeedPageMain = (page) => {
 	});
 };
 
-$(".contentWrapper").scroll(function(){
-	
-	if($(".contentWrapper").width() > 1260){
-		if($(".contentWrapper").height() > 660){
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.6)){
-				if(!loading){
-					loading = true;
-					addFeedPageMain(page++);
-				}
-			}
-		}else {
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.2)){
-				if(!loading){
-					loading = true;
-					addFeedPageMain(page++);
-				}
-			}
-		}
-		
-	}else if($(".contentWrapper").width() < 1260){
-		if($(".contentWrapper").height() > 660){
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.15)){
-				if(!loading){
-					loading = true;
-					addFeedPageMain(page++);
-				}
-			}
-		}else {
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * 0.1)){
-				if(!loading){
-					loading = true;
-					addFeedPageMain(page++);
-				}
-			}
-		}
-	}
-});
+/* const feedMainLikeCheck = (e) => {
+let code = '';
+let writer = '';
+let guestNickname = ${loginMember.id};
 
+	if($(e.target).attr('class') != 'feedBodyBtn'){
+		code = $(e.target).parent().parent().find("input.code").val();
+		writer = $(e.target).parent().parent().parent().find("input.id").val();
+	}else{
+		code = $(e.target).find("input.code").val();
+		writer = $(e.target).find("input.id").val();
+	}
+	
+	feedMainLikeSave(code, writer, guestNickname);
+	console.log(code, writer, guestNickname);
+}  */
+
+
+
+// 피드모달
 let $hidden = $(".feedBodyBtn");
 $(".commentBtn").click((e) => {
 	feedDetailModalView(e);
@@ -511,48 +559,6 @@ const feedDetailModalView = (e) => {
 	}
 	console.log(id + " " + code);
 	selectedFeed(id, code);
-};
-
-const likeH = (code, writer, guestNickname) => {
-	$("#like").on('change',function(){
-	
-		console.log('like!');
-		let ranNo = Math.floor(Math.random() * 10000);
-		let alarmCode = 'fe-' + ranNo;
-		let content = '';
-		
-		let check = '';
-		if($("#like").is(':checked')){
-			console.log($("#like").is(':checked'));
-			check = '1';
-			$("label[for='like']").html('<i class="fas fa-heart"></i>');
-			$("#like").prop("checked", true);
-			
-			content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>${guestNickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
-			sendAndInsertAlarm('I',writer,alarmCode,content);
-		}else {
-			console.log($("#like").is(':checked'));
-			check = '0';
-			$("label[for='like']").html('<i class="far fa-heart"></i>');
-			$("#like").prop("checked", false);
-		}		
-		feedLikeChanged(check, code);		
-	});
-};
-
-const feedLikeChanged = (check, code) => {
-	
-	$.ajax({
-		url: '/nadaum/feed/feedLikeChange.do',		
-		data: {check, code},
-		type: "POST",
-		headers: headers,
-		success(resp){
-			if(resp > 0)
-				console.log('success');
-		},
-		error: console.log
-	});
 };
 
  

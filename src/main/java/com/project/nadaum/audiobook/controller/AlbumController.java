@@ -102,7 +102,6 @@ public class AlbumController {
 	}
 	
 	
-	
 	@GetMapping("/widgetInfo")
 	public ResponseEntity<ModelMap> widgetInfo(ModelMap model) {
 		try {
@@ -252,6 +251,14 @@ public class AlbumController {
 		return "/album/comment/list";
 	}
 
+	/**
+	 * Recommend 
+	 */
+	@GetMapping("/recommend/list")
+	public String recommend() {
+		return "/audiobook/recommend/recommendList";
+	}
+	
 	/* Album (Old Code 모두 전환예정) */
 
 	/**
@@ -382,8 +389,8 @@ public class AlbumController {
 		return "/audiobook/album/updateForm";
 	}
 	
-	@PostMapping("/album/updateTest")
-	public String albumUpdateTest(Album album,ModelMap model,
+	@PostMapping("/album/update")
+	public String albumUpdate(Album album,ModelMap model,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles,
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "trkOriginalFileName", defaultValue="") String[] trkOriginalFileNames,
@@ -395,6 +402,8 @@ public class AlbumController {
 		String saveAudioDirectory = application.getRealPath("/resources/upload/audiobook/mp3");
 		String saveImgDirectory = application.getRealPath("/resources/upload/audiobook/img");
 		
+		int infoResult = albumService.updateAlbumInfo(album); 
+		
 		int imgDelResult=-1;
 		int imgInsertResult=-1;
 		//이미지 파일 변경 있으면 동작
@@ -405,7 +414,7 @@ public class AlbumController {
 				//기존 삭제
 				List<AlbumImg> oldImgList = albumService.selectListAlbumImg(code);
 				oldImgList.stream()
-						.map(x -> IMG_PATH + x.getRenamedFilename())
+						.map(x -> saveImgDirectory + x.getRenamedFilename())
 						.peek(x -> log.debug("path={}", x))
 						.map(File::new)
 						.peek(x -> log.debug("file={}", x))
@@ -428,6 +437,7 @@ public class AlbumController {
 						attach.setOriginalFilename(originalFilename);
 						attach.setRenamedFilename(renamedFilename);
 						imgList.add(attach);
+						log.debug("attach={}",attach);
 					} else {
 						// default Img
 						AlbumImg attach = new AlbumImg();
@@ -438,7 +448,7 @@ public class AlbumController {
 					}
 				}
 				log.debug("insertImgList={}",imgList);
-				imgInsertResult= albumService.insertAlbumImgs(imgList);
+				imgInsertResult= albumService.insertAlbumImg(imgList.get(0));
 			}
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -446,14 +456,18 @@ public class AlbumController {
 			e.printStackTrace();
 		}
 		
+		
 		int trackDelResult=-1;
-		//트랙 파일 일부삭제한 경우
-		if(0!=trkOriginalFileNames.length) {
+		
+		//조회
+		List<AlbumTrack> oldTrackList = albumService.selectListAlbumTrack(code);
+	
+		//트랙 파일 일부삭제한 경우 
+		log.debug("oldTrackSize={}",oldTrackList.size());
+		if(oldTrackList.size()!=trkOriginalFileNames.length) {
 			String trkOriginal0 = trkOriginalFileNames[0];
 			log.debug("trkOriginal0={}", trkOriginal0);
-			//조회
-			List<AlbumTrack> oldTrackList = albumService.selectListAlbumTrack(code);
-
+			
 			//비교
 			List<String> trkOriginalList = Arrays.asList(trkOriginalFileNames);
 			log.debug("trkOriginalList={}",trkOriginalList);
@@ -461,6 +475,7 @@ public class AlbumController {
 					.filter(x->!trkOriginalList.contains(x.getOriginalFilename()))
 					.collect(Collectors.toList());
 			log.debug("delTrackList={}",delTrackList);
+			
 			//기존삭제
 			delTrackList.stream()
 				.map(x -> AUDIO_PATH + x.getRenamedFilename())
@@ -471,7 +486,10 @@ public class AlbumController {
 			//DB삭제
 			int[] delArray=delTrackList.stream().map(x->x.getNo()).mapToInt(i->i).toArray();
 			log.debug("delArrayLen={}",delArray.length);
+			
 			trackDelResult =albumService.deleteAlbumTracks(delArray);
+			
+		} else if(oldTrackList.size()==trkOriginalFileNames.length) {
 			
 		} else {
 			//모두삭제한경우->code로삭제
@@ -480,10 +498,11 @@ public class AlbumController {
 		
 		int trackInsertResult =-1;
 		//첨부 트랙파일 있는경우
+		log.debug("boolOnTrkFiles={}",trkFiles==null);
 		try {
-			if(""!=trkFiles[0].getOriginalFilename()) {
+			if(null!=trkFiles&&0!=trkFiles.length) {
 				//int trkFileLen =trkFiles.length;
-				String trkFile0=trkFiles[0].getOriginalFilename();
+				String trkFile0=trkFiles[0].getOriginalFilename()=="" ? trkFiles[0].getOriginalFilename():"";
 				log.debug("trkFile0={}", trkFile0);
 				
 				//새파일 등록
@@ -540,8 +559,8 @@ public class AlbumController {
 	}
 	
 
-	@PostMapping("/album/update")
-	public String albumUpdate(Album album, ModelMap model, 
+	@PostMapping("/album/updateTest")
+	public String albumUpdateTest(Album album, ModelMap model, 
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles, 
 			@RequestParam(name = "trkOriginalFileName") String[] trkOriginalFileNames,
