@@ -157,7 +157,7 @@ div#board-container label.custom-file-label {
 			<form id="likeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
-				<button type="submit" class="btn btn-success" id="like-btn">
+				<button type="submit" class="btn btn-success" id="like-btn" >
 					스크랩<i class="fas fa-check-double ml-1"></i>
 				</button>
 			</form>
@@ -269,11 +269,37 @@ div#board-container label.custom-file-label {
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item" id="comment-li">
 							<div class="form-inline mb-2">
-								<label for="replyId"><i
-									class="fa fa-user-circle-o fa-2x"> <input type="text"
-										class="id-detail movie-detail" name="id" id="writerId"
-										value="${loginMember.nickname}" readonly /></i> </label>
-							</div>
+										<div class="profileimg1">
+											<div class="profileimg-detail1"
+												style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+												<c:if test="${loginMember.loginType eq 'K'}">
+													<img src="${loginMember.profile}" alt=""
+														style="width: 45px; height: 45px; object-fit: cover;" />
+												</c:if>
+												<c:if test="${loginMember.loginType eq 'D'}">
+													<c:if test="${loginMember.profileStatus eq 'N'}">
+														<img
+															src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+															alt=""
+															style="width: 45px; height: 45px; object-fit: cover;" />
+													</c:if>
+													<c:if test="${loginMember.profileStatus eq 'Y'}">
+														<img
+															src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}"
+															alt=""
+															style="width: 45px; height: 45px; object-fit: cover;" />
+													</c:if>
+												</c:if>
+											</div>
+
+										</div>
+										<div class="profileimg2">
+											<label for="replyId"> <input type="text"
+												class="id-detail" name="id" id="replyId"
+												value="${loginMember.nickname}" />
+											</label>
+										</div>
+									</div>
 
 							<form id="insertCommentFrm">
 
@@ -328,12 +354,35 @@ div#board-container label.custom-file-label {
 							<ul class="list-group list-group-flush" id="level1">
 								<li class="list-group-item" id="commentList">
 									<div class="form-inline mb-2">
-										<label for="replyId"> <i
-											class="fa fa-user-circle-o fa-2x"></i>&nbsp;&nbsp;<strong>${comment.id}</strong>
-										</label> &nbsp;&nbsp;
-										<fmt:formatDate value="${comment.regDate}"
-											pattern="yyyy-MM-dd HH:mm" />
-									</div>
+                              <div class="profileimg1">
+                                 <div class="profileimg-detail1"
+                                    style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+                                    <c:if test="${comment.loginType eq 'K'}">
+                                       <img src="${comment.profile}" alt=""
+                                          style="width: 45px; height: 45px; object-fit: cover;" />
+                                    </c:if>
+                                    <c:if test="${comment.loginType eq 'D'}">
+                                       <c:if test="${comment.profileStatus eq 'N'}">
+                                          <img
+                                             src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+                                             alt=""
+                                             style="width: 45px; height: 45px; object-fit: cover;" />
+                                       </c:if>
+                                       <c:if test="${comment.profileStatus eq 'Y'}">
+                                          <img
+                                             src="${pageContext.request.contextPath}/resources/upload/member/profile/${comment.profile}"
+                                             alt=""
+                                             style="width: 45px; height: 45px; object-fit: cover;" />
+                                       </c:if>
+                                    </c:if>
+                                 </div>
+                              </div>
+
+                              <div class="profileimg2">
+                                 <input type="text" class="id-detail movie-detail" name="id"
+                                    id="writerId" value="${comment.nickname}" readonly />
+                              </div>
+                           </div>
 
 									<div class="col-sm-10">
 										<label for="star" class="col-sm-2 col-form-label">평점 :</label>
@@ -667,15 +716,60 @@ $(insertCommentFrm).submit((e) => {
         const headers = {};
         headers[csrfHeader] = csrfToken;
         
+
+
 			$.ajax({
-				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
-				method: "POST",
-				headers : headers, 
+				url:`${pageContext.request.contextPath}/culture/boardLikeCount.do`,
+				method: "GET",
 				data : $(likeFrm).serialize(),
-				success(resp){
-					console.log(resp);
-					location.reload();
-					alert(resp.msg);
+				success(data){
+					const selectCountLikes = data["selectCountLikes"];
+					console.log(selectCountLikes);
+					
+					//location.reload();
+					//alert(resp.msg);
+					 if(selectCountLikes == 0 ){
+						$.ajax({
+							url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
+							method : "POST",
+							headers : headers,
+							data : $(likeFrm).serialize(),
+							success(data){
+								const result = data["result"]
+								const selectCountLikes = data["selectCountLikes"];
+								
+								if(result == 1) {
+									
+									console.log("selectCountLikes = " + selectCountLikes);
+									console.log("좋아요 등록!");
+									alert("좋아요를 등록했습니다.");
+										
+								}
+							},
+							error : function(xhr, status, err){
+								console.log(xhr, status, err);
+									alert("좋아요 안됩니꽈,,,?");
+							}
+						});
+					}else{
+						$.ajax({
+							url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
+							method : "DELETE",
+							headers : headers,
+							data : $(likeFrm).serialize(),
+							success(data){
+								const result = data["result"];
+								const selectCountLikes = data["selectCountLikes"];
+								
+								if(result == 1) {
+									console.log("selectCountLikes = " + selectCountLikes);
+									console.log("좋아요 취소!");
+									alert("좋아요를 취소했습니다.");
+								}
+							},
+							error : console.log
+						});
+					} 
 				},
 				error: console.log
 				});

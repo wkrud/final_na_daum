@@ -158,7 +158,7 @@ public class CultureController {
 	}
 	
 	@PostMapping("/search.do")
-	public List<Map<String, Object>> Search(
+	public void Search(
 			@RequestParam (value="keyword", defaultValue="") String keyword, 
 			@DateTimeFormat(pattern="yyyy-MM-dd") Date startDate, @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate, 
 			@RequestParam (value="searchArea", defaultValue="") String searchArea, 
@@ -240,27 +240,35 @@ public class CultureController {
 			Map<String, Object> response = (Map<String, Object>) map.get("response");
 			Map<String, Object> msgBody = (Map<String, Object>) response.get("msgBody");
 
+			String count = msgBody.get("totalCount").toString();
 			log.debug("response={}", response);
 			log.debug("msgBody={}", msgBody);
+			log.debug("count={}",count);
 			
 			
+			if(count.equals("1")) {
+				System.out.println("결과값 한개");
+				
+			}
+			else {
 				perforList = (List<Map<String, Object>>) msgBody.get("perforList");
 				log.debug("perforList = {}", perforList);
 				
-
-				List<Object> searchList = new ArrayList<>();
-
-				for (int i = 0; i < perforList.size(); i++) {
-					String seq = perforList.get(i).get("seq").toString();
-					String title = perforList.get(i).get("title").toString();
-					String area = perforList.get(i).get("area").toString();
-					String place = perforList.get(i).get("place").toString();
-					String thumbnail = perforList.get(i).get("thumbnail").toString();
-					String start = perforList.get(i).get("startDate").toString();
-					String end = perforList.get(i).get("endDate").toString();
-					String realmName = perforList.get(i).get("realmName").toString();
+				
+				if (perforList != null && !perforList.isEmpty()) {
+					List<Object> searchList = new ArrayList<>();
 					
-					  Map<String, Object> map2 = new HashMap<>();
+					for (int i = 0; i < perforList.size(); i++) {
+						String seq = perforList.get(i).get("seq").toString();
+						String title = perforList.get(i).get("title").toString();
+						String area = perforList.get(i).get("area").toString();
+						String place = perforList.get(i).get("place").toString();
+						String thumbnail = perforList.get(i).get("thumbnail").toString();
+						String start = perforList.get(i).get("startDate").toString();
+						String end = perforList.get(i).get("endDate").toString();
+						String realmName = perforList.get(i).get("realmName").toString();
+						
+						Map<String, Object> map2 = new HashMap<>();
 						map2.put("seq", seq);
 						map2.put("title", title);
 						map2.put("startDate", start);
@@ -272,16 +280,23 @@ public class CultureController {
 						
 						searchList.add(map2);
 						
-					  System.out.println(map2);
+						System.out.println(map2);
 					}
+					
+					model.addAttribute("perforList", perforList);
+					System.out.println(perforList);
+				}
 				
-				model.addAttribute("perforList", perforList);
-				System.out.println(perforList);
+				else {
+					System.out.println("perforList는 널입니다.");
+				}
+				
+			}
+				
 			
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
-		return perforList;
 	}
 	
     // tag값의 정보를 가져오는 메소드
@@ -674,23 +689,23 @@ public class CultureController {
 		}
 		
 		@DeleteMapping("/board/view/{apiCode}/likes")
-		public ResponseEntity<?> deleteLikes(@PathVariable String apiCode){
+		public ResponseEntity<?> deleteLikes(@RequestParam Map<String,Object> map){
 			
 			try{
-				int result = cultureService.deleteCultureLike(apiCode);
+				int result = cultureService.deleteCultureLike(map);
 				String msg = (result > 0) ? "스크랩 취소 완료" : "스크랩 취소 실패";	
 				
-				int selectCountLikes = cultureService.selectCountLikes(apiCode);
+				int selectCountLikes = cultureService.selectCountLikes(map);
 				log.debug("result={}", result);
 				log.debug("selectCountLikes={}", selectCountLikes);
 				
-				Map<String, Object> map = new HashMap<>();
-				map.put("result", result);
-				map.put("msg", msg);
-				map.put("selectCountLikes", selectCountLikes);
+				Map<String, Object> resultMap = new HashMap<>();
+				resultMap.put("result", result);
+				resultMap.put("msg", msg);
+				resultMap.put("selectCountLikes", selectCountLikes);
 
 					if(result == 1) {
-			            return ResponseEntity.ok(map);
+			            return ResponseEntity.ok(resultMap);
 			        } 
 			        else {
 			        	return ResponseEntity.status(404).build();
@@ -701,8 +716,37 @@ public class CultureController {
 					return ResponseEntity.badRequest().build();
 				}
 		}
-		
-		@GetMapping("/scheduleAccept.do")
-		public void memberFindFriend() {}
-		
+		/*
+		@ResponseBody
+		@GetMapping("/boardLikeIdCount.do")
+		public Map<String, Object> boardLikeIdCount(@RequestParam String code, @RequestParam String id) {
+
+			Map<String, Object> param = new HashMap<>();
+			param.put("code", code);
+			param.put("id", id);
+
+			// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
+			int selectCountLikes = cultureService.selectCountLikes(param);
+
+			Map<String, Object> map = new HashMap<>();
+
+			map.put("selectCountLikes", selectCountLikes);
+
+			return map;
+		}*/
+		//좋아요
+				@ResponseBody
+				@GetMapping("/boardLikeCount.do")
+				public Map<String, Object> boardLikeTotalAdd(@RequestParam Map<String,Object> map) {
+					
+					// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
+						int selectCountLikes = cultureService.selectCountLikes(map); 
+						
+						Map<String, Object> resultMap = new HashMap<>();
+						
+						resultMap.put("selectCountLikes", selectCountLikes);
+						
+						return resultMap;
+					
+				}
 }
