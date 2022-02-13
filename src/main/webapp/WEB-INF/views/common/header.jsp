@@ -382,12 +382,7 @@
     /* iframe 드래그 */
     dragElement(document.getElementById("infowrap"));
   </script>
-  <script>
-	$(document).on("click","#scheduleAccept-btn",function(){
-		const spec = "left=800px, top=200px, width=265px, height=100px";
-		const popup = open('${pageContext.request.contextPath}/culture/scheduleAccept.do', '수락여부', spec);
-	});
-	</script>
+  
   </sec:authorize>
 
 <!-- 각자 페이지 영역 -->

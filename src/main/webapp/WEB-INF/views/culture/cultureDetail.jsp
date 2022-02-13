@@ -153,11 +153,12 @@ div#board-container label.custom-file-label {
 
 		<!-- 스크랩 버튼 -->
 
+			<!-- scrap.api_code eq apiCode -->
 			<form id="likeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
-				<button type="submit" class="btn btn-success" id="likeButton" data-like-yes-no="${likeYesNo}">
-					스크랩${selectCountLikes}<i class="fas fa-check-double ml-1"></i>
+				<button type="submit" class="btn btn-success" id="like-btn" >
+					스크랩<i class="fas fa-check-double ml-1"></i>
 				</button>
 			</form>
 			<button type="button" class="btn btn-secondary" data-toggle="modal"
@@ -165,7 +166,14 @@ div#board-container label.custom-file-label {
 		<button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button>
 
 
+
+		<!-- 영화 줄거리 -->
 		<hr />
+		<h2 class="blog-post-title"></h2>
+		<p class="blog-post-meta">
+			January 1, 2014 by <a href="#">Mark</a>
+		</p>
+
 		<p>${culture.contents1}</p>
 		<p>${culture.contents2}</p>
 
@@ -261,36 +269,37 @@ div#board-container label.custom-file-label {
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item" id="comment-li">
 							<div class="form-inline mb-2">
-								<div class="profileimg1">
-									<div class="profileimg-detail1"
-										style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
-										<c:if test="${loginMember.loginType eq 'K'}">
-											<img src="${loginMember.profile}" alt=""
-												style="width: 45px; height: 45px; object-fit: cover;" />
-										</c:if>
-										<c:if test="${loginMember.loginType eq 'D'}">
-											<c:if test="${loginMember.profileStatus eq 'N'}">
-												<img
-													src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
-													alt=""
-													style="width: 45px; height: 45px; object-fit: cover;" />
-											</c:if>
-											<c:if test="${loginMember.profileStatus eq 'Y'}">
-												<img
-													src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}"
-													alt=""
-													style="width: 45px; height: 45px; object-fit: cover;" />
-											</c:if>
-										</c:if>
-									</div>
+										<div class="profileimg1">
+											<div class="profileimg-detail1"
+												style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+												<c:if test="${loginMember.loginType eq 'K'}">
+													<img src="${loginMember.profile}" alt=""
+														style="width: 45px; height: 45px; object-fit: cover;" />
+												</c:if>
+												<c:if test="${loginMember.loginType eq 'D'}">
+													<c:if test="${loginMember.profileStatus eq 'N'}">
+														<img
+															src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+															alt=""
+															style="width: 45px; height: 45px; object-fit: cover;" />
+													</c:if>
+													<c:if test="${loginMember.profileStatus eq 'Y'}">
+														<img
+															src="${pageContext.request.contextPath}/resources/upload/member/profile/${loginMember.profile}"
+															alt=""
+															style="width: 45px; height: 45px; object-fit: cover;" />
+													</c:if>
+												</c:if>
+											</div>
 
-								</div>
-								<div class="profileimg2">
-									<input type="text"
-										class="id-detail movie-detail" name="id" id="writerId"
-										value="${loginMember.nickname}" readonly />
-								</div>
-							</div>
+										</div>
+										<div class="profileimg2">
+											<label for="replyId"> <input type="text"
+												class="id-detail" name="id" id="replyId"
+												value="${loginMember.nickname}" />
+											</label>
+										</div>
+									</div>
 
 							<form id="insertCommentFrm">
 
@@ -322,7 +331,7 @@ div#board-container label.custom-file-label {
 
 								<button type="submit" id="btn-comment-enroll1"
 									class="btn btn-outline-primary"
-									>등록</button>
+									onClick="fn_comment('${apiCode}')">등록</button>
 								<input type="hidden" name="${_csrf.parameterName}"
 									value="${_csrf.token}" />
 							</form>
@@ -334,105 +343,94 @@ div#board-container label.custom-file-label {
 		</div>
 
 
-	
-				<div class="card mb-2">
-					<div class="card-header bg-light">
-						<i class="fa fa-comment fa"></i> 댓글 목록
-					</div>
-					<div class="card-body">
+			<div class="card mb-2">
+				<div class="card-header bg-light">
+					<i class="fa fa-comment fa"></i> 댓글 목록
+				</div>
+				<div class="card-body">
 
-						<%-- 댓글이 하나가 되었다면 if구문으로 들어올꺼임 for문 돌면서 level1, ldecel2 태그를 고르고 출력--%>
-						<c:forEach items="${commentList}" var="comment">
-							
-								<ul class="list-group list-group-flush" id="level1">
-									<li class="list-group-item" id="commentList">
-										<div class="form-inline mb-2">
-											<label for="replyId">
-												<div class="form-inline mb-2">
-													<div class="profileimg1">
-														<div class="profileimg-detail1"
-															style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
-															<c:if test="${comment.loginType eq 'K'}">
-																<img src="${comment.profile}" alt=""
-																	style="width: 45px; height: 45px; object-fit: cover;" />
-															</c:if>
-															<c:if test="${comment.loginType eq 'D'}">
-																<c:if test="${comment.profileStatus eq 'N'}">
-																	<img
-																		src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
-																		alt=""
-																		style="width: 45px; height: 45px; object-fit: cover;" />
-																</c:if>
-																<c:if test="${comment.profileStatus eq 'Y'}">
-																	<img
-																		src="${pageContext.request.contextPath}/resources/upload/member/profile/${comment.profile}"
-																		alt=""
-																		style="width: 45px; height: 45px; object-fit: cover;" />
-																</c:if>
-															</c:if>
-														</div>
+					<%-- 댓글이 하나가 되었다면 if구문으로 들어올꺼임 for문 돌면서 level1, ldecel2 태그를 고르고 출력--%>
+					<c:forEach items="${commentList}" var="comment">
+							<ul class="list-group list-group-flush" id="level1">
+								<li class="list-group-item" id="commentList">
+									<div class="form-inline mb-2">
+                              <div class="profileimg1">
+                                 <div class="profileimg-detail1"
+                                    style="border-radius: 50%; width: 45px; height: 45px; overflow: hidden; padding: 0;">
+                                    <c:if test="${comment.loginType eq 'K'}">
+                                       <img src="${comment.profile}" alt=""
+                                          style="width: 45px; height: 45px; object-fit: cover;" />
+                                    </c:if>
+                                    <c:if test="${comment.loginType eq 'D'}">
+                                       <c:if test="${comment.profileStatus eq 'N'}">
+                                          <img
+                                             src="${pageContext.request.contextPath}/resources/upload/member/profile/default_profile_cat.png"
+                                             alt=""
+                                             style="width: 45px; height: 45px; object-fit: cover;" />
+                                       </c:if>
+                                       <c:if test="${comment.profileStatus eq 'Y'}">
+                                          <img
+                                             src="${pageContext.request.contextPath}/resources/upload/member/profile/${comment.profile}"
+                                             alt=""
+                                             style="width: 45px; height: 45px; object-fit: cover;" />
+                                       </c:if>
+                                    </c:if>
+                                 </div>
+                              </div>
 
-													</div>
-													
-													<div class="profileimg2">
-														<input type="text"
-															class="id-detail movie-detail" name="id" id="writerId"
-															value="${comment.nickname}" readonly />
-													</div>
-												</div>
+                              <div class="profileimg2">
+                                 <input type="text" class="id-detail movie-detail" name="id"
+                                    id="writerId" value="${comment.nickname}" readonly />
+                              </div>
+                           </div>
 
-											</label> &nbsp;&nbsp;
-											<fmt:formatDate value="${comment.regDate}"
-												pattern="yyyy-MM-dd HH:mm" />
-										</div>
+									<div class="col-sm-10">
+										<label for="star" class="col-sm-2 col-form-label">평점 :</label>
+										<input type="hidden" class="form-control" name="star">
 
-										<div class="col-sm-10">
-											<label for="star" class="col-sm-2 col-form-label">평점
-												:</label> <input type="hidden" class="form-control" name="star">
+										<select id="category-select-commentList" class="form-control"
+											aria-label="Default select example">
+											<option selected>${comment.star}</option>
+										</select>
+									</div> <textarea class="form-control"
+										id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
 
-											<select id="category-select-commentList" class="form-control"
-												aria-label="Default select example">
-												<option selected>${comment.star}</option>
-											</select>
-										</div> <textarea class="form-control"
-											id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
+									<%-- 회원일때만 답글 버튼이 나타남 --%>
+									<div class="row float-right">
+										&nbsp;
+										<%-- 회원이고 글쓴이 본인일 경우 댓글 삭제/수정 버튼--%>
+										<c:if test="${comment.id eq loginMember.id}">
 
-										<%-- 회원일때만 답글 버튼이 나타남 --%>
-										<div class="row float-right">
-											&nbsp;
-											<%-- 회원이고 글쓴이 본인일 경우 댓글 삭제/수정 버튼--%>
-											<c:if test="${loginMember.id eq comment.id}">
-
-												<%-- 댓글 삭제 --%>
-												<form id="deleteCommentFrm">
-													<input type="hidden" name="code" value="${comment.code}"></input>
-													<button type="submit"
-														class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
-														id="deleteComment-btn" value="${comment.code}">삭제</button>
-												</form>
+											<%-- 댓글 삭제 --%>
+											<form id="deleteCommentFrm">
+												<input type="hidden" name="code" value="${comment.code}"></input>
+												<button type="submit"
+													class="btn btn-outline-secondary disabled btnCommentDelete btn-delete"
+													id="deleteComment-btn" value="${comment.code}">삭제</button>
+											</form>
 											&nbsp;
 											
 												<!-- 댓글 수정 -->
-												<form id="findUpdateComment">
-													<input type="hidden" name="code" value="${comment.code}" />
-													<button type="button"
-														class="btn btn-outline-dark updateCommmentBtn"
-														data-toggle="modal" data-target="#updateComment"
-														value="${comment.code}">수정</button>
-												</form>
-											</c:if>
+											<form id="findUpdateComment">
+												<input type="hidden" name="code" value="${comment.code}" />
+												<button type="button"
+													class="btn btn-outline-dark updateCommmentBtn"
+													data-toggle="modal" data-target="#updateComment"
+													value="${comment.code}">수정</button>
+											</form>
+										</c:if>
 
 
-										</div>
+									</div>
 
-									</li>
-								</ul>
-						</c:forEach>
-					</div>
+								</li>
+							</ul>
+					</c:forEach>
 				</div>
-		</div>
+			</div>
 	</div>
-	<!-- 댓글 목록 끝 -->
+</div>
+<!-- 댓글 목록 끝 -->
 
 <!-- 댓글 수정 Modal -->
 <div class="modal fade" id="updateComment" tabindex="-1" role="dialog"
@@ -540,7 +538,7 @@ div#board-container label.custom-file-label {
 									</div>
 									<div class="input-group mb-3">
 										<div class="input-group-prepend">
-											<input id="searchFriend" type="text" name="friendId" value="희연이" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
+											<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
 											<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
 										</div>
 									</div>
@@ -551,6 +549,7 @@ div#board-container label.custom-file-label {
 									</div>
 								</div>
 							<input type="hidden" name="apiCode" value="${apiCode}" />
+							<input type="hidden" name="friendId" value="희연이" />
 							<input type="hidden" name="allDay" value="0" />
 							<input type="hidden" name="id" value="${loginMember.id}" />
 							</div>
@@ -711,20 +710,66 @@ $(insertCommentFrm).submit((e) => {
 
  		$(likeFrm).submit((e) => {
 		e.preventDefault();
+
 		const csrfHeader = "${_csrf.headerName}";
         const csrfToken = "${_csrf.token}";
         const headers = {};
         headers[csrfHeader] = csrfToken;
         
+
+
 			$.ajax({
-				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
-				method: "POST",
-				headers : headers, 
+				url:`${pageContext.request.contextPath}/culture/boardLikeCount.do`,
+				method: "GET",
 				data : $(likeFrm).serialize(),
-				success(resp){
-					console.log(resp);
-					location.reload();
-					alert(resp.msg);
+				success(data){
+					const selectCountLikes = data["selectCountLikes"];
+					console.log(selectCountLikes);
+					
+					//location.reload();
+					//alert(resp.msg);
+					 if(selectCountLikes == 0 ){
+						$.ajax({
+							url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
+							method : "POST",
+							headers : headers,
+							data : $(likeFrm).serialize(),
+							success(data){
+								const result = data["result"]
+								const selectCountLikes = data["selectCountLikes"];
+								
+								if(result == 1) {
+									
+									console.log("selectCountLikes = " + selectCountLikes);
+									console.log("좋아요 등록!");
+									alert("좋아요를 등록했습니다.");
+										
+								}
+							},
+							error : function(xhr, status, err){
+								console.log(xhr, status, err);
+									alert("좋아요 안됩니꽈,,,?");
+							}
+						});
+					}else{
+						$.ajax({
+							url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
+							method : "DELETE",
+							headers : headers,
+							data : $(likeFrm).serialize(),
+							success(data){
+								const result = data["result"];
+								const selectCountLikes = data["selectCountLikes"];
+								
+								if(result == 1) {
+									console.log("selectCountLikes = " + selectCountLikes);
+									console.log("좋아요 취소!");
+									alert("좋아요를 취소했습니다.");
+								}
+							},
+							error : console.log
+						});
+					} 
 				},
 				error: console.log
 				});
@@ -738,7 +783,8 @@ $(insertCommentFrm).submit((e) => {
         const headers = {};
         headers[csrfHeader] = csrfToken;
         
-        $.ajax({
+        const date = $(e.target).find("#scheduleDate").val();
+			$.ajax({
 				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
 				method: "POST",
 				headers : headers, 
@@ -751,14 +797,13 @@ $(insertCommentFrm).submit((e) => {
 					let guest = $("[name=friendId]").val();
 					alert(guest);
 					let content = '';
+					 console.log(date);
 					content = `<a href='/nadaum/culture/board/view/${apiCode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a><a><button type="button" class="btn btn-warning" id="scheduleAccept-btn">자세히</button></a>`
 					console.log(content);
 					commonAlarmSystem(code,guest,content);
 					},
 				error: console.log
 				});
-        
-        
  	});
  	
 </script>
@@ -787,13 +832,6 @@ function friendAlarm(type, status, myNickname, friendNickname){
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=457ac91e7faa203823d1c0761486f8d7&libraries=services"></script>
 <script>
-/* <c:forEach var="culture" items="${list}">
-	<c:if test="${comment.id eq loginMember.id}">
-		placeList.push("${culture.place}");
-		placeList.push("${culture.placeAddr}");
-	</c:if>
-</c:forEach> */
-
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표

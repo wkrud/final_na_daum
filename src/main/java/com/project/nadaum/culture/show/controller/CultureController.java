@@ -689,23 +689,23 @@ public class CultureController {
 		}
 		
 		@DeleteMapping("/board/view/{apiCode}/likes")
-		public ResponseEntity<?> deleteLikes(@PathVariable String apiCode){
+		public ResponseEntity<?> deleteLikes(@RequestParam Map<String,Object> map){
 			
 			try{
-				int result = cultureService.deleteCultureLike(apiCode);
+				int result = cultureService.deleteCultureLike(map);
 				String msg = (result > 0) ? "스크랩 취소 완료" : "스크랩 취소 실패";	
 				
-				int selectCountLikes = cultureService.selectCountLikes(apiCode);
+				int selectCountLikes = cultureService.selectCountLikes(map);
 				log.debug("result={}", result);
 				log.debug("selectCountLikes={}", selectCountLikes);
 				
-				Map<String, Object> map = new HashMap<>();
-				map.put("result", result);
-				map.put("msg", msg);
-				map.put("selectCountLikes", selectCountLikes);
+				Map<String, Object> resultMap = new HashMap<>();
+				resultMap.put("result", result);
+				resultMap.put("msg", msg);
+				resultMap.put("selectCountLikes", selectCountLikes);
 
 					if(result == 1) {
-			            return ResponseEntity.ok(map);
+			            return ResponseEntity.ok(resultMap);
 			        } 
 			        else {
 			        	return ResponseEntity.status(404).build();
@@ -716,22 +716,37 @@ public class CultureController {
 					return ResponseEntity.badRequest().build();
 				}
 		}
-		
+		/*
+		@ResponseBody
+		@GetMapping("/boardLikeIdCount.do")
+		public Map<String, Object> boardLikeIdCount(@RequestParam String code, @RequestParam String id) {
+
+			Map<String, Object> param = new HashMap<>();
+			param.put("code", code);
+			param.put("id", id);
+
+			// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
+			int selectCountLikes = cultureService.selectCountLikes(param);
+
+			Map<String, Object> map = new HashMap<>();
+
+			map.put("selectCountLikes", selectCountLikes);
+
+			return map;
+		}*/
 		//좋아요
-				@GetMapping("/board/view/{apiCode}/likes")
+				@ResponseBody
+				@GetMapping("/boardLikeCount.do")
 				public Map<String, Object> boardLikeTotalAdd(@RequestParam Map<String,Object> map) {
 					
 					// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
-					int selectCountLikes = cultureService.selectCountLikes(map); 
+						int selectCountLikes = cultureService.selectCountLikes(map); 
+						
+						Map<String, Object> resultMap = new HashMap<>();
+						
+						resultMap.put("selectCountLikes", selectCountLikes);
+						
+						return resultMap;
 					
-					Map<String, Object> resultMap = new HashMap<>();
-					
-					resultMap.put("selectCountLikes", selectCountLikes);
-					
-					
-					
-					return resultMap;
 				}
-		@GetMapping("/scheduleAccept.do")
-		public void memberFindFriend() {}
 }

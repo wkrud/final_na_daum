@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
 import com.project.nadaum.culture.show.model.vo.Scrap;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +21,8 @@ public class CultureDaoImpl implements CultureDao {
 
 
 	@Override
-	public int deleteCultureLike(String apiCode) {
-		return session.delete("culture.deleteCultureLike", apiCode);
+	public int deleteCultureLike(Map<String, Object> map) {
+		return session.delete("culture.deleteCultureLike", map);
 	}
 
 	@Override
@@ -88,14 +89,30 @@ public class CultureDaoImpl implements CultureDao {
 	
 	//==========================================
 
-	@Override
-	public int insertSchedule(Map<String, Object> map) {
-		return session.insert("culture.insertSchedule", map);
-	}
 
 	@Override
 	public List<Scrap> selectCultureWidget(String id) {
 		return session.selectList("culture.selectCultureWidget", id);
+	}
+
+	@Override
+	public int insertSchedule(Schedule schedule) {
+		return session.insert("culture.insertSchedule", schedule);
+	}
+
+	@Override
+	public Schedule selectOneBoardScheduleCheck(String schedulecode) {
+		return session.selectOne("culture.selectOneBoardScheduleCheck", schedulecode);
+	}
+
+	@Override
+	public int insertFinalSchedule(Map<String, Object> map) {
+		return session.insert("culture.insertFinalSchedule", map);
+	}
+
+	@Override
+	public int insertFinalSecondSchedule(Map<String, Object> map) {
+		return session.insert("culture.insertFinalSecondSchedule", map);
 	}
 
 	
