@@ -72,6 +72,7 @@
 			schedule 
 		values(concat('pr-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
 	</insert>
+	
 	<!-- 평점 평균 -->
 	<select id="avgRating" resultType = "double">
 		select  round(avg(star),1) as rating from comments where api_code = #{apiCode} group by api_code

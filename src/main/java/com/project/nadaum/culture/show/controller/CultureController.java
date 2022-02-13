@@ -702,7 +702,5 @@ public class CultureController {
 				}
 		}
 		
-		@GetMapping("/scheduleAccept.do")
-		public void Schedule() {}
 		
 }

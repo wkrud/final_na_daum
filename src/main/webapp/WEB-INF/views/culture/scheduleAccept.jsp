@@ -36,9 +36,19 @@
 <body>
 <sec:authentication property="principal" var="loginMember"/>
 <h2>수락할까요?</h2>
+<form action="">
+	<input type="hidden" />
+</form>
 <button type="button" class="btn btn-success" id="accept-Y">수락</button>
 <button type="button" class="btn btn-danger" id="accept-N">거절</button>
 
-
+<script>
+/* $("#accept-Y").click((e) => {
+	
+}); */
+$("#accept-N").click((e) => {
+	
+});
+</script>
 </body>
 </html>

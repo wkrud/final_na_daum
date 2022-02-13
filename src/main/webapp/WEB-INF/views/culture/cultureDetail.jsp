@@ -688,8 +688,7 @@ $(insertCommentFrm).submit((e) => {
         const headers = {};
         headers[csrfHeader] = csrfToken;
         
-        const date = $(e.target).find("#scheduleDate").val();
-			$.ajax({
+        $.ajax({
 				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
 				method: "POST",
 				headers : headers, 
@@ -709,6 +708,8 @@ $(insertCommentFrm).submit((e) => {
 					},
 				error: console.log
 				});
+        
+        
  	});
  	
 </script>
