@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="schedule">
+
+	<insert id="insertSchedule">
+		insert 
+		into 
+			schedule 
+		values(concat('pr-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
+		 <selectKey order="AFTER" resultType="string" keyProperty="code">
+            select concat('pr-',seq_schedule_no.currval) from dual
+        </selectKey>
+	</insert>
+	
+	<select id="selectOneboardScheduleCheck" resultType="schedule">
+		select
+			*
+		from
+			schedule
+		where
+			code = #{code}
+	</select>
+	
+	<insert id="insertFinalSchedule">
+		insert into 
+			calendar 
+		values(
+			seq_calendar_no.nextval,
+			concat('pr-',seq_schedule_no.nextval),
+			'',
+			#{id},
+			#{title}, 
+			default, 
+			#{startDate},
+			#{endDate},
+			#{allDay},
+			#{textColor},
+			#{backgroundColor},
+			#{borderColor},
+			#{type}
+	)
+	</insert>
+	
+	<insert id="insertFinalSecondSchedule">
+		insert into 
+			calendar 
+		values(
+			seq_calendar_no.nextval,
+			concat('pr-',seq_schedule_no.nextval),
+			'',
+			#{friendid},
+			#{title}, 
+			default, 
+			#{startDate},
+			#{endDate}, 
+			#{allDay},
+			#{textColor},
+			#{backgroundColor},
+			#{borderColor},
+			#{type}
+	)
+	</insert>
+	
+	<!-- 영화 -->
+	<insert id="insertMovieSchedule">
+		insert 
+		into 
+			schedule 
+		values(concat('pm-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
+		 <selectKey order="AFTER" resultType="string" keyProperty="code">
+            select concat('pm-',seq_schedule_no.currval) from dual
+        </selectKey>
+	</insert>
+	
+	<select id="selectOneSchedule" resultType="schedule">
+		select
+			*
+		from
+			schedule
+		where
+			code = #{code}
+	</select>
+	
+	<!-- 영화 캘린더 -->
+	<insert id="insertCalendarMovie">
+		insert into  calendar  values( seq_calendar_no.nextval, concat('pm-',seq_schedule_no.nextval), '',
+			#{id},#{title}, default,  #{startDate}, #{endDate},  #{allDay}, #{textColor}, #{backgroundColor}, #{borderColor}, #{type} )
+	</insert>
+	
+	<insert id="insertCalendarMovieFriend">
+		insert into calendar values(seq_calendar_no.nextval,concat('pm-',seq_schedule_no.nextval),'',
+			#{friendid}, #{title}, default,  #{startDate}, #{endDate},  #{allDay}, #{textColor}, #{backgroundColor}, #{borderColor}, #{type} )
+	</insert>
+	
+</mapper>
+

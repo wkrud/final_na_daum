@@ -8,11 +8,16 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.nadaum.board.model.vo.Likes;
 import com.project.nadaum.common.vo.Attachment;
 import com.project.nadaum.feed.model.vo.Feed;
 import com.project.nadaum.feed.model.vo.FeedComment;
+
 import com.project.nadaum.member.model.vo.Member;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class FeedDaoImpl implements FeedDao {
 
@@ -110,13 +115,44 @@ public class FeedDaoImpl implements FeedDao {
 	}
 
 	@Override
-	public List<Feed> feedMain() {
-		return session.selectList("feed.feedMain");
+	public List<Feed> feedMain(String id) {
+		return session.selectList("feed.feedMain", id);
 	}
 
 	@Override
 	public void deleteFeed(Map<String, Object> map) {
 		session.delete("feed.deleteFeed",map);
+	}
+
+	@Override
+	public Feed feedMainLikeSave(Likes likes) {	 
+		int result = session.insert("feed.feedMainLikeSave", likes);		
+		Feed feed = new Feed();
+		String code = likes.getCode();
+		log.debug("feed = {}, code ={}", feed, code);
+		if (result == 1) {
+			// 갱신된 하트 갯수를 가져옴
+			feed = session.selectOne("feed.feedMainLikeCount", code);
+		}
+		return feed;
+	}
+
+	@Override
+	public Feed feedMainLikeRemove(Likes likes) {
+		int result = session.insert("feed.feedMainLikeRemove", likes);		
+		Feed feed = new Feed();
+		String code = likes.getCode();
+		
+		if (result == 1) {
+			// 갱신된 하트 갯수를 가져옴
+			feed = session.selectOne("feed.feedMainLikeCount", code);
+		}
+		return feed;
+	}
+
+	@Override
+	public int addFeedMainCount(Map<String, Object> map) {
+		return session.selectOne("feed.addFeedMainCount", map);
 	}
 	
 	

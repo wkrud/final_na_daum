@@ -1,0 +1,349 @@
+.modal-content {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 150%;
+    height: 602px;
+    pointer-events: auto;
+    background-color: #eaecffed;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0.3rem;
+    outline: 0;
+} 
+.one-person-feed-wrap{
+	display:flex;
+	flex-direction: column;
+}
+
+/* 상단 정보역역 */
+.one-person-profile-area{
+	height: 300px;
+	width: 100%;
+}
+
+.one-person-profile-area{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+}
+.profile-img-area{
+}
+.profile-info-area{
+	width: 400px;
+	margin-left: 30px;
+}
+.host-nickname-area{
+	
+}
+.host-nickname{
+	display: flex;
+}
+.contact-host-wrap{
+	margin-left: 10px;
+	cursor:pointer;
+}
+.host-friends-area{
+	display: flex;
+}
+.friends-count{
+	
+}
+.following-count{
+	margin-left: 10px;
+}
+.host-introduce-area{
+	
+}
+.host-hobby-wrap{
+	display: flex;
+}
+.host-hobby-title{
+	
+}
+.host-hobby-title span{
+	
+}
+.hobby-list-wrap{
+	display: flex;
+}
+.host-hobby{
+	margin-left: 5px;
+}
+.host-introduce-wrap{
+	margin-top: 10px;
+	width: 398px;
+	max-height: 75px;
+}
+
+
+
+
+
+
+/* 하단 피드영역 */
+.one-person-feed-area{
+	display: flex;
+	justify-content: center;
+}
+.feed-limit-area{
+	width: 1250px;
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+}
+.one-feed{
+	position: relative;
+	width: 300px;
+	height: 300px;
+	margin: 5px;
+}
+.hidden-likes-comment{
+	cursor: pointer;
+	width: 300px;
+	height: 300px;
+	position: absolute;
+	opacity: 0;
+	transition: .6s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	color: red;
+}
+.hidden-likes-comment:hover{
+	opacity: 1;
+	background-color: rgba(0, 0, 0, .3);
+}
+.hidden-likes-comment:hover i{
+	color: red;
+}
+.feed-area{
+	width: 300px;
+	height: 300px;
+	border: 1px solid #e2e2ed;
+	background-color: #FFFBF5;
+	color: #000;
+}
+.feed-img-area{
+	border: 0 !important;
+}
+.feed-area img{
+	width: 300px;
+	height: 300px;
+}
+.likes-count{
+	margin-right: 10px;
+}
+
+/* top 버튼 */
+.my-feed-top-wrap{
+	position: fixed;
+	right: 60px;
+	bottom: 70px;
+	z-index: 100;
+	font-size: 2rem;
+}
+.my-feed-top-wrap i{
+	cursor: pointer;
+}
+
+
+/* 피드 상세보기 모달 */
+.modal-dialog{
+	position: relative;
+	top: 15%;
+}
+.feed-section-wrap .modal-content{
+	width: 720px;
+	height: 600px;
+}
+
+.one-feed-detail-area-wrap{
+	display: flex;
+	justify-content: space-between;
+}
+article.one-feed-detail-area{
+	width: 410px;
+	height: 568px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.feed-profile-delete-wrap{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.feed-profile-wrap{
+	display: flex;
+}
+.feed-profile-wrap .feed-host-profile{
+	
+}
+.click-send-chat{
+	display: block !important;
+	padding-left: 10px;
+	text-decoration: none;
+	color: black;
+}
+
+.feed-delete-wrap{
+	margin-right: 5px;	
+}
+.feed-delete-wrap .dropdown-menu{
+	transform: translate3d(-150px, 20px, 0px)!important;
+	text-align: center;
+	cursor: pointer;
+}
+
+.feed-host-profile{	
+	width: 50px;
+	height: 50px;
+}
+.feed-profile-wrap img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+
+.feed-host-nickname{
+	margin-top: 23px;
+	margin-left: 10px;	
+}
+.feed-host-nickname span{
+	
+}
+
+.feed-pic-area-wrap{
+	
+}
+.feed-pic-area{
+	height: 350px;
+}
+.feed-pic-area img{
+	width: 410px;
+	height: 350px;
+}
+
+.feed-content-area-wrap{
+	
+}
+.feed-content-area{
+	height: 150px;
+	overflow: scroll;
+}
+/* 글만 있을 경우 content */
+.only-content-feed-area-wrap{
+	
+}
+.only-content-feed{
+	height: 500px;
+}
+
+article.one-feed-comment-area-wrap{
+	height: 568px;
+	width: 260px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.feed-comment-title{
+	margin-top: 10px;
+}
+.feed-comment-area{
+	height: 400px;
+	overflow: scroll;
+}
+.feed-comment-write-area{
+	display: flex;
+	flex-direction: column;
+}
+.like-btn-area{
+	
+}
+.like-btn-area label{
+	
+}
+.like-btn-area input{
+	display: none;
+}
+.feed-comment-write-area .input-group{
+	
+}
+.feed-textarea{
+	resize: none;
+}
+.feed-comment-write-area btn{
+	
+}
+
+
+
+/* 상세보기 댓글 영역 */
+.commenter-area-wrap{
+	margin: 5px 0;
+}
+.commenter-profile-area-wrap{
+	display: flex;
+	justify-content: space-between;
+}
+.commenter-profile-area{
+	display: flex;
+}
+.commenter-profile-img{
+	
+}
+.commenter-profile-img img{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
+.commenter-profile-img .dropdown-menu a{
+	display: block;
+	padding-left: 10px;
+	text-decoration: none;
+	color: black;
+}
+.commenter-profile-img .dropdown-menu a:hover{
+	background-color: #fff6e9;
+}
+
+.commenter-nickname-area{
+	margin-top: 20px;
+	margin-left: 5px;
+}
+.commenter-nickname-area span{
+	
+}
+.comment-setting-btn-wrap{
+	margin-right: 10px;
+}
+.comment-setting-btn{
+	cursor:pointer;
+}
+.delete-btn-wrap{
+	position: absolute;
+	right: -200px;
+}
+
+.commenter-comment-area{
+	margin: 3px 0;
+}
+.commenter-comment-area span{
+	
+}
+
+.comment-date-area{
+	
+}
+.comment-date-area span{
+	font-size: .8rem;
+	color: grey;
+}
+
+

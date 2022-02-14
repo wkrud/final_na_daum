@@ -39,9 +39,9 @@ public class NadaumUtils {
 					 + "<ul class=\"pagination\">");
 		
 		if(cPage == 1) {
-			pagebar.append("<li class='page-item disabled'><a class='page-link' href=" + "javascript:paging(" + (cPage - 1) + ")" + ">Previous</a></li>\n");
+			pagebar.append("<li class='page-item disabled'><a class='page-link' href=" + "javascript:paging(" + (cPage - 1) + ")" + "><i class='fa fa-chevron-left' aria-hidden='true'></i></a></li>\n");
 		}else {
-			pagebar.append("<li class='page-item'><a class='page-link' href=" + "javascript:paging(" + (cPage - 1) + ")" + ">Previous</a></li>\n");
+			pagebar.append("<li class='page-item'><a class='page-link' href=" + "javascript:paging(" + (cPage - 1) + ")" + "><i class='fa fa-chevron-left' aria-hidden='true'></i></a></li>\n");
 		}
 		
 		// pageNo
@@ -57,9 +57,9 @@ public class NadaumUtils {
 		
 		// [다음]
 		if(cPage == totalPage) {
-			pagebar.append("<li class='page-item disabled'><a class='page-link' href=" +"javascript:paging(" + pageNo + ")" + ">Next</a></li>\n");
+			pagebar.append("<li class='page-item disabled'><a class='page-link' href=" +"javascript:paging(" + (cPage + 1) + ")" + "><i class='fa fa-chevron-right' aria-hidden='true'></i></a></li>\n");
 		} else {
-			pagebar.append("<li class='page-item'><a class='page-link' href=" + "javascript:paging(" + pageNo + ")" + ">Next</a></li>\n");
+			pagebar.append("<li class='page-item'><a class='page-link' href=" + "javascript:paging(" + (cPage + 1) + ")" + "><i class='fa fa-chevron-right' aria-hidden='true'></i></a></li>\n");
 		}
 		
 		if("all".equals(category)) {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.nadaum.board.model.vo.Likes;
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
 import com.project.nadaum.culture.show.model.dao.CultureDao;
 import com.project.nadaum.culture.show.model.vo.Scrap;
 
@@ -21,8 +22,8 @@ public class CultureServiceImpl implements CultureService {
 	
 
 	@Override
-	public int deleteCultureLike(String apiCode) {
-		return cultureDao.deleteCultureLike(apiCode);
+	public int deleteCultureLike(Map<String, Object> map) {
+		return cultureDao.deleteCultureLike(map);
 	}
 
 	@Override
@@ -88,18 +89,11 @@ public class CultureServiceImpl implements CultureService {
 	}
 
 	@Override
-	public int insertSchedule(Map<String, Object> map) {
-		return cultureDao.insertSchedule(map);
-	}
-
-	@Override
 	public List<Scrap> selectCultureWidget(String id) {
 		return cultureDao.selectCultureWidget(id);
 	}
-	
 
 
-	
 
 
 

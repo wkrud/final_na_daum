@@ -257,8 +257,8 @@
         </button>
         <div class="collapse" id="alarmList">
         	<div class="card card-body my-feed"><a href="${pageContext.request.contextPath}/feed/socialFeed.do?id=${loginMember.id}">내 피드 가기</a></div>
-        	<div class="alarms-wrap"></div>
         	<div class="card card-body my-feed"><a href="javascript:void(0);" onclick="checkBadge(0);">알림 모두비우기</a></div>
+        	<div class="alarms-wrap"></div>
         </div>
       </div>
     </div>
@@ -343,8 +343,7 @@
 						<a href="${pageContext.request.contextPath}/member/mypage/memberHelpDetail.do?code=\${code}">\${content}</a>								
 						</div>`;
 					}else if(code == 'fr'){
-						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />
-						
+						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />						
 						\${content}</div>`;
 					}else if(code.substring(0,4) == 'chat' || code.substring(0,4) == 'fcom' || code.substring(0,4) == 'flik'){
 						alarmDiv = `<div class="card card-body alarmContent"><input type="hidden" name="no" value="\${no}" />\${content}</div>`;

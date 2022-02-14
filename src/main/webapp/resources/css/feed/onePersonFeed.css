@@ -112,6 +112,7 @@
 	border: 1px solid #e2e2ed;
 	background-color: #FFFBF5;
 	color: #000;
+	overflow: hidden;
 }
 .feed-img-area{
 	border: 0 !important;
@@ -122,6 +123,18 @@
 }
 .likes-count{
 	margin-right: 10px;
+}
+
+/* top 버튼 */
+.my-feed-top-wrap{
+	position: fixed;
+	right: 60px;
+	bottom: 70px;
+	z-index: 100;
+	font-size: 2rem;
+}
+.my-feed-top-wrap i{
+	cursor: pointer;
 }
 
 
@@ -208,6 +221,7 @@ article.one-feed-detail-area{
 }
 .feed-content-area{
 	height: 150px;
+	overflow: scroll;
 }
 /* 글만 있을 경우 content */
 .only-content-feed-area-wrap{

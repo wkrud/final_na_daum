@@ -3,9 +3,11 @@ package com.project.nadaum.feed.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.project.nadaum.board.model.vo.Likes;
 import com.project.nadaum.common.vo.Attachment;
 import com.project.nadaum.feed.model.vo.Feed;
 import com.project.nadaum.feed.model.vo.FeedComment;
+
 
 public interface FeedDao {
 
@@ -43,8 +45,14 @@ public interface FeedDao {
 
 	List<Map<String, Object>> addFeedMain(Map<String, Object> map);
 
-	List<Feed> feedMain();
+	List<Feed> feedMain(String id);
 
 	void deleteFeed(Map<String, Object> map);
+
+	Feed feedMainLikeSave(Likes likes);
+
+	Feed feedMainLikeRemove(Likes likes);
+
+	int addFeedMainCount(Map<String, Object> map);
 
 }

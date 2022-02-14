@@ -3,6 +3,7 @@ package com.project.nadaum.accountbook.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,7 @@ public class AccountBookController {
 		
 		//이달의 월 조회
 		String today = accountBookService.searchToday(param);
+		
 		// 로그인한 아이디로 등록된 가계부 전체 목록
 		List<AccountBook> accountList = accountBookService.selectAllAccountList(param);
 
@@ -115,6 +117,20 @@ public class AccountBookController {
 		model.addAttribute("monthlyAccount", monthlyAccount);
 		model.addAttribute("totalAccountList", totalAccountList);
 		model.addAttribute("today", today);
+	}
+	
+	//사용자가 입력한 기간 조회
+	@ResponseBody
+	@RequestMapping(value="/searchDate.do")
+	public List<Map<String, Object>> searchDate(@AuthenticationPrincipal Member member, String date) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", member.getId());
+		param.put("date", date);
+		
+		//사용자 입력값이 들어있는 월 뽑아내기
+		List<Map<String, Object>> list = accountBookService.detailMonthlyChart(param);
+		
+		return list;
 	}
 
 	// 차트 더보기 페이지

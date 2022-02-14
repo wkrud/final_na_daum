@@ -73,13 +73,13 @@
 				<td>
 					<input class="checkbox-tools" type="radio" name="payment" id="cash" value ="cash"/>
 					<label class="for-checkbox-tools" for="cash">
-						<span><i class="far fa-money-bill-alt"></i></span>
+						<span><i class="far fa-money-bill-alt"></i> 현금</span>
 					</label>
 				</td>
 				<td>
 					<input class="checkbox-tools" type="radio" name="payment" id="card" value ="card"/>
 					<label class="for-checkbox-tools" for="card">
-						<span><i class="far fa-credit-card" id="card"></i></span>
+						<span><i class="far fa-credit-card" id="card"></i> 카드</span>
 					</label>
 				</td>
 			</tr>
@@ -141,8 +141,8 @@
 				id="searchFrm">
 				<select name="incomeExpense" id="mainCategory">
 					<option value="" selected>대분류</option> 
-					<option value="I" <c:if test="${'I' eq searchKeyword.incomeExpense}">selected</c:if>>수입</option>
-					<option value="E" <c:if test="${'E' eq searchKeyword.incomeExpense}">selected</c:if>>지출</option>
+					<option value="I">수입</option>
+					<option value="E">지출</option>
 				</select>
 				<select name="category" id="subCategory">
 					<option value="">소분류</option>
@@ -198,12 +198,12 @@
 	<!-- 사용자별 가계부 월별 금액 -->
 	<section class="infoSection">
 		<div class="account">
-			<div>
- 				<button type="submit" onclick="monthly('before')">
-					<i class="fas fa-angle-left"></i>
+			<div class="monthlyPagingBtn">
+ 				<button type="submit" onclick="monthly('before')" class="defaultBtn">
+					<i class="fa fa-chevron-left"></i>
 				</button>
-				<button type="submit" onclick="monthly('next')">
-					<i class="fas fa-angle-right"></i>
+				<button type="submit" onclick="monthly('next')" class="defaultBtn">
+					<i class="fa fa-chevron-right"></i>
 				</button>
 			</div>
 			<table class="account-info">
@@ -211,7 +211,7 @@
 					<td colspan="2">${loginMember.name}님의</td>
 				</tr>
 				<tr>
-					<td colspan="2">${today}월 총 자산</td>
+					<td colspan="2">${today} 총 자산</td>
 				</tr>
 				<tr id="total_income">
 					<td colspan="2" style="font-size:40px"><fmt:formatNumber value="${monthlyAccount}" type="number"/>원</td>

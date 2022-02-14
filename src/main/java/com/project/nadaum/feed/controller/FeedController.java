@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.project.nadaum.board.model.vo.Likes;
 import com.project.nadaum.common.NadaumUtils;
 import com.project.nadaum.common.vo.Attachment;
 import com.project.nadaum.feed.model.service.FeedService;
@@ -154,11 +158,24 @@ public class FeedController {
 	}
 	
 	@GetMapping("/feedMain.do")
-	public void feedMain(Model model) {
-		List<Feed> feed = feedService.feedMain();
-		log.debug("feed = {}", feed);
+	public void feedMain(Model model, @AuthenticationPrincipal Member member, HttpServletRequest request) {
+//		String id = member.getId();
+//		List<Feed> feed = feedService.feedMain(id);
+//		log.debug("feed = {}", feed);
+//		
+//		Map<String, Object> map = new HashMap<>();
+//		int page = 1;
+//		int limit = 2;
+//		int offset = (page - 1) * limit;
+//		map.put("limit", limit);
+//		map.put("offset", offset);
+//		map.put("id", id);
 		
-		model.addAttribute("feed", feed);
+		// 글의 개수
+//	    int totalRow = feedService.addFeedMainCount(map);
+//	    // 전체 페이지의 개수
+//	    int totalPageCount = (int) Math.ceil(totalRow / (double) limit);
+//	    request.setAttribute("totalPageCount", totalPageCount);	    
 	}
 
 	@GetMapping("/addFeedPage.do")
@@ -209,10 +226,13 @@ public class FeedController {
     }
 	
 	@GetMapping("/addFeedPageMain.do")
-	public ResponseEntity<?> addFeedPageMain(@RequestParam Map<String, Object> map, Model model, @AuthenticationPrincipal Member member){
+	public ResponseEntity<?> addFeedPageMain(@RequestParam Map<String, Object> map, 
+			Model model, 
+			@AuthenticationPrincipal Member member,
+			HttpServletRequest request){
 		log.debug("map = {}", map);
 		int page = Integer.parseInt((String) map.get("page"));
-		int limit = 2;
+		int limit = 4;
 		int offset = (page - 1) * limit;
 		map.put("limit", limit);
 		map.put("offset", offset);
@@ -221,7 +241,13 @@ public class FeedController {
 		List<Map<String, Object>> addFeed = feedService.addFeedMain(map);
 		log.debug("addFeed = {}", addFeed);
 		
-		model.addAttribute("addFeed", addFeed);
+		// 글의 개수
+	    int totalRow = feedService.addFeedMainCount(map);
+	    // 전체 페이지의 개수
+	    int totalPageCount = (int) Math.ceil(totalRow / (double) limit);
+		
+		model.addAttribute("totalPageCount", totalPageCount);
+		log.debug("totalPageCount = {}", totalPageCount);
 		
 		return ResponseEntity.ok(addFeed);
 	}
@@ -237,6 +263,33 @@ public class FeedController {
 			return ResponseEntity.badRequest().build();
 		}
 		return ResponseEntity.ok(1);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/feedMainLikeSave.do")
+	public ResponseEntity<?> feedMainLikeSave(@RequestParam String code, @AuthenticationPrincipal Member member) {
+
+		Likes likes = new Likes();
+		likes.setCode(code);
+		likes.setId((String) member.getId());
+
+	    // +1된 하트 갯수를 담아오기위함
+		Feed feed = feedService.feedMainLikeSave(likes);
+
+		return ResponseEntity.ok(feed);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/feedMainLikeRemove.do")
+	public ResponseEntity<?> feedMainLikeRemove(@RequestParam String code, @AuthenticationPrincipal Member member) {
+		
+		Likes likes = new Likes();
+		likes.setCode(code);
+		likes.setId((String) member.getId());
+
+		Feed feed = feedService.feedMainLikeRemove(likes);
+
+		return ResponseEntity.ok(feed);
 	}
 	
 }

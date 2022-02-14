@@ -13,18 +13,18 @@
 <sec:authentication property="principal" var="loginMember"/>
 
 <article class="mainWrapper">
-	<section class="main box" id="dragZone" droppable="true" ondrop="drop(event)" ondragover="dragOver(event)">
+	<section class="main" id="dragZone" droppable="true" ondrop="drop(event)" ondragover="dragOver(event)">
 		<div class="add-widget">
-			<span style="--i:0;--x:-1;--y:0" class="accept-drag" id="feed-widget">
+			<span style="--i:0;--x:-1;--y:0" class="accept-drag" id="friend-widget">
 				<i class="far fa-comments"></i>
 			</span>
-			<span style="--i:1;--x:1;--y:0" class="accept-drag" id="calendar-widget">
+			<span style="--i:1;--x:1;--y:0" id="calendar-widget">
 				<i class="far fa-calendar-alt"></i>
 			</span>
-			<span style="--i:2;--x:0;--y:-1" class="accept-drag" id="todo-widget">
-				<i class="fas fa-clipboard-list"></i>
+			<span style="--i:2;--x:0;--y:-1" class="accept-drag" id="alert-widget">
+				<i class="far fa-bell"></i>
 			</span>
-			<span style="--i:3;--x:0;--y:1" class="accept-drag" id="memo-widget">
+			<span style="--i:3;--x:0;--y:1" id="memo-widget">
 				<i class="far fa-edit"></i>
 			</span>
 			<span style="--i:4;--x:1;--y:1" class="accept-drag" id="account-widget">
@@ -43,16 +43,18 @@
 				<i class="far fa-play-circle"></i>
 			</span>
 		</div>
+			<button class="clearWidgetBtn"><i class="fas fa-trash-alt"></i></button>
 		<c:forEach items="${widgetList}" var="widget">
 			<div class="widget_form ${widget.widgetName}">
-				<button class="delWidgetBtn" onclick="delWidget(${widget.no})">삭제하기</button>
-				<p>${widget.widgetName}${widget.no}</p>
+				<button class="delWidgetBtn" onclick="delWidget(${widget.no})"><i class="fas fa-minus"></i></button>
 			</div>
-			
 		</c:forEach>
 	</section>
 </article>
 <input type="hidden" id="id" value="${loginMember.id}" />
+<input type="hidden" id="nickName" value="${loginMember.nickname}" />
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
+<input type="hidden" id ="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
+<input type="hidden" id ="csrfParameterName" value="${_csrf.parameterName}"/>	
 <script src='${pageContext.request.contextPath}/resources/js/main/main.js'></script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

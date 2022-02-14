@@ -2,6 +2,9 @@
 //기본값
  let $id = $("#id").val();
  let $contextPath = $("#contextPath").val();
+ let $nickName = $("#nickName").val();
+ let $csrfToken = $("#csrfToken").val();
+ let $csrfParameterName = $("#csrfParameterName").val();
 
 //클릭시 커지게
  let addWidget = document.querySelector('.add-widget');
@@ -18,9 +21,6 @@
     if(document.querySelector('.game-widget') != null) {
  	  gameWidgetInfo();
    } 
-	if (document.querySelector('.todo-widget') != null) {
-  	 todoListWidgetInfo();	
-   } 
     if (document.querySelector('.account-widget') != null) {
   	 accountbookWidgetInfo();	
    }
@@ -28,8 +28,21 @@
 	cultureWidgetInfo();
    }
    	if (document.querySelector('.audio-widget') != null) {
-	AudiobookWidgetInfo();
+	audiobookWidgetInfo();
    }
+   if (document.querySelector('.movie-widget') != null) {
+	movieWidgetInfo();
+   }
+   /*if (document.querySelector('.memo-widget') != null) {
+	memoWidgetInfo();
+   }*/
+   if (document.querySelector('.alert-widget') != null) {
+	alertWidgetInfo();
+   }
+   if (document.querySelector('.friend-widget') != null) {
+	friendWidgetInfo();
+   }
+   
    
  })
 
@@ -46,8 +59,7 @@ const dragOver = (ev) => {
 const drop = (ev) => {
    ev.preventDefault();
    let widgetName = ev.dataTransfer.getData("text");
-   let widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)">
-   				 <p>`+widgetName+`</p></div>`
+   let widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)"></div>`
 
    
 	//내려놓을 때 db 등록
@@ -72,39 +84,50 @@ const drop = (ev) => {
 	}
 	
 	//위젯 생성
-   	//피드
-   if(widgetName == 'feed-widget') {
-	   if(document.querySelector('.feed-widget') == null) {
+   	//친구
+   if(widgetName == 'friend-widget') {
+	   if(document.querySelector('.friend-widget') == null) {
 	        insertWidget(); 
+	        friendWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
 	      }
    } 
    //캘린더
-   else if(widgetName == 'calendar-widget') {
+/*   else if(widgetName == 'calendar-widget') {
 	   if(document.querySelector('.calendar-widget') == null) {
 	        insertWidget(); 
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
 	      }
-   } 
-   //투두리스트
-   else if(widgetName == 'todo-widget') {
-	   if(document.querySelector('.todo-widget') == null) {
+   } */
+   //알림 불러오기
+   else if(widgetName == 'alert-widget') {
+	   if(document.querySelector('.alert-widget') == null) {
 		   insertWidget();   
-			//투두리스트 자동 등록
+		   alertWidgetInfo();
+	   } else {
+	        alert('위젯은 하나만 생성할 수 있습니다.');
+	        return;
+	      }
+   }    
+	//메모
+/*   else if(widgetName == 'memo-widget') {
+	   if(document.querySelector('.memo-widget') == null) {
+	        insertWidget(); 
+	        //메모 자동 등록
 			$.ajax({
-		    	url : $contextPath+"/main/insertTodoList.do",
+		    	url : $contextPath+"/main/insertMemo.do",
 		     	method : 'GET',
 		     	contentType : "application/json; charset=UTF-8",
 		     	dataType : "json",
 		     	success(data) {
 		     		console.log(data);
-		     		//투두리스트 insert 성공시 리스트 로딩
+		     		//메모 insert 성공시 리스트 로딩
 		     		if(data == 1) {
-		     			todoListWidgetInfo();
+		     			memoWidgetInfo();
 		     		} else {
 		     			alert("위젯 등록에 실패했습니다.");
 		     		} //success 끝
@@ -113,21 +136,12 @@ const drop = (ev) => {
 					alert("조회에 실패했습니다.");
 				}
 		     });
-	   } else {
-	        alert('위젯은 하나만 생성할 수 있습니다.');
-	        return;
-	      }
-   }    
-	//메모
-   else if(widgetName == 'memo-widget') {
-	   if(document.querySelector('.memo-widget') == null) {
-	        insertWidget(); 
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
 	      }
      
-   } 
+   } */
    	//가계부
    else if(widgetName == 'account-widget') {
 	   if(document.querySelector('.account-widget') == null) {
@@ -152,21 +166,7 @@ const drop = (ev) => {
  	else if(widgetName == 'movie-widget') {
  		if(document.querySelector('.movie-widget') == null) {
 	        insertWidget(); 
-	      
-	      $.ajax({
-		 	url : $contextPath+"/movie/widgetMovie.do",
-		 	method : 'GET',
-	     	contentType : "application/json; charset=UTF-8",
-	     	dataType : "json",
-	     	success(data) {
-				console.log(data);
-			},
-			error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
-			}
-		});
-	      
+	      	movieWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -177,7 +177,6 @@ const drop = (ev) => {
  		if(document.querySelector('.game-widget') == null) {
 			insertWidget();
 		    gameWidgetInfo();
- 		 
  		 } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -187,7 +186,7 @@ const drop = (ev) => {
  	else if(widgetName == 'audio-widget') {
  		if(document.querySelector('.audio-widget') == null) {
 	        insertWidget(); 
-	        AudiobookWidgetInfo();
+	        audiobookWidgetInfo();
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
@@ -216,65 +215,174 @@ const drop = (ev) => {
 			alert("위젯 로딩에 실패했습니다.");
 		}
 	});
-	}
- 
- //투두리스트 삭제
-const delTodoList = (no) => {
-	 $.ajax({
-    	url : $contextPath+"/main/deleteTodoList.do",
-     	method : 'POST',
-     	data : {
-     		"no" : no,
-     	},
-		headers : headers,
-     	success(data) {
-			//div 새고하니까 날라가는데?????????
-				$('.todo-widget').load(location.href+' .todo-widget');
-				$.ajax({
-     				url : $contextPath+"/main/userTodoList.do",
-     				method : 'GET',
-    		     	contentType : "application/json; charset=UTF-8",
-    		     	dataType : "json",
-    		     	success(resp) {
-    		     		console.log(resp);
-    		     		console.log(resp.length);
-
-    		     		let todoList = "";
-		    		   	todoList = `<ul class="todoListRoom">
-		    		   					<li><input type="text" name="title" id="title" value="`+resp[0].title+`" /></li>
-		    		   					<li><input type="text" name="regDate" value="`+timeConvert(resp[0].regDate)+`" /></li>
-		    		   				</ul>
-		    		   					`
-		    		   				$(".widget_form").append(todoList);
-    		     		//for문으로 투두리스트 목록
-		   				for(let i = 0; i < resp.length; i++) {		    		     			
-    		     		todoList = `
-    		     			<li>
-    		     				<input type="checkbox" name="no" id="" value="`+resp[i].no+`" />
-    		     				<input type="text" name="content" id="" value="`+resp[i].content+`" />
-    		     				<button onclick="delTodoList(`+resp[i].no+`)">삭제하기</button>
-    		     			</li>
-    		     		`
-	     					$(".todoListRoom").append(todoList);
-	     					}
-		   				//버튼 추가
-		   				todoList = `<button class="`+resp[0].title+`">+ 일정을 추가하세요</button>`
-		   				$(".todoListRoom").append(todoList);
-    		     	},error(xhr, testStatus, err) {
-    					console.log("error", xhr, testStatus, err);
-    					alert("위젯 로딩에 실패했습니다.");
-    				}
-     			});
-		}, 
-		error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
-	 });
-	};
+}
 
 
 //위젯 정보 로딩용
+//친구 위젯
+const friendWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/member/mypage/memberFriendWidget.do",
+		method : 'GET',
+		contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+		success(resp) {
+			console.log(resp);		
+			console.log(resp.widgetFriends[0].profile);
+			console.log(resp.widgetFriends[1].profile);
+			console.log(resp.widgetFriends.length);
+			let content = "";
+			content = `
+			<div style="display : flex; text-align : center; width : 200px;">
+				<div class="friendTogetherInfo" style="margin : 0px 30px;">
+					<p style="border-bottom : 1px solid gray; margin : 10px auto;">친구</p>
+				</div>
+				<div class="friendStraightInfo">
+					<p style="border-bottom : 1px solid gray; margin : 10px auto;">팔로워</p>
+				</div>
+			</div>
+			`
+			$(".friend-widget").append(content);
+			//맞팔
+			for(let i = 0; i <resp.widgetFriends.length; i++) {
+				if(resp.widgetFriends[i].profile != null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
+						</div>
+						<span>`+resp.widgetFriends[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendTogetherInfo").append(content);
+				} else {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
+						</div>
+						<span>`+resp.widgetFriends[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendTogetherInfo").append(content);
+
+				}
+			}
+			//팔로워
+			for(let i = 0; i <resp.widgetFollowers.length; i++) {
+				if(resp.widgetFollowers[i].profile != null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>
+						</div>
+						<span>`+resp.widgetFollowers[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendStraightInfo").append(content);
+				} else {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
+						</div>
+						<span>`+resp.widgetFollowers[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendStraightInfo").append(content);
+
+				}
+			}
+			
+		}, //success 끝
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}	
+	})
+}
+
+//알림 불러오기
+const alertWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/websocket/wsCountAlarm.do",
+		method : 'GET',
+		contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+		success(resp) {
+			let content = "";
+			if(resp.length == 0) {
+				content = `
+					<p>최신 알림 내역이 존재하지 않습니다 :(<br/>지금 나:다움에서 친구들과 소통해 보는 건 어떠세요?</p>
+					<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/feed/feedMain.do">나:다움 피드 구경가기</a></p>
+				`
+				$(".alert-widget").append(content);
+			} else {
+			content = `
+				<div style="width : 360px; padding : 10px; border-radius : 5px;" class="alertList"></div>
+			`
+			$(".alert-widget").append(content);
+			for(let i = 0; i < 5; i++) {				
+			content = `
+				<div style="border-bottom: 1px solid lightgray;">
+			      <p style="margin : 5px 0px;"><span style="color : rgb(238, 210, 88);"><i class="fas fa-bell"></i></span> 
+			       `+resp[i].content+`<br><span style="color : gray; margin-left : 20px;">`+timeConvert(resp[i].regDate)+`</span>
+			      </p>
+			    </div>
+			`
+			$(".alertList").append(content);
+			}
+			content = `
+				<span style="margin:10px; float : right;"><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/member/mypage/memberDetail.do?tPage=alarm"> + 지난 알림 보러 가기 </a></span>
+			`
+			$(".alertList").append(content);
+			}
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	})
+}
+
+/*//메모
+const memoWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/main/userMemoList.do",
+		method : 'GET',
+	 	contentType : "application/json; charset=UTF-8",
+	 	dataType : "json",
+	 	success(resp) {
+	 		console.log(resp);
+	 		console.log(resp.length);
+	 		let content = `
+	 			<div class="memoContentDiv">
+	 			<form 
+	 				action="`+$contextPath+`/main/updateMemoList.do"
+	 				method="POST">
+	 				<textarea name="content" id="memoBox" cols="20" rows="10" style="resize:none;">`+resp[0].content+`</textarea>
+	 				<input type="hidden" id ="csrfToken" name="`+$csrfParameterName+`" value="`+$csrfToken+`"/>
+	 				<input type="hidden" name="code" value="`+resp[0].code+`">
+	 			<button type="submit">메모 저장</button>
+	 			</form>
+	 			</div>
+	 		`
+	 		$(".memo-widget").append(content);
+	 	}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	});
+}*/
 
 //게임
 const gameWidgetInfo = () => {
@@ -288,12 +396,58 @@ const gameWidgetInfo = () => {
 	 	headers : headers,
 	 	data : JSON.stringify(member_Id),
 	 	success(resp) { 
-	 		console.log(resp);
-	 		for(data in resp) {
-				let content = `
-				<p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p><p>테스트 성공했나요?</p>
+		let content = "";
+			if(resp.widgetinfo == null) {
+				if(resp.widgetnullcheck == null) {					
+				content = `
+					<div>
+						<p>아직 즐겨찾기한 롤 유저가 없어요 :(<br/>지금 마음에 드는 유저를 즐겨찾기 해 보는 건 어떨까요?</p>
+						<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riotheader.do">LOL 유저 검색하러 가기</a><span style="color : rgb(238, 210, 88);"> <i class="fas fa-star"></i></span></p>
+					</div>
+					`
+					$(".game-widget").append(content);
+				} else {
+					content = `
+					<div style="width : 450px; height: 160px; padding : 10px; box-sizing : border-box;">
+					    <div style="text-align: center; font-size : 20px;">
+					    	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetnullcheck.name+`"><h4>`+resp.widgetnullcheck.name+`</h4></a>
+					    </div>
+					    <div style="display: inline-flex;"><img src="`+$contextPath+`/resources/images/riot/unranked.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;"></div>
+					    <div style="display: inline-flex; position: relative; bottom : 40px; left : 10px;">
+					      <p>즐겨찾기한 유저의 랭크 정보가 존재하지 않아요 :(<br>지금 친구와 함께 즐거운 게임 한 판 어떨까요?</p>
+					    </div>
+					    <div style="text-align: center; position : relative; bottom : 40px;">
+					      <span>
+					        <a style="text-decoration : none;" href="`+$contextPath+`/board/boardList.do">친구와 약속 잡기</a>
+					      </span>
+					    </div>
+					  </div>
+					`
+					$(".game-widget").append(content);
+				}
+			} else {
+				content = `
+				<div style="width : 320px; height: 140px; padding : 15px;">
+			    <div style="text-align: center; font-size : 20px;">
+			    	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetinfo.name+`"><h4>`+resp.widgetinfo.name+`</h4></a>
+			    </div>
+			    <div>
+			    <div style="display: inline-flex;" class="lolLankImg"><img src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;"></div>
+			    <div style="display: inline-flex; position: relative; bottom : 40px; left : 10px;">
+			      <table style="text-align: center; font-size : 18px;">
+			          <tr>
+			            <td>`+resp.widgetinfo.tier+``+resp.widgetinfo.rank+`</td>
+			            <td>`+resp.widgetinfo.leaguePoints+` LP</td>
+			          </tr>
+			          <tr>
+			            <td style="width : 100px; height : 40px;"><span style="color : #00BFFF ">승리 : `+resp.widgetinfo.wins+`</span></td>
+			            <td><span style="color : #CD5C5C">패배 : `+resp.widgetinfo.losses+`</span></td>
+			          </tr>
+			      </table>
+			    </div>
+			    </div>
+			  </div>
 				`
-				$(".game-widget").append(content);
 			}
 	 	}, 
 	 	error(xhr, testStatus, err) {
@@ -303,29 +457,6 @@ const gameWidgetInfo = () => {
 	});
 }
 
-//투두리스트
-const todoListWidgetInfo = () => {
-	$.ajax({
-		url : $contextPath+"/main/userTodoList.do",
-		method : 'GET',
-	 	contentType : "application/json; charset=UTF-8",
-	 	dataType : "json",
-	 	success(resp) {
-	 		console.log(resp);
-	 		console.log(resp.length);
-	 		for(data in resp) {
-				let content = `
-				<p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p><p>이건 투두리스트</p>
-				`
-				$(".todo-widget").append(content);
-			}
-	 	}, 
-	 	error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
-	});
-}
 
 //가계부
 const accountbookWidgetInfo = () => {
@@ -335,13 +466,33 @@ const accountbookWidgetInfo = () => {
      	contentType : "application/json; charset=UTF-8",
      	dataType : "json",
      	success(resp) {
-			for(data in resp) {
-				let content = `
-				<p>가계부우우우우우</p><p>욜마부우우우우우우</p><p>가계부우우우우우</p><p>욜마부우우우우우우</p><p>가계부우우우우우</p><p>욜마부우우우우우우</p>
-				`
+			let content = "";
+				content = `
+					<div style="padding : 15px;">
+						<div style="margin : auto; text-align : center;">
+							<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/accountbook/accountbook.do">
+								<h4>`+$nickName+`님의 이번 달 가계부</h4>
+							</a>
+						</div>
+						<table style="text-align : center; font-size : 20px;">
+							<tr>
+								<td><span>수입</span></td>
+								<td><span>지출</span></td>
+							</tr>
+							<tr class="accountList">
+							</tr>
+						</table>
+					</div>
+				`;
 				$(".account-widget").append(content);
-			}
-		}, 
+				for(let i = 0; i < 1; i++) {
+					content = `
+					<td style="width : 150px;"><span style="color : green;">+`+numberWithCommas(resp.income)+`원</span></td>
+					<td style="width : 150px;"><span style="color : red;">-`+numberWithCommas(resp.expense)+`원</span></td>
+					`
+					$(".accountList").append(content);
+				}
+		}, //success 끝
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
@@ -358,13 +509,51 @@ const cultureWidgetInfo = () => {
      	dataType : "json",
      	headers : headers,
      	success(resp) {
-			console.log(resp);
-			for(data in resp) {
-				let content = `
-				<p>컬쳐러럴러러럴러....털그럭...</p><p>컬쳐러럴러러럴러....털그럭...</p><p>컬쳐러럴러러럴러....털그럭...</p>
-				`
-				$(".culture-widget").append(content);
-			}
+				let content = "";
+				if(resp.length == 0) {
+					content = `
+					<div>
+						<p>스크랩한 전시가 없어요 :(<br/>지금 나:다움과 함께 전시회 나들이 어떠세요?</p>
+						<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/culture/board/1">문화생활 즐기기</a><span style="color : rgb(238, 210, 88);"> <i class="fas fa-star"></i></span></p>
+					</div>
+					`
+					$(".culture-widget").append(content);
+				} else {
+					content	= `
+					<div class="page-wrapper" style="position: relative;">
+					<div class="post-slider" style="width:300px; height : 360px; margin: 0px auto; 
+						position: relative; text-align: center; margin: 0; overflow : hidden;">
+						<h1 class="slider-title" style="text-align: center; margin: 0; font-size:20px !important;">CultureScrap</h1>
+						<a href="`+$contextPath+`/culture/board/1"
+							class="post-subject">+더보기</a> 
+						<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+						color: gray; cursor: pointer;"></i>
+						<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+						color: gray; cursor: pointer;"></i>
+						<div class="culture-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
+						</div>
+					</div>
+					</div>
+						`
+					$(".culture-widget").append(content);
+					for(data in resp) {
+						content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+									<img style = "width : 120px; height : 180px;"class="card-img-top slider-image"
+										src="`+resp[data].imgUrl+`"
+										alt="Card image cap">
+									<p class="card-text widget-movie-title">`+resp[data].title+`</p>
+								</div>`
+						$(".culture-wrapper").append(content);
+					}
+						$('.culture-wrapper').slick({
+						  slidesToShow: 2,
+						  slidesToScroll: 1,
+						  autoplay: true,
+						  autoplaySpeed: 2000,
+						  nextArrow:$('.next'),
+						  prevArrow:$('.prev'),
+						});
+					}
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -382,7 +571,7 @@ const calendarWidgetInfo = () => {
 
 
 //오디오북
-const AudiobookWidgetInfo = () => {
+const audiobookWidgetInfo = () => {
 	$.ajax({
 		url : $contextPath+"/audiobook/widget",
 		method : 'POST',
@@ -390,13 +579,26 @@ const AudiobookWidgetInfo = () => {
      	dataType : "json",
      	headers : headers,
      	success(resp) {
-			console.log(resp);
-			for(data in resp) {
 				let content = `
-				<p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p><p>오디오북오디오북오디오북오디오북</p>
+				<div style="width : 360px; height : 120px; padding : 10px; box-sizing: border-box;">
+				    
+				    <div style="display: inline-flex;">
+				      <div style="margin : 0px 20px"><img src="`+$contextPath+``+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
+				      <div>
+				        <span style="font-size: 20px; display: block;">`+resp.albumInfo.title+`</span>
+				        <span style="color : gray;">`+resp.albumInfo.creator+`</span>
+				        <a style="text-decoration : none; color : black;" href="`+$contextPath+`/audiobook/detail?code=`+resp.albumInfo.code+`">
+					        <div style="font-size : 18px; justify-content: space-between; width : 150px; display: flex; margin : 20px;">
+					          <i class="fas fa-step-backward"></i>
+					          <i class="fas fa-play"></i>
+					          <i class="fas fa-fast-forward"></i>
+					        </div>
+				        </a>
+				    </div>
+				    </div>
+				  </div>			
 				`
 				$(".audio-widget").append(content);
-			}
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -406,7 +608,73 @@ const AudiobookWidgetInfo = () => {
 	});
 }
 
+
+//영화 
+const movieWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/movie/widgetMovie.do",
+		method : 'GET',
+		contentType : "application/json; charset=UTF-8",
+     	dataType : "json",
+     	headers : headers,
+     	success(resp) {
+				let content = ""; 
+				content	= `
+				<div class="page-wrapper" style="position: relative;">
+				<div class="post-slider" style="width:300px; height : 360px; margin: 0px auto; 
+					position: relative; text-align: center; margin: 0; overflow : hidden;">
+					<h1 class="silder-title" style="text-align: center; margin: 0; font-size:20px !important;">Upcoming Movies</h1>
+					<a href="`+$contextPath+`/movie/movieList.do"
+						class="post-subject">+더보기</a> 
+					<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+					color: gray; cursor: pointer;"></i>
+					<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+					color: gray; cursor: pointer;"></i>
+					<div class="post-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
+					</div>
+				</div>
+				</div>
+					`
+				$(".movie-widget").append(content);
+				for(data in resp) {
+					content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+								<img class="card-img-top slider-image" stlye="width : 120px; height : 180px;"
+									src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
+									alt="Card image cap">
+								<div class="card-body post-info">
+									<p class="card-text widget-movie-title">`+resp[data].title+`</p>
+									<p class="card-text widget-movie-rating">평점 : `+resp[data].voteAverage+`</p>
+								</div>
+							</div>`
+					$(".post-wrapper").append(content);
+				}
+					$('.post-wrapper').slick({
+					  slidesToShow: 2,
+					  slidesToScroll: 1,
+					  autoplay: true,
+					  autoplaySpeed: 2000,
+					  nextArrow:$('.next'),
+					  prevArrow:$('.prev'),
+					});
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+     	
+	});
+}
+
+
+//위젯 삭제 버튼
+$(".clearWidgetBtn").on('click', function(){
+		$(".delWidgetBtn").toggle();
+	});
+
+//친구 누르면 창 뜨게
+$(document).on("click", ".activeWithFriends", function() {
 	
+});
  
 //수입 지출 변환 함수
 const IE = (x) => {
@@ -430,3 +698,4 @@ const timeConvert = (t) => {
     var day = "0" + date.getDate();
     return year + "-" + month.substr(-2) + "-" + day.substr(-2);
 }
+

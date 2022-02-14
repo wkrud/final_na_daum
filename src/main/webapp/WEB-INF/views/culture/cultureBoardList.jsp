@@ -94,12 +94,14 @@ padding-left: 20px;
 				        <option value="D000">미술</option><!-- D 미술  -->
 				      </select>
 				  </div>
-				  <button type="submit" class="btn orange btn-default" id="search-btn" >Search</button>
+				  <button type="submit" class="btn culture-btn orange btn-default" id="search-btn" >Search</button>
 			</form>
-			<form action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}" method="post">
-				<input type="hidden" name="id" value="${loginMember.id}" />
-					<button type="submit" class="btn btn-dark"  >나다운 찜 목록</button>			
-			</form>
+			<div class="scrap">
+				<form action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}" method="post">
+					<input type="hidden" name="id" value="${loginMember.id}" />
+						<button type="submit" class="btn btn-dark"  >나다운 찜 목록</button>			
+				</form>
+			</div>
 		</div>
 	<div id="culture-container">
 	    <br />
@@ -110,7 +112,7 @@ padding-left: 20px;
 	     <c:forEach var="culture" items="${list}">
 	    	<div class="col-md-4" style="padding: 15px;">
 	         <div class="card culture-card"> 
-	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
+	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/cultureDetail?apiCode=${culture.seq}`">
 	              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.place}</p>
