@@ -98,14 +98,14 @@ const drop = (ev) => {
 	      }
    } 
    //캘린더
-   else if(widgetName == 'calendar-widget') {
+/*   else if(widgetName == 'calendar-widget') {
 	   if(document.querySelector('.calendar-widget') == null) {
 	        insertWidget(); 
 	      } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
 	      }
-   } 
+   } */
    //알림 불러오기
    else if(widgetName == 'alert-widget') {
 	   if(document.querySelector('.alert-widget') == null) {

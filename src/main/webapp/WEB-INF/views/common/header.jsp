@@ -116,7 +116,7 @@
         </a>
       </li>
       <li class="nav-list">
-        <a href="${pageContext.request.contextPath}">
+        <a href="${pageContext.request.contextPath}/main/main.do">
           <span class="nav-icon"><i class="fas fa-home header-icon"></i></span>
           <span class="nav-title">홈</span>
         </a>

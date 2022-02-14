@@ -25,10 +25,10 @@
 
 <div class="accountWrapper">
 <!-- 본문 영역 -->
-	<div class="analyze-account box">
+	<div class="analyze-account">
 		<!-- 헤더 -->
+		<a href="${pageContext.request.contextPath}/accountbook/accountbook.do" style="text-decoration : none; color : black;">가계부로 돌아가기</a>
 		<div type="submit" class="analyze-account-header">
-			<a href="${pageContext.request.contextPath}/accountbook/accountbook.do" style="display:block;">돌아가기</a>
 			<button class="defaultBtn" onclick="monthly('before')"><i class="fas fa-arrow-left"></i></button>
 			<p>${today}월의 나:다운 가계부</p>
 			<button type="submit" class="defaultBtn" onclick="monthly('next')"><i class="fas fa-arrow-right"></i></button>

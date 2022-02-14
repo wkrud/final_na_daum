@@ -141,8 +141,8 @@
 				id="searchFrm">
 				<select name="incomeExpense" id="mainCategory">
 					<option value="" selected>대분류</option> 
-					<option value="I" <c:if test="${'I' eq searchKeyword.incomeExpense}">selected</c:if>>수입</option>
-					<option value="E" <c:if test="${'E' eq searchKeyword.incomeExpense}">selected</c:if>>지출</option>
+					<option value="I">수입</option>
+					<option value="E">지출</option>
 				</select>
 				<select name="category" id="subCategory">
 					<option value="">소분류</option>
@@ -198,12 +198,12 @@
 	<!-- 사용자별 가계부 월별 금액 -->
 	<section class="infoSection">
 		<div class="account">
-			<div>
+			<div class="monthlyPagingBtn">
  				<button type="submit" onclick="monthly('before')" class="defaultBtn">
-					<i class="fas fa-angle-left"></i>
+					<i class="fa fa-chevron-left"></i>
 				</button>
 				<button type="submit" onclick="monthly('next')" class="defaultBtn">
-					<i class="fas fa-angle-right"></i>
+					<i class="fa fa-chevron-right"></i>
 				</button>
 			</div>
 			<table class="account-info">

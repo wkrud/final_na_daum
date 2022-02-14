@@ -117,6 +117,9 @@ body {
   backdrop-filter: blur(25px);
   float : left;
   display : inline-block;
+  padding : 20px;
+  box-sizing : border-box;
+  z-index : 999;
 }
 
 .widget_form::after {
@@ -125,4 +128,16 @@ body {
 
 .delWidgetBtn {
 	display : none;
+}
+
+.delWidgetBtn {
+	position : absolute;
+	right : 5%;
+	border : none;
+	background : #E2DFDA;
+}
+
+.delWidgetBtn i {
+	color : #CD5C5C;
+	cursor : pointer;
 }
