@@ -160,8 +160,8 @@ const addFeedPage = (id, page) => {
 			let feedDiv = ``;
 			
 			$resp.each((i,{CODE,WRITER,CONTENT,REGDATE,FILENAME,COMMENTS,LIKES}) => {
-												
-				if(resp.attachments != ''){
+				console.log('FILENAME : ' + FILENAME);			
+				if(typeof FILENAME != 'undefined'){
 					feedDiv = `
 					<div class="one-feed" onclick="feedDetailModalView(this);">
 						<div class="hidden-likes-comment">
@@ -194,7 +194,7 @@ const addFeedPage = (id, page) => {
 							</div>
 						</div>
 						<div class="feed-area">
-							<img class="change-profile" src="${pageContext.request.contextPath}/resources/\${FILENAME}" alt="" />
+						<div class="feed-content-hidden">\${CONTENT}</div>
 						</div>
 					</div>`;
 				}
