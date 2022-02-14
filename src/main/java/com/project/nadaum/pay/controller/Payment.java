@@ -1,4 +1,4 @@
-package com.project.nadaum.pay;
+package com.project.nadaum.pay.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +40,7 @@ public class Payment {
             }
         });
     }
-    
+
     private final String SECRET_KEY = "test_ak_mnRQoOaPz8LwjZD1Oljry47BMw6v";
 
     @GetMapping("/")

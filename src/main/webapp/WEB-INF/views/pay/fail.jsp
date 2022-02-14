@@ -17,11 +17,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
+<style>
+	div.pay-container{text-align:center;}
+</style>
 <body>
 <section>
-    <h1>결제 실패</h1>
-    <p>${message}</p>
-    <span>에러코드: ${code}</span>
+	<div class="pay-container">
+			<h1>결제 실패</h1>
+			<p>${message}</p>
+			<span>에러코드: ${code}</span>
+    </div>
 </section>
 </body>
 </html>

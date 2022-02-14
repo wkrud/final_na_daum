@@ -10,7 +10,7 @@
 	Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 %>    
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<c:set var="imgPath" value="/resources/upload/audiobook/pay/"/>
+<c:set var="imgPath" value="/resources/images/audiobook"/>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -20,17 +20,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pay/pay.css" />
 </head>
+<style>
+div.pay-container{text-align:center;margin-top:10vh;}
+body {font-family:'Pretendard-Regular';}
+h1 {font-size:30px;}
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+</style>
 <body>
 <section>
-    <h1>구매하기</h1>
-    <img src="${contextPath}${imgPath}/toss-tee.png" style="max-width: 100%" />
-    <h3>토스 티셔츠</h3>
-    <span>20 원</span>
-    <p>----------------------</p>
-    <div><label><input type="radio" name="method" value="카드" checked/>신용카드</label></div>
-    <div><label><input type="radio" name="method" value="가상계좌"/>가상계좌</label></div>
-    <p>----------------------</p>
-    <button id="payment-button">결제하기</button>
+	<div class="pay-container">
+	    <h1>구매하기</h1>
+	    <img src="${contextPath}${imgPath}/nadaum_pay.jpg" style="height:25vh; width:20vh;" />
+	    <h3>나다움 정기결제</h3>
+	    <span>5000 원</span>
+	    <p>----------------------</p>
+	    <div><label><input type="radio" name="method" value="카드" checked/>신용카드</label></div>
+	    <div><label><input type="radio" name="method" value="가상계좌"/>가상계좌</label></div>
+	    <p>----------------------</p>
+	    <button id="payment-button">결제하기</button>
+    </div>
 </section>
 <script src="https://js.tosspayments.com/v1"></script>
 <script>
@@ -45,8 +59,8 @@
         var paymentData = {
             amount: 20,
             orderId: orderId,
-            orderName: "토스 티셔츠",
-            customerName: "이토페",
+            orderName: "정기결제",
+            customerName: "이렇게",
             successUrl: window.location.origin + "/nadaum/payment/success",
             failUrl: window.location.origin + "/nadaum/payment/fail",
         };

@@ -17,11 +17,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pay/pay.css" />
 </head>
+<style>
+div.pay-container{text-align:center;}
+</style>
 <body>
 	<section>
+		<div class="pay-container">
 		<h1>결제 성공</h1>
-		<h3>상품명: 토스 티셔츠</h3>
+		<h3>상품명: 나 다움 결제</h3>
 		<h3>주문번호: ${orderId}</h3>
+		</div>
 	</section>
 </body>
 </html>
