@@ -537,10 +537,10 @@ const audiobookWidgetInfo = () => {
 			console.log(resp);
 			console.log(resp.imgLink);
 				let content = `
-				<div style="width : 400px; height : 120px; padding : 10px; box-sizing: border-box;">
+				<div style="width : 380px; height : 120px; padding : 10px; box-sizing: border-box;">
 				    
 				    <div style="display: inline-flex;">
-				      <div style="margin : 0px 30px"><img src="`+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
+				      <div style="margin : 0px 30px"><img src="`+$contextPath+``+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
 				      <div>
 				        <span style="font-size: 20px; display: block;">`+resp.albumInfo.title+`</span>
 				        <span style="color : gray;">`+resp.albumInfo.creator+`</span>
