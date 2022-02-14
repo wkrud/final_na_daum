@@ -175,8 +175,8 @@ const addFeedPage = (id, page) => {
 								\${COMMENTS}
 							</div>
 						</div>
-						<div class="feed-area">
-							<div class="feed-content-hidden">\${CONTENT}</div>
+						<div class="feed-area feed-img-area">
+							<img class="change-profile" src="${pageContext.request.contextPath}/resources/upload/feed/img/\${FILENAME}" alt="" />
 						</div>
 					</div>`;
 				}else{
