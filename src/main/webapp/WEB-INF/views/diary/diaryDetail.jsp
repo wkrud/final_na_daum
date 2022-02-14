@@ -74,9 +74,9 @@
 				value="<fmt:formatDate value="${diary.regDate}" pattern="YYYY-MM-dd"/>"/>
 			</div>
 			<div id="diaryIsPublic">
-				<label>공개여부
-					<input type="checkbox" name="isPublic" value='Y' id="isPublic" ${diary.isPublic == 'Y' ? 'checked' : ''}/>
-				</label>						
+				<div class="weatherBox">
+		      		날씨 : <img alt="" src="${diary.weather}">
+		      	</div>						
 			</div>
 			<div id="diaryContent-container">
 				<input type="hidden" name="isPublic" value='N' id="isPublic" checked="checked"/>

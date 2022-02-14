@@ -125,9 +125,10 @@
 }
 .diaryContentTitle {
 	cursor: pointer;
-	display: flex;
+    display: flex;
     justify-content: space-between;
     padding-bottom: 6px;
+    align-items: center;
 }
 
 .diaryContentTitle :hover { 

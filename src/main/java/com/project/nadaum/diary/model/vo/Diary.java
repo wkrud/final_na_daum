@@ -21,5 +21,6 @@ public class Diary implements Serializable {
 	private Date regDate;
 	private int emotionNo;
 	private String isPublic;
+	private String weather;
 
 }

@@ -110,12 +110,9 @@
 						      <div class="tab-pane fade show active" id="${diary.code}" role="tabpanel" aria-labelledby="${diary.code}-list">
 						      	<div class="diaryContentTitle" onclick="location.href=`${pageContext.request.contextPath}/diary/diaryDetail.do?code=${diary.code}`">
 							      	<div><h4><fmt:formatDate value="${diary.regDate}" pattern="dd일 E"/>요일</h4></div>
-							      	<%-- <div>
-							      		<c:choose>
-										    <c:when test="${diary.isPublic eq 'Y'}">공개</c:when>
-										    <c:otherwise>비공개</c:otherwise>
-										</c:choose>
-							      	</div> --%>
+							      	<div class="weatherBox">
+							      		<img alt="" src="${diary.weather}">
+							      	</div>
 						      	</div>
 						      	<hr/>
 						      	<h5>${diary.title}</h5>
@@ -126,12 +123,9 @@
 						      <div class="tab-pane fade show" id="${diary.code}" role="tabpanel" aria-labelledby="${diary.code}-list">
 						      	<div class="diaryContentTitle" onclick="location.href=`${pageContext.request.contextPath}/diary/diaryDetail.do?code=${diary.code}`">
 							      	<div><h4><fmt:formatDate value="${diary.regDate}" pattern="dd일 E"/>요일</h4></div>
-							      	<%-- <div>
-							      		<c:choose>
-										    <c:when test="${diary.isPublic eq 'Y'}">공개</c:when>
-										    <c:otherwise>비공개</c:otherwise>
-										</c:choose>
-							      	</div> --%>
+							      	<div class="weatherBox">
+							      		<img alt="" src="${diary.weather}">
+							      	</div>
 						      	</div>
 						      	<hr/>
 						      	<h5>${diary.title}</h5>
