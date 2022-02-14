@@ -309,11 +309,129 @@ public class CultureController {
 	    return nValue.getNodeValue();
 	}
 
+	@GetMapping("/board/view/{apiCode}/{schedulecode}")
+	public String cultureDetail(@AuthenticationPrincipal Member member,@PathVariable String apiCode,@PathVariable String schedulecode, Model model) {
+		
+		log.debug("schedulecode={}",schedulecode);
+		
+		List<Object> list = new ArrayList<>();
+		try {
+			
+			// parsing할 url 지정(API 키 포함해서)
+			String url = "http://www.culture.go.kr/openapi/rest/publicperformancedisplays/d/"
+					+ "?serviceKey=p%2B16HHPYFEvCkanGQCoGc9CAAG7x66tc5u3xrBmJpM8avVLTGiJ%2FjJaIvItRCggk79J9k%2Byn47IjYUHr%2FdzlgA%3D%3D"
+					+ "&seq="+apiCode ;
+			
+			DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
+			Document doc = dBuilder.parse(url);
+			
+			  doc.getDocumentElement().normalize();
+			  
+			  NodeList nList = doc.getElementsByTagName("perforInfo");
+			
+			     Node nNode = nList.item(0);
+			     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+			 
+			        Element eElement = (Element) nNode;
+			 
 
+			       String title = getTagValue("title", eElement);
+					String startDate = getTagValue("startDate", eElement);
+					String endDate = getTagValue("endDate", eElement);
+					String area = getTagValue("area", eElement);
+					String place = getTagValue("place", eElement);
+					String placeAddr = getTagValue("placeAddr", eElement);
+					String realmName = getTagValue("realmName", eElement);
+					String price = getTagValue("price", eElement);
+					String phone = getTagValue("phone", eElement);
+					String bookingUrl = getTagValue("url", eElement);
+					String imgUrl = getTagValue("imgUrl", eElement);
+					String placeUrl = getTagValue("placeUrl", eElement);
+					String contents1 = getTagValue("contents1", eElement);
+					String contents2 = getTagValue("contents2", eElement);
+
+					Map<String, Object> map = new HashMap<>();
+					
+					map.put("title", title);
+					map.put("startDate", startDate);
+					map.put("endDate", endDate);
+					map.put("area", area);
+					map.put("place", place);
+					map.put("placeAddr", placeAddr);
+					map.put("realmName", realmName);
+					map.put("price", price);
+					map.put("phone", phone);
+					map.put("bookingUrl", bookingUrl);
+					map.put("imgUrl", imgUrl);
+					map.put("placeUrl", placeUrl);
+					map.put("contents1",contents1);
+					map.put("contents2",contents2);
+					
+					
+					list.add(map);
+					
+			     }//if end
+			     List<Comment> commentList = commentService.selectCultureCommentList(apiCode);
+			     System.out.println(list);
+			     model.addAttribute("list", list);
+			     model.addAttribute("commentList", commentList);
+			     
+			     //friend
+			     List<Map<String, Object>> friends = memberService.selectAllFriend(member);
+				List<Member> memberList = memberService.selectAllNotInMe(member);
+				model.addAttribute("memberList", memberList);
+				model.addAttribute("friends", friends);
+				
+				//평점 평균
+				List<Integer> star = cultureService.listStar(apiCode); //star 불어오기
+				log.debug("star{}", star);
+
+				int totalStartComment = cultureService.totalStarCount(apiCode);
+				
+//				int sum = 0; // 평점 합계 구하는 변수 0으로 초기화
+//				double avg = 0; // 평점 평균 구하는 변수 0으로 초기화
+//				sum = star.stream().mapToInt(Integer::intValue).sum();
+//				System.out.println("starSum : " + sum);
+//				int arraysize = star.size();
+//				avg = sum / arraysize;
+//				System.out.println("avgStar : " + avg);
+//				log.debug("avg{}", avg);
+//				model.addAttribute("avg", avg);
+				
+				double rating = cultureService.avgRating(apiCode);
+				int starCount1 = cultureService.starCount1(apiCode);
+				int starCount2 = cultureService.starCount2(apiCode);
+				int starCount3 = cultureService.starCount3(apiCode);
+				int starCount4 = cultureService.starCount4(apiCode);
+				int starCount5 = cultureService.starCount5(apiCode);
+				log.debug("rating{}", rating);
+				
+				model.addAttribute("rating", rating);
+				
+				model.addAttribute("starCount1", starCount1);
+				model.addAttribute("starCount2", starCount2);
+				model.addAttribute("starCount3", starCount3);
+				model.addAttribute("starCount4", starCount4);
+				model.addAttribute("starCount5", starCount5);
+				
+				model.addAttribute("totalStartComment", totalStartComment);
+				
+				model.addAttribute("schedulecode", schedulecode);
+		} catch (Exception e) {
+			  e.printStackTrace();
+		}		  
+		return "/culture/cultureView";
+		
+	}
 	//문화 상세정보API
 		@GetMapping("/board/view/{apiCode}")
-		public ModelAndView getCultureDetailApi(@AuthenticationPrincipal Member member, @PathVariable String apiCode, Model model) {
+		public ModelAndView getCultureDetailApi(@AuthenticationPrincipal Member member, @RequestParam Map<String, Object> scheduleMap,@PathVariable String apiCode, Model model) {
 			
+
+			String schedulecode = (String) scheduleMap.get("schedulecode");
+			model.addAttribute("check", scheduleMap);
+			log.debug("schedulecode={}",schedulecode);
 			List<Object> list = new ArrayList<>();
 				try {
 					
@@ -749,4 +867,7 @@ public class CultureController {
 						return resultMap;
 					
 				}
+				
+				@GetMapping("/scheduleAccept.do")
+				public void Schedule() {}
 }

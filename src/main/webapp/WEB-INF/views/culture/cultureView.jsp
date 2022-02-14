@@ -150,6 +150,7 @@ div#board-container label.custom-file-label {
 			</div>
 		</c:forEach>
 		<br />
+		
 			<form id="likeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
@@ -157,16 +158,13 @@ div#board-container label.custom-file-label {
 					스크랩<i class="fas fa-check-double ml-1"></i>
 				</button>
 			</form>
-			
 				<button type="button" class="btn btn-secondary" data-toggle="modal"
-					data-target="#add-calander">약속 잡기&raquo;</button>
-					
+					data-target="#add-calander2">약속 확인&raquo;</button>
 		</div>
-
-	<hr style="margin-top: 30px;" />
-	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
+	<!-- 받을모달 -->
+	<div class="modal fade" id="add-calander2" tabindex="-1" role="dialog"
 		aria-labelledby="add-calander" aria-hidden="true">
-		<form id="promiseFrm">
+		<form id="promiseReceiveFrm">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -177,26 +175,36 @@ div#board-container label.custom-file-label {
 						</button>
 					</div>
 					<div class="modal-body">
-						<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">제목</label>
+					<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">상대<br>닉네임</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="title" name="title"
-									placeholder="제목을 입력해주세요" required>
+								<input type="text" class="form-control" name="mynickname"  id="receive-mynickname"/>
+								<input type="hidden" class="form-control" name="friendnickname"  id="receive-friendnickname"/>
+							</div>
+						</div>
+					
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">내용</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="receive-title" name="title">
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label for="title" class="col-sm-2 col-form-label">약속일</label>
 							<div class="col-sm-10">
-								<input type="date" class="form-control" id="startDate"
-									name="startDate" required>
+								<input type="date" class="form-control" id="receive-startDate"
+									name="startDate">
+									<input type="date" id="receive-endDate" name="endDate" style="display:none"/>
 							</div>
 						</div>
-						<span>상대방 닉네임</span> <input type="text" name="friendId"
-							id="friendId" class="friendTextId" /> <br /> <br /> <input
-							type="hidden" name="apiCode" value="${apiCode}" /> <input
-							type="hidden" name="allDay" value="1" /> <input type="hidden"
-							name="id" value="${loginMember.id}" />
+							<input type="hidden" name="allDay" id="receive-allDay" /> 
+							<input type="hidden" name="type"  value="culture"/>
+							<input type="hidden" name="borderColor"  value="#ffbb3d"/>
+							<input type="hidden" name="backgroundColor"  value="#ffbb3d"/>
+							<input type="hidden" name="textColor"  value="#ffffff"/>
+							<input type="hidden" name="id" value="${loginMember.id}" />
+							<input type="hidden" name="friendid" id="receive-friendId" />
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">취소</button>
@@ -207,37 +215,74 @@ div#board-container label.custom-file-label {
 			</div>
 		</form>
 	</div>
-	
 <script>
 	//약속 ======================================================================================
-	 		$(promiseFrm).submit((e) => {
- 		e.preventDefault();
-
+	
+$(document).ready(function() {
+	
+	const timeConvert = (t) => {
+	    var unixTime = Math.floor(t / 1000);
+	    var date = new Date(unixTime*1000);
+	    var year = date.getFullYear();
+	    var month = "0" + (date.getMonth()+1);
+	    var day = "0" + date.getDate();
+	    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
+	}
+			
+	const $scheduleCheckCode ='${schedulecode}';
+			
+		 	var data = {"schedulecode":$scheduleCheckCode}
 			$.ajax({
-				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
-				method: "POST",
-				headers : headers, 
-				data : $(promiseFrm).serialize(),
-				success(resp){
-					//location.reload();
-					alert(resp.msg);
-					let ranNo = Math.floor(Math.random() * 10000);
-					let code = 'culture-' + ranNo;
-					let guest = $(".friendTextId").val();
-					alert(guest);
-					let schedulecode = resp["schedulecode"]
-					let content = '';
-					content = `<a href='/nadaum/culture/board/view/${apiCode}/\${schedulecode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a>`
-					console.log(content);
-					commonAlarmSystem(code,guest,content);
-					},
-				error: console.log
-				});
- 	});
+				url : "${pageContext.request.contextPath}/culture/boardScheduleCheck.do",
+				method : "GET",
+				data : {
+					schedulecode : $scheduleCheckCode
+					
+				},
+				success(data){
+					const accept = data["accept"];
+					const allDay = data["allDay"];
+					const friendnickname = data["friendnickname"];
+					const mynickname = data["mynickname"];
+					const startDate = data["startDate"];
+					const content = data["content"];
+					const friendid = data["friendid"];
+					
+					$('#receive-title').val(content);
+					$('#receive-startDate').val(timeConvert(startDate));
+					$('#receive-endDate').val(timeConvert(startDate));
+					$('#receive-mynickname').val(mynickname);
+					$('#receive-friendnickname').val(friendnickname);
+					$('#receive-allDay').val(allDay);
+					$('#receive-friendId').val(friendid);
+					
+					 $(promiseReceiveFrm).submit((e) => {
+							e.preventDefault();
+					
+					     
+								$.ajax({
+									url:`${pageContext.request.contextPath}/culture/boardReceiveSchedule.do`,
+									method: "POST",
+									headers : headers, 
+									data : $(promiseReceiveFrm).serialize(),
+									success(resp){
+										location.reload();
+										const msg = resp["msg"];
+										alert(msg);
+										
+										},
+									error: console.log
+									});
+						}); 
+				},
+				error : function(xhr, status, err){
+					console.log(xhr, status, err);
+						alert("에러");
+				}
+			}); 
+});	
 </script>
 
-		<!-- 영화 줄거리 -->
-		<h2 class="blog-post-title"></h2>
 
 		<p>${culture.contents1}</p>
 		<p>${culture.contents2}</p>
@@ -628,7 +673,7 @@ div#board-container label.custom-file-label {
 				</div>
 				</form>
 				</div>
-</div>
+
 <script>
 
 /* 댓글 등록 */
