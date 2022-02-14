@@ -28,15 +28,17 @@ public interface MovieService {
 
 	int totalStarCount(String apiCode);
 
-	int insertSchedule(Map<String, Object> map);
+	String insertSchedule(Schedule movieSchedule);
 
 //	Map<String, Object> selectOneSchedule(String code);
 
-	Schedule selectOneSchedule(String code);
+	Schedule selectOneSchedule(String schedulecode);
 
 	int insertCalendarMovie(Map<String, Object> map);
 
 	int updateAccept(String code);
+
+	int insertCalendarMovieFriend(Map<String, Object> map);
 
 
 	

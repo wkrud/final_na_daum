@@ -11,13 +11,22 @@
 				 '', #{id}, #{title}, #{content}, to_date(#{startDate}, 'YYYY-MM-DD HH24:MI'), to_date(#{startDate}, 'YYYY-MM-DD HH24:MI'), 
 				 1, '#ffffff', '#f06595', '#4d638c', 'movie')
 	</insert>
+	<insert id="insertCalendarMovieFriend">
+		insert into calendar
+		values (seq_calendar_no.nextval, concat('movie-',seq_schedule_no.nextval),
+				 '', #{friendId}, #{title}, #{content}, to_date(#{startDate}, 'YYYY-MM-DD HH24:MI'), to_date(#{startDate}, 'YYYY-MM-DD HH24:MI'), 
+				 1, '#ffffff', '#f06595', '#4d638c', 'movie')
+	</insert>
 	
 	<!-- 약속 -->
 	<insert id="insertSchedule">
 		insert into schedule values(concat('pm-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
+		<selectKey order="AFTER" resultType="string" keyProperty="code">
+			select concat('pm-',seq_schedule_no.currval) from dual
+		</selectKey>
 	</insert>
 	<select id="selectOneSchedule">
-		select * from schedule where code = #{code}, id = #{id}
+		select * from schedule where code = #{code}
 	</select>
 	<update id="updateAccept">
 		update schedule set accept = 'y' where code = #{code}

@@ -1,5 +1,8 @@
 package com.project.nadaum.culture.movie.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,30 +51,71 @@ public class MovieController {
 	public void schedulePopup () {}
 	
 	//약속 수락 -> 캘린더
-	@PostMapping("/insertCalendarMovie.do")
-	public ResponseEntity<?> insertCalendarMovie(
-			@RequestParam Map<String, Object> map, 
-			Schedule schedule,
-			Model model) {
+//	@PostMapping("/insertCalendarMovie")
+//	public ResponseEntity<?> insertCalendarMovie(
+//			@RequestParam Map<String, Object> map, 
+//			Schedule schedule,
+//			Model model) {
+//		
+//		log.debug("insertCalendarMovie map = {}", map);
+//		
+//		try {
+//			String code = (String) map.get("code");
+//			
+//			// 수락여부가 n -> y로 변경 되면 캘린더에 insert
+//			int updateAccept = movieService.updateAccept(code);
+//			
+//			System.out.println(map);
+//			if (updateAccept == 1) {
+//				int result = movieService.insertCalendarMovie(map);
+//				log.debug("result={}", result);
+//				String msg = (result > 0) ? "캘린더추가 성공" : "캘린더추가 실패";
+//
+//				map.put("result", result);
+//				map.put("msg", msg);
+//				return ResponseEntity.ok(map);
+//
+//			} else {
+//				return ResponseEntity.status(404).build();
+//			}
+//
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//			return ResponseEntity.badRequest().build();
+//		}
+//	}
+	@PostMapping("/movieDetail/{apiCode}/insertCalendar.do")
+	public ResponseEntity<?> insertCalendarMovie(@RequestParam Map<String, Object> map, @PathVariable String schedulecode) throws ParseException {
+
+		log.debug("map = {}", map);
+		String id = (String) map.get("id");
+		String friendid = (String) map.get("friendid");
+		String a  = (String) map.get("startDate");
+		String b  = (String) map.get("endDate");
 		
-		log.debug("insertCalendarMovie map = {}", map);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date startDate = sdf.parse(a);
+		Date endDate = sdf.parse(b);
+		
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
 		
 		try {
-			String code = (String) map.get("code");
-			
-			// 수락여부가 n -> y로 변경 되면 캘린더에 insert
-			int updateAccept = movieService.updateAccept(code);
-			
-			System.out.println(map);
-			if (updateAccept == 1) {
-				int result = movieService.insertCalendarMovie(map);
-				log.debug("result={}", result);
-				String msg = (result > 0) ? "캘린더추가 성공" : "캘린더추가 실패";
+				map.remove("friendid");
+				log.debug("map = {}", map);
+			 int result = movieService.insertCalendarMovie(map);
+			 	map.put("friendid",friendid);
+			 	map.remove("id");
+			 	log.debug("map = {}", map);
+			 int result2 = movieService.insertCalendarMovieFriend(map);
+			 
+			 log.debug("result2={}", result2);
+			 String msg = (result2 > 0) ? "약속수락 성공" : "약속수락 실패";
+			 map.put("msg", msg);
 
-				map.put("result", result);
-				map.put("msg", msg);
+			if (result == 1) {
+
 				return ResponseEntity.ok(map);
-
 			} else {
 				return ResponseEntity.status(404).build();
 			}
@@ -80,25 +124,64 @@ public class MovieController {
 			log.error(e.getMessage(), e);
 			return ResponseEntity.badRequest().build();
 		}
+
 	}
 
+		//약속체크하기
+		@ResponseBody
+		@GetMapping("/movieDetail/{apiCode}/movieScheduleCheck.do")
+		public Map<String, Object> selectOneComment(@PathVariable String schedulecode){
+			
+			Map<String, Object> param = new HashMap<>();
+			log.info("schedulecode = {}", schedulecode);
+			
+			Schedule checkresult = movieService.selectOneSchedule(schedulecode);
+			char accept = checkresult.getAccept();
+			int allDay = checkresult.getAllDay();
+			String friendnickname = checkresult.getFriendId();
+			String mynickname = checkresult.getId();
+			Date startDate = checkresult.getStartDate();
+			String content = checkresult.getTitle();
+			String friendid = checkresult.getId();
+			
+			param.put("accept", accept);
+			param.put("allDay", allDay);
+			param.put("friendnickname", friendnickname);
+			param.put("mynickname", mynickname);
+			param.put("startDate", startDate);
+			param.put("content", content);
+			param.put("friendid", friendid);
+
+			return param;
+		}	
+	
 	// 약속
 //	@ResponseBody
-	@PostMapping("/movieDetail/{apiCode}/schedule")
-	public ResponseEntity<?> insertSchedule(@RequestParam Map<String, Object> map, Model model) {
-		log.debug("insertSchedule map = {}", map);
-
+	@PostMapping("/movieDetail/insertSchedule.do")
+	public ResponseEntity<?> insertSchedule(@RequestParam Map<String, Object> map, Model model) throws Exception {
 		try {
-			int result = movieService.insertSchedule(map);
+			log.debug("insertSchedule map = {}", map);
+			
+			String title = (String) map.get("title");
+			String startDatebefore = (String) map.get("startDate");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date startDate = format.parse(startDatebefore);
+			String friendId = (String) map.get("friendId");
+			String apiCode = (String) map.get("apiCode");
+			String id = (String) map.get("id");
+			
+			Schedule movieSchedule = new Schedule(null, friendId, '\u0000', apiCode, startDate, 1, id, title);
+			
+			String schedulecode = movieService.insertSchedule(movieSchedule);
 
-			log.debug("result={}", result);
-			String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";
-
-			map.put("result", result);
-			map.put("msg", msg);
-
-			System.out.println(map);
-			if (result == 1) {
+			if (schedulecode == null) {
+				int result = 1;
+				log.debug("result={}", result);
+				String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";
+				System.out.println(map);
+				map.put("schedulecode", schedulecode);
+				map.put("result", result);
+				map.put("msg", msg);
 
 				return ResponseEntity.ok(map);
 			} else {
@@ -126,43 +209,6 @@ public class MovieController {
 //	 }
 	
 	
-	//물어보고 schedule 클래스 바꾸기
-	@ResponseBody
-	@GetMapping("/movieDetail/{apiCode}/schedule/{code}")
-	public ResponseEntity<?> selectOneComment(@PathVariable String code){
-		log.info("code = {}", code);
-		Schedule schedule = movieService.selectOneSchedule(code);
-		if(schedule != null) 
-			return ResponseEntity.ok(schedule);
-		else
-			return ResponseEntity.notFound().build();
-	}
-	
-	
-//	//수정
-//	@PutMapping("/movieDetail/{apiCode}/schedule")
-//	public ResponseEntity<?> updateMenu(@RequestBody Comment comment){
-//		log.debug("updateComment comment = {}", comment);
-//		try {
-//			int result = movieService.updateMovieComment(comment);
-//			log.debug("updateComment result = {}", result);
-//			
-//			Map<String, Object> resultMap = new HashMap<>();
-//			
-//			resultMap.put("msg", "댓글 수정 성공!");
-//			resultMap.put("result", result);
-//			
-////			if(result == 1) {
-//                return ResponseEntity.ok(resultMap);
-////            } 
-////            else {
-////            	return ResponseEntity.status(404).build();
-////            }
-//		} catch (Exception e) {
-//			log.error(e.getMessage(), e);
-//			return ResponseEntity.badRequest().build();
-//		}
-//	}
 	
 	
 	
