@@ -277,6 +277,13 @@ const alertWidgetInfo = () => {
 		success(resp) {
 			console.log(resp);
 			let content = "";
+			if(resp.length == 0) {
+				content = `
+					<p>최신 알림 내역이 존재하지 않습니다 :(<br/>지금 나:다움에서 친구들과 소통해 보는 건 어떠세요?</p>
+					<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/feed/feedMain.do">나:다움 피드 구경가기</a></p>
+				`
+				$(".alert-widget").append(content);
+			} else {
 			content = `
 				<div style="width : 360px; padding : 10px; border-radius : 5px;" class="alertList"></div>
 			`
@@ -295,6 +302,7 @@ const alertWidgetInfo = () => {
 				<span style="margin:10px; float : right;"><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/member/mypage/memberDetail.do?tPage=alarm"> + 지난 알림 보러 가기 </a></span>
 			`
 			$(".alertList").append(content);
+			}
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -358,36 +366,34 @@ const gameWidgetInfo = () => {
 				$(".game-widget").append(content);
 			} else {
 				content = `
-				<div style="width : 380px; height : 150px">
-				    <div style="width : 180px; text-align: center; padding : 10px; box-sizing: border-box; float: left;" >
-				      <div>
-				        <img src="../sample/image/flower1.PNG" alt="" style="width : 100px; height: 100px; border-radius: 50%;">
-				      </div>
-				      <div>
-				        <h5 style="font-size: 18px;">`+resp.widgetinfo.name+`</h5>
-				      </div>
-				    </div>
-				    <div style="width : 200px; text-align: center; box-sizing: border-box; float: right; right : 30px;">
-				      <div style="margin-top:20px;">
-				        <div style="display: inline-flex;" class="lolLankImg"></div>
-				        <div style="display: inline-flex; position : relative; bottom : 10px; height: 50px;">
-				        	<span>`+resp.widgetinfo.tier+``+resp.widgetinfo.rank+` `+resp.widgetinfo.leaguePoints+` LP</span>
-				        </div>
-				      </div>
-				      <div style="width : 200px; display: inline-flex; font-size : 18px; margin-left : 15px;">
-				        <div style="width : 100px; height: 30px;"><span style="color : #00BFFF ">승리 : `+resp.widgetinfo.wins+`</span></div>
-				        <div style="width : 100px;"><span style="color : #CD5C5C">패배 : `+resp.widgetinfo.losses+`</span></div>
-				      </div>
-				    </div>
-				  </div>
+				<div style="width : 320px; height: 140px; padding : 15px;">
+			    <div style="text-align: center; font-size : 20px;">
+			    	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetinfo.name+`"><h4>`+resp.widgetinfo.name+`</h4></a>
+			    </div>
+			    <div>
+			    <div style="display: inline-flex;" class="lolLankImg"></div>
+			    <div style="display: inline-flex; position: relative; bottom : 40px; left : 10px;">
+			      <table style="text-align: center; font-size : 18px;">
+			          <tr>
+			            <td>`+resp.widgetinfo.tier+``+resp.widgetinfo.rank+`</td>
+			            <td>`+resp.widgetinfo.leaguePoints+` LP</td>
+			          </tr>
+			          <tr>
+			            <td style="width : 100px; height : 40px;"><span style="color : #00BFFF ">승리 : `+resp.widgetinfo.wins+`</span></td>
+			            <td><span style="color : #CD5C5C">패배 : `+resp.widgetinfo.losses+`</span></td>
+			          </tr>
+			      </table>
+			    </div>
+			    </div>
+			  </div>
 				`
 				$(".game-widget").append(content);
 				if(resp.widgetinfo.rank == null) {
 					content = `
-					<img src="`+$contextPath+`/resources/images/riot/unranked.png" alt="" style="width : 50px; height : 50px; margin : 5px;">`
+					<img src="`+$contextPath+`/resources/images/riot/unranked.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;">`
 				} else {
 					content = `
-					<img src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="" style="width : 50px; height : 50px; margin : 5px;">`
+					<img src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;">`
 				}
 				$(".lolLankImg").append(content);
 			}
@@ -529,13 +535,25 @@ const audiobookWidgetInfo = () => {
      	headers : headers,
      	success(resp) {
 			console.log(resp);
+			console.log(resp.imgLink);
 				let content = `
-				<p>`+resp.albumInfo.kind+` 장르의 이런 오디오북 감상은 어떠세요?</p>
-				<p>이미지 링크: `+resp.imgLink+`</p>
-				<img src=`+resp.imgLink+`>
-				<p>제목 : `+resp.albumInfo.title+`</p>
-				<p>creator : `+resp.albumInfo.creator+`</p>
-				<p>provider : `+resp.albumInfo.provider+`</p>				
+				<div style="width : 400px; height : 120px; padding : 10px; box-sizing: border-box;">
+				    
+				    <div style="display: inline-flex;">
+				      <div style="margin : 0px 30px"><img src="`+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
+				      <div>
+				        <span style="font-size: 20px; display: block;">`+resp.albumInfo.title+`</span>
+				        <span style="color : gray;">`+resp.albumInfo.creator+`</span>
+				        <a style="text-decoration : none; color : black;" href="`+$contextPath+`/audiobook/detail?code=`+resp.albumInfo.code+`">
+					        <div style="font-size : 18px; justify-content: space-between; width : 150px; display: flex; margin : 20px;">
+					          <i class="fas fa-step-backward"></i>
+					          <i class="fas fa-play"></i>
+					          <i class="fas fa-fast-forward"></i>
+					        </div>
+				        </a>
+				    </div>
+				    </div>
+				  </div>			
 				`
 				$(".audio-widget").append(content);
 		}, 
@@ -561,14 +579,19 @@ const movieWidgetInfo = () => {
 				let content = ""; 
 				content	= `
 				<div class="page-wrapper" style="position: relative;">
-				<div class="post-slider">
-					<h1 class="silder-title">Upcoming Movies</h1>
+				<div class="post-slider" style="width:95%; margin: 0px auto; 
+					position: relative; text-align: center; margin: 0;">
+					<h1 class="silder-title" style="text-align: center; margin: 0; font-size:20px !important;">Upcoming Movies</h1>
 					<a href="`+$contextPath+`/movie/movieList.do"
 						class="post-subject">+더보기</a> 
-					<i class="fas fa-chevron-left prev"></i>
-					<i class="fas fa-chevron-right next"></i>
-
-					<div class="post-wrapper">
+					<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+					color: gray; cursor: pointer;"></i>
+					<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+					color: gray; cursor: pointer;"></i>
+					<div class="post-wrapper" style="width:95%; height:100%; margin: 0px auto; overflow: hidden; padding: 10px 0px 10px 0px;">
+					</div>
+				</div>
+				</div>
 					`
 				$(".movie-widget").append(content);
 				for(data in resp) {
@@ -581,13 +604,8 @@ const movieWidgetInfo = () => {
 									<p class="card-text widget-movie-rating">평점 : `+resp[data].voteAverage+`</p>
 								</div>
 							</div>`
-					$(".movie-widget").append(content);
+					$(".post-wrapper").append(content);
 				}
-				content = `</div>
-						</div>
-					</div>
-				</div>`
-				$(".movie-widget").append(content);
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -633,11 +651,13 @@ const timeConvert = (t) => {
 
 
 /* 슬라이드 스크립트*/
-	$('.post-wrapper').slick({
-	  slidesToShow: 2,
-	  slidesToScroll: 1,
-	  autoplay: true,
-	  autoplaySpeed: 2000,
-	  nextArrow:$('.next'),
-	  prevArrow:$('.prev'),
-	});
+$(window).on('load', '.post-wrapper', function() {
+$('.post-wrapper').slick({
+  slidesToShow: 2,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  nextArrow:$('.next'),
+  prevArrow:$('.prev'),
+});
+});
