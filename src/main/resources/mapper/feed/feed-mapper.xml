@@ -13,7 +13,23 @@
 	</select>
 	
 	<select id="selectOnePersonFeedOnebyOne" resultType="feed">
-		select d.* from (select rownum as roww, f.* from feed f where f.writer = #{id} order by f.reg_date desc)d where d.roww = #{rownum}
+		SELECT 
+			e.*
+		from(
+			select 
+				rownum r,
+				d.*
+			from 
+				(select 
+					* 
+				from 
+					feed
+				where 
+					writer = #{id}
+				order by 
+				reg_date desc) d) e	
+		where 
+			e.r = #{rownum}
 	</select>
 	
 	<select id="selectAllOneFeedAttachments" resultType="attachment">
