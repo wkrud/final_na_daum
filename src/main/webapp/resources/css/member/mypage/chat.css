@@ -136,6 +136,8 @@
 	overflow: scroll;
 	overflow-x:hidden;
 	-ms-overflow-style:none;
+	flex-wrap: wrap;
+	padding: 5px 30px;
 }
 .invite-friend::-webkit-scrollbar{
 	display: none;
@@ -144,6 +146,8 @@
 	display: flex;
 	margin: 5px 0;
 	height: 45px;
+	width: 150px;
+	overflow: hidden;
 }
 .invite-friend-options:hover .invite-friend-nickname{
 	color: #fff;
