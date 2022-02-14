@@ -215,8 +215,8 @@ $(".contentWrapper").scroll(function(){
 	}
 });
 
-
 $chatRoom.click((e) => {
+<c:if test="${loginMember.nickname ne member.nickname}">
 	var room = Math.floor(Math.random() * 100000);
 	
 	let guest = '${member.nickname}';
@@ -231,8 +231,8 @@ $chatRoom.click((e) => {
 		chatInvite('chat', '${loginMember.nickname}', guest, room);
 		windowObjHistorySearch = window.open(url, name, spec);	
 	}
+</c:if>
 });
-
 
 let $hidden = $(".hidden-likes-comment");
 
