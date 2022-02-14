@@ -23,7 +23,7 @@
 }
 .userPic{padding-right: 8px;}
 .feedPic img {
-	width: 637px;
+	width: 706px;
 }
 #mainArticle{
 	display: flex;
@@ -37,16 +37,16 @@
     padding-top: 20px;
 }
 .feedItem {
-    padding: 10px;
+    padding: 20px;
     border: solid 1px;
-    width: 660px;
+    width: 750px;
     margin: 12px;
     border-radius: 2px;
     background-color: #a2bffe4f;
     color: #4c536c;
 }
 .writeFeed{
-	width: 660px;
+	width: 750px;
     border: solid 1px;
     background-color: #e2e8f8;
     color: #4c536c;
@@ -90,7 +90,7 @@
 }
 .likeNum{padding-left: 5px;}
 #writeFeedTextArea {
-	width: 580px;
+	width: 650px;
     height: 120px;
     overflow: auto;
     margin-left: 5px;
@@ -98,7 +98,7 @@
 .btnSet {
     display: flex;
     justify-content: space-between;
-    margin: 3px 18px 5px 15px;
+    margin: 3px 24px 5px 15px;
     align-items: center;
 }
 .feedWriteBtn{cursor: pointer;}
@@ -149,12 +149,13 @@ textarea {resize: none;}
 .uploadBox .upload-name {
   display: inline-block;
   height: 39px;
-  font-size:18px; 
+  font-size: 18px;
   padding: 0 10px;
   vertical-align: middle;
-  background-color: #f5f5f5;
+  background-color: #f5f5f5c2;
   border: 1px solid #ebebeb;
   border-radius: 5px;
+  width: 240px;
 }
 
 hr {
@@ -163,6 +164,7 @@ hr {
     border: 0;
     border-top: 1px solid rgba(0,0,0,.1);
 }
+
 </style>
 
 <script>
@@ -244,6 +246,7 @@ $(document).ready(function(){
 	   $(".upload-name").val(cur);
 	 }); 
 }); 
+
 </script>
 <article id="mainArticle" class="mainArticle">
 <!-- 피드 작성하기 -->

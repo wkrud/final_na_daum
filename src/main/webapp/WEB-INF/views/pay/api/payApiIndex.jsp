@@ -18,17 +18,17 @@
 	<h1>PayApiIndexPage</h1>
 	<h2>단건결제</h2>
 	<ul>
-		<li><a href="${pageContext.request.contextPath}/payready/api/payEnroll">API 흐름설명</a></li>
-		<li><a href="${pageContext.request.contextPath}/payready/modal">모달창 처리</a></li>
-		<li><a href="${pageContext.request.contextPath}/payready/rest">REST API 처리</a></li>
+		<li><a href="${pageContext.request.contextPath}/pay/ready/api/enroll">API 흐름설명</a></li>
+		<li><a href="${pageContext.request.contextPath}/pay/ready/modal">모달창 처리</a></li>
+		<li><a href="${pageContext.request.contextPath}/pay/ready/rest">REST API 처리</a></li>
 	</ul>
 	<!-- 정기결제의 경우 방식은 비슷하지만 sid토큰을 발행해주는방식이 필요함.-->
 	<!-- 컨트롤러를 분리하도록 하자. -->
 	<h2>정기결제</h2>
 	<ul>
-		<li><a href="${pageContext.request.contextPath}/payready/monthly">정기결제</a></li>
-		<li><a href="${pageContext.request.contextPath}/payready/monthlyModal">모달창 처리</a></li>
-		<li><a href="${pageContext.request.contextPath}/payready/monthlyRest">정기결제 REST API</a></li>
+		<li><a href="${pageContext.request.contextPath}/pay/ready/monthly">정기결제</a></li>
+		<li><a href="${pageContext.request.contextPath}/pay/ready/monthlyModal">모달창 처리</a></li>
+		<li><a href="${pageContext.request.contextPath}/pay/ready/monthlyRest">정기결제 REST API</a></li>
 	</ul>
 	
 </body>

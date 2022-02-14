@@ -112,6 +112,7 @@
 	border: 1px solid #e2e2ed;
 	background-color: #FFFBF5;
 	color: #000;
+	overflow: hidden;
 }
 .feed-img-area{
 	border: 0 !important;
