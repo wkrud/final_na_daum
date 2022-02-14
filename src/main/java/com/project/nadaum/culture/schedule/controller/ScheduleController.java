@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.nadaum.board.model.vo.RiotSchedule;
+import com.project.nadaum.culture.schedule.model.service.ScheduleService;
 import com.project.nadaum.culture.schedule.model.vo.Schedule;
-import com.project.nadaum.culture.show.model.service.CultureService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ScheduleController {
 	
 	@Autowired
-	private CultureService cultureService;
+	private ScheduleService scheduleService;
 	
 		//약속 insert
 			@PostMapping("/board/view/{apiCode}/schedule")
@@ -46,16 +45,16 @@ public class ScheduleController {
 				log.debug("title={}",title);
 				try{
 					
-					String schedulecode = cultureService.insertSchedule(schedule);
+					String schedulecode = scheduleService.insertSchedule(schedule);
 //					int result = cultureService.insertSchedule(map);
 					
-					log.debug("scheduleCode={}", schedulecode);
+					log.debug("schedulecode={}", schedulecode);
 					
 					if(schedulecode != null) {
 						int result  = 1;
 						log.debug("result={}", result);
 						String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";
-						map.put("scheduleCode", schedulecode);
+						map.put("schedulecode", schedulecode);
 						map.put("result", result);
 						map.put("msg", msg);
 						
@@ -76,7 +75,7 @@ public class ScheduleController {
 
 				Map<String, Object> param = new HashMap<>();
 			
-				Schedule checkresult = cultureService.selectOneboardScheduleCheck(schedulecode);
+				Schedule checkresult = scheduleService.selectOneboardScheduleCheck(schedulecode);
 				char accept = checkresult.getAccept();
 				int allDay = checkresult.getAllDay();
 				String friendnickname = checkresult.getFriendId();
@@ -96,6 +95,7 @@ public class ScheduleController {
 				return param;
 			}
 
+			
 			@PostMapping("/boardReceiveSchedule.do")
 			public ResponseEntity<?> insertReceiveSchedule(@RequestParam Map<String, Object> map ) throws ParseException {
 
@@ -118,11 +118,11 @@ public class ScheduleController {
 				try {
 						map.remove("friendid");
 						log.debug("map = {}", map);
-					 int result = cultureService.insertFinalSchedule(map);
+					 int result = scheduleService.insertFinalSchedule(map);
 					 	map.put("friendid",friendid);
 					 	map.remove("id");
 					 	log.debug("map = {}", map);
-					 int result2 = cultureService.insertFinalSecondSchedule(map);
+					 int result2 = scheduleService.insertFinalSecondSchedule(map);
 					 
 					 log.debug("result={}", result2);
 					 String msg = (result2 > 0) ? "약속수락 성공" : "약속수락 실패";
@@ -143,4 +143,5 @@ public class ScheduleController {
 				}
 
 			}
+			
 }

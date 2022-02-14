@@ -112,7 +112,7 @@ padding-left: 20px;
 	     <c:forEach var="culture" items="${list}">
 	    	<div class="col-md-4" style="padding: 15px;">
 	         <div class="card culture-card"> 
-	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">
+	            <div class="card-block" onclick="location.href=`${pageContext.request.contextPath}/culture/cultureDetail?apiCode=${culture.seq}`">
 	              <h4 class="card-title" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.title}</h4>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.area}</p>
 	              <p class="card-text p-y-1" onclick="location.href=`${pageContext.request.contextPath}/culture/board/view/${culture.seq}`">${culture.place}</p>

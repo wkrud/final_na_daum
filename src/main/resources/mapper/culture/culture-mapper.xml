@@ -103,63 +103,6 @@
 		select  count(star) from comments where api_code = #{apiCode}
 	</select>
 	
-	<insert id="insertSchedule">
-		insert 
-		into 
-			schedule 
-		values(concat('pr-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
-		 <selectKey order="AFTER" resultType="string" keyProperty="code">
-            select concat('pr-',seq_schedule_no.currval) from dual
-        </selectKey>
-	</insert>
 	
-	<select id="selectOneboardScheduleCheck" resultType="schedule">
-		select
-			*
-		from
-			schedule
-		where
-			code = #{code}
-	</select>
-	
-	<insert id="insertFinalSchedule">
-		insert into 
-			calendar 
-		values(
-			seq_calendar_no.nextval,
-			concat('pr-',seq_schedule_no.nextval),
-			'',
-			#{id},
-			#{title}, 
-			default, 
-			#{startDate},
-			#{endDate},
-			#{allDay},
-			#{textColor},
-			#{backgroundColor},
-			#{borderColor},
-			#{type}
-	)
-	</insert>
-	
-	<insert id="insertFinalSecondSchedule">
-		insert into 
-			calendar 
-		values(
-			seq_calendar_no.nextval,
-			concat('pr-',seq_schedule_no.nextval),
-			'',
-			#{friendid},
-			#{title}, 
-			default, 
-			#{startDate},
-			#{endDate}, 
-			#{allDay},
-			#{textColor},
-			#{backgroundColor},
-			#{borderColor},
-			#{type}
-	)
-	</insert>
 </mapper>
 
