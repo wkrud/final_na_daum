@@ -205,45 +205,18 @@ const addFeedPage = (id, page) => {
 
 $(".contentWrapper").scroll(function(){
 	
-	if($(".contentWrapper").width() > 1260){
-		if($(".contentWrapper").height() > 660){
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.6)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
-		}else {
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.2)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
-		}
-		
-	}else if($(".contentWrapper").width() < 1260){
-		if($(".contentWrapper").height() > 660){
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.15)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
-		}else {
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * 0.1)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
+	let wrapper = $(".contentWrapper"); // scroll이 있는 wrapper
+	let feedSection = $(".feed-section-wrap"); // wrapper 하위의 실제로 늘어나는 공간
+	if(wrapper.scrollTop() >= feedSection.height() - wrapper.height() + 110){
+		if(!loading){
+			loading = true;
+			addFeedPage('${member.id}', page++);
 		}
 	}
 });
 
 
 $chatRoom.click((e) => {
-	console.log(1);
 	var room = Math.floor(Math.random() * 100000);
 	
 	let guest = '${member.nickname}';
