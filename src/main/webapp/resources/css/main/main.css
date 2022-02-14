@@ -34,7 +34,20 @@ body {
   border-radius : 10px;
 }
 
-.add-widget {
+.clearWidgetBtn {
+	position : absolute;
+	border : none;
+	width : 70px;
+	height : 70px;
+	background : var(--yellow);
+	cursor : pointer;
+	font-size : 1.75em;
+	top : 7%;
+	left : -10%;
+	outline : none;
+}
+
+.add-widget{
 	position : absolute;
 	top : -5%;
 	left : -10%;

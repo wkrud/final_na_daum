@@ -36,9 +36,9 @@
    if (document.querySelector('.movie-widget') != null) {
 	movieWidgetInfo();
    }
-   if (document.querySelector('.memo-widget') != null) {
+   /*if (document.querySelector('.memo-widget') != null) {
 	memoWidgetInfo();
-   }
+   }*/
    if (document.querySelector('.alert-widget') != null) {
 	alertWidgetInfo();
    }
@@ -117,7 +117,7 @@ const drop = (ev) => {
 	      }
    }    
 	//메모
-   else if(widgetName == 'memo-widget') {
+/*   else if(widgetName == 'memo-widget') {
 	   if(document.querySelector('.memo-widget') == null) {
 	        insertWidget(); 
 	        //메모 자동 등록
@@ -144,7 +144,7 @@ const drop = (ev) => {
 	        return;
 	      }
      
-   } 
+   } */
    	//가계부
    else if(widgetName == 'account-widget') {
 	   if(document.querySelector('.account-widget') == null) {
@@ -247,15 +247,17 @@ const friendWidgetInfo = () => {
 			for(let i = 0; i < resp.widgetFriends.length; i++) {
 				content = `
 					<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<div class="friendProfileImg"><img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`></div>
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
+						</div>
 						<span>`+resp.widgetFriends[i].nickname+`</span>
+						</a>
 					</div>
 				`;
 				$(".friendTogetherInfo").append(content);
 				if(resp.widgetFriends[i].profile == null) {
 					
-				} else {
-					content = `<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>`
 				}
 			}
 			//팔로워
@@ -321,7 +323,7 @@ const alertWidgetInfo = () => {
 	})
 }
 
-//메모
+/*//메모
 const memoWidgetInfo = () => {
 	$.ajax({
 		url : $contextPath+"/main/userMemoList.do",
@@ -350,7 +352,7 @@ const memoWidgetInfo = () => {
 			alert("조회에 실패했습니다.");
 		}
 	});
-}
+}*/
 
 //게임
 const gameWidgetInfo = () => {
@@ -647,7 +649,7 @@ $(".clearWidgetBtn").on('click', function(){
 
 //친구 누르면 창 뜨게
 $(document).on("click", ".activeWithFriends", function() {
-	console.log("찍히냐?");
+	
 });
  
 //수입 지출 변환 함수
@@ -673,15 +675,3 @@ const timeConvert = (t) => {
     return year + "-" + month.substr(-2) + "-" + day.substr(-2);
 }
 
-
-/* 슬라이드 스크립트*/
-$(window).on('load', '.post-wrapper', function() {
-$('.post-wrapper').slick({
-  slidesToShow: 2,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 2000,
-  nextArrow:$('.next'),
-  prevArrow:$('.prev'),
-});
-});

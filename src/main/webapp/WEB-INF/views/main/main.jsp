@@ -6,14 +6,10 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:requestEncoding value="utf-8" />
-<link href='${pageContext.request.contextPath}/resources/css/main/main.css' rel='stylesheet' />
-<jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="나:다움" name="title"/>
-</jsp:include>
 <sec:authentication property="principal" var="loginMember"/>
 
 <article class="mainWrapper">
-	<section class="main box" id="dragZone" droppable="true" ondrop="drop(event)" ondragover="dragOver(event)">
+	<section class="main" id="dragZone" droppable="true" ondrop="drop(event)" ondragover="dragOver(event)">
 		<div class="add-widget">
 			<span style="--i:0;--x:-1;--y:0" class="accept-drag" id="friend-widget">
 				<i class="far fa-comments"></i>
@@ -43,7 +39,7 @@
 				<i class="far fa-play-circle"></i>
 			</span>
 		</div>
-			<button class="clearWidgetBtn"><p>위젯 삭제하기</p></button>
+			<button class="clearWidgetBtn"><i class="fas fa-trash-alt"></i></button>
 		<c:forEach items="${widgetList}" var="widget">
 			<div class="widget_form ${widget.widgetName}">
 				<button class="delWidgetBtn" onclick="delWidget(${widget.no})">삭제하기</button>
@@ -57,4 +53,3 @@
 <input type="hidden" id ="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
 <input type="hidden" id ="csrfParameterName" value="${_csrf.parameterName}"/>	
 <script src='${pageContext.request.contextPath}/resources/js/main/main.js'></script>
-<jsp:include page="/WEB-INF/views/common/footer.jsp" />
