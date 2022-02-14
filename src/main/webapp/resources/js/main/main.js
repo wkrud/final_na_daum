@@ -551,8 +551,8 @@ const movieWidgetInfo = () => {
 				let content = ""; 
 				content	= `
 				<div class="page-wrapper" style="position: relative;">
-				<div class="post-slider" style="width:95%; margin: 0px auto; 
-					position: relative; text-align: center; margin: 0;">
+				<div class="post-slider" style="width:300px; height : 360px; margin: 0px auto; 
+					position: relative; text-align: center; margin: 0; overflow : hidden;">
 					<h1 class="silder-title" style="text-align: center; margin: 0; font-size:20px !important;">Upcoming Movies</h1>
 					<a href="`+$contextPath+`/movie/movieList.do"
 						class="post-subject">+더보기</a> 
@@ -560,14 +560,14 @@ const movieWidgetInfo = () => {
 					color: gray; cursor: pointer;"></i>
 					<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
 					color: gray; cursor: pointer;"></i>
-					<div class="post-wrapper" style="width:95%; height:100%; margin: 0px auto; overflow: hidden; padding: 10px 0px 10px 0px;">
+					<div class="post-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
 					</div>
 				</div>
 				</div>
 					`
 				$(".movie-widget").append(content);
 				for(data in resp) {
-					content = `<div class="card post" style="width: 18rem;">
+					content = `<div class="card post" style="width: 500px;">
 								<img class="card-img-top slider-image"
 									src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
 									alt="Card image cap">
@@ -578,6 +578,14 @@ const movieWidgetInfo = () => {
 							</div>`
 					$(".post-wrapper").append(content);
 				}
+					$('.post-wrapper').slick({
+					  slidesToShow: 2,
+					  slidesToScroll: 1,
+					  autoplay: true,
+					  autoplaySpeed: 2000,
+					  nextArrow:$('.next'),
+					  prevArrow:$('.prev'),
+					});
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
