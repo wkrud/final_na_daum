@@ -162,14 +162,15 @@
 			album_code =#{albumCode}
 	</delete>
 	
-	 <delete id="deleteAlbumTracks">
-		<foreach collection="list" separator=";">
+	<!-- 에러 나는이유 -->
+	<!--  <delete id="deleteAlbumTracks">
+		<foreach collection="array" separator=";">
 		delete from 
 			album_track 
 		where
-			 no = #{list.no} 
-			</foreach>
-	</delete> 
+			 no = #{list} 
+		</foreach>
+	 </delete>  -->
 	
 	<!-- <delete id="deleteAlbumTracks">
 		<foreach collection="array" item="no" index="index" separator=";">

@@ -111,6 +111,10 @@
 			</div>
 		</div>
 	</div>	
+	
+	<div class="my-feed-top-wrap">
+		<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+	</div>
 
 	<!-- 게시물 상세보기 모달 -->
 	<div class="modal fade" id="feedViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -128,14 +132,21 @@ $(() => {
  	<c:if test="${check.type eq 'alarmMessage'}">
 		selectedFeed('${loginMember.id}','${check.code}');
 	</c:if>
-	console.log($(".one-feed").length);
+	$myFeedTop.hide();
 });
 
+const $myFeedTop = $(".my-feed-top-wrap i");
 const $feedArea = $(".feed-limit-area");
 const $chatRoom = $("#make-chat-room");
 const $detailBody = $(".feed-detail-modal-body");
 var loading = false;
 var page = 2;
+
+$myFeedTop.on('click',() => {
+	$(".contentWrapper").animate({
+		scrollTop:0
+	}, 400);
+});
 
 /* 페이징 id, page */
 const addFeedPage = (id, page) => {
@@ -205,45 +216,24 @@ const addFeedPage = (id, page) => {
 
 $(".contentWrapper").scroll(function(){
 	
-	if($(".contentWrapper").width() > 1260){
-		if($(".contentWrapper").height() > 660){
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.6)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
-		}else {
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.2)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
-		}
-		
-	}else if($(".contentWrapper").width() < 1260){
-		if($(".contentWrapper").height() > 660){
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * -0.15)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
-		}else {
-			if($(".contentWrapper").scrollTop() - $(".contentWrapper").height() > ($(".contentWrapper").height() * 0.1)){
-				if(!loading){
-					loading = true;
-					addFeedPage('${member.id}', page++);
-				}
-			}
+	if($(this).scrollTop() > 600){
+		$myFeedTop.fadeIn();
+	}else{
+		$myFeedTop.fadeOut();
+	}
+	
+	let wrapper = $(".contentWrapper"); // scroll이 있는 wrapper
+	let feedSection = $(".feed-section-wrap"); // wrapper 하위의 실제로 늘어나는 공간
+	if(wrapper.scrollTop() >= feedSection.height() - wrapper.height() + 110){
+		if(!loading){
+			loading = true;
+			addFeedPage('${member.id}', page++);
 		}
 	}
 });
 
-
 $chatRoom.click((e) => {
-	console.log(1);
+<c:if test="${loginMember.nickname ne member.nickname}">
 	var room = Math.floor(Math.random() * 100000);
 	
 	let guest = '${member.nickname}';
@@ -258,8 +248,8 @@ $chatRoom.click((e) => {
 		chatInvite('chat', '${loginMember.nickname}', guest, room);
 		windowObjHistorySearch = window.open(url, name, spec);	
 	}
+</c:if>
 });
-
 
 let $hidden = $(".hidden-likes-comment");
 
