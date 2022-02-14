@@ -242,7 +242,7 @@ const friendWidgetInfo = () => {
 			for(let i = 0; i < resp.widgetFriends.length; i++) {
 				content = `
 					<div class="activeWithFriends">
-					<img style = "width : 100px; height : 100px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
+					<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
 					<span>`+resp.widgetFriends[i].nickname+`</span>
 					</div>
 				`;
@@ -252,7 +252,7 @@ const friendWidgetInfo = () => {
 			for(let i = 0; i < resp.widgetFollowers.length; i++) {
 				content = `
 					<div class="activeWithFriends">
-					<img style = "width : 100px; height : 100px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>
+					<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>
 					<span>`+resp.widgetFollowers[i].nickname+`</span>
 					</div>
 				`;
