@@ -240,7 +240,7 @@ const selectedFeed = (id, code) => {
 					alert('내용을 입력하세요');
 				}else{
 					writeComment($content.val(), resp.feed.code, resp.feed.writer);
-					$content.val('');										
+					$content.val('');
 				}
 			});		
 			
@@ -355,11 +355,12 @@ const writeComment = (content, code, id) => {
 				let val = $(e.target).parent().find('input').val();
 				deleteComment(val, resp.commentWriter, resp.fcode);
 			});	
-			
-			let content = `<a href='/nadaum/feed/socialFeed.do?id=${id}&code=${resp.fcode}&type=alarmMessage'>${resp.nickname}님이 회원님의 피드에 댓글을 작성했습니다.</a>`;
-			let ranNo = Math.floor(Math.random() * 10000);
-			let alarmCode = 'fcomment-' + resp.no + ranNo;
-			sendAndInsertAlarm('I',id, alarmCode, content);
+			if(id != resp.commentWriter){
+				let content = `<a href='/nadaum/feed/socialFeed.do?id=${id}&code=${resp.fcode}&type=alarmMessage'>${resp.nickname}님이 회원님의 피드에 댓글을 작성했습니다.</a>`;
+				let ranNo = Math.floor(Math.random() * 10000);
+				let alarmCode = 'fcomment-' + resp.no + ranNo;
+				sendAndInsertAlarm('I',id, alarmCode, content);
+			}
 			
 		},
 		error: console.log
