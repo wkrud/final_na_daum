@@ -357,13 +357,33 @@ const gameWidgetInfo = () => {
 		console.log(resp);
 		let content = "";
 			if(resp.widgetinfo == null) {
+				if(resp.widgetnullcheck == null) {					
 				content = `
-				<div>
-					<p>아직 즐겨찾기를 누른 롤 유저가 없어요 :(<br/>지금 마음에 드는 유저를 즐겨찾기 해 보는 건 어떨까요?</p>
-					<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riotheader.do">LOL 유저 검색하러 가기</a><span style="color : rgb(238, 210, 88);"> <i class="fas fa-star"></i></span></p>
-				</div>
-				`
-				$(".game-widget").append(content);
+					<div>
+						<p>아직 즐겨찾기한 롤 유저가 없어요 :(<br/>지금 마음에 드는 유저를 즐겨찾기 해 보는 건 어떨까요?</p>
+						<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riotheader.do">LOL 유저 검색하러 가기</a><span style="color : rgb(238, 210, 88);"> <i class="fas fa-star"></i></span></p>
+					</div>
+					`
+					$(".game-widget").append(content);
+				} else {
+					content = `
+					<div style="width : 450px; height: 160px; padding : 10px; box-sizing : border-box;">
+					    <div style="text-align: center; font-size : 20px;">
+					    	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetnullcheck.name+`"><h4>`+resp.widgetnullcheck.name+`</h4></a>
+					    </div>
+					    <div style="display: inline-flex;"><img src="`+$contextPath+`/resources/images/riot/unranked.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;"></div>
+					    <div style="display: inline-flex; position: relative; bottom : 40px; left : 10px;">
+					      <p>즐겨찾기한 유저의 랭크 정보가 존재하지 않아요 :(<br>지금 친구와 함께 즐거운 게임 한 판 어떨까요?</p>
+					    </div>
+					    <div style="text-align: center; position : relative; bottom : 40px;">
+					      <span>
+					        <a style="text-decoration : none;" href="`+$contextPath+`/board/boardList.do">친구와 약속 잡기</a>
+					      </span>
+					    </div>
+					  </div>
+					`
+					$(".game-widget").append(content);
+				}
 			} else {
 				content = `
 				<div style="width : 320px; height: 140px; padding : 15px;">
@@ -371,7 +391,7 @@ const gameWidgetInfo = () => {
 			    	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetinfo.name+`"><h4>`+resp.widgetinfo.name+`</h4></a>
 			    </div>
 			    <div>
-			    <div style="display: inline-flex;" class="lolLankImg"></div>
+			    <div style="display: inline-flex;" class="lolLankImg"><img src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;"></div>
 			    <div style="display: inline-flex; position: relative; bottom : 40px; left : 10px;">
 			      <table style="text-align: center; font-size : 18px;">
 			          <tr>
@@ -387,15 +407,6 @@ const gameWidgetInfo = () => {
 			    </div>
 			  </div>
 				`
-				$(".game-widget").append(content);
-				if(resp.widgetinfo.rank == null) {
-					content = `
-					<img src="`+$contextPath+`/resources/images/riot/unranked.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;">`
-				} else {
-					content = `
-					<img src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;">`
-				}
-				$(".lolLankImg").append(content);
 			}
 	 	}, 
 	 	error(xhr, testStatus, err) {
@@ -405,45 +416,6 @@ const gameWidgetInfo = () => {
 	});
 }
 
-//투두리스트
-const todoListWidgetInfo = () => {
-	$.ajax({
-		url : $contextPath+"/main/userTodoList.do",
-		method : 'GET',
-	 	contentType : "application/json; charset=UTF-8",
-	 	dataType : "json",
-	 	success(resp) {
-	 		console.log(resp);
-	 		console.log(resp.length);
-	 		console.log(resp[0].title);
-	 		let content = "";
-	 		content = `
-	 			<div>
-	 				<p>투두리스트 제목 : `+resp[0].title+`</p>
-	 				<p>등록일 : `+timeConvert(resp[0].regDate)+`</p>
-	 				<ul class="todoListContent">
-	 				<ul>
-	 			</div>
-	 		`
-	 		$(".todo-widget").append(content);
-	 		for(data in resp) {
-				content = `
-					<li> 
-						<input type="checkbox" name="finish" id="doing" />
-						<label for="doing">
-						<p>`+resp[data].content+`</p>	
-						</label>
-					</li>
-				`
-				$(".todoListContent").append(content);
-			}
-	 	}, 
-	 	error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
-	});
-}
 
 //가계부
 const accountbookWidgetInfo = () => {
@@ -537,10 +509,10 @@ const audiobookWidgetInfo = () => {
 			console.log(resp);
 			console.log(resp.imgLink);
 				let content = `
-				<div style="width : 380px; height : 120px; padding : 10px; box-sizing: border-box;">
+				<div style="width : 360px; height : 120px; padding : 10px; box-sizing: border-box;">
 				    
 				    <div style="display: inline-flex;">
-				      <div style="margin : 0px 30px"><img src="`+$contextPath+``+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
+				      <div style="margin : 0px 20px"><img src="`+$contextPath+``+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
 				      <div>
 				        <span style="font-size: 20px; display: block;">`+resp.albumInfo.title+`</span>
 				        <span style="color : gray;">`+resp.albumInfo.creator+`</span>
