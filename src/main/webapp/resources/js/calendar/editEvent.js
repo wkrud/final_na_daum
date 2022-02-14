@@ -87,7 +87,7 @@ var editEvent = function (event, element, view) {
 	        title : event.title,
 	        startDate : event.start,
 	        endDate : event.end,
-	        type : event.type, 
+	        type : 'schedule', 
 	        backgroundColor : event.backgroundColor,
 	        content : event.description,
 			no : event.id
@@ -104,7 +104,7 @@ var editEvent = function (event, element, view) {
 			contentType: "application/json",
             data: JSON.stringify(calendarDetail),
             success: function (response) {
-				alert("수정했습니다.");
+				console.log("캘린더 수정");
             },
 			error: function(response){
 				console.log("캘린더 수정 실패");
