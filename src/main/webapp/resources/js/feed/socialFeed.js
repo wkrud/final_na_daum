@@ -13,6 +13,8 @@ const selectedFeed = (id, code) => {
 			let commentDate = '';
 			let likes = '';		
 			let dmDiv = '';
+			let d = new Date(resp.feed.regDate);
+			let reg = `${d.getFullYear()}.${(d.getMonth() + 1)}.${(d.getDate())}`;
 			
 			
 			if(resp.likeCheck > 0){
@@ -65,7 +67,7 @@ const selectedFeed = (id, code) => {
 							<div class="feed-profile-wrap">
 								${dmDiv}
 								<div class="feed-host-nickname">
-									<span>${resp.member.nickname}</span>
+									<span>${resp.member.nickname}</span><span style="font-size:.8rem; color: gray;"> ${reg}</span>
 								</div>
 							</div>							
 						</div>
@@ -107,7 +109,7 @@ const selectedFeed = (id, code) => {
 							<div class="feed-profile-wrap">
 								${dmDiv}
 								<div class="feed-host-nickname">
-									<span>${resp.member.nickname}</span>
+									<span>${resp.member.nickname}</span><span style="font-size:.8rem; color: gray;"> ${reg}</span>
 								</div>
 							</div>							
 						</div>						
