@@ -37,6 +37,8 @@ public class GetMovieApi {
 	@Autowired
 	private CommentService commentService;
 	
+	final static String SERVICEKEY = "5640ea577618caa1d5cefe4b2fea1683";
+	
 	//영화API
 		@GetMapping("/movieList.do")
 		public ModelAndView getMovieApi(Model model) {
@@ -45,10 +47,9 @@ public class GetMovieApi {
 		
 	        try {
 	            // 인증키
-	            String serviceKey = "5640ea577618caa1d5cefe4b2fea1683";
 	            
 	            String urlStr = "https://api.themoviedb.org/3/movie/upcoming";
-	            urlStr += "?"+ URLEncoder.encode("api_key","UTF-8") +"=" + serviceKey;
+	            urlStr += "?"+ URLEncoder.encode("api_key","UTF-8") +"=" + SERVICEKEY;
 	            urlStr += "&"+ URLEncoder.encode("language","UTF-8") +"=ko-kr";
 	            urlStr += "&"+ URLEncoder.encode("page","UTF-8") +"=1";
 //	            urlStr += "&"+ URLEncoder.encode("year","UTF-8") +"=2019";

@@ -51,16 +51,7 @@
 	</update>
 	<!-- 영화 댓글 -->
 	<select id="selectMovieCommentList" resultType="comment">
-		select
-			*
-		from
-			comments c
-				join member m
-				on c.id = m.id
-		where
-			api_code = #{apiCode}
-		order by 
-		    c.reg_date desc
+		select * from comments c join member m on c.id = m.id where api_code = #{apiCode} order by c.reg_date desc
 	</select>
 	
 	<select  id="selectOneComment" resultMap="CommentMap">

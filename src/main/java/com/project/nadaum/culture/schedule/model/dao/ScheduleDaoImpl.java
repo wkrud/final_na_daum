@@ -37,4 +37,24 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		return session.insert("schedule.insertFinalSecondSchedule", map);
 	}
 
+	@Override
+	public int insertMovieSchedule(Schedule schedule) {
+		return session.insert("schedule.insertMovieSchedule", schedule);
+	}
+
+	@Override
+	public Schedule selectOneSchedule(String schedulecode) {
+		return session.selectOne("schedule.selectOneSchedule", schedulecode);
+	}
+
+	@Override
+	public int insertCalendarMovie(Map<String, Object> map) {
+		return session.insert("schedule.insertCalendarMovie",map);
+	}
+
+	@Override
+	public int insertCalendarMovieFriend(Map<String, Object> map) {
+		return session.insert("schedule.insertCalendarMovieFriend",map);
+	}
+
 }

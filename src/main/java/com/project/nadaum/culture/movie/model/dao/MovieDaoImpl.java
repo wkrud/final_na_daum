@@ -3,12 +3,12 @@ package com.project.nadaum.culture.movie.model.dao;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.project.nadaum.culture.movie.model.vo.Movie;
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
+import com.project.nadaum.culture.show.model.vo.Scrap;
 
 
 @Repository
@@ -32,6 +32,11 @@ public class MovieDaoImpl implements MovieDao {
 		return session.delete("movie.deleteScrap", param);
 	}
 
+	@Override
+	public List<Scrap> selectMovieScrap(String id) {
+		return session.selectList("movie.selectMovieScrap", id);
+	}
+	
 	@Override
 	public double avgRating(String apiCode) {
 		return session.selectOne("movie.avgRating", apiCode);
@@ -72,35 +77,42 @@ public class MovieDaoImpl implements MovieDao {
 		return session.selectOne("movie.totalStarCount", apiCode);
 	}
 
+	@Override
+	public int insertSchedule(Schedule movieSchedule) {
+		return session.insert("movie.insertSchedule", movieSchedule);
+	}
+
 
 //	@Override
-//	public List<Movie> selectMovieList() {
-//		return session.selectList("movie.selectMovieList");
+//	public Map<String, Object> selectOneSchedule(String code) {
+//		return session.selectOne("movie.selectOneSchedule", code);
 //	}
 
-//	@Override
-//	public Movie selectOneMovie(String code) {
-//		return session.selectOne("movie.selectOneMovie", code);
-//	}
+	@Override
+	public Schedule selectOneSchedule(String schedulecode) {
+		return session.selectOne("movie.selectOneSchedule", schedulecode);
+	}
 
-//	@Override
-//	public List<Movie> selectMovieList(Map<String, Object> param) {
-//		int offset = (int) param.get("offset");
-//		int limit = (int) param.get("limit");
-//		RowBounds rowBounds = new RowBounds(offset, limit);
-//		return session.selectList("board.selectMovieList", null, rowBounds);
-//	}
+	@Override
+	public int insertCalendarMovie(Map<String, Object> map) {
+		return session.insert("movie.insertCalendarMovie", map);
+	}
+
+	@Override
+	public int updateAccept(String code) {
+		return session.update("movie.updateAccept",code);
+	}
+
+	@Override
+	public int insertCalendarMovieFriend(Map<String, Object> map) {
+		return session.insert("insertCalendarMovieFriend", map);
+	}
+
 	
 	
-//	@Override
-//	public int selectTotalContent() {
-//		return session.selectOne("movie.selectTotalContent");
-//	}
 
-//	@Override
-//	public Movie selectOneMovieCollection(String code) {
-//		return session.selectOne("movie.selectOneMovieCollection", code);
-//	}
+
+
 
 	
 
