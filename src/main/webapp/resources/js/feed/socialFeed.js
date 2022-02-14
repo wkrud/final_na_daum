@@ -224,7 +224,7 @@ const selectedFeed = (id, code) => {
 				location.href=`/nadaum/feed/socialFeed.do?id=${resp.feed.writer}`;
 			});*/
 			
-			likeHtml(resp.feed.code, resp.feed.writer, resp.guest.nickname);			
+			likeHtml(resp.feed.code, resp.feed.writer, resp.guest.nickname, resp.guest.id);			
 			
 			$(".feed-textarea").on('keyup',function(e){
 				if($(".feed-textarea").val() != '' && $(".feed-textarea").val() != '\n'){
@@ -368,7 +368,7 @@ const writeComment = (content, code, id) => {
 };
 
 
-const likeHtml = (code, writer, guestNickname) => {
+const likeHtml = (code, writer, guestNickname, guestId) => {
 	$("#like").on('change',function(){
 	
 		console.log('hi');
@@ -382,10 +382,11 @@ const likeHtml = (code, writer, guestNickname) => {
 			check = '1';
 			$("label[for='like']").html('좋아요<i class="fas fa-heart"></i>');
 			$("#like").prop("checked", true);
-			let i = $(".likes-count").val();
 			
-			content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>${guestNickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
-			sendAndInsertAlarm('I',writer,alarmCode,content);
+			if(writer != guestId){
+				content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>${guestNickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
+				sendAndInsertAlarm('I',writer,alarmCode,content);				
+			}
 		}else {
 			console.log($("#like").is(':checked'));
 			check = '0';
