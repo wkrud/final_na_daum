@@ -638,7 +638,7 @@ div#board-container label.custom-file-label {
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 						<button type="submit" class="btn btn-primary schedule-btn">추가</button>
-						<button type="submit" class="btn btn-primary add-calendar-btn">캘린더 추가</button>
+						
 					</div>
 				</div>
 				<!-- 모달 내용 끌 -->
@@ -891,18 +891,6 @@ $(promiseFrm).submit((e) => {
 			});
 });
 
-$(."add-calendar-btn").click((e) => {
-	e.preventDefault();
-	
-	
-	
-	const csrfHeader = "${_csrf.headerName}";
-    const csrfToken = "${_csrf.token}";
-    const headers = {};
-    headers[csrfHeader] = csrfToken;
-    
-	
-})
 </script>
 
 <jsp:include page="/WEB-INF/views/common/movieScheduleDetail.jsp"></jsp:include>
