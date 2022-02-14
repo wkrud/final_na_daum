@@ -39,20 +39,18 @@
                 <li><a tabindex="-1" href="#" data-role="close">Close</a></li>
             </ul>
         </div>
-
         <div id="wrapper">
             <div id="loading"></div>
             <div id="calendar"></div>
         </div>
-
         <!-- 일정 추가 MODAL -->
         <div class="modal fade" tabindex="-1" role="dialog" id="eventModal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h4 class="modal-title"></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title"></h4>
                     </div>
                     <div class="modal-body">
 
@@ -69,7 +67,7 @@
                                 <input class="inputModal" type="text" name="edit-title" id="edit-title"
                                     required="required" />
                             </div>
-                        </div>
+                        </div> 
                         <div class="row">
                             <div class="col-xs-12">
                                 <label class="col-xs-4" for="edit-start">시작</label>
@@ -82,7 +80,7 @@
                                 <input class="inputModal" type="text" name="edit-end" id="edit-end" />
                             </div>
                         </div>
-                        <div class="row">
+                       <!--  <div class="row">
                             <div class="col-xs-12">
                                 <label class="col-xs-4" for="edit-type">구분</label>
                                 <select class="inputModal" type="text" name="edit-type" id="edit-type">
@@ -94,7 +92,7 @@
                                     <option value="lol">롤</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="col-xs-12">
                                 <label class="col-xs-4" for="edit-color">색상</label>
@@ -131,15 +129,11 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
         <div class="panel panel-default">
-
             <div class="panel-heading">
                 <h3 class="panel-title">필터</h3>
             </div>
-
             <div class="panel-body">
-
                 <div class="col-lg-6">
                     <label for="calendar_view">구분별</label>
                     <div class="input-group">
@@ -153,23 +147,6 @@
                         </select>
                     </div>
                 </div>
-
-                <!-- <div class="col-lg-6">
-                    <label for="calendar_view">등록자별</label>
-                    <div class="input-group">
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="정연"
-                                checked>정연</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="다현"
-                                checked>다현</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="사나"
-                                checked>사나</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="나연"
-                                checked>나연</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="지효"
-                                checked>지효</label>
-                    </div>
-                </div> -->
-
             </div>
         </div>
         <!-- /.filter panel -->
