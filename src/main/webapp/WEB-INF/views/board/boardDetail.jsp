@@ -834,7 +834,7 @@ $(".btn-reply").click((e) => {
 						}
 					},
 					error : console.log
-				})
+				});
 			}
 			
 		},
