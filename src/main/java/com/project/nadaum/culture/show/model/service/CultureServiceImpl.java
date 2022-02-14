@@ -93,32 +93,7 @@ public class CultureServiceImpl implements CultureService {
 		return cultureDao.selectCultureWidget(id);
 	}
 
-	@Override
-	public String insertSchedule(Schedule schedule) {
-		int result = cultureDao.insertSchedule(schedule);
-		log.debug("code={}", schedule.getCode());
-		String scheduleCode = schedule.getCode();
-		return scheduleCode;
-	}
 
-	@Override
-	public Schedule selectOneboardScheduleCheck(String schedulecode) {
-		return cultureDao.selectOneBoardScheduleCheck(schedulecode);
-	}
-
-	@Override
-	public int insertFinalSchedule(Map<String, Object> map) {
-		return cultureDao.insertFinalSchedule(map);
-	}
-
-	@Override
-	public int insertFinalSecondSchedule(Map<String, Object> map) {
-		return cultureDao.insertFinalSecondSchedule(map);
-	}
-	
-
-
-	
 
 
 

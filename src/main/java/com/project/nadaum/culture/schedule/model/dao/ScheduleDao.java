@@ -1,5 +1,16 @@
 package com.project.nadaum.culture.schedule.model.dao;
 
-public interface ScheduleDao {
+import java.util.Map;
 
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
+
+public interface ScheduleDao {
+	//=========================================
+	int insertSchedule(Schedule schedule);
+
+	Schedule selectOneBoardScheduleCheck(String schedulecode);
+
+	int insertFinalSchedule(Map<String, Object> map);
+
+	int insertFinalSecondSchedule(Map<String, Object> map);
 }
