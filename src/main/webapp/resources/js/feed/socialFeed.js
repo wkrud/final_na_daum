@@ -227,7 +227,7 @@ const selectedFeed = (id, code) => {
 			likeHtml(resp.feed.code, resp.feed.writer, resp.guest.nickname);			
 			
 			$(".feed-textarea").on('keyup',function(e){
-				if($(".feed-textarea").val() != ''){
+				if($(".feed-textarea").val() != '' && $(".feed-textarea").val() != '\n'){
 					if(e.key === 'Enter' || e.keyCode === 13){
 						$("#write-comment-btn").trigger('click');
 					}
