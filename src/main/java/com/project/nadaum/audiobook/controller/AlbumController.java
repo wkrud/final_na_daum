@@ -91,7 +91,7 @@ public class AlbumController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			AlbumInfo albumInfo = albumService.selectWidgetAlbumInfo(map);
-			String imgLink = application.getRealPath("/resources/upload/audiobook/")
+			String imgLink = "/resources/upload/audiobook/img/"
 							+ albumService.selectListAlbumImg(albumInfo.getCode()).get(0).getRenamedFilename();
 			map.put("albumInfo", albumInfo);// albumInfo.title, albumInfo.kind...
 			map.put("imgLink", imgLink); //이미지 표시하시면 img src에 붙여 쓰시면됩니다.
@@ -295,7 +295,8 @@ public class AlbumController {
 	}
 
 	@PostMapping("/album/enroll")
-	public String albumEnroll(Album album, 
+	public String albumEnroll(@AuthenticationPrincipal Member member,
+			Album album, 
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles, 
 			ModelMap model, RedirectAttributes redirectAttr)
@@ -390,7 +391,8 @@ public class AlbumController {
 	}
 	
 	@PostMapping("/album/update")
-	public String albumUpdate(Album album,ModelMap model,
+	public String albumUpdate(@AuthenticationPrincipal Member member,
+			Album album,ModelMap model,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles,
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "trkOriginalFileName", defaultValue="") String[] trkOriginalFileNames,
@@ -574,7 +576,7 @@ public class AlbumController {
 	
 
 	@PostMapping("/album/updateTest")
-	public String albumUpdateTest(Album album, ModelMap model, 
+	public String albumUpdateTest(@AuthenticationPrincipal Member member,Album album, ModelMap model, 
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles, 
 			@RequestParam(name = "trkOriginalFileName") String[] trkOriginalFileNames,
