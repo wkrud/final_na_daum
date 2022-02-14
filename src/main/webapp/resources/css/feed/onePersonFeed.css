@@ -124,6 +124,18 @@
 	margin-right: 10px;
 }
 
+/* top 버튼 */
+.my-feed-top-wrap{
+	position: fixed;
+	right: 60px;
+	bottom: 70px;
+	z-index: 100;
+	font-size: 2rem;
+}
+.my-feed-top-wrap i{
+	cursor: pointer;
+}
+
 
 /* 피드 상세보기 모달 */
 .modal-dialog{

@@ -40,13 +40,6 @@ public interface CultureService {
 	List<Scrap> selectCultureWidget(String id);
 
 
-	//============================================
-	String insertSchedule(Schedule schedule);
-	
-	Schedule selectOneboardScheduleCheck(String schedulecode);
-	
-	int insertFinalSchedule(Map<String, Object> map);
-	
-	int insertFinalSecondSchedule(Map<String, Object> map);
+
 	
 }

@@ -34,12 +34,5 @@ public interface CultureDao {
 
 	List<Scrap> selectCultureWidget(String id);
 
-	//=========================================
-	int insertSchedule(Schedule schedule);
 
-	Schedule selectOneBoardScheduleCheck(String schedulecode);
-
-	int insertFinalSchedule(Map<String, Object> map);
-
-	int insertFinalSecondSchedule(Map<String, Object> map);
 }

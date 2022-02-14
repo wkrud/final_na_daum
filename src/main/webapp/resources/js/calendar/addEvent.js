@@ -43,7 +43,7 @@ var newEvent = function (start, end, eventType) {
 			start : editStart.val(),
 			end : editEnd.val(),
 			description : editDesc.val(),
-			type : editType.val(),
+			type : 'schedule',
 			username : '',
 			backgroundColor : editColor.val(),
 			textColor : '#ffffff',
@@ -103,6 +103,7 @@ var newEvent = function (start, end, eventType) {
                 //DB연동시 중복이벤트 방지
                 $('#calendar').fullCalendar('removeEvents');
                 $('#calendar').fullCalendar('refetchEvents');
+				document.location.reload(true);
             },
 			error: function(response){
 				console.log("캘린더 등록 실패");

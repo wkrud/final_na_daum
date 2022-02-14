@@ -104,6 +104,7 @@
     width: 200px;
 }
 .commentBtn{cursor: pointer;}
+
 </style>
 
 <script>
@@ -273,31 +274,17 @@ const $detailBody = $(".feed-detail-modal-body");
 var loading = false;
 var page = 1;
 
-//웹브라우저의 창을 스크롤 할 때 마다 호출되는 함수 등록
-$(window).on("scroll",function(){
-    //위로 스크롤된 길이
-    let scrollTop = $(window).scrollTop();
-    //웹브라우저의 창의 높이
-    let windowHeight = $(window).height();
-    //문서 전체의 높이
-    let documentHeight = $(document).height();
-    //바닥까지 스크롤 되었는 지 여부를 알아낸다.
-    let isBottom=scrollTop+windowHeight + 100 >= documentHeight;
-
-    if(isBottom){
-        //만일 현재 마지막 페이지라면
-        if(page == ${totalPageCount} || loading){
-            return; //함수를 여기서 끝낸다.
+$(".contentWrapper").scroll(function(){
+    
+    let wrapper = $(".contentWrapper"); // scroll이 있는 wrapper
+    let feedSection = $("#mainArticle"); // wrapper 하위의 실제로 늘어나는 공간
+    if(wrapper.scrollTop() >= feedSection.height() - wrapper.height() + 110){
+        if(!loading){
+            loading = true;
+            addFeedPageMain(page++);
         }
-
-        loading = true;
-        page++;
-        console.log("scroll" + page);
-        
-        addFeedPageMain(page);
-    }; 
+    }
 });
-
 
 /* 페이징 id, page */
 const addFeedPageMain = (page) => {
@@ -442,10 +429,15 @@ const addFeedPageMain = (page) => {
 };
 
 function likeCheck(e){
-	/* $(".heart-click").on("click",function(){ */
-	    // idx로 전달받아 저장
 	    let code = $(e).attr('idx');
-	    /* let id = ${loginMember.id}; */
+		let writer = '';
+		
+		if($(e.target).attr('class') != 'feedBodyBtn'){
+			writer = $(e).parent().parent().parent().find("input.id").val();
+		}else{
+			writer = $(e).find("input.id").val();
+		}
+		console.log(writer + " " + code);
 	    console.log("heart-click");
 
 	    // 빈하트를 눌렀을때
@@ -472,9 +464,8 @@ function likeCheck(e){
 	                let ranNo = Math.floor(Math.random() * 10000);
 	    			let alarmCode = 'fe-' + ranNo;
 	    			let content = '';
-	    			let writer = $(".writer").val();
 	    			let nickname = $(".nickname").val();
-	    	        content = `<a href='/nadaum/feed/socialFeed.do?id=${writer}&code=${code}&type=alarmMessage'>\${nickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
+	    	        content = `<a href='/nadaum/feed/socialFeed.do?id=\${writer}&code=\${code}&type=alarmMessage'>\${nickname}님이 회원님의 피드에 좋아요를 눌렀습니다.</a>`;
 	    	        sendAndInsertAlarm('I',writer,alarmCode,content);
 	                console.log("하트추가 성공");
 	            },
@@ -522,24 +513,6 @@ function likeCheck(e){
 	    }
 
 	};
-
-/* const feedMainLikeCheck = (e) => {
-let code = '';
-let writer = '';
-let guestNickname = ${loginMember.id};
-
-	if($(e.target).attr('class') != 'feedBodyBtn'){
-		code = $(e.target).parent().parent().find("input.code").val();
-		writer = $(e.target).parent().parent().parent().find("input.id").val();
-	}else{
-		code = $(e.target).find("input.code").val();
-		writer = $(e.target).find("input.id").val();
-	}
-	
-	feedMainLikeSave(code, writer, guestNickname);
-	console.log(code, writer, guestNickname);
-}  */
-
 
 
 // 피드모달
