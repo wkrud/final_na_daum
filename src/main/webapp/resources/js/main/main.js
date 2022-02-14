@@ -230,30 +230,40 @@ const friendWidgetInfo = () => {
 		contentType : "application/json; charset=UTF-8",
 	 	dataType : "json",
 		success(resp) {
+			console.log(resp);
 			let content = "";
 			content = `
-				<div class="friendTogetherInfo">
+			<div style="display : flex; text-align : center; width : 200px;">
+				<div class="friendTogetherInfo" style="margin : 0px 30px;">
+					<p style="border-bottom : 1px solid gray; margin : 10px auto;">친구</p>
 				</div>
 				<div class="friendStraightInfo">
+					<p style="border-bottom : 1px solid gray; margin : 10px auto;">팔로워</p>
 				</div>
+			</div>
 			`
 			$(".friend-widget").append(content);
 			//맞팔
 			for(let i = 0; i < resp.widgetFriends.length; i++) {
 				content = `
-					<div class="activeWithFriends">
-					<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
-					<span>`+resp.widgetFriends[i].nickname+`</span>
+					<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<div class="friendProfileImg"><img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`></div>
+						<span>`+resp.widgetFriends[i].nickname+`</span>
 					</div>
 				`;
 				$(".friendTogetherInfo").append(content);
+				if(resp.widgetFriends[i].profile == null) {
+					
+				} else {
+					content = `<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>`
+				}
 			}
 			//팔로워
 			for(let i = 0; i < resp.widgetFollowers.length; i++) {
 				content = `
-					<div class="activeWithFriends">
-					<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>
-					<span>`+resp.widgetFollowers[i].nickname+`</span>
+					<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<div class="friendProfileImg"><img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`></div>
+						<span>`+resp.widgetFollowers[i].nickname+`</span>
 					</div>
 				`;
 				$(".friendStraightInfo").append(content);
@@ -470,17 +480,51 @@ const cultureWidgetInfo = () => {
      	headers : headers,
      	success(resp) {
 			console.log(resp);
-			let content = "";
-			for(data in resp) {
-				content = `
-					<div style="text-align : center; display:inline-block;">
-						<img style="width : 300px; height : 400px"src=`+resp[data].imgUrl+`>
-						<p>`+resp[data].title+`</p>
-						<p>전시 기간 : `+resp[data].startDate+`~`+resp[data].endDate+`</p>
+				let content = "";
+				if(resp.length == 0) {
+					content = `
+					<div>
+						<p>스크랩한 전시가 없어요 :(<br/>지금 나:다움과 함께 전시회 나들이 어떠세요?</p>
+						<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/culture/board/1">문화생활 즐기기</a><span style="color : rgb(238, 210, 88);"> <i class="fas fa-star"></i></span></p>
 					</div>
-				`
-				$(".culture-widget").append(content);
-			}
+					`
+					$(".culture-widget").append(content);
+				} else {
+					content	= `
+					<div class="page-wrapper" style="position: relative;">
+					<div class="post-slider" style="width:300px; height : 360px; margin: 0px auto; 
+						position: relative; text-align: center; margin: 0; overflow : hidden;">
+						<h1 class="slider-title" style="text-align: center; margin: 0; font-size:20px !important;">CultureScrap</h1>
+						<a href="`+$contextPath+`/culture/board/1"
+							class="post-subject">+더보기</a> 
+						<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+						color: gray; cursor: pointer;"></i>
+						<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+						color: gray; cursor: pointer;"></i>
+						<div class="culture-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
+						</div>
+					</div>
+					</div>
+						`
+					$(".culture-widget").append(content);
+					for(data in resp) {
+						content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+									<img style = "width : 120px; height : 180px;"class="card-img-top slider-image"
+										src="`+resp[data].imgUrl+`"
+										alt="Card image cap">
+									<p class="card-text widget-movie-title">`+resp[data].title+`</p>
+								</div>`
+						$(".culture-wrapper").append(content);
+					}
+						$('.culture-wrapper').slick({
+						  slidesToShow: 2,
+						  slidesToScroll: 1,
+						  autoplay: true,
+						  autoplaySpeed: 2000,
+						  nextArrow:$('.next'),
+						  prevArrow:$('.prev'),
+						});
+					}
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
@@ -567,8 +611,8 @@ const movieWidgetInfo = () => {
 					`
 				$(".movie-widget").append(content);
 				for(data in resp) {
-					content = `<div class="card post" style="width: 500px;">
-								<img class="card-img-top slider-image"
+					content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+								<img class="card-img-top slider-image" stlye="width : 120px; height : 180px;"
 									src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
 									alt="Card image cap">
 								<div class="card-body post-info">
