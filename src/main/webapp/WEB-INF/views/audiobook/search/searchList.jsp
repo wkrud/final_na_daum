@@ -96,7 +96,8 @@ img {
 			<select name="searchType" class="form-select" required>
 				<option value="">검색타입</option>
 				<!-- required여부를 판단할 value="" 반드시 있어야함.-->
-				<option value="kind" <c:if test="${'emp_id' eq param.searchType}">selected</c:if>>장르</option>
+				<option value="title" ${'title' eq param.searchType? "selected" : ""}>타이틀</option>
+				<option value="kind" ${'kind' eq param.searchType? "selected" : ""}>장르</option>
 				<option value="creator" ${'creator' eq param.searchType? "selected" : ""}>크리에이터</option>
 				<option value="provider" ${'provider' eq param.searchType? "selected" : ""}>제공자</option>
 				<option value="content" ${'content' eq param.searchType? "selected" : ""}>컨텐츠</option>
