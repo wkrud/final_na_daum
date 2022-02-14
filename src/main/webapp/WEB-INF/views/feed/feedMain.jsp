@@ -8,10 +8,10 @@
 <fmt:requestEncoding value="utf-8" />
 <link href='${pageContext.request.contextPath}/resources/css/main/main.css' rel='stylesheet' />
 <script src="${pageContext.request.contextPath}/resources/js/feed/socialFeed.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeed.css" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 feed" name="title"/>
 </jsp:include>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeedMain.css" />
 <sec:authentication property="principal" var="loginMember"/>
 <style>
 
@@ -24,7 +24,7 @@
 }
 .userPic{padding-right: 8px;}
 .feedPic img {
-	width: 650px;
+	width: 637px;
 }
 #mainArticle{
 	display: flex;
@@ -38,31 +38,41 @@
     padding-top: 20px;
 }
 .feedItem {
-	padding: 10px;
+    padding: 10px;
     border: solid 1px;
     width: 660px;
     margin: 12px;
+    border-radius: 2px;
+    background-color: #a2bffe4f;
+    color: #4c536c;
 }
 .writeFeed{
 	width: 660px;
     border: solid 1px;
+    background-color: #e2e8f8;
+    color: #4c536c;
+    border-radius: 2px;
 }
-.writeFeedHeader{   
-	display: flex;
+.writeFeedHeader {
+    display: flex;
     align-items: baseline;
     justify-content: space-between;
     margin: 8px;
+    font-size: 20px;
+    margin-left: 17px;
+    margin-top: 13px;
 }
 .writeFeedBody{
 	display: flex;
-    padding: 6 6 0 6px;
+    padding: 6 6 0 8px;
+    margin-left: 5px
 }
 .feedHeader{    
 	display: flex;
     justify-content: space-between;
     padding-bottom: 8px;
 }
-.user {display: flex;} 
+.user { display: flex;} 
 .feedBodyBtn{
 	display: flex;
     flex-direction: row;
@@ -86,11 +96,11 @@
     overflow: auto;
     margin-left: 5px;
 }
-/* #feedWriteImgInput{display: none;} */
-.btnSet{    
-	display: flex;
+.btnSet {
+    display: flex;
     justify-content: space-between;
-    margin: 5px 10 5px 10px;
+    margin: 3px 18px 5px 15px;
+    align-items: center;
 }
 .feedWriteBtn{cursor: pointer;}
 .feedWriteImgInputBtn{cursor: pointer;}
@@ -99,12 +109,61 @@
     flex-direction: column;
 }
 /* 첨부파일 */
+
+#preview{margin-left: 5px;}
 #preview-image{
 	margin: 9px;
     width: 200px;
 }
 .commentBtn{cursor: pointer;}
+.btn-primary {
+    color: #fff;
+    background-color: #0a1f33;
+    border-color: #0a1f33;
+    height: 36px;
+}
+textarea {resize: none;}
 
+.uploadBox input[type="file"] {
+	position: absolute;
+  	width: 0;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 0;
+}
+
+.uploadBox label {
+   display: inline-block;
+   padding: 7px 13px;
+   color: #e3e5e8;
+   vertical-align: middle;
+   background-color: #0a1f33;
+   cursor: pointer;
+   border-radius: 5px;
+   height: 36.99px;
+   width: 55.18px;
+   margin-top: 7px;
+}
+
+/* named upload */
+.uploadBox .upload-name {
+  display: inline-block;
+  height: 39px;
+  font-size:18px; 
+  padding: 0 10px;
+  vertical-align: middle;
+  background-color: #f5f5f5;
+  border: 1px solid #ebebeb;
+  border-radius: 5px;
+}
+
+hr {
+    margin-top: 0;
+    margin-bottom: 0;
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.1);
+}
 </style>
 
 <script>
@@ -178,6 +237,14 @@ $(document).ready(function (e){
       });
     }
   });
+  
+$(document).ready(function(){ 
+	 var fileTarget = $('#feedWriteImgInput'); 
+	 fileTarget.on('change', function(){ // 값이 변경되면
+	     var cur=$(".uploadBox input[type='file']").val();
+	   $(".upload-name").val(cur);
+	 }); 
+}); 
 </script>
 <article id="mainArticle" class="mainArticle">
 <!-- 피드 작성하기 -->
@@ -225,10 +292,13 @@ $(document).ready(function (e){
 			<!-- 피드에 올릴 사진 -->
 			<div id="preview">
 			</div>
-			<!-- <img id="preview-image"/> -->
 			<!-- 버튼 모음([사진 올리기], [작성] 버튼) -->
 			<div class="btnSet">
-				<input type="file" class="feedWriteImgInput" id="feedWriteImgInput" name="upFile" accept=".gif, .jpg, .png, .jpeg" onchange="readURL(this);"/> 
+				<div class="uploadBox">
+					<label for="feedWriteImgInput">사진</label> 
+	  				<input class="upload-name" value="첨부파일 없당 😩" disabled="disabled">
+					<input type="file" class="feedWriteImgInput" id="feedWriteImgInput" name="upFile" accept=".gif, .jpg, .png, .jpeg" onchange="readURL(this);"/> 
+				</div>
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<input type="hidden" name="writer" class="writer" value="${loginMember.id}"/>
 				<input type="hidden" name="nickname" class=nickname value="${loginMember.nickname}"/>
@@ -281,7 +351,8 @@ $(".contentWrapper").scroll(function(){
     if(wrapper.scrollTop() >= feedSection.height() - wrapper.height() + 110){
         if(!loading){
             loading = true;
-            addFeedPageMain(page++);
+            page++
+            addFeedPageMain(page);
         }
     }
 });
@@ -335,7 +406,6 @@ const addFeedPageMain = (page) => {
                             </svg></a>
            			 </span>`;
 				}
-				
 
 				if(FILENAME != null){
 					feedDiv = `
@@ -354,6 +424,7 @@ const addFeedPageMain = (page) => {
 								</div>
 								\${moreBtn}
 							</div>
+							<hr />
 							<div class="feedBody">
 								<div class="feedPic">
 									<img
@@ -366,9 +437,9 @@ const addFeedPageMain = (page) => {
 									<div class="likeBtn">
 									<input type="hidden" class="code" value="\${CODE}"/>
 										\${like}
-										<span id="m_heart\${CODE}">\${LIKES}</span>	
+										<span id="m_heart\${CODE}" style="padding-left: 3px;">\${LIKES}</span>	
 									</div>
-									<div class="commentBtn">댓글(\${COMMENTS})</div>
+									<div class="commentBtn" onclick="feedDetailModalView(this);">댓글(\${COMMENTS})</div>
 								</div>
 								<div class="feedContent">\${CONTENT}</div>
 							</div>
@@ -389,6 +460,7 @@ const addFeedPageMain = (page) => {
 										</div>
 									</div>
 								</div>
+								<hr />
 								<div class="feedBody">
 									<div class="feedPic">
 									</div>
@@ -399,22 +471,15 @@ const addFeedPageMain = (page) => {
 										<div class="likeBtn">
 										<input type="hidden" class="code" value="\${CODE}"/>
 											\${like}
-											<span id="m_heart\${CODE}">\${LIKES}</span>	
+											<span id="m_heart\${CODE}" style="padding-left: 3px;">\${LIKES}</span>	
 										</div>
-										<div class="commentBtn">댓글(\${COMMENTS})</div>
+										<div class="commentBtn" onclick="feedDetailModalView(this);">댓글(\${COMMENTS})</div>
 									</div>
 									<div class="feedContent">\${CONTENT}</div>
 								</div>
 							</div> `;
-				}
-				
-				$feedArea.append(feedDiv);
-				
-				
-				
-				$(".commentBtn").click((e) => {
-					feedDetailModalView(e);
-				});	
+				}			
+				$feedArea.append(feedDiv);		
 							
 			});
 			console.log(page);
@@ -427,6 +492,8 @@ const addFeedPageMain = (page) => {
 		error: console.log
 	});
 };
+
+onclick="commentView(this);"
 
 function likeCheck(e){
 	    let code = $(e).attr('idx');
@@ -517,19 +584,20 @@ function likeCheck(e){
 
 // 피드모달
 let $hidden = $(".feedBodyBtn");
-$(".commentBtn").click((e) => {
+/* $(".commentBtn").click((e) => {
 	feedDetailModalView(e);
-});
+}); */
 
 const feedDetailModalView = (e) => {
+	console.log($(e).parent());
 	let code = '';
 	let id = '';
 	if($(e.target).attr('class') != 'feedBodyBtn'){
-		code = $(e.target).parent().parent().find("input.code").val();
-		id = $(e.target).parent().parent().find("input.id").val();
+		code = $(e).parent().parent().find("input.code").val();
+		id = $(e).parent().parent().find("input.id").val();
 	}else{
-		code = $(e.target).find("input.code").val();
-		id = $(e.target).find("input.id").val();
+		code = $(e).find("input.code").val();
+		id = $(e).find("input.id").val();
 	}
 	console.log(id + " " + code);
 	selectedFeed(id, code);

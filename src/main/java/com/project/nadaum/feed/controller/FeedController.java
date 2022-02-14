@@ -159,23 +159,23 @@ public class FeedController {
 	
 	@GetMapping("/feedMain.do")
 	public void feedMain(Model model, @AuthenticationPrincipal Member member, HttpServletRequest request) {
-		String id = member.getId();
-		List<Feed> feed = feedService.feedMain(id);
-		log.debug("feed = {}", feed);
-		
-		Map<String, Object> map = new HashMap<>();
-		int page = 1;
-		int limit = 2;
-		int offset = (page - 1) * limit;
-		map.put("limit", limit);
-		map.put("offset", offset);
-		map.put("id", id);
+//		String id = member.getId();
+//		List<Feed> feed = feedService.feedMain(id);
+//		log.debug("feed = {}", feed);
+//		
+//		Map<String, Object> map = new HashMap<>();
+//		int page = 1;
+//		int limit = 2;
+//		int offset = (page - 1) * limit;
+//		map.put("limit", limit);
+//		map.put("offset", offset);
+//		map.put("id", id);
 		
 		// 글의 개수
-	    int totalRow = feedService.addFeedMainCount(map);
-	    // 전체 페이지의 개수
-	    int totalPageCount = (int) Math.ceil(totalRow / (double) limit);
-	    request.setAttribute("totalPageCount", totalPageCount);	    
+//	    int totalRow = feedService.addFeedMainCount(map);
+//	    // 전체 페이지의 개수
+//	    int totalPageCount = (int) Math.ceil(totalRow / (double) limit);
+//	    request.setAttribute("totalPageCount", totalPageCount);	    
 	}
 
 	@GetMapping("/addFeedPage.do")

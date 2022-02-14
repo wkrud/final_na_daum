@@ -20,6 +20,7 @@
 	 width: 0;
 	 height: 0;
 } 
+textarea {resize: none;}
 #diaryIsPublic {
 	display: flex;
     justify-content: flex-end;
@@ -81,7 +82,7 @@
 				<input type="hidden" name="isPublic" value='N' id="isPublic" checked="checked"/>
 				<label for="title">제목</label>						
 				<input type="text" class="form-control" name="title" id="title"	placeholder="제목을 입력해주세요" required>
-				<textarea id="diaryContent" name="content" required></textarea>
+				<textarea id="diaryContent" name="content" required ></textarea>
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			</div>
 			<div id="diaryFooter">
