@@ -72,6 +72,8 @@ span{
     font-style: normal;
 }
 
+.carousel-inner{cursor: pointer;}
+
 /* width: 100%;
 	height: 100%; */
 </style>

@@ -91,7 +91,7 @@ public class AlbumController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			AlbumInfo albumInfo = albumService.selectWidgetAlbumInfo(map);
-			String imgLink = application.getRealPath("/resources/upload/audiobook/")
+			String imgLink = "/resources/upload/audiobook/img/"
 							+ albumService.selectListAlbumImg(albumInfo.getCode()).get(0).getRenamedFilename();
 			map.put("albumInfo", albumInfo);// albumInfo.title, albumInfo.kind...
 			map.put("imgLink", imgLink); //이미지 표시하시면 img src에 붙여 쓰시면됩니다.
@@ -295,7 +295,8 @@ public class AlbumController {
 	}
 
 	@PostMapping("/album/enroll")
-	public String albumEnroll(Album album, 
+	public String albumEnroll(@AuthenticationPrincipal Member member,
+			Album album, 
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles, 
 			ModelMap model, RedirectAttributes redirectAttr)
@@ -390,7 +391,8 @@ public class AlbumController {
 	}
 	
 	@PostMapping("/album/update")
-	public String albumUpdate(Album album,ModelMap model,
+	public String albumUpdate(@AuthenticationPrincipal Member member,
+			Album album,ModelMap model,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles,
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "trkOriginalFileName", defaultValue="") String[] trkOriginalFileNames,
@@ -464,7 +466,7 @@ public class AlbumController {
 	
 		//트랙 파일 일부삭제한 경우 
 		log.debug("oldTrackSize={}",oldTrackList.size());
-		if(oldTrackList.size()!=trkOriginalFileNames.length) {
+		if(oldTrackList.size()!=trkOriginalFileNames.length && 0!=trkOriginalFileNames.length) {
 			String trkOriginal0 = trkOriginalFileNames[0];
 			log.debug("trkOriginal0={}", trkOriginal0);
 			
@@ -484,24 +486,38 @@ public class AlbumController {
 				.peek(x -> log.debug("file={}", x))
 				.forEach(f -> f.delete());
 			//DB삭제
+			
+			/*list 방식
+			List<Integer> delList=delTrackList.stream().map(x->x.getNo()).collect(Collectors.toList());
+			log.debug("delArrayLen={}",delList.size());
+			for(int i=0;i<delList.size();i++) {
+				trackDelResult =albumService.deleteAlbumTrack(delList.get(i).intValue());				
+			}
+			*/
+			
+			//array방식
 			int[] delArray=delTrackList.stream().map(x->x.getNo()).mapToInt(i->i).toArray();
-			log.debug("delArrayLen={}",delArray.length);
+			if(0==delArray.length) {log.debug("{}","could not activate the transaction");}
 			
+			int temp= 0!=delArray[0]?delArray[0]:-1;
+			log.debug("delArrayLen={},delArray={}",delArray.length,temp);
 			trackDelResult =albumService.deleteAlbumTracks(delArray);
+			log.debug("trackDelResult={}",trackDelResult);
 			
+	
 		} else if(oldTrackList.size()==trkOriginalFileNames.length) {
 			
-		} else {
+		} else if(0==trkOriginalFileNames.length){
 			//모두삭제한경우->code로삭제
 			trackDelResult= albumService.deleteAllAlbumTracks(code);
+			log.debug("trackDelResult={}",trackDelResult);
 		}
 		
 		int trackInsertResult =-1;
 		//첨부 트랙파일 있는경우
-		log.debug("boolOnTrkFiles={}",trkFiles==null);
+		log.debug("CheckNullOnTrkFiles={}",trkFiles!=null&&trkFiles.length!=0);
 		try {
 			if(null!=trkFiles&&0!=trkFiles.length) {
-				//int trkFileLen =trkFiles.length;
 				String trkFile0=trkFiles[0].getOriginalFilename()=="" ? trkFiles[0].getOriginalFilename():"";
 				log.debug("trkFile0={}", trkFile0);
 				
@@ -560,7 +576,7 @@ public class AlbumController {
 	
 
 	@PostMapping("/album/updateTest")
-	public String albumUpdateTest(Album album, ModelMap model, 
+	public String albumUpdateTest(@AuthenticationPrincipal Member member,Album album, ModelMap model, 
 			@RequestParam(name = "trkFile") MultipartFile[] trkFiles,
 			@RequestParam(name = "imgFile") MultipartFile[] imgFiles, 
 			@RequestParam(name = "trkOriginalFileName") String[] trkOriginalFileNames,
@@ -777,7 +793,9 @@ public class AlbumController {
 		// 단일 for문 방식
 		List<AlbumTrack> trackOriginList = albumService.selectListAlbumTrack(code);
 		List<AlbumImg> imgOriginList = albumService.selectListAlbumImg(code);
-		log.debug("trackOriginList={},imgORiginList={}", trackOriginList.get(0), imgOriginList.get(0));
+		if( 0!=trackOriginList.size() && 0!=imgOriginList.size()) {
+			log.debug("trackOriginList={},imgORiginList={}", trackOriginList.get(0), imgOriginList.get(0));
+		}
 
 		String audioPath = application.getRealPath("/resources/upload/audiobook/mp3");
 		String imgPath = application.getRealPath("/resources/upload/audiobook/img");

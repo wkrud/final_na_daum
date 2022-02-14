@@ -122,8 +122,21 @@ public class AlbumServiceImpl implements AlbumService {
 	}
 
 	@Override
+	public int deleteAlbumTrack(int no) {
+		return albumDao.deleteAlbumTrack(no);
+	}
+	
+	@Override
 	public int deleteAlbumTracks(int[] delArray) {
-		return albumDao.deleteAlbumTracks(delArray);
+		int result=1;
+		for(int i=0;i<delArray.length;i++) {
+			result*=albumDao.deleteAlbumTrack(delArray[i]);
+			if(result==-1) return result;
+		}
+		return result;
+		
+		//다중삭제 : album-mapper.xml [id="deleteAlbumTracks"]
+		//return albumDao.deleteAlbumTracks(delArray);
 	}
 	
 	@Override
@@ -285,9 +298,6 @@ public class AlbumServiceImpl implements AlbumService {
 	public AlbumInfo selectWidgetAlbumInfo(Map<String,Object> map) {
 		return albumDao.selectWidgetAlbumInfo(map);
 	}
-
-	
-
 	
 
 }
