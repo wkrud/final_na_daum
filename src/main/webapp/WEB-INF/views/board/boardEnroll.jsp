@@ -54,16 +54,11 @@ function boardValidate(){
 		</div>
 		</div>
 		
-		<div class="form-group row">
+		<div class="form-group row" style="display:none">
 		<label for="category" class="col-sm-2 col-form-label">카테고리</label>
 		<div class="col-sm-10">
-			<input type="hidden" class="form-control" name="category" >
-			<select id="category-select" class="form-control" aria-label="Default select example">
-			<option selected>카테고리</option>
-			<option value="자유">자유게시판</option>
-			<option value="문화">문화</option>
-			<option value="영화">영화</option>
-		</select>
+			<input type="hidden" class="form-control" name="category" value="LoL">		
+	
 		</div>
 		</div>
 		

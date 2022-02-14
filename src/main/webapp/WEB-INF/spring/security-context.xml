@@ -31,8 +31,7 @@
 		<intercept-url pattern="/audiobook/album/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/audiobook/comment/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/audiobook/like/**" access="isAuthenticated()"/>
-		<intercept-url pattern="/pay/ready/**" access="isAuthenticated()"/>
-		<intercept-url pattern="/pay/result/**" access="isAuthenticated()"/>
+		<intercept-url pattern="/payment" access="isAuthenticated()"/> 
 		<intercept-url pattern="/**" access="permitAll"/>
 		
 		<form-login
