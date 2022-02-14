@@ -95,10 +95,161 @@
 	</script>
 </c:if>
 </head>
+<style>
+@font-face {
+    font-family: 'InfinitySans-RegularA1';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-RegularA1.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+html{
+ background-color: #FFFBF5;
+  scroll-behavior: smooth;
+}
+.mainpage-container{
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: #FFFBF5;
+     font-family: 'InfinitySans-RegularA1';
+       scroll-behavior: smooth;
+}
+.mainpage-container p {
+padding: 20px;
+}
+.mainpage-content{
+    margin-left: 200px;
+    margin-right: 200px;	
+}
+.mainpage-image{
+    margin-top: 100px;
+    box-shadow: 5px 5px 20px lightgrey;
+    width: 90%;
+}
+.mainpage-title{
+    font-size: 100px;
+}
+
+.mainpage-btn-wrap {
+  text-align: center;
+}
+
+.mainpage-btn {
+  width: 150px;
+    height: 55px;
+    color: #000;
+    background-color: #e2b9f0;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0px 8px 15px rgb(0 0 0 / 10%);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    outline: 0;
+    margin-top: 50px;
+  }
+
+.mainpage-btn:hover {
+  background-color: #a34dbf;
+  color: #fff;
+  transform: translateY(-7px);
+  border: 0;
+  outline: 0;
+}
+</style>
 <body>
 <!-- 비회원 / 로그인 X -->
 <sec:authorize access="isAnonymous()">
-	<a href="${pageContext.request.contextPath}/member/memberLogin.do">로그인폼</a>
+<div class="mainpage-container">
+  <h1 class="text-center mainpage-title" id="mainpage-title">나 : 다움</h1>
+  <br />
+   <h1 class="text-center">모두가 나다워지는 그날까지</h1>
+	<h5 class="text-center">내 취향에 맞춘 웹사이트를 구성해보세요.</h5>
+	<div class="mainpage-btn-wrap">
+  <button class="mainpage-btn" id="mainpage-btn"onclick="location.href=`${pageContext.request.contextPath}/member/memberLogin.do`">시작하기</button>
+</div>
+	<div class="mainpage-content">
+		<!--  image left  -->
+  <div class="row">
+    <div class="col-md-6">
+		<img class="mainpage-image"src="${pageContext.request.contextPath}/resources/images/common/1.png" />
+	    </div>
+	    <!-- /.col-md-6 -->
+	    <div class="col-md-6">
+	
+	      <div class="row align-items-center h-100">
+	        <div class="col">
+	          <h1 class="display-10">웹 사이트도 내 스타일대로! 😎</h1>
+	          <br /><br />
+	          <p class="lead"> 내 취향에 맞춘 웹사이트를 구성해보세요.
+	            <br /><br />
+	            보고싶은 위젯만 쏙쏙 골라 커스터마이징해보세요!
+	            <br /><br />
+	            영화, 음악, 전시, 롤 등 관심있는 정보를 바로 파악할 수 있어요. 
+	          </p>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <!--  image right  -->
+	  <div class="row">
+	    <div class="col-md-6 order-md-6">
+	
+	      <img class="mainpage-image"src="${pageContext.request.contextPath}/resources/images/common/2.png" />
+	    </div>
+	    <!-- /.col-md-6 -->
+	    <div class="col-md-6 order-md-1" style="text-align: right;">
+	
+	      <div class="row align-items-center h-100">
+	        <div class="col">
+	          <h1 >나다움과 함께 생산성을 높여보세요 🏃</h1>
+	          <br /><br />
+	          <p class="lead">체크리스트, 일기, 가계부의 다양한 기능을 활용하여 
+	          <br />
+	          나만의 기록을 쌓아보세요. 
+	            <br /><br />
+	            작심삼일 멈춰!🙅
+	          </p>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	   <div class="row">
+    <div class="col-md-6">
+		<img class="mainpage-image"src="${pageContext.request.contextPath}/resources/images/common/3.png" />
+	    </div>
+	    <!-- /.col-md-6 -->
+	    <div class="col-md-6">
+	
+	      <div class="row align-items-center h-100">
+	        <div class="col">
+	        <br />
+	          <h1 class="display-10">친구들에게 하루를 공유해보세요 💃</h1>
+	          <br /><br />
+	          <p class="lead">내가 좋아하는 사진을 올리고,
+	          <br /><br />
+	           친구들의 사진에 좋아요를 눌러보세요 💖 
+	            <br /><br />
+	            알람을 받은 친구는 바로 달려올거에요! 
+	            <br /><br />
+	            친구와 영화, 전시회, 롤 약속을 잡을 수 있고,
+	            <br /><br />
+	            같이 채팅도 할 수 있어요! &#128145;
+	          </p>
+	          
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <div style="text-align:end;">
+	  	<a href="#mainpage-title" style="color: black; text-decoration: none;">
+  		 <h2>↑ TOP</h2>
+  		</a>
+	  </div>
+	   
+	</div>
+  
+</div>
 </sec:authorize>
 
 <!-- 로그인 O -->
