@@ -9,8 +9,8 @@
 	<jsp:param value="나:다움 친구관리" name="title"/>
 </jsp:include>
 <sec:authentication property="principal" var="loginMember"/>
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/> -->
 <div class="member-body">
 	<div class="find-friend-page-button">
 		<button type="button" class="btn btn-outline-warning" id="searchFriendBtn">친구검색</button>
