@@ -65,7 +65,7 @@ img {
 </div> -->
 
 <!-- ${_csrf.parameterName}=${_csrf.token}  -->
-<<%-- div id="search-container" class="text-center search-container">
+<%-- div id="search-container" class="text-center search-container">
 	<form name="albumSearchFrm" action="${contextPath}/audiobook/search/list/select?" method="get">
 		<div class="col-md-7 mt-5 border pt-3 search-box">
 			<select name="searchType" required>

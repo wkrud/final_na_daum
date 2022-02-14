@@ -1,10 +1,19 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="com.project.nadaum.member.model.vo.Member"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%
+	Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+%>
 <jsp:include page="/WEB-INF/views/audiobook/common/audioBookHeader.jsp">
-	<jsp:param value="album 등록" name="pageTitle" />
+	<jsp:param value="album 삭제" name="pageTitle" />
 </jsp:include>
+
+<sec:authentication property="principal" var="loginMember"/>
 <style>
 div#board-container {
 	width: 800px;
@@ -25,11 +34,13 @@ div#board-container label.custom-file-label {
 }
 </style>
 <div id="board-container">
+	
 	<form name="albumFrm" action="${pageContext.request.contextPath}/audiobook/album/delete?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
 		<input type="text" class="form-control" placeholder="코드" name="code" id="code" readonly value="${code}">
 		<span>삭제하는 이유를 알려주세요.</span>
 		<textarea class="form-control" name="content" placeholder="내용" required></textarea>
-		<br/> 
+		<br/>
+		<input type="hidden" name="member" value="${loginMember.id}"/> 
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
 		<input type="submit" class="btn btn-outline-success" value="제출">
 	</form>
