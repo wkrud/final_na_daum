@@ -212,10 +212,10 @@ div#board-container label.custom-file-label {
 			</div>
 		</c:forEach>
 
-		<!-- 캘린더 약속 버튼 -->
+		<!-- 캘린더 약속 모달 버튼 -->
 		<br />
 		<button type="button" class="btn btn-secondary" data-toggle="modal"
-			data-target="#add-calander">캘린더&raquo;</button>
+			data-target="#add-calander">약속잡기&raquo;</button>
 
 		<!-- 스크랩 버튼 -->
 
@@ -226,8 +226,10 @@ div#board-container label.custom-file-label {
 			</button>
 
 		</c:if>
-
-
+		
+		<!-- 캘린더 확인 모달 버튼 -->
+		<button type="button" class="btn btn-secondary" data-toggle="modal"data-target="#check-calander">약속확인&raquo;</button>
+		
 		<!-- 영화 줄거리 -->
 		<hr />
 		<h2 class="blog-post-title">영화 줄거리</h2>
@@ -563,91 +565,110 @@ div#board-container label.custom-file-label {
 
 </div>
 
-<!-- 캘린더 Modal -->
+<!-- 캘린더 약속 모달 -->
 <div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
-	aria-labelledby="add-calander" aria-hidden="true">
-	<form id="promiseFrm">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<!-- 모달 내용 시작 -->
-				<div class="modal-body">
-				
-					<div class="form-group row">
-						<label for="title" class="col-sm-2 col-form-label">약속일</label>
-						<div class="col-sm-10">
-							<input type="date" class="form-control" id="startDate"
-								name="startDate" required>
-						</div>
+		aria-labelledby="add-calander" aria-hidden="true">
+		<form id="promiseFrm">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
-					
-					<div class="form-group row">
-						<label for="title" class="col-sm-2 col-form-label">내용</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="title" name="title"
-								placeholder="내용을 입력해주세요" required>
-						</div>
-					</div>
-
-					
-					<div class="friend-list-wrap">
-						<div class="friends-list">
-							<div class="friend">
-								<div class="form-group row">
-									<label for="title" class="col-sm-2 col-form-label">친구</label>
-									<div class="col-sm-10">
-										<div class="input-group mb-3">
-											<div class="input-group-prepend">
-												<input id="friendId" type="text" name="friendId" class="form-control friendTextId" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
-												<input type="hidden" name="apiCode" value="${apiCode}" /> 
-												<input type="hidden" name="allDay" value="0" /> 
-												<input type="hidden" name="id" value="${loginMember.id}" />
-												<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="search-result-list">
-									<div class="list-group"></div>
-								</div>
-								<hr />
-								<!-- 친구닉네임 검색 -->
-								<div class="friends-section">
-									<c:forEach items="${memberList}" var="ml">
-										<c:forEach items="${friends}" var="fr">
-											<c:if test="${ml.id eq fr.friendId}">
-												<div class="friend-wrap">
-													<div class="friend-name-wrap">
-														<span class="friend-name">${ml.nickname}</span>
-													</div>
-												</div>
-											</c:if>
-										</c:forEach>
-									</c:forEach>
-								</div>
-
+					<div class="modal-body">
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">제목</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="title" name="title"
+									placeholder="제목을 입력해주세요" required>
 							</div>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-						<button type="submit" class="btn btn-primary schedule-btn">추가</button>
-						
+
+
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">약속일</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" id="startDate"
+									name="startDate" required>
+							</div>
+						</div>
+						<span>약속할 친구 닉네임</span> <input type="text" name="friendId" value="qwer1234"
+							id="friendId" class="friendTextId" /> <br /> <br /> <input
+							type="hidden" name="apiCode" value="${apiCode}" /> <input
+							type="hidden" name="allDay" value="1" /> <input type="hidden"
+							name="id" value="${loginMember.id}" />
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">취소</button>
+							<button type="submit" class="btn btn-primary">추가</button>
+						</div>
 					</div>
 				</div>
-				<!-- 모달 내용 끌 -->
 			</div>
-		</div>
-	</form>
-</div>
+		</form>
+	</div>
+<!-- 캘린더 약속 모달 끝 -->
 
+<!-- 캘린더 확인 모달 시작 -->
+<div class="modal fade" id="check-calander" tabindex="-1" role="dialog"
+		aria-labelledby="check-calander" aria-hidden="true">
+		<form id="promiseReceiveFrm">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+					<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">상대<br>닉네임</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="mynickname"  id="receive-mynickname"/>
+								<input type="hidden" class="form-control" name="friendnickname"  id="receive-friendnickname"/>
+							</div>
+						</div>
+					
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">내용</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="receive-title" name="title">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="title" class="col-sm-2 col-form-label">약속일</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" id="receive-startDate"
+									name="startDate">
+									<input type="date" id="receive-endDate" name="endDate" style="display:none"/>
+							</div>
+						</div>
+							<input type="hidden" name="allDay" id="receive-allDay" /> 
+							<input type="hidden" name="type"  value="lol"/>
+							<input type="hidden" name="borderColor"  value="#D25565"/>
+							<input type="hidden" name="backgroundColor"  value="#D25565"/>
+							<input type="hidden" name="textColor"  value="#ffffff"/>
+							<input type="hidden" name="id" value="${loginMember.id}" />
+							<input type="hidden" name="friendid" id="receive-friendId" />
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">취소</button>
+							<button type="submit" class="btn btn-primary">추가</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+<!-- 캘린더 확인 모달 끝 -->
 <script>
+
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
 	e.preventDefault();
@@ -865,29 +886,28 @@ $(document).on('click', '#scrapButton', function(e) {
 <script>
 $(promiseFrm).submit((e) => {
 	e.preventDefault();
-	
-	const csrfHeader = "${_csrf.headerName}";
-    const csrfToken = "${_csrf.token}";
-    const headers = {};
-    headers[csrfHeader] = csrfToken;
- 
+		
 		$.ajax({
 			url:`${pageContext.request.contextPath}/movie/movieDetail/{apiCode}/schedule`,
 			method: "POST",
 			headers : headers, 
 			data : $(promiseFrm).serialize(),
 			success(resp){
-				location.reload();
 				alert(resp.msg);
 				let ranNo = Math.floor(Math.random() * 10000);
 				let code = 'movie-' + ranNo;
 				let guest = $(".friendTextId").val();
+				let schedulecode = resp["schedulecode"];
+				
 				let content = '';
-				content = `<a href='/nadaum/movie/movieDetail/${apiCode}&guest=guest'>🎬${loginMember.nickname}님이 회원님에게 [영화]약속을 보냈습니다.</a>
+				content = `<a href='/nadaum/movie/movieDetail/${apiCode}&guest=guest&schedulecode=\${schedulecode}'>🎬{loginMember.nickname}님이 회원님에게 [영화]약속을 보냈습니다.</a>
 					<button type="button" class="btn btn-light schedule-detail-btn" data-toggle="modal" data-target="#detail-calender" id="schedule-detail" name="code" value=\"\$\{schedule\.code\}\">더보기</button>`
 				commonAlarmSystem(code,guest,content);
+					alert("e되어라,,,,");
+				location.reload();
 				},
-			error: console.log
+				error: console.log
+				
 			});
 });
 

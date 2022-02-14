@@ -78,8 +78,8 @@ public class MovieDaoImpl implements MovieDao {
 	}
 
 	@Override
-	public int insertSchedule(Map<String, Object> map) {
-		return session.insert("movie.insertSchedule", map);
+	public int insertSchedule(Schedule movieSchedule) {
+		return session.insert("movie.insertSchedule", movieSchedule);
 	}
 
 
@@ -89,8 +89,8 @@ public class MovieDaoImpl implements MovieDao {
 //	}
 
 	@Override
-	public Schedule selectOneSchedule(String code) {
-		return session.selectOne("movie.selectOneSchedule", code);
+	public Schedule selectOneSchedule(String schedulecode) {
+		return session.selectOne("movie.selectOneSchedule", schedulecode);
 	}
 
 	@Override
@@ -101,6 +101,11 @@ public class MovieDaoImpl implements MovieDao {
 	@Override
 	public int updateAccept(String code) {
 		return session.update("movie.updateAccept",code);
+	}
+
+	@Override
+	public int insertCalendarMovieFriend(Map<String, Object> map) {
+		return session.insert("insertCalendarMovieFriend", map);
 	}
 
 	

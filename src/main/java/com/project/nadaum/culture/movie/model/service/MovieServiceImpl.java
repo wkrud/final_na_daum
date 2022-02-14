@@ -81,8 +81,13 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	@Override
-	public int insertSchedule(Map<String, Object> map) {
-		return movieDao.insertSchedule(map);
+	public String insertSchedule(Schedule movieSchedule) {
+		
+		int result = movieDao.insertSchedule(movieSchedule);
+		log.debug("code = {}", movieSchedule.getCode());
+		String Schedulecode = movieSchedule.getCode();
+		
+		return Schedulecode;
 	}
 
 //	@Override
@@ -91,8 +96,8 @@ public class MovieServiceImpl implements MovieService {
 //	}
 
 	@Override
-	public Schedule selectOneSchedule(String code) {
-		return movieDao.selectOneSchedule(code);
+	public Schedule selectOneSchedule(String schedulecode) {
+		return movieDao.selectOneSchedule(schedulecode);
 	}
 
 	@Override
@@ -103,6 +108,11 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public int updateAccept(String code) {
 		return movieDao.updateAccept(code);
+	}
+
+	@Override
+	public int insertCalendarMovieFriend(Map<String, Object> map) {
+		return movieDao.insertCalendarMovieFriend(map);
 	}
 
 	
