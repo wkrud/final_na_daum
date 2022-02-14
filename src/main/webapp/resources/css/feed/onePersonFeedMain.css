@@ -223,18 +223,18 @@ article.one-feed-detail-area{
 	
 }
 .feed-pic-area{
-	height: 350px;
+	height: 410px;
 }
 .feed-pic-area img{
 	width: 410px;
-	height: 350px;
+	height: 410px;
 }
 
 .feed-content-area-wrap{
 	
 }
 .feed-content-area{
-	height: 150px;
+	height: 90px;
 	overflow: scroll;
 }
 /* 글만 있을 경우 content */
