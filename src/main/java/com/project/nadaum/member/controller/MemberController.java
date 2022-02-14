@@ -945,7 +945,6 @@ public class MemberController {
 			friendWidget.put("widgetFriends",widgetFriends);
 			friendWidget.put("widgetFollowers",widgetFollowers);
 			
-			log.debug("wwwwwwwwwwwwwwwww = {}", friendWidget);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw e;
