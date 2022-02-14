@@ -24,16 +24,16 @@
 					<div class="form-group row">
 						<label for="title" class="col-sm-2 col-form-label">약속일</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control" id="startDate"
-								name="startDate" value="<c:out>${schedule.startDate}</c:out> " readonly>
+							<input type="date" class="form-control" id="startDate" name="startDate" value="<c:out>${schedule.startDate}</c:out> " readonly>
+							<input type="date" class="form-control" id="startDate" name="startDate" value="${startDate} " readonly>
 						</div>
 					</div>
 					
 					<div class="form-group row">
 						<label for="title" class="col-sm-2 col-form-label">내용</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="title" name="title" value="${schedule.title }"
-								placeholder="제목을 입력해주세요" readonly>
+							<input type="text" class="form-control" id="title" name="title" value="${schedule.title }" placeholder="제목을 입력해주세요" readonly>
+							<input type="text" class="form-control" id="title" name="title" value="${title}" placeholder="제목을 입력해주세요" readonly>
 						</div>
 					</div>
 					
@@ -50,7 +50,9 @@
 												<input type="text" name="apiCode" value="${apiCode}" /> 
 												<input type="text" name="allDay" value="0" /> 
 												<input type="text" name="id" value="${loginMember.id}" />
-												<input type="text" name="code" value="${schedule.id}" />
+												<input type="text" name="code" value="${schedule.code}" />
+												<input type="text" name="code" value="${code}" />
+												<input type="text" name="code" value="${schedulecode}" />
 												
 											</div>
 										</div>
@@ -76,13 +78,13 @@
 </div>
 
 <script>
-/* $(."schedule-detail-btn").click((e)=> {
+$(."schedule-detail-btn").click((e)=> {
 	const code = $(e.target).val();
 		console.log(e.target);
 		console.log(code);
 		
 		$.ajax({
-			url : `${pageContext.request.contextPath}/movieDetail/{apiCode}/schedule/{code}`,
+			url : `${pageContext.request.contextPath}/movieDetail/{apiCode}/schedule/{schedulecode}`,
 			method: "GET",
 			success(resp){
 				console.log(resp);
@@ -102,7 +104,7 @@
 					console.log(xhr, textStatus, err);
 			}
 		});
-}); */
+});
 /* $(schedule-detail).click((e) => {
 	const spec = "left=500px, top=500px, width=265px, height=285px";
 	const popup = open('${pageContext.request.contextPath}/movie/insertCalendarMovie.do', '약속수락', spec);
