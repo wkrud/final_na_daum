@@ -227,10 +227,7 @@ const friendWidgetInfo = () => {
 		contentType : "application/json; charset=UTF-8",
 	 	dataType : "json",
 		success(resp) {
-			console.log(resp);		
-			console.log(resp.widgetFriends[0].profile);
-			console.log(resp.widgetFriends[1].profile);
-			console.log(resp.widgetFriends.length);
+		console.log(resp);		
 			let content = "";
 			content = `
 			<div style="display : flex; text-align : center; width : 200px;">
@@ -243,9 +240,44 @@ const friendWidgetInfo = () => {
 			</div>
 			`
 			$(".friend-widget").append(content);
+
+			if(resp.widgetFriends.length == 0) {
+				content = `
+					<span>친구 목록이<br/>존재하지<br/>않습니다.</span>
+				`			
+				$(".friendTogetherInfo").append(content);	
+			} else {
 			//맞팔
 			for(let i = 0; i <resp.widgetFriends.length; i++) {
-				if(resp.widgetFriends[i].profile != null) {
+				//기본 고양이 프사 (d타입 기본 프사)
+				if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile != null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/`+resp.widgetFriends[i].profile+`">
+						</div>
+						<span>`+resp.widgetFriends[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendTogetherInfo").append(content);
+					//d타입 각자 프사 -> 각자 프사
+				} else if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile == null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
+						</div>
+						<span>`+resp.widgetFriends[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendTogetherInfo").append(content);
+					}
+					//k타입은 주소 필요 없이 이미지 경로
+					else {
 					content = `
 						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
 						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
@@ -257,24 +289,43 @@ const friendWidgetInfo = () => {
 						</div>
 					`
 					$(".friendTogetherInfo").append(content);
-				} else {
-					content = `
-						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
-						</div>
-						<span>`+resp.widgetFriends[i].nickname+`</span>
-						</a>
-						</div>
-					`
-					$(".friendTogetherInfo").append(content);
 
 				}
 			}
+		}
 			//팔로워
+			if(resp.widgetFollowers.length == 0) {
+				content = `
+					<span>팔로워 목록이<br/>존재하지<br/>않습니다.</span>
+				`			
+				$(".friendStraightInfo").append(content);	
+			} else {
 			for(let i = 0; i <resp.widgetFollowers.length; i++) {
-				if(resp.widgetFollowers[i].profile != null) {
+				if(resp.widgetFollowers[i].loginType == 'D' && resp.widgetFollowers[i].profile != null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/`+resp.widgetFollowers[i].profile+`">
+						</div>
+						<span>`+resp.widgetFollowers[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendStraightInfo").append(content);
+				} else if(resp.widgetFollowers[i].loginType == 'D' && resp.widgetFollowers[i].profile == null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
+						</div>
+						<span>`+resp.widgetFollowers[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendStraightInfo").append(content);
+				} else {
 					content = `
 						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
 						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
@@ -286,21 +337,10 @@ const friendWidgetInfo = () => {
 						</div>
 					`
 					$(".friendStraightInfo").append(content);
-				} else {
-					content = `
-						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
-						</div>
-						<span>`+resp.widgetFollowers[i].nickname+`</span>
-						</a>
-						</div>
-					`
-					$(".friendStraightInfo").append(content);
 
 				}
 			}
+		}
 			
 		}, //success 끝
 	 	error(xhr, testStatus, err) {
@@ -330,16 +370,18 @@ const alertWidgetInfo = () => {
 				<div style="width : 360px; padding : 10px; border-radius : 5px;" class="alertList"></div>
 			`
 			$(".alert-widget").append(content);
-			for(let i = 0; i < 5; i++) {				
-			content = `
-				<div style="border-bottom: 1px solid lightgray;">
-			      <p style="margin : 5px 0px;"><span style="color : rgb(238, 210, 88);"><i class="fas fa-bell"></i></span> 
-			       `+resp[i].content+`<br><span style="color : gray; margin-left : 20px;">`+timeConvert(resp[i].regDate)+`</span>
-			      </p>
-			    </div>
-			`
-			$(".alertList").append(content);
-			}
+			$(resp).each((i, v) => {
+				if(i < 5) {
+					content = `
+					<div style="border-bottom: 1px solid lightgray;">
+				      <p style="margin : 5px 0px;"><span style="color : rgb(238, 210, 88);"><i class="fas fa-bell"></i></span> 
+				       `+resp[i].content+`<br><span style="color : gray; margin-left : 20px;">`+timeConvert(resp[i].regDate)+`</span>
+				      </p>
+				    </div>
+				`
+				$(".alertList").append(content);
+				}
+			});
 			content = `
 				<span style="margin:10px; float : right;"><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/member/mypage/memberDetail.do?tPage=alarm"> + 지난 알림 보러 가기 </a></span>
 			`
@@ -396,6 +438,7 @@ const gameWidgetInfo = () => {
 	 	headers : headers,
 	 	data : JSON.stringify(member_Id),
 	 	success(resp) { 
+		console.log(resp);
 		let content = "";
 			if(resp.widgetinfo == null) {
 				if(resp.widgetnullcheck == null) {					
@@ -448,6 +491,7 @@ const gameWidgetInfo = () => {
 			    </div>
 			  </div>
 				`
+			$(".game-widget").append(content);
 			}
 	 	}, 
 	 	error(xhr, testStatus, err) {
