@@ -51,6 +51,8 @@ public interface AlbumDao {
 
 	int deleteAlbumTracks(int[] delArray);
 	
+	int deleteAlbumTrack(int no);
+	
 	int deleteAllAlbumTracks(String code);
 
 	AlbumTrack selectOneAlbumTrack(Map<String, Object> param);
