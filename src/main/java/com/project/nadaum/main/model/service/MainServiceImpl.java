@@ -46,6 +46,21 @@ public class MainServiceImpl implements MainService {
 		return mainDao.deleteTodoList(map);
 	}
 
+	@Override
+	public int insertMemo(Map<String, Object> param) {
+		return mainDao.insertMemo(param);
+	}
+
+	@Override
+	public List<TodoList> userMemoList(Map<String, Object> param) {
+		return mainDao.userMemoList(param);
+	}
+
+	@Override
+	public int updateMemoList(Map<String, Object> param) {
+		return mainDao.updateMemoList(param);
+	}
+
 	
 	
 	

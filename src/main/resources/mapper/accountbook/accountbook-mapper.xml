@@ -55,6 +55,7 @@
 			from
 				account_book
 			<where>
+				id = #{id}
 				<choose>
                  <when test="date != null and date != ''">
                    and
@@ -270,7 +271,7 @@
 		    nvl(sum(case when income_expense='E' then price end), 0) as expense
 		from (
 			select
-				to_char(reg_date,'yy-mm') as monthly,
+				to_char(reg_date,'yyyy-mm') as monthly,
 			    price,
 			    income_expense
 			from

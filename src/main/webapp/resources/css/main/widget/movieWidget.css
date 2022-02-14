@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+/*post slider*/
+.post-slider {
+	width:95%;
+	margin: 0px auto;
+	position: relative;
+}
+
+.post-slider .silder-title{
+	text-align: center;
+	margin: 0;
+}
+.silder-title{
+	font-size:20px !important;
+}
+.post-slider .next {
+	position: absolute;
+	top: 50%;
+	right: -2px;
+	font-size: 1em;
+	color: gray;
+	cursor: pointer;
+}
+
+.post-slider .prev {
+	position: absolute;
+	top: 50%;
+	left: -2px;
+	font-size: 1em;
+	color: gray;
+	cursor: pointer;
+}
+
+.post-slider .post-wrapper {
+	width:95%;
+  	height:100%;
+	margin: 0px auto;
+	overflow: hidden;
+	padding: 10px 0px 10px 0px;
+}
+
+.post-slider .post-wrapper .post {
+	width:400px;
+  	height:300px;
+	margin: 0px 1px;
+	display: inline-block;
+	background: white;
+	border-radius: 5px;
+}
+
+.post-slider .post-wrapper .post .post-info {
+	height:30%;
+	font-size: 15px;
+	padding: 1px;
+}
+
+.post-slider .post-wrapper .post .slider-image {
+	/* width:60%; */
+  	height:80%;
+	display: inline-block;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.widget-movie-title{
+	margin:0;
+	text-align: center;
+}
+.widget-movie-rating{
+	margin:0;
+	font-size:12px !important;
+	text-align: right;
+	display:block;
+	
+}
+.post-subject {
+	text-align: right;
+	display: block;
+	color:black;
+}

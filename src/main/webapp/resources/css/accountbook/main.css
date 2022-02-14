@@ -532,6 +532,15 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 }
 
 
+.monthlyPagingBtn {
+	font-size : 2rem;
+	display : flex;
+	justify-content : space-between;
+	padding : 0 40px;
+}
+
+
+
 /* 엑셀 모달 */
 .findExcelDate {
 	position : relative;

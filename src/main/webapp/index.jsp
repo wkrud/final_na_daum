@@ -10,5 +10,11 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움" name="title"/>
 </jsp:include>
-
+<sec:authorize access="isAuthenticated()">
+<script>
+$(() => {
+    location.href='/nadaum/main/main.do';
+});
+</script>
+</sec:authorize>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
