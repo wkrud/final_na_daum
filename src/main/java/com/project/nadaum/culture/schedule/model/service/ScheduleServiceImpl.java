@@ -37,6 +37,29 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public int insertFinalSecondSchedule(Map<String, Object> map) {
 		return scheduleDao.insertFinalSecondSchedule(map);
 	}
+
+	@Override
+	public String insertMovieSchedule(Schedule schedule) {
+		int result = scheduleDao.insertMovieSchedule(schedule);
+		log.debug("code={}", schedule.getCode());
+		String scheduleCode = schedule.getCode();
+		return scheduleCode;
+	}
+
+	@Override
+	public Schedule selectOneSchedule(String schedulecode) {
+		return scheduleDao.selectOneSchedule(schedulecode);
+	}
+
+	@Override
+	public int insertCalendarMovie(Map<String, Object> map) {
+		return scheduleDao.insertCalendarMovie(map);
+	}
+
+	@Override
+	public int insertCalendarMovieFriend(Map<String, Object> map) {
+		return scheduleDao.insertCalendarMovieFriend(map);
+	}
 	
 
 

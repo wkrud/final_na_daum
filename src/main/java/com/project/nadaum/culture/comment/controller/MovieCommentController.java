@@ -61,7 +61,7 @@ public class MovieCommentController{
 	}
 	
 	//삭제
-		@DeleteMapping("/movieDetail/{apiCode}/{code}")
+		@DeleteMapping("/movieDetail/{apiCode}/comment/{code}")
 		public ResponseEntity<?> deleteMenu(@PathVariable String code){
 			log.info("code = {}", code);
 			 
@@ -86,14 +86,14 @@ public class MovieCommentController{
 			}
 		}
 		
-		@GetMapping("/movieDetail/{apiCode}/{code}")
-		public ResponseEntity<?> selectOneComment(@PathVariable String code){
-			Comment comment = commentService.selectOneComment(code);
-			if(comment != null) 
-				return ResponseEntity.ok(comment);
-			else
-				return ResponseEntity.notFound().build();
-		}
+//		@GetMapping("/movieDetail/{apiCode}/comment/{code}")
+//		public ResponseEntity<?> selectOneComment(@PathVariable String code){
+//			Comment comment = commentService.selectOneComment(code);
+//			if(comment != null) 
+//				return ResponseEntity.ok(comment);
+//			else
+//				return ResponseEntity.notFound().build();
+//		}
 		
 	//수정
 	@PutMapping("/movieDetail/{apiCode}")

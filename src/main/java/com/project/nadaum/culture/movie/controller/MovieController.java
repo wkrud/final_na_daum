@@ -86,149 +86,149 @@ public class MovieController {
 //			return ResponseEntity.badRequest().build();
 //		}
 //	}
-	@PostMapping("/movieDetail/{apiCode}/insertCalendar")
-	public ResponseEntity<?> insertCalendarMovie(@RequestParam Map<String, Object> map, @PathVariable String schedulecode) throws ParseException {
-
-		log.debug("map = {}", map);
-		String id = (String) map.get("id");
-		String friendid = (String) map.get("friendid");
-		String a  = (String) map.get("startDate");
-		String b  = (String) map.get("endDate");
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date startDate = sdf.parse(a);
-		Date endDate = sdf.parse(b);
-		
-		map.put("startDate", startDate);
-		map.put("endDate", endDate);
-		
-		try {
-				map.remove("friendid");
-				log.debug("map = {}", map);
-			 int result = movieService.insertCalendarMovie(map);
-			 	map.put("friendid",friendid);
-			 	map.remove("id");
-			 	log.debug("map = {}", map);
-			 int result2 = movieService.insertCalendarMovieFriend(map);
-			 
-			 log.debug("result2={}", result2);
-			 String msg = (result2 > 0) ? "약속수락 성공" : "약속수락 실패";
-			 map.put("msg", msg);
-
-			if (result == 1) {
-
-				return ResponseEntity.ok(map);
-			} else {
-				return ResponseEntity.status(404).build();
-			}
-
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return ResponseEntity.badRequest().build();
-		}
-
-	}
-
-		//약속체크하기
-		@ResponseBody
-		@GetMapping("/movieDetail/{apiCode}/movieScheduleCheck")
-		public Map<String, Object> selectOneSchedule(@PathVariable String schedulecode){
-			
-			Map<String, Object> param = new HashMap<>();
-			log.info("schedulecode = {}", schedulecode);
-			
-			Schedule checkresult = movieService.selectOneSchedule(schedulecode);
-			char accept = checkresult.getAccept();
-			int allDay = checkresult.getAllDay();
-			String friendnickname = checkresult.getFriendId();
-			String mynickname = checkresult.getId();
-			Date startDate = checkresult.getStartDate();
-			String content = checkresult.getTitle();
-			String friendid = checkresult.getId();
-			
-			param.put("accept", accept);
-			param.put("allDay", allDay);
-			param.put("friendnickname", friendnickname);
-			param.put("mynickname", mynickname);
-			param.put("startDate", startDate);
-			param.put("content", content);
-			param.put("friendid", friendid);
-
-			return param;
-		}	
-	
-	// 약속
-//	@ResponseBody
-	@PostMapping("/movieDetail/{apiCode}/schedule")
-	public ResponseEntity<?> insertSchedule( @RequestParam Map<String, Object> map, Model model) throws Exception {
-		try {
-			log.debug("insertSchedule map = {}", map);
-			
-			String title = (String) map.get("title");
-			String startDatebefore = (String) map.get("startDate");
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date startDate = format.parse(startDatebefore);
-			String friendId = (String) map.get("friendId");
-			String apiCode = (String) map.get("apiCode");
-			String id = (String) map.get("id");
-			
-			Schedule movieSchedule = new Schedule(null, friendId, '\u0000', apiCode, startDate, 1, id, title);
-			
-			String schedulecode = movieService.insertSchedule(movieSchedule);
-			log.info("Schedulecode={}", schedulecode);
-			if (schedulecode != null) {
-				int result = 1;
-				log.debug("result={}", result);
-				
-				String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";
-				
-				map.put("schedulecode", schedulecode);
-				map.put("result", result);
-				map.put("msg", msg);
-				System.out.println(map);
-
-				return ResponseEntity.ok(map);
-			} else {
-				return ResponseEntity.status(404).build();
-			}
-
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return ResponseEntity.badRequest().build();
-		}
-	}
-	
-	
-	 @GetMapping("/movieDetail/{apiCode}/schedule/{schedulecode}") 
-	 public String movieScheduleDetail(@RequestParam String schedulecode, @RequestParam Map<String,Object> map, Model model) {
-		 log.debug("scheduleDetail code = {}", schedulecode);
-		 log.debug("scheduleDetail map = {}", map);
-		 
-		 Map<String, Object> param = new HashMap<>();
-		 
-//		 String code = (String) map.get("code");
-		 Schedule checkresult = movieService.selectOneSchedule(schedulecode);
-		 
-		 char accept = checkresult.getAccept();
-			int allDay = checkresult.getAllDay();
-			String friendnickname = checkresult.getFriendId();
-			String mynickname = checkresult.getId();
-			Date startDate = checkresult.getStartDate();
-			String content = checkresult.getTitle();
-			String friendid = checkresult.getId();
-			
-			param.put("accept", accept);
-			param.put("allDay", allDay);
-			param.put("friendnickname", friendnickname);
-			param.put("mynickname", mynickname);
-			param.put("startDate", startDate);
-			param.put("content", content);
-			param.put("friendid", friendid);
-		 
-//		 model.addAttribute("scheduleDetail", scheduleDetail);
-		 
-		 return "common/movieScheduleDetail";
-	 }
+//	@PostMapping("/movieDetail/{apiCode}/insertCalendar")
+//	public ResponseEntity<?> insertCalendarMovie(@RequestParam Map<String, Object> map, @PathVariable String schedulecode) throws ParseException {
+//
+//		log.debug("map = {}", map);
+//		String id = (String) map.get("id");
+//		String friendid = (String) map.get("friendid");
+//		String a  = (String) map.get("startDate");
+//		String b  = (String) map.get("endDate");
+//		
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		Date startDate = sdf.parse(a);
+//		Date endDate = sdf.parse(b);
+//		
+//		map.put("startDate", startDate);
+//		map.put("endDate", endDate);
+//		
+//		try {
+//				map.remove("friendid");
+//				log.debug("map = {}", map);
+//			 int result = movieService.insertCalendarMovie(map);
+//			 	map.put("friendid",friendid);
+//			 	map.remove("id");
+//			 	log.debug("map = {}", map);
+//			 int result2 = movieService.insertCalendarMovieFriend(map);
+//			 
+//			 log.debug("result2={}", result2);
+//			 String msg = (result2 > 0) ? "약속수락 성공" : "약속수락 실패";
+//			 map.put("msg", msg);
+//
+//			if (result == 1) {
+//
+//				return ResponseEntity.ok(map);
+//			} else {
+//				return ResponseEntity.status(404).build();
+//			}
+//
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//			return ResponseEntity.badRequest().build();
+//		}
+//
+//	}
+//
+//		//약속체크하기
+//		@ResponseBody
+//		@GetMapping("/movieDetail/{apiCode}/movieScheduleCheck")
+//		public Map<String, Object> selectOneSchedule(@PathVariable String schedulecode){
+//			
+//			Map<String, Object> param = new HashMap<>();
+//			log.info("schedulecode = {}", schedulecode);
+//			
+//			Schedule checkresult = movieService.selectOneSchedule(schedulecode);
+//			char accept = checkresult.getAccept();
+//			int allDay = checkresult.getAllDay();
+//			String friendnickname = checkresult.getFriendId();
+//			String mynickname = checkresult.getId();
+//			Date startDate = checkresult.getStartDate();
+//			String content = checkresult.getTitle();
+//			String friendid = checkresult.getId();
+//			
+//			param.put("accept", accept);
+//			param.put("allDay", allDay);
+//			param.put("friendnickname", friendnickname);
+//			param.put("mynickname", mynickname);
+//			param.put("startDate", startDate);
+//			param.put("content", content);
+//			param.put("friendid", friendid);
+//
+//			return param;
+//		}	
+//	
+//	// 약속
+////	@ResponseBody
+//	@PostMapping("/movieDetail/{apiCode}/schedule")
+//	public ResponseEntity<?> insertSchedule( @RequestParam Map<String, Object> map, Model model) throws Exception {
+//		try {
+//			log.debug("insertSchedule map = {}", map);
+//			
+//			String title = (String) map.get("title");
+//			String startDatebefore = (String) map.get("startDate");
+//			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//			Date startDate = format.parse(startDatebefore);
+//			String friendId = (String) map.get("friendId");
+//			String apiCode = (String) map.get("apiCode");
+//			String id = (String) map.get("id");
+//			
+//			Schedule movieSchedule = new Schedule(null, friendId, '\u0000', apiCode, startDate, 1, id, title);
+//			
+//			String schedulecode = movieService.insertSchedule(movieSchedule);
+//			log.info("Schedulecode={}", schedulecode);
+//			if (schedulecode != null) {
+//				int result = 1;
+//				log.debug("result={}", result);
+//				
+//				String msg = (result > 0) ? "약속잡기 성공" : "약속잡기 실패";
+//				
+//				map.put("schedulecode", schedulecode);
+//				map.put("result", result);
+//				map.put("msg", msg);
+//				System.out.println(map);
+//
+//				return ResponseEntity.ok(map);
+//			} else {
+//				return ResponseEntity.status(404).build();
+//			}
+//
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//			return ResponseEntity.badRequest().build();
+//		}
+//	}
+//	
+//	
+//	 @GetMapping("/movieDetail/{apiCode}/schedule/{schedulecode}") 
+//	 public String movieScheduleDetail(@RequestParam String schedulecode, @RequestParam Map<String,Object> map, Model model) {
+//		 log.debug("scheduleDetail code = {}", schedulecode);
+//		 log.debug("scheduleDetail map = {}", map);
+//		 
+//		 Map<String, Object> param = new HashMap<>();
+//		 
+////		 String code = (String) map.get("code");
+//		 Schedule checkresult = movieService.selectOneSchedule(schedulecode);
+//		 
+//		 char accept = checkresult.getAccept();
+//			int allDay = checkresult.getAllDay();
+//			String friendnickname = checkresult.getFriendId();
+//			String mynickname = checkresult.getId();
+//			Date startDate = checkresult.getStartDate();
+//			String content = checkresult.getTitle();
+//			String friendid = checkresult.getId();
+//			
+//			param.put("accept", accept);
+//			param.put("allDay", allDay);
+//			param.put("friendnickname", friendnickname);
+//			param.put("mynickname", mynickname);
+//			param.put("startDate", startDate);
+//			param.put("content", content);
+//			param.put("friendid", friendid);
+//		 
+////		 model.addAttribute("scheduleDetail", scheduleDetail);
+//		 
+//		 return "common/movieScheduleDetail";
+//	 }
 	
 	
 	

@@ -13,4 +13,13 @@ public interface ScheduleService {
 	int insertFinalSchedule(Map<String, Object> map);
 	
 	int insertFinalSecondSchedule(Map<String, Object> map);
+	
+	//영화
+	String insertMovieSchedule(Schedule schedule);
+
+	Schedule selectOneSchedule(String schedulecode);
+
+	int insertCalendarMovie(Map<String, Object> map);
+
+	int insertCalendarMovieFriend(Map<String, Object> map);
 }
