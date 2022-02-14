@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.project.nadaum.culture.movie.model.dao.MovieDao;
-import com.project.nadaum.culture.movie.model.vo.Movie;
+import com.project.nadaum.culture.schedule.model.vo.Schedule;
+import com.project.nadaum.culture.show.model.vo.Scrap;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +35,11 @@ public class MovieServiceImpl implements MovieService {
 		return movieDao.deleteScrap(param);
 	}
 
+	@Override
+	public List<Scrap> selectMovieScrap(String id) {
+		return movieDao.selectMovieScrap(id);
+	}
+	
 	@Override
 	public double avgRating(String apiCode) {
 		return movieDao.avgRating(apiCode);
@@ -74,6 +79,43 @@ public class MovieServiceImpl implements MovieService {
 	public int totalStarCount(String apiCode) {
 		return movieDao.totalStarCount(apiCode);
 	}
+
+	@Override
+	public String insertSchedule(Schedule movieSchedule) {
+		
+		int result = movieDao.insertSchedule(movieSchedule);
+		log.debug("code = {}", movieSchedule.getCode());
+		String Schedulecode = movieSchedule.getCode();
+		
+		return Schedulecode;
+	}
+
+//	@Override
+//	public Map<String, Object> selectOneSchedule(String code) {
+//		return movieDao.selectOneSchedule(code);
+//	}
+
+	@Override
+	public Schedule selectOneSchedule(String schedulecode) {
+		return movieDao.selectOneSchedule(schedulecode);
+	}
+
+	@Override
+	public int insertCalendarMovie(Map<String, Object> map) {
+		return movieDao.insertCalendarMovie(map);
+	}
+
+	@Override
+	public int updateAccept(String code) {
+		return movieDao.updateAccept(code);
+	}
+
+	@Override
+	public int insertCalendarMovieFriend(Map<String, Object> map) {
+		return movieDao.insertCalendarMovieFriend(map);
+	}
+
+	
 	
 
 

@@ -62,5 +62,37 @@
 			#{type}
 	)
 	</insert>
+	
+	<!-- 영화 -->
+	<insert id="insertMovieSchedule">
+		insert 
+		into 
+			schedule 
+		values(concat('pm-',seq_schedule_no.nextval), #{friendId}, default, #{apiCode}, #{startDate}, #{allDay}, #{id}, #{title})
+		 <selectKey order="AFTER" resultType="string" keyProperty="code">
+            select concat('pm-',seq_schedule_no.currval) from dual
+        </selectKey>
+	</insert>
+	
+	<select id="selectOneSchedule" resultType="schedule">
+		select
+			*
+		from
+			schedule
+		where
+			code = #{code}
+	</select>
+	
+	<!-- 영화 캘린더 -->
+	<insert id="insertCalendarMovie">
+		insert into  calendar  values( seq_calendar_no.nextval, concat('pm-',seq_schedule_no.nextval), '',
+			#{id},#{title}, default,  #{startDate}, #{endDate},  #{allDay}, #{textColor}, #{backgroundColor}, #{borderColor}, #{type} )
+	</insert>
+	
+	<insert id="insertCalendarMovieFriend">
+		insert into calendar values(seq_calendar_no.nextval,concat('pm-',seq_schedule_no.nextval),'',
+			#{friendid}, #{title}, default,  #{startDate}, #{endDate},  #{allDay}, #{textColor}, #{backgroundColor}, #{borderColor}, #{type} )
+	</insert>
+	
 </mapper>
 
