@@ -37,6 +37,11 @@ textarea {resize: none;}
     padding-top: 15px;
     justify-content: space-between;
 }
+#weatherBox{    
+	display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
 .blanket{
     content:url("${pageContext.request.contextPath}/resources/images/diary/emotion/blanket.png");
     height:130px;
@@ -73,12 +78,11 @@ textarea {resize: none;}
 				</label>
 				<input type="date" name="regDate" id="reg_date" value="<%= regDate %>"/>
 			</div>
-			<div id="diaryIsPublic">
-				<label>공개여부 
-					<input type="checkbox" name="isPublic" value='Y' id="isPublic"/>
-				</label>			
+			<div id="weatherBox">
+				오늘의 날씨 : <img class="weatherIcon" id="weatherIcon" src="">		
 			</div>
 			<div id="diaryContent-container">
+				<input type="hidden" name="weather" value="" />
 				<input type="hidden" name="isPublic" value='N' id="isPublic" checked="checked"/>
 				<label for="title">제목</label>						
 				<input type="text" class="form-control" name="title" id="title"	placeholder="제목을 입력해주세요" required>
@@ -96,6 +100,47 @@ textarea {resize: none;}
 	</div>
 </div>
 <script>
+var weather = (".weatherIcon");
+console.log(weather);
+//|| *********** 날씨 api ************ ||
+const COORDS = "coords";
+function handleGeoSucc(position) {
+    console.log(position);
+    const latitude = position.coords.latitude;  // 경도  
+    const longitude = position.coords.longitude;  // 위도
+    const coordsObj = {
+        latitude,
+        longitude
+    }
+    saveCoords(coordsObj);
+    getWeather(latitude, longitude);
+    console.log(latitude, longitude);
+}
+
+function handleGeoErr(err) {
+    console.log("geo err! " + err);
+}
+
+function requestCoords() {
+    navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr);
+}
+//추가
+function saveCoords(coordsObj) {
+  localStorage.setItem(COORDS, JSON.stringify(coordsObj));
+}
+requestCoords();
+const API_KEY = "48d8083486dafbc4ac8f913a69bbe777";
+function getWeather(lat, lon) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=\${lat}&lon=\${lon}&appid=\${API_KEY}&units=metric`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data.weather[0].icon);     	
+        var imgURLIcon = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png"; // 아이콘        
+        $(".weatherIcon").attr("src", imgURLIcon);
+        $("[name = weather]").attr("value", imgURLIcon);
+    })
+}
+
 $("#diaryBtn").click((e) => {
 	if($("#title").val() == ''){
 		alert('제목을 작성해 주세요');

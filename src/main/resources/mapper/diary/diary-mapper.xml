@@ -5,7 +5,7 @@
 <mapper namespace="diary">
 	<insert id="insertDiary">
 		insert into diary 
-		values(concat('dy-', seq_diary_no.nextval), #{id}, #{content}, to_date(#{regDate},'YYYY-MM-DD'), #{emotionNo}, #{isPublic}, #{title})
+		values(concat('dy-', seq_diary_no.nextval), #{id}, #{content}, to_date(#{regDate},'YYYY-MM-DD'), #{emotionNo}, #{isPublic}, #{title}, #{weather})
 	</insert>
 	
 	<select id="emotionNo" resultType="_int">
@@ -79,6 +79,7 @@
 		<result column="emotion_no" property="emotionNo"/>
 		<result column="is_public" property="isPublic"/>
 		<result column="title" property="title"/>
+		<result column="weather" property="weather"/>
 	</resultMap>
 </mapper>
 
