@@ -163,15 +163,17 @@ const selectedFeed = (id, code) => {
 				
 				let rd = new Date(v.regDate);
 				commentDate = `${rd.getFullYear()}.${f(rd.getMonth() + 1)}.${f(rd.getDate())}`;
-				
-				if(v.profile == '' && v.loginType == 'D'){
+				console.log(v.profile);
+				if(v.profile == null && v.loginType == 'D'){
 					commenterProfileImg = '/nadaum/resources/upload/member/profile/default_profile_cat.png';
+					console.log(commenterProfileImg);
 				}else if(v.profile != '' && v.loginType == 'D'){
 					commenterProfileImg = `/nadaum/resources/upload/member/profile/${v.profile}`;
+					console.log(commenterProfileImg);
 				}else if(v.loginType == 'K'){
 					commenterProfileImg = v.profile;							
 				}
-				
+				console.log(commenterProfileImg);
 				if(v.commentWriter == resp.guest.id){
 					deleteBtn = `
 					<div class="dropdown comment-setting-btn-wrap">

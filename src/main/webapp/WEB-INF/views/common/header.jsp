@@ -533,7 +533,7 @@ padding: 20px;
     /* iframe 드래그 */
     dragElement(document.getElementById("infowrap"));
   </script>
-  </sec:authorize>
 
 <!-- 각자 페이지 영역 -->
 <section class="contentWrapper">
+  </sec:authorize>

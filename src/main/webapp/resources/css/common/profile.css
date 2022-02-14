@@ -30,7 +30,7 @@
 	max-width: 350px;
 	max-height: 150px;
 	overflow: scroll;
-	z-index: 9;
+	z-index: 9999;
 }
 
 .my-feed{
