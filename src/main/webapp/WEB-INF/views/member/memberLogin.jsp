@@ -32,7 +32,7 @@ $(() => {
 	$(loginModal)
 		.modal()
 		.on("hide.bs.modal", (e) => {
-			location.href='${empty header.referer || header.referer.contains('/member/memberLogin.do') ? pageContext.request.contextPath : header.referer}';
+			location.href='${pageContext.request.contextPath}';
 		});	
 });
 function onEnterLogin(){
@@ -45,7 +45,7 @@ function onEnterLogin(){
 </script>
 <style>
 .modal-backdrop{
-	background-image: url("${pageContext.request.contextPath}/resources/images/member/city.jpg");
+	background-image: url("${pageContext.request.contextPath}/resources/images/member/pastel.jpg");
 	background-repeat : no-repeat;
 	background-size : 100% 100%;
 	opacity: 1 !important;
@@ -53,6 +53,9 @@ function onEnterLogin(){
 .modal-dialog{
 	position: relative;
 	top: 25%;
+}
+.modal-content{
+	background-color: #FFFBF5;
 }
 </style>
 </head>
