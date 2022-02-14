@@ -21,9 +21,6 @@
     if(document.querySelector('.game-widget') != null) {
  	  gameWidgetInfo();
    } 
-	if (document.querySelector('.alret-widget') != null) {
-  	 todoListWidgetInfo();	
-   } 
     if (document.querySelector('.account-widget') != null) {
   	 accountbookWidgetInfo();	
    }
@@ -230,7 +227,10 @@ const friendWidgetInfo = () => {
 		contentType : "application/json; charset=UTF-8",
 	 	dataType : "json",
 		success(resp) {
-			console.log(resp);
+			console.log(resp);		
+			console.log(resp.widgetFriends[0].profile);
+			console.log(resp.widgetFriends[1].profile);
+			console.log(resp.widgetFriends.length);
 			let content = "";
 			content = `
 			<div style="display : flex; text-align : center; width : 200px;">
@@ -244,34 +244,65 @@ const friendWidgetInfo = () => {
 			`
 			$(".friend-widget").append(content);
 			//맞팔
-			for(let i = 0; i < resp.widgetFriends.length; i++) {
-				content = `
-					<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+			for(let i = 0; i <resp.widgetFriends.length; i++) {
+				if(resp.widgetFriends[i].profile != null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
 						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
 						<div class="friendProfileImg">
 							<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
 						</div>
 						<span>`+resp.widgetFriends[i].nickname+`</span>
 						</a>
-					</div>
-				`;
-				$(".friendTogetherInfo").append(content);
-				if(resp.widgetFriends[i].profile == null) {
-					
+						</div>
+					`
+					$(".friendTogetherInfo").append(content);
+				} else {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
+						</div>
+						<span>`+resp.widgetFriends[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendTogetherInfo").append(content);
+
 				}
 			}
 			//팔로워
-			for(let i = 0; i < resp.widgetFollowers.length; i++) {
-				content = `
-					<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<div class="friendProfileImg"><img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`></div>
+			for(let i = 0; i <resp.widgetFollowers.length; i++) {
+				if(resp.widgetFollowers[i].profile != null) {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>
+						</div>
 						<span>`+resp.widgetFollowers[i].nickname+`</span>
-					</div>
-				`;
-				$(".friendStraightInfo").append(content);
+						</a>
+						</div>
+					`
+					$(".friendStraightInfo").append(content);
+				} else {
+					content = `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
+						<div class="friendProfileImg">
+							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
+						</div>
+						<span>`+resp.widgetFollowers[i].nickname+`</span>
+						</a>
+						</div>
+					`
+					$(".friendStraightInfo").append(content);
+
+				}
 			}
 			
-		}, 
+		}, //success 끝
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
@@ -287,7 +318,6 @@ const alertWidgetInfo = () => {
 		contentType : "application/json; charset=UTF-8",
 	 	dataType : "json",
 		success(resp) {
-			console.log(resp);
 			let content = "";
 			if(resp.length == 0) {
 				content = `
@@ -366,7 +396,6 @@ const gameWidgetInfo = () => {
 	 	headers : headers,
 	 	data : JSON.stringify(member_Id),
 	 	success(resp) { 
-		console.log(resp);
 		let content = "";
 			if(resp.widgetinfo == null) {
 				if(resp.widgetnullcheck == null) {					
@@ -437,7 +466,6 @@ const accountbookWidgetInfo = () => {
      	contentType : "application/json; charset=UTF-8",
      	dataType : "json",
      	success(resp) {
-			console.log(resp);
 			let content = "";
 				content = `
 					<div style="padding : 15px;">
@@ -481,7 +509,6 @@ const cultureWidgetInfo = () => {
      	dataType : "json",
      	headers : headers,
      	success(resp) {
-			console.log(resp);
 				let content = "";
 				if(resp.length == 0) {
 					content = `
@@ -552,8 +579,6 @@ const audiobookWidgetInfo = () => {
      	dataType : "json",
      	headers : headers,
      	success(resp) {
-			console.log(resp);
-			console.log(resp.imgLink);
 				let content = `
 				<div style="width : 360px; height : 120px; padding : 10px; box-sizing: border-box;">
 				    
@@ -593,7 +618,6 @@ const movieWidgetInfo = () => {
      	dataType : "json",
      	headers : headers,
      	success(resp) {
-			console.log(resp);
 				let content = ""; 
 				content	= `
 				<div class="page-wrapper" style="position: relative;">
