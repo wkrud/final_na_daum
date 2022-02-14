@@ -465,13 +465,26 @@ public class ApitestController {
 	@PostMapping("/riotWidget.do")
 	public Map<String, Object> riotWidget(@RequestBody Map<String, Object> map) {
 		
+		RiotFavo widgetnullcheck;
 		RiotWidget widgetinfo;
 		
 		try {
 			
 			widgetinfo = riotService.selectOneWidget(map);
-			map.put("widgetinfo", widgetinfo);
-			log.info("oneaccount= {}",widgetinfo);
+			widgetnullcheck = riotService.selectOneAccountName(map);
+			if(widgetinfo != null)
+			{
+				
+				map.put("widgetinfo", widgetinfo);
+				
+			}
+			else {
+				
+				map.put("widgetnullcheck", widgetnullcheck);
+				
+			}
+			
+			
 			
 
 			

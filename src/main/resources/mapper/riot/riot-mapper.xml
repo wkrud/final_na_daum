@@ -100,7 +100,7 @@
             on a.sm_id = b.id
 		where
 			member_id = #{member_Id} 
-	
+			
 	</select>
 	
 		<select id="selectOneWidget" resultType="riotWidget">
