@@ -14,7 +14,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/feed/onePersonFeedMain.css" />
 <sec:authentication property="principal" var="loginMember"/>
 <style>
-
 .userPic img {
 	border-radius: 50%; 
 	width: 45px; 
