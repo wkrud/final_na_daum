@@ -164,9 +164,9 @@ const selectedFeed = (id, code) => {
 				let rd = new Date(v.regDate);
 				commentDate = `${rd.getFullYear()}.${f(rd.getMonth() + 1)}.${f(rd.getDate())}`;
 				
-				if(v.profile != '' && v.loginType == 'D'){
+				if(v.profile == '' && v.loginType == 'D'){
 					commenterProfileImg = '/nadaum/resources/upload/member/profile/default_profile_cat.png';
-				}else if(v.profile == '' && v.loginType == 'D'){
+				}else if(v.profile != '' && v.loginType == 'D'){
 					commenterProfileImg = `/nadaum/resources/upload/member/profile/${v.profile}`;
 				}else if(v.loginType == 'K'){
 					commenterProfileImg = v.profile;							
