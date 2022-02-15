@@ -18,114 +18,9 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 영화상세보기 " name="movieDetail" />
 </jsp:include>
-<style>
-.movie-detail-container {
-	width: 80%;
-	margin: 0 auto;
-	padding-right: 15px;
-	padding-left: 80px;
-}
-
-input, button, textarea {
-	margin-bottom: 15px;
-	
-	
-}
-
-.col-sm-10 {
-	vertical-align: middle;
-	text-align: left;
-	padding: 0px;
-	display: inline-block;
-}
-
-.col-form-label {
-	width: 70px;
-}
-
-.movie-detail {
-	border: none;
-	border-right: 0px;
-	border-top: 0px;
-	boder-left: 0px;
-	boder-bottom: 0px;
-	display: inline-block;
-	margin: 0px;
-	background-color: transparent;
-	pointer-events: none;
-	height: 38px;
-	font-size: 24px;
-}
-
-#movieCd-detail {
-	width: 300px;
-}
-
-button {
-	overflow: hidden;
-}
-/* 부트스트랩 : 파일라벨명 정렬*/
-div#board-container label.custom-file-label {
-	text-align: left;
-}
-
-#exampleFormControlTextarea1 {
-	border: none;
-	border-right: 0px;
-	border-top: 0px;
-	boder-left: 0px;
-	boder-bottom: 0px;
-	background-color: transparent;
-	display: inline-block;
-	margin: 0px;
-	pointer-events: none;
-	font-size: 22px;
-}
-
-#category-select {
-	width: 100px;
-}
-
-#category-select-commentList {
-	width: 100px;
-	display: inline-block;
-	pointer-events: none;
-	border: none;
-	appearance: none;
-}
-
-.star-2 {
-	position: relative;
-	font-size: 4rem;
-	color: #ddd;
-}
-
-.star-2 span {
-	position: absolute;
-	left: 0;
-	color: #ffd400;
-	overflow: hidden;
-	pointer-events: none;
-}
-
-.star-count {
-	position: relative;
-	font-size: 1.5rem;
-	color: #ddd;
-}
-
-.star-count span {
-	position: absolute;
-	left: 0;
-	color: #ffc57d;
-	overflow: hidden;
-	pointer-events: none;
-}
-
-/* .rating svg:nth-child(1){
-	color:#F05522; */
-}
-</style>
+<link
+	href='${pageContext.request.contextPath}/resources/css/movie/moviedetail.css'
+	rel='stylesheet' />
 
 <div class="movie-detail-container">
 	<!-- 영화상세보기 정보 -->
@@ -133,34 +28,18 @@ div#board-container label.custom-file-label {
 
 		<!-- 상세정보 -->
 		<c:forEach var="movie" items="${list}">
-			<div class="row featurette">
+			<div class="row featurette top-detail">
 				<div class="col-md-7 order-md-2">
-					<h2 class="featurette-heading">
-						<input type="text" class="form-control- movie-detail"
-							placeholder="제목" name="title" id="title" value="${movie.title}"
-							readonly>
-					</h2>
-					<p class="lead">
+					<h1 class="featurette-heading">${movie.title}</h1>
 					<div class="form-group row">
-						<label for="date" class="col-sm-2
-			col-form-label">개봉일
-							: </label>
+						<label for="date" class="col-sm-2 col-form-label">개봉일 : </label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control- movie-detail"
 								name="openDt" title="개봉일" id="date" value="${movie.releaseDate}"
 								readonly>
 						</div>
 					</div>
-					<%-- <div class="form-group row">
-						<label for="nationNm" class="col-sm-2 col-form-label">제작국가
-							: </label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control-
-			movie-detail"
-								name="nation" title="제작국가" id="nationNm" value="${movie.nation}"
-								readonly>
-						</div>
-					</div> --%>
+
 					<div class="form-group row">
 						<label for="genreNm" class="col-sm-2 col-form-label">장르 :
 						</label>
@@ -172,40 +51,22 @@ div#board-container label.custom-file-label {
 
 						</div>
 					</div>
-					<%-- <div class="form-group row">
-						<label for="director" class="col-sm-2 col-form-label">감독 :
-						</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail"
-								name="director" title="감독" id="director"
-								value="${movie.director}" readonly>
-						</div>
-					</div> --%>
 
-					<%-- <div class="form-group row">
-						<label for="date" class="col-sm-2 col-form-label">개봉일 : </label>
+					<div class="form-group row">
+						<label for="nationNm" class="col-sm-2 col-form-label">영화
+							줄거리 : </label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control- movie-detail"
-								name="openDt" title="개봉일" id="date" value="${movie.releaseDate}"
-								readonly>
+
+							<p class="blog-post-meta overView">${movie.overview}</p>
 						</div>
-					</div> --%>
+					</div>
 
 
 				</div>
-				<div class="col-md-5 order-md-1">
-					<%-- <svg
-						class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-						width="500" height="500" xmlns="http://www.w3.org/2000/svg"
-						preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-						aria-label="Placeholder: 500x500">
-						<img class="card-img-top"
-							src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
-							alt="Card image cap">
-					<rect width="100%" height="100%" fill="#eee" />
-					</svg> --%>
+				<div class="col-md-5 order-md-1 movie-detail-poster">
+
 					<img
-						class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+						class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto movie-detail-poster-image"
 						src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
 						alt="Card image cap">
 				</div>
@@ -220,19 +81,54 @@ div#board-container label.custom-file-label {
 		<!-- 스크랩 버튼 -->
 
 		<c:if test="${ loginMember.id != null }">
-			<button type="button" class="btn btn-success" value="${apiCode}" id="scrapButton"
-					data-api-code ="${apiCode}" data-id="${loginMember.id}" >
+			<button type="button" class="btn btn-success" value="${apiCode}"
+				id="scrapButton" data-api-code="${apiCode}"
+				data-id="${loginMember.id}">
 				스크랩<i class="fas fa-check-double ml-1"></i>
 			</button>
 
 		</c:if>
-		
-		<!-- 영화 줄거리 -->
+
+
+		<!-- 비슷한 영화 -->
 		<hr />
-		<h2 class="blog-post-title">영화 줄거리</h2>
-		<p class="blog-post-meta">
-			<c:forEach items="${list }" var="movie">${movie.overview}</c:forEach>
-		</p>
+		<div class="widget_form">
+			<div class="upcoming-movie-item">
+
+				<!-- 슬라이드 시작 -->
+				<div class="page-wrapper" style="position: relative;">
+					<!--page slider -->
+					<div class="post-slider">
+						<h1 class="silder-title">비슷한 영화들</h1>
+
+						<!-- 왼쪽 방향 버튼 -->
+						<i class="fas fa-chevron-left prev"></i>
+						<!-- 오른쪽 방향 버튼 -->
+						<i class="fas fa-chevron-right next"></i>
+						<div class="post-wrapper">
+							<c:forEach var="movie" items="${similarList}">
+								<div class="card post movie-card">
+									<img class="card-img-top movie-img"
+										src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
+										alt="Card image cap"
+										onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
+									<div class="card-body post-info">
+										<p class="card-text widget-movie-title">${movie.title}</p>
+									</div>
+								</div>
+
+							</c:forEach>
+
+						</div>
+
+					</div>
+					<!--post slider-->
+				</div>
+			</div>
+			<!-- 슬라이드 끝 -->
+		</div>
+		<br /> <br /> <br />
+		<!-- 비슷한 영화 끝 -->
 
 	</div>
 	<hr class="featurette-divider" />
@@ -345,7 +241,7 @@ div#board-container label.custom-file-label {
 										<div class="profileimg2">
 											<label for="replyId"> <input type="text"
 												class="id-detail" name="id" id="replyId"
-												value="${loginMember.nickname}" />
+												value="${loginMember.nickname}" readonly />
 											</label>
 										</div>
 									</div>
@@ -354,8 +250,8 @@ div#board-container label.custom-file-label {
 								<form id="insertCommentFrm">
 
 									<!-- api 코드 -->
-									<input type="hidden" name="apiCode" value="${apiCode}" />
-									<input type="hidden" name="id" value="${loginMember.id}" />
+									<input type="hidden" name="apiCode" value="${apiCode}" /> <input
+										type="hidden" name="id" value="${loginMember.id}" />
 									<!-- 댓글인 경우 1 -->
 									<input type="hidden" name="commentLevel" value="1" />
 									<!-- 대댓글인 경우 써여져야함 -->
@@ -381,7 +277,7 @@ div#board-container label.custom-file-label {
 
 									<button type="submit" id="btn-comment-enroll1"
 										class="btn btn-outline-primary">등록</button>
-									
+
 								</form>
 
 							</li>
@@ -446,8 +342,9 @@ div#board-container label.custom-file-label {
 										</div>
 
 										<div class="col-sm-10">
-											<label for="star" class="col-sm-2 col-form-label">평점
-												:</label> <input type="hidden" class="form-control" name="star">
+											<label for="star"
+												class="col-sm-2 col-form-label comment-rating">평점 :</label>
+											<input type="hidden" class="form-control" name="star">
 
 											<select id="category-select-commentList" class="form-control"
 												aria-label="Default select example">
@@ -564,53 +461,62 @@ div#board-container label.custom-file-label {
 
 <!-- 캘린더 약속 모달 -->
 <!-- 캘린더 Modal -->
-	<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
-		aria-labelledby="add-calander" aria-hidden="true">
-		<form id="promiseFrm">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
+	aria-labelledby="add-calander" aria-hidden="true">
+	<form id="promiseFrm">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label">제목</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="title" name="title"
+								placeholder="제목을 입력해주세요" required>
+						</div>
 					</div>
-					<div class="modal-body">
-						<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">제목</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="title" name="title"
-									placeholder="제목을 입력해주세요" required>
-							</div>
-						</div>
 
-						<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">약속일</label>
-							<div class="col-sm-10">
-								<input type="date" class="form-control" id="startDate"
-									name="startDate" required>
-							</div>
+					<div class="form-group row">
+						<label for="title" class="col-sm-2 col-form-label">약속일</label>
+						<div class="col-sm-10">
+							<input type="date" class="form-control" id="startDate"
+								name="startDate" required>
 						</div>
-						<span>친구 닉네임</span> <input type="text" name="friendId" value="꿈나무"
-							id="friendId" class="friendTextId" /> <br /> <br /> <input
-							type="hidden" name="apiCode" value="${board.code}" /> <input
-							type="hidden" name="allDay" value="1" /> <input type="hidden"
-							name="id" value="${loginMember.id}" />
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">취소</button>
-							<button type="submit" class="btn btn-primary">추가</button>
-						</div>
+					</div>
+					<span>친구 닉네임</span> <input type="text" name="friendId"
+						id="friendId" class="friendTextId" /> <br /> <br /> <input
+						type="hidden" name="apiCode" value="${board.code}" /> <input
+						type="hidden" name="allDay" value="1" /> <input type="hidden"
+						name="id" value="${loginMember.id}" />
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">취소</button>
+						<button type="submit" class="btn btn-primary">추가</button>
 					</div>
 				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+	</form>
+</div>
 <!-- 캘린더 약속 모달 끝 -->
 
 <script>
-
+/* 비슷한 영화 */
+$('.post-wrapper').slick({
+		slidesToShow : 7,
+		slidesToScroll : 1,
+		autoplay : true,
+		autoplaySpeed : 2000,
+		nextArrow : $('.next'),
+		prevArrow : $('.prev'),
+	});
+	
 /* 댓글 등록 */
 $(insertCommentFrm).submit((e) => {
 	e.preventDefault();
@@ -824,7 +730,8 @@ $(document).on('click', '#scrapButton', function(e) {
 }); //끝 괄호
 
 </script>
-<script src="${pageContext.request.contextPath}/resources/js/movie/rating.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/movie/rating.js"></script>
 <script>
 	$(promiseFrm).submit((e) => {
  		e.preventDefault();
@@ -843,7 +750,7 @@ $(document).on('click', '#scrapButton', function(e) {
 					alert(guest);
 					let schedulecode = resp["schedulecode"];
 					let content = '';
-					content = `<a href='/nadaum/movie/movieDetail/${apiCode}/\${schedulecode}'>${loginMember.nickname}님이 [영화] 약속을 신청을 했습니다</a>`
+					content = `<a href='/nadaum/movie/movieDetail/${apiCode}/\${schedulecode}'>🎬${loginMember.nickname}님이 [영화] 약속을 신청을 했습니다</a>`
 					console.log(content);
 					commonAlarmSystem(code,guest,content);
 					},

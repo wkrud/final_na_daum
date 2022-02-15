@@ -13,6 +13,7 @@
 	<jsp:param value="나:다움 영화리스트 " name="movieList" />
 </jsp:include>
 <link href='${pageContext.request.contextPath}/resources/css/movie/movieList.css' rel='stylesheet' />
+
 <div class="movie-container">
 	<!-- 썸네일 그림, 타이틀  -->
 	<div class="movie-banner">
@@ -83,146 +84,32 @@
 			</form>
 		</nav>
 	</div>
-
-	<!-- 슬라이드 시작 -->
-	<!-- 위젯 안에 들어갈 영화 (upcoming movie) -->
-	<div class="widget_form">
-		<div class="upcoming-movie-item">
-
-			<div class="page-wrapper" style="position: relative;">
-				<!--page slider -->
-				<div class="post-slider">
-					<h1 class="silder-title">Upcoming Movie</h1>
-
-					<!-- 왼쪽 방향 버튼 -->
-					<i class="fas fa-chevron-left prev"></i>
-					<!-- 오른쪽 방향 버튼 -->
-					<i class="fas fa-chevron-right next"></i>
-
-					<div class="post-wrapper">
-
-						<c:forEach var="movie" items="${upcomingList}">
-
-							<div class="card post" style="width: 18rem;">
-								<img class="card-img-top movie-img"
-									src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
-									alt="Card image cap"
-									onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
-								<div class="card-body post-info">
-									<p class="card-text widget-movie-title">${movie.title}</p>
-									<p class="card-text widget-movie-rating">평점 :
-										${movie.voteAverage}</p>
-								</div>
-							</div>
-
-						</c:forEach>
-
-					</div>
-
-				</div>
-				<!--post slider-->
-			</div>
+		
+		<h1>${loginMember.nickname} 님의 영화 스크랩 목록</h1>
+		<!-- TMDB api -->
+	<div class="upcoming-movie">
+		<c:forEach var="movie" items="${scrapList}">
+		<div class="card movie-card" style="width: 18rem;">
+			
+  			<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
+            						
+            						<rect width="100%" height="100%" fill="#55595c" />
+           		 					</svg>	
+  			
+  			<div class="card-body">
+   			 <p class="card-text">${movie.title}</p>
+  			</div>
 		</div>
-		<!-- 슬라이드 끝 -->
+		</c:forEach>
 	</div>
-
-	<!-- 위젯 안에 들어갈 영화 (popular movie) -->
-	<div class="widget_form">
-		<div class="upcoming-movie-item">
-
-			<!-- 슬라이드 시작 -->
-			<div class="page-wrapper" style="position: relative;">
-				<!--page slider -->
-				<div class="post-slider">
-					<h1 class="silder-title">Popular Movie</h1>
-
-					<!-- 왼쪽 방향 버튼 -->
-					<i class="fas fa-chevron-left prev"></i>
-					<!-- 오른쪽 방향 버튼 -->
-					<i class="fas fa-chevron-right next"></i>
-
-					<div class="post-wrapper">
-
-						<c:forEach var="movie" items="${popularList}">
-
-							<div class="card post" style="width: 18rem;">
-								<img class="card-img-top movie-img"
-									src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
-									alt="Card image cap"
-									onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
-								<div class="card-body post-info">
-									<p class="card-text widget-movie-title">${movie.title}</p>
-									<p class="card-text widget-movie-rating">평점 :
-										${movie.voteAverage}</p>
-								</div>
-							</div>
-
-						</c:forEach>
-
-					</div>
-
-				</div>
-				<!--post slider-->
-			</div>
-		</div>
-		<!-- 슬라이드 끝 -->
-	</div>
-
-	<!-- 위젯 안에 들어갈 영화 (Top Rated movie) -->
-	<div class="widget_form">
-		<div class="upcoming-movie-item">
-
-			<!-- 슬라이드 시작 -->
-			<div class="page-wrapper" style="position: relative;">
-				<!--page slider -->
-				<div class="post-slider">
-					<h1 class="silder-title">Top Rated Movie</h1>
-
-					<!-- 왼쪽 방향 버튼 -->
-					<i class="fas fa-chevron-left prev"></i>
-					<!-- 오른쪽 방향 버튼 -->
-					<i class="fas fa-chevron-right next"></i>
-
-					<div class="post-wrapper">
-
-						<c:forEach var="movie" items="${topratedList}">
-
-							<div class="card post" style="width: 18rem;">
-								<img class="card-img-top movie-img"
-									src="https://image.tmdb.org/t/p/w500${movie.posterPath}"
-									alt="Card image cap"
-									onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
-								<div class="card-body post-info">
-									<p class="card-text widget-movie-title">${movie.title}</p>
-									<p class="card-text widget-movie-rating">평점 :
-										${movie.voteAverage}</p>
-								</div>
-							</div>
-
-						</c:forEach>
-
-					</div>
-
-				</div>
-				<!--post slider-->
-			</div>
-		</div>
-		<!-- 슬라이드 끝 -->
-	</div>
+		
 
 </div>
-
+		
 
 <script>
-	/* the movie api 에서 top_rated  불러오기*/
+/* the movie api 에서 top_rated  불러오기*/
 
-	$('.post-wrapper').slick({
-		slidesToShow : 6,
-		slidesToScroll : 1,
-		autoplay : true,
-		autoplaySpeed : 2000,
-		nextArrow : $('.next'),
-		prevArrow : $('.prev'),
-	});
+
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

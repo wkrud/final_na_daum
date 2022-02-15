@@ -48,7 +48,7 @@ padding-left: 20px;
 			<img src="${pageContext.request.contextPath}/resources/images/culture/festival.jpg" alt="문화썸네일" />
 			<h1 class="title">Culture</h1>
 		</div>
-		<h1>나다운 찜 목록</h1>
+		<h1>나다운 스크랩 목록</h1>
 		<br />
 		  <div class="py-5">
 	    <div class="container">

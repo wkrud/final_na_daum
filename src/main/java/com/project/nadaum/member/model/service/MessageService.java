@@ -55,7 +55,7 @@ public class MessageService {
 	
 	public void sendId(Member member){
 		Map<String, String> map = new HashMap<>();
-		
+		String sender = prop.getProperty("from");
 		String AllId = member.getId();
 		String id = "";
 		if(AllId.length() >= 8) {
@@ -69,7 +69,7 @@ public class MessageService {
 		String text = "[나:다움] 아이디 찾기 문자입니다. 회원님의 아이디는 " + id + "입니다.";
 		
 		map.put("to", member.getPhone());
-		map.put("from", "");
+		map.put("from", sender);
 		map.put("text", text);
 		
 		sendMessage(map);
@@ -77,12 +77,12 @@ public class MessageService {
 	
 	public void sendPw(Member member) {
 		Map<String, String> map = new HashMap<>();
-		
+		String sender = prop.getProperty("from");
 		String password = member.getPassword();
 		String text = "[나:다움] 비밀번호 찾기 문자입니다. 임시 비밀번호 : " + password;
 		
 		map.put("to", member.getPhone());
-		map.put("from", "");
+		map.put("from", sender);
 		map.put("text", text);
 		
 		sendMessage(map);

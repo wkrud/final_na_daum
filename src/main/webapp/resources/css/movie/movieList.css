@@ -1,71 +1,97 @@
 @charset "UTF-8";
-/* 페이지 설정 */
-#container{
-padding: 0;
-}
-.container{
-	padding: 0;
-}
-section{
-	background-color: #FFFBF5;
-}
-body{
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: #EEEEEE;
-}
-
 /* 썸네일 이미지 설정*/
-
-.culture-thumnail{
-	position: relative;
+.movie-banner {
+	top: 50px;
 	padding: 0;
 }
-.culture-thumnail img{
-	height: 450px;
+
+.banner-div{
+    height: 400px;
+    width: 60%;
+    margin-left: 350px;
+    background-color: black
+}
+.banner-img{
+    height: 400px;
+    width: 60%;
+    margin-left: 250px;
+    background-color: black
+}
+.movie-nav{
+background-color: #fffbf5 !important;
+}
+
+.slick-list {
+	min-height: 100px;
 	width: 100%;
-	opacity: 0.75;
+	background-color: #fffbf5;
 }
-.title{
+
+.movieapi-container {
+	padding: 100px;
+}
+
+.movie-card {
+	display: inline-block;
+}
+
+/* poster style */
+/*post slider*/
+.post-slider {
+	
+}
+
+.post-slider .silder-title {
+	text-align: center;
+	margin: 30px auto;
+}
+
+.post-slider .next {
 	position: absolute;
-	top: 30%;
-    left: 60%;
+	top: 50%;
+	right: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
 }
-/*검색 폼 */
-.search-form{
+
+.post-slider .prev {
 	position: absolute;
-    background: #F2F2F2;
-    left: 15%;
-    bottom: -10%;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px grey;
-    margin-bottom: 20px;
+	top: 50%;
+	left: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
 }
 
-
-/* 오렌지색 버튼*/
-.btn {
-  border-radius: 10px;
-  text-decoration: none;
-  color: #fff;
-  position: relative;
-  display: inline-block;
+.post-slider .post-wrapper {
+	width: 90%;
+	height: 500px;
+	margin: 0px auto;
+	overflow: hidden;
+	padding: 10px 0px 10px 0px;
 }
 
-.btn:active {
-  transform: translate(0px, 5px);
-  -webkit-transform: translate(0px, 5px);
-  box-shadow: 0px 1px 0px 0px;
+.post-slider .post-wrapper .post {
+	width: 100%;
+	height: 410px;
+	border-radius: 5px;
+	margin-right: 20px;
 }
 
-.orange {
-  background-color: #F6953C;
-  box-shadow: 0px 4px 0px 0px #CD6509;
+.post-slider .post-wrapper .post .post-info {
+	font-size: 15px;
+	padding-left: 10px;
 }
 
-.orange:hover {
-  background-color: #FF983C;
+.post-slider .post-wrapper .post .slider-image {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.movie-img {
+	width: 100%;
+	height: 330px;
+}
+.silk-slide{
+height: 300px;
 }

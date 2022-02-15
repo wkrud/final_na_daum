@@ -6,6 +6,7 @@ import java.util.Map;
 import com.project.nadaum.culture.schedule.model.vo.Schedule;
 import com.project.nadaum.culture.show.model.vo.Scrap;
 
+
 public interface MovieDao {
 
 	int checkScrap(Map<String, Object> param);
