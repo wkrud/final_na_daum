@@ -140,7 +140,7 @@ function getWeather(lat, lon) {
         $("[name = weather]").attr("value", imgURLIcon);
     })
 }
-
+//|| *********** 날씨 api ************ ||
 $("#diaryBtn").click((e) => {
 	if($("#title").val() == ''){
 		alert('제목을 작성해 주세요');
