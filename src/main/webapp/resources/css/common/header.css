@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'InfinitySans-RegularA1';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-RegularA1.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+html{
+ background-color: #FFFBF5;
+  scroll-behavior: smooth;
+}
+.mainpage-container{
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: #FFFBF5;
+     font-family: 'InfinitySans-RegularA1';
+       scroll-behavior: smooth;
+}
+.mainpage-container p {
+padding: 20px;
+}
+.mainpage-content{
+    margin-left: 200px;
+    margin-right: 200px;	
+}
+.mainpage-image{
+    margin-top: 100px;
+    box-shadow: 5px 5px 20px lightgrey;
+    width: 90%;
+}
+.mainpage-title{
+    font-size: 100px;
+}
+
+.mainpage-btn-wrap {
+  text-align: center;
+}
+
+.mainpage-btn {
+  width: 150px;
+    height: 55px;
+    color: #000;
+    background-color: #e2b9f0;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0px 8px 15px rgb(0 0 0 / 10%);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    outline: 0;
+    margin-top: 50px;
+  }
+
+.mainpage-btn:hover {
+  background-color: #a34dbf;
+  color: #fff;
+  transform: translateY(-7px);
+  border: 0;
+  outline: 0;
+}

@@ -618,6 +618,7 @@ public class CultureController {
 
 							Map<String, Object> map2 = new HashMap<>();
 							for (int j = 0; j < resultList.size(); j++) {
+								String seq = perforInfo.get("seq").toString();
 								String title = perforInfo.get("title").toString();
 								String startDate = perforInfo.get("startDate").toString();
 								String endDate = perforInfo.get("endDate").toString();
@@ -630,7 +631,7 @@ public class CultureController {
 								String imgUrl = perforInfo.get("imgUrl").toString();
 									
 								
-								
+								map2.put("seq", seq);
 								map2.put("title", title);
 								map2.put("startDate", startDate);
 								map2.put("endDate", endDate);
@@ -792,6 +793,7 @@ public class CultureController {
 				map.put("selectCountLikes", selectCountLikes);
 				
 				log.debug("selectCountLikes={}", selectCountLikes);
+				
 				System.out.println(map);
 					if(result == 1) {
 			            return ResponseEntity.ok(map);
@@ -806,10 +808,11 @@ public class CultureController {
 				}
 		}
 		
-		@DeleteMapping("/board/view/{apiCode}/likes")
-		public ResponseEntity<?> deleteLikes(@RequestParam Map<String,Object> map){
+		@PostMapping("/board/view/{apiCode}/disLikes")
+		public ResponseEntity<?> deleteLikes( @RequestParam Map<String,Object> map){
 			
 			try{
+				log.debug("map={}", map);
 				int result = cultureService.deleteCultureLike(map);
 				String msg = (result > 0) ? "스크랩 취소 완료" : "스크랩 취소 실패";	
 				

@@ -65,6 +65,7 @@ padding-left: 20px;
 			               </div>
 			          </div>
 			        </div>
+			        
 		       	 </c:forEach>
 	        </div>
 	        </div>

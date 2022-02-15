@@ -11,121 +11,10 @@
 <sec:authentication property="principal" var="loginMember" />
 
 <%@ page import="com.project.nadaum.member.model.vo.MemberEntity"%>
+<link href='${pageContext.request.contextPath}/resources/css/culture/cultureDetail.css' rel='stylesheet' />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="나:다움 문화상세보기 " name="cultureDetail" />
 </jsp:include>
-<style>
-.movie-detail-container {
-	width: 70%;
-	margin: 0 auto;
-}
-
-input, button, textarea {
-	margin-bottom: 15px;
-}
-
-.col-sm-10 {
-	vertical-align: middle;
-	text-align: left;
-	padding: 0px;
-	display: inline-block;
-}
-
-.col-form-label {
-	width: 70px;
-}
-
-.movie-detail {
-	border: none;
-	border-right: 0px;
-	border-top: 0px;
-	boder-left: 0px;
-	boder-bottom: 0px;
-	display: inline-block;
-	margin: 0px;
-	background-color: transparent;
-	pointer-events: none;
-	height: 38px;
-	font-size: 24px;
-}
-
-#movieCd-detail {
-	width: 300px;
-}
-
-button {
-	overflow: hidden;
-}
-/* 부트스트랩 : 파일라벨명 정렬*/
-div#board-container label.custom-file-label {
-	text-align: left;
-}
-
-#exampleFormControlTextarea1 {
-	border: none;
-	border-right: 0px;
-	border-top: 0px;
-	boder-left: 0px;
-	boder-bottom: 0px;
-	background-color: transparent;
-	display: inline-block;
-	margin: 0px;
-	pointer-events: none;
-	font-size: 22px;
-}
-
-#category-select {
-	width: 100px;
-}
-
-#category-select-commentList {
-	width: 100px;
-	display: inline-block;
-	pointer-events: none;
-	border: none;
-	appearance: none;
-}
-
-.star-2 {
-	position: relative;
-	font-size: 4rem;
-	color: #ddd;
-}
-
-.star-2 span {
-	position: absolute;
-	left: 0;
-	color: #ffd400;
-	overflow: hidden;
-	pointer-events: none;
-}
-
-.star-count {
-	position: relative;
-	font-size: 1.5rem;
-	color: #ddd;
-}
-
-.star-count span {
-	position: absolute;
-	left: 0;
-	color: #ffc57d;
-	overflow: hidden;
-	pointer-events: none;
-}
-
-.culture-detail-img {
-	width: 100%;
-}
-/* .rating svg:nth-child(1){
-	color:#F05522; */
-}
-
-.culture-detail p{
-	font-size: 28px;
-}
-</style>
-
 <div class="movie-detail-container">
 	<!-- 영화상세보기 정보 -->
 	<div class="movie-detail-content  culture-detail">
@@ -142,7 +31,26 @@ div#board-container label.custom-file-label {
 					<p>장르 : ${culture.realmName}</p>
 					<p>가격 : ${culture.price}</p>
 					<p>장소 : ${culture.placeAddr}</p>
+					<p>문의 : ${culture.phone}</p>
 					<a href="${culture.placeUrl}">${culture.placeUrl}</a>
+					<br /><br />
+					<button  class="btn btn-warning" onclick="location.href=`${culture.bookingUrl}`">예약하기</button>
+					<form id="likeFrm">
+				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
+					type="hidden" name="id" value="${loginMember.id}" />
+				<button type="submit" class="btn btn-success" id="like-btn" >
+					스크랩<i class="fas fa-check-double ml-1"></i>
+				</button>
+			</form>
+			<form id="disLikeFrm">
+				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
+					type="hidden" name="id" value="${loginMember.id}" />
+				<button type="submit" class="btn btn-danger" id="disLike-btn" >
+					스크랩 취소<i class="fas fa-check-double ml-1"></i>
+				</button>
+			</form>
+				<button type="button" class="btn btn-dark" data-toggle="modal"
+					data-target="#add-calander">약속 잡기&raquo;</button>
 				</div>
 				<div class="col-md-5 order-md-1">
 					<img src="${culture.imgUrl}" class="culture-detail-img">
@@ -150,16 +58,8 @@ div#board-container label.custom-file-label {
 			</div>
 		</c:forEach>
 		<br />
-			<form id="likeFrm">
-				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
-					type="hidden" name="id" value="${loginMember.id}" />
-				<button type="submit" class="btn btn-success" id="like-btn" >
-					스크랩<i class="fas fa-check-double ml-1"></i>
-				</button>
-			</form>
+		
 			
-				<button type="button" class="btn btn-secondary" data-toggle="modal"
-					data-target="#add-calander">약속 잡기&raquo;</button>
 					
 		</div>
 
@@ -208,33 +108,6 @@ div#board-container label.custom-file-label {
 		</form>
 	</div>
 	
-<script>
-	//약속 ======================================================================================
-	 		$(promiseFrm).submit((e) => {
- 		e.preventDefault();
-
-			$.ajax({
-				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
-				method: "POST",
-				headers : headers, 
-				data : $(promiseFrm).serialize(),
-				success(resp){
-					//location.reload();
-					alert(resp.msg);
-					let ranNo = Math.floor(Math.random() * 10000);
-					let code = 'culture-' + ranNo;
-					let guest = $(".friendTextId").val();
-					alert(guest);
-					let schedulecode = resp["schedulecode"]
-					let content = '';
-					content = `<a href='/nadaum/culture/board/view/${apiCode}/\${schedulecode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a>`
-					console.log(content);
-					commonAlarmSystem(code,guest,content);
-					},
-				error: console.log
-				});
- 	});
-</script>
 
 		<!-- 영화 줄거리 -->
 		<h2 class="blog-post-title"></h2>
@@ -561,73 +434,6 @@ div#board-container label.custom-file-label {
 <hr class="featurette-divider" />
 
 
-<!-- 캘린더 Modal -->
-<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
-	aria-labelledby="add-calander" aria-hidden="true">
-	<form id="scheduleFrm">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				
-				
-				<!-- 모달 내용 시작 -->
-				<div class="modal-body">
-				
-					<div class="form-group row">
-						<label for="title" class="col-sm-2 col-form-label" >제목</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="title" name="title"
-								placeholder="제목을 입력해주세요" required>
-						</div>
-					</div>
-					
-					<div class="form-group row">
-						<label for="title" class="col-sm-2 col-form-label" >약속일</label>
-						<div class="col-sm-10">
-							<input type="date" class="form-control" id="scheduleDate" name="startDate" required>
-						</div>
-					</div>
-						<div class="friend-list-wrap">
-							<div class="friends-list">
-								<div class="find-friend-search">
-								<div class="find-friend-title">
-										<span>친구 찾기</span>
-									</div>
-									<div class="input-group mb-3">
-										<div class="input-group-prepend">
-											<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
-											<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
-										</div>
-									</div>
-									<div class="search-result-list">
-										<div class="list-group">
-										
-										</div>
-									</div>
-								</div>
-							<input type="hidden" name="apiCode" value="${apiCode}" />
-							<input type="hidden" name="friendId" value="희연이" />
-							<input type="hidden" name="allDay" value="0" />
-							<input type="hidden" name="id" value="${loginMember.id}" />
-							</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">취소</button>
-						<button type="submit" class="btn btn-primary">추가</button>
-					</div>
-				</div>
-				<!-- 모달 내용 끌 -->
-			</div>
-			</div>
-				</div>
-				</form>
-				</div>
 </div>
 <script>
 
@@ -780,8 +586,8 @@ $(insertCommentFrm).submit((e) => {
         const headers = {};
         headers[csrfHeader] = csrfToken;
         
-
-
+       	console.log($(likeFrm).serialize());
+       	
 			$.ajax({
 				url:`${pageContext.request.contextPath}/culture/boardLikeCount.do`,
 				method: "GET",
@@ -805,43 +611,99 @@ $(insertCommentFrm).submit((e) => {
 								if(result == 1) {
 									
 									console.log("selectCountLikes = " + selectCountLikes);
-									console.log("좋아요 등록!");
-									alert("좋아요를 등록했습니다.");
+									console.log("스크랩 등록!");
+									alert("게시물이 스크랩되었습니다!");
 										
 								}
 							},
 							error : function(xhr, status, err){
 								console.log(xhr, status, err);
-									alert("좋아요 안됩니꽈,,,?");
 							}
 						});
-					}else{
-						$.ajax({
-							url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
-							method : "DELETE",
-							headers : headers,
-							data : $(likeFrm).serialize(),
-							success(data){
-								const result = data["result"];
-								const selectCountLikes = data["selectCountLikes"];
-								
-								if(result == 1) {
-									console.log("selectCountLikes = " + selectCountLikes);
-									console.log("좋아요 취소!");
-									alert("좋아요를 취소했습니다.");
-								}
-							},
-							error : console.log
-						});
-					} 
+					 }else{
+						 alert("이미 스크랩한 게시글입니다.")
+					 }
 				},
 				error: console.log
-				});
 		});
 
+ 	});
  	
+ 		$(disLikeFrm).submit((e) => {
+ 			e.preventDefault();
+
+ 			const csrfHeader = "${_csrf.headerName}";
+ 		    const csrfToken = "${_csrf.token}";
+ 		    const headers = {};
+ 		    headers[csrfHeader] = csrfToken;
+ 		    
+ 		   	console.log($(disLikeFrm).serialize());
+ 		   	
+ 		   $.ajax({
+				url:`${pageContext.request.contextPath}/culture/boardLikeCount.do`,
+				method: "GET",
+				data : $(disLikeFrm).serialize(),
+				success(data){
+					const selectCountLikes = data["selectCountLikes"];
+					console.log(selectCountLikes);
+					
+					//location.reload();
+					//alert(resp.msg);
+					 if(selectCountLikes != 0 ){
+						 $.ajax({
+				 				url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/disLikes`,
+				 				
+				 				method: "POST",
+				 				headers : headers,
+				 				data : $(disLikeFrm).serialize(),
+				 				success(data){
+				 					const result = data["result"];
+				 					const selectCountLikes = data["selectCountLikes"];
+				 					
+				 					if(result == 1) {
+				 						console.log("selectCountLikes = " + selectCountLikes);
+				 						console.log("스크랩 취소!");
+				 						alert("스크랩이 취소되었습니다!");
+				 					}
+				 				},
+				 				error : console.log
+				 			});
+					 }else{
+						 alert("스크랩한 적 없는데요?")
+					 }
+				},
+				error: console.log
+		});
+ 		  
+ 	});
 </script>
 
+<script>
+	//약속 ======================================================================================
+	 		$(promiseFrm).submit((e) => {
+ 		e.preventDefault();
+
+			$.ajax({
+				url:`${pageContext.request.contextPath}/culture/board/view/${apiCode}/schedule`,
+				method: "POST",
+				headers : headers, 
+				data : $(promiseFrm).serialize(),
+				success(resp){
+					location.reload();
+					alert(resp.msg);
+					let ranNo = Math.floor(Math.random() * 10000);
+					let code = 'culture-' + ranNo;
+					let schedulecode = resp["schedulecode"]
+					let content = '';
+					let guest = $(".friendTextId").val();
+					content = `<a href='/nadaum/culture/board/view/${apiCode}/\${schedulecode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a>`
+					console.log(content);
+					commonAlarmSystem(code,guest,content);
+					},
+				error: console.log
+				});
+ 	});
+</script>
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=457ac91e7faa203823d1c0761486f8d7&libraries=services"></script>
 <script>
