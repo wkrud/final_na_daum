@@ -148,7 +148,7 @@ font-size: 25px;
 					<p>문의 : ${culture.phone}</p>
 					<a href="${culture.placeUrl}">${culture.placeUrl}</a>
 					<br /><br />
-					<button  class="btn btn-secondary" onclick="location.href=`${culture.bookingUrl}`">예약하기</button>
+					<button  class="btn btn-warning" onclick="location.href=`${culture.bookingUrl}`">예약하기</button>
 					<form id="likeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
@@ -159,11 +159,11 @@ font-size: 25px;
 			<form id="disLikeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
-				<button type="submit" class="btn btn-success" id="disLike-btn" >
+				<button type="submit" class="btn btn-danger" id="disLike-btn" >
 					스크랩 취소<i class="fas fa-check-double ml-1"></i>
 				</button>
 			</form>
-				<button type="button" class="btn btn-secondary" data-toggle="modal"
+				<button type="button" class="btn btn-dark" data-toggle="modal"
 					data-target="#add-calander">약속 잡기&raquo;</button>
 				</div>
 				<div class="col-md-5 order-md-1">
@@ -809,6 +809,7 @@ $(insertCommentFrm).submit((e) => {
 					let code = 'culture-' + ranNo;
 					let schedulecode = resp["schedulecode"]
 					let content = '';
+					let guest = $(".friendTextId").val();
 					content = `<a href='/nadaum/culture/board/view/${apiCode}/\${schedulecode}'>${loginMember.nickname}님이 [문화 생활] 데이트 신청을 했습니다 💖</a>`
 					console.log(content);
 					commonAlarmSystem(code,guest,content);

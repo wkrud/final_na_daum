@@ -148,7 +148,7 @@ font-size: 25px;
 					<p>문의 : ${culture.phone}</p>
 					<a href="${culture.placeUrl}">${culture.placeUrl}</a>
 					<br /><br />
-					<button  class="btn btn-secondary" onclick="location.href=`${culture.bookingUrl}`">예약하기</button>
+					<button  class="btn btn-warning" onclick="location.href=`${culture.bookingUrl}`">예약하기</button>
 					<form id="likeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
@@ -159,11 +159,11 @@ font-size: 25px;
 			<form id="disLikeFrm">
 				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
 					type="hidden" name="id" value="${loginMember.id}" />
-				<button type="submit" class="btn btn-success" id="disLike-btn" >
+				<button type="submit" class="btn btn-danger" id="disLike-btn" >
 					스크랩 취소<i class="fas fa-check-double ml-1"></i>
 				</button>
 			</form>
-				<button type="button" class="btn btn-secondary" data-toggle="modal"
+				<button type="button" class="btn btn-dark" data-toggle="modal"
                data-target="#add-calander2">약속 확인&raquo;</button>
 				</div>
 				<div class="col-md-5 order-md-1">
