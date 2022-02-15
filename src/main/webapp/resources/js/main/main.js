@@ -470,25 +470,19 @@ const gameWidgetInfo = () => {
 				}
 			} else {
 				content = `
-				<div style="width : 350px; height: 140px; padding : 10px; display : flex;">
+				<div style="width : 360px; height: 140px; padding : 5px; display : flex;">
 				  <div style="width : 120px; height : 120px; margin-top : 5px;">
 				    <img style="width : 120px; height : 120px;"src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="롤 랭킹 이미지">
 				  </div>
-				    <table style="margin-left : 30px;">
-				      <tr>
-				        <td colspan="2" style="height : 40px;">
-				       	 <a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetinfo.name+`"><h4 style="margin : 0">`+resp.widgetinfo.name+`</h4></a>	 
-				        </td>
-				      </tr>
-				      <tr>
-				        <td style="width : 120px;">`+resp.widgetinfo.tier+` `+resp.widgetinfo.rank+`</td>
-				        <td>`+resp.widgetinfo.leaguePoints+`LP</td>
-				      </tr>
-				      <tr>
-				        <td><span style="color : #00BFFF">승리 : `+resp.widgetinfo.wins+`</span></td>
-				        <td><span style="color : #CD5C5C">패배 : `+resp.widgetinfo.losses+`</span></td>
-				      </tr>
-				    </table>
+				   <div style="font-size : 18px; margin-left : 10px;">
+				    <ul style="list-style: none;">
+				      <li style="margin : 10px;">
+				      	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetinfo.name+`"><h4 style="margin : 0">`+resp.widgetinfo.name+`</h4></a>
+				      </li>
+				      <li style="margin : 10px;">`+resp.widgetinfo.tier+` `+resp.widgetinfo.rank+` `+resp.widgetinfo.leaguePoints+`LP</li>
+				      <li style="margin : 10px;"><span style="color : #00BFFF;">승리 : `+resp.widgetinfo.wins+`</span><span style="color : #CD5C5C; margin : 0 15px;">패배 : `+resp.widgetinfo.losses+`</span></li>
+				    </ul>
+				  </div>
 				</div>
 				`
 			$(".game-widget").append(content);
@@ -571,10 +565,10 @@ const cultureWidgetInfo = () => {
 						<a href="`+$contextPath+`/culture/board/1"class="post-subject" style="text-decoration : none; color : black;">
 							<h1 class="slider-title" style="text-align: center; margin: 0; font-size:20px !important;">CultureScrap</h1>
 						</a> 
-						<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
-						color: gray; cursor: pointer;"></i>
-						<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
-						color: gray; cursor: pointer;"></i>
+						<i class="fas fa-chevron-left prevC" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+						color: gray; cursor: pointer; z-index : 5;"></i>
+						<i class="fas fa-chevron-right nextC" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+						color: gray; cursor: pointer; z-index : 5;"></i>
 						<div class="culture-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
 						</div>
 					</div>
@@ -595,8 +589,8 @@ const cultureWidgetInfo = () => {
 						  slidesToScroll: 1,
 						  autoplay: true,
 						  autoplaySpeed: 2000,
-						  nextArrow:$('.next'),
-						  prevArrow:$('.prev'),
+						  nextArrow:$('.nextC'),
+						  prevArrow:$('.prevC'),
 						});
 					}
 		}, 
@@ -671,10 +665,10 @@ const movieWidgetInfo = () => {
 				<a href="`+$contextPath+`/movie/movieList.do" class="post-subject" style="text-decoration : none; color : black;">
 					<h1 class="silder-title" style="text-align: center; margin: 0; font-size:20px !important;">Upcoming Movies</h1>
 				</a> 
-				<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
-				color: gray; cursor: pointer;"></i>
-				<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
-				color: gray; cursor: pointer;"></i>
+				<i class="fas fa-chevron-left prevM" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+				color: gray; cursor: pointer; z-index : 5;"></i>
+				<i class="fas fa-chevron-right nextM" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+				color: gray; cursor: pointer; z-index : 5;"></i>
 				<div class="post-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
 				</div>
 			</div>
@@ -699,8 +693,8 @@ const movieWidgetInfo = () => {
 				  slidesToScroll: 1,
 				  autoplay: true,
 				  autoplaySpeed: 2000,
-				  nextArrow:$('.next'),
-				  prevArrow:$('.prev'),
+				  nextArrow:$('.nextM'),
+				  prevArrow:$('.prevM'),
 				});
 		}, 
 	 	error(xhr, testStatus, err) {
