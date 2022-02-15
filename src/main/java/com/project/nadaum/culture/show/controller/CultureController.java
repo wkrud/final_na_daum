@@ -618,6 +618,7 @@ public class CultureController {
 
 							Map<String, Object> map2 = new HashMap<>();
 							for (int j = 0; j < resultList.size(); j++) {
+								String seq = perforInfo.get("seq").toString();
 								String title = perforInfo.get("title").toString();
 								String startDate = perforInfo.get("startDate").toString();
 								String endDate = perforInfo.get("endDate").toString();
@@ -630,7 +631,7 @@ public class CultureController {
 								String imgUrl = perforInfo.get("imgUrl").toString();
 									
 								
-								
+								map2.put("seq", seq);
 								map2.put("title", title);
 								map2.put("startDate", startDate);
 								map2.put("endDate", endDate);
