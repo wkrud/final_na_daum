@@ -533,10 +533,11 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 
 
 .monthlyPagingBtn {
-	font-size : 2rem;
+	font-size : 1rem;
 	display : flex;
 	justify-content : space-between;
 	padding : 0 40px;
+	z-index : 3;
 }
 
 
