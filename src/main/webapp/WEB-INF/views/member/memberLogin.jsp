@@ -44,6 +44,7 @@ function onEnterLogin(){
 }
 </script>
 <style>
+
 .modal-backdrop{
 	background-image: url("${pageContext.request.contextPath}/resources/images/member/pastel.jpg");
 	background-repeat : no-repeat;
@@ -52,10 +53,15 @@ function onEnterLogin(){
 }
 .modal-dialog{
 	position: relative;
-	top: 25%;
+	top: 20%;
 }
 .modal-content{
 	background-color: #FFFBF5;
+	border: 0;
+	font-family: 'SUIT-Medium';
+}
+#loginFrm{
+	padding: 20px;
 }
 </style>
 </head>
@@ -107,19 +113,19 @@ function onEnterLogin(){
 						<div class="remember-find-wrap">
 							<div class="remember-me-wrap">
 								<input type="checkbox" class="form-check-input" name="remember-me" id="remember-me" />
-								<label for="remember-me">remember me</label>
+								<label for="remember-me">로그인 유지</label>
 							</div>
 							<div class="find-wrap">
 								<div class="find-id">
-									<a href="${pageContext.request.contextPath}/member/memberFindId.do">Find ID</a>
+									<a href="${pageContext.request.contextPath}/member/memberFindId.do">아이디 찾기</a>
 								</div>
 								<div class="find-pw">
-									<a href="${pageContext.request.contextPath}/member/memberFindPassword.do">Find PW</a>
+									<a href="${pageContext.request.contextPath}/member/memberFindPassword.do">비밀번호 찾기</a>
 								</div>
 							</div>
 						</div>
 						<div class="login-btn-wrap">
-							<button type="submit" id="main-login-btn" class="btn btn-outline-success">로그인</button>
+							<button type="submit" id="main-login-btn" class="btn btn-secondary">로그인</button>
 						</div>
 					</div>
 				</div>

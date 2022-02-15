@@ -1,0 +1,111 @@
+@charset "UTF-8";
+
+.movie-detail-container {
+	width: 70%;
+	margin: 0 auto;
+}
+
+input, button, textarea {
+	margin-bottom: 15px;
+}
+
+.col-sm-10 {
+	vertical-align: middle;
+	text-align: left;
+	padding: 0px;
+	display: inline-block;
+}
+
+.col-form-label {
+	width: 70px;
+}
+
+.movie-detail {
+	border: none;
+	border-right: 0px;
+	border-top: 0px;
+	boder-left: 0px;
+	boder-bottom: 0px;
+	display: inline-block;
+	margin: 0px;
+	background-color: transparent;
+	pointer-events: none;
+	height: 38px;
+	font-size: 24px;
+}
+
+#movieCd-detail {
+	width: 300px;
+}
+
+button {
+	overflow: hidden;
+}
+/* 부트스트랩 : 파일라벨명 정렬*/
+div#board-container label.custom-file-label {
+	text-align: left;
+}
+
+#exampleFormControlTextarea1 {
+	border: none;
+	border-right: 0px;
+	border-top: 0px;
+	boder-left: 0px;
+	boder-bottom: 0px;
+	background-color: transparent;
+	display: inline-block;
+	margin: 0px;
+	pointer-events: none;
+	font-size: 22px;
+}
+
+#category-select {
+	width: 100px;
+}
+
+#category-select-commentList {
+	width: 100px;
+	display: inline-block;
+	pointer-events: none;
+	border: none;
+	appearance: none;
+}
+
+.star-2 {
+	position: relative;
+	font-size: 4rem;
+	color: #ddd;
+}
+
+.star-2 span {
+	position: absolute;
+	left: 0;
+	color: #ffd400;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.star-count {
+	position: relative;
+	font-size: 1.5rem;
+	color: #ddd;
+}
+
+.star-count span {
+	position: absolute;
+	left: 0;
+	color: #ffc57d;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.culture-detail-img {
+	width: 100%;
+}
+
+.culture-detail p{
+	font-size: 28px;
+}
+.culture-detail {
+font-size: 25px;
+}

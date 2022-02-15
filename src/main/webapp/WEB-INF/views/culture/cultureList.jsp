@@ -49,12 +49,17 @@ div#culture-container {
 	width: 300px;
 }
 
+.paging{
+	font-size: 30px;
+}
 .paging li {
 	list-style: none;
+	
 }
 
 .paging a {
 	color: black;
+	text-decoration-line: none;
 }
 
 .form-group {
@@ -107,6 +112,7 @@ body {
 }
 /*검색 폼 */
 .search-form {
+	width: 100%;
 	position: absolute;
 	background: #F2F2F2;
 	bottom: -10%;
@@ -117,7 +123,7 @@ body {
 }
 
 /* 오렌지색 버튼*/
-.btn {
+.culture-btn {
 	border-radius: 10px;
 	text-decoration: none;
 	color: #fff;
@@ -126,7 +132,7 @@ body {
 	margin-left: 30px;
 }
 
-.btn:active {
+.culture-btn:active {
 	transform: translate(0px, 5px);
 	-webkit-transform: translate(0px, 5px);
 	box-shadow: 0px 1px 0px 0px;
@@ -139,6 +145,10 @@ body {
 
 .orange:hover {
 	background-color: #FF983C;
+}
+
+.culture-container {
+	text-align: center;
 }
 </style>
 <script>
@@ -164,7 +174,7 @@ $(() => {
 		
 }); 
 </script>
-<div class="container">
+<div class="container culture-container">
 	<div class="culture-thumnail">
 		<!-- 썸네일 그림, 타이틀  -->
 		<img
@@ -177,13 +187,14 @@ $(() => {
 			<form class="form-inline search-form" id="searchFrm"
 				action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}"
 				method="post">
-				<input type="text" class="form-control form-control-sm"
-					name="keyword" id="keyword">
+				<label for="">검색어</label> <input type="text"
+					class="form-control form-control-sm" name="keyword" id="keyword">
 
 				<div class="form-group" id="period">
 					<label for="Date" class="control-label">기간</label> <input
 						type="date" class="form-control" id="startDate" name="startDate">
-					<input type="date" class="form-control" id="endDate" name="endDate">
+					<span>~</span> <input type="date" class="form-control" id="endDate"
+						name="endDate">
 				</div>
 				<div class="form-group" id="area">
 					<label for="area" class="control-label">지역</label> <select
@@ -207,12 +218,12 @@ $(() => {
 						<!-- D 미술  -->
 					</select>
 				</div>
-				<button type="submit" class="btn orange btn-default" id="search-btn">Search</button>
+				<button type="submit" class="culture-btn btn orange btn-default" id="search-btn">Search</button>
 			</form>
 
 		</div>
 	</div>
-	<form
+	<%-- <form
 		action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}"
 		method="post">
 		<input type="hidden" name="id" value="${loginMember.id}" />
@@ -223,10 +234,10 @@ $(() => {
 		method="post">
 		<input type="hidden" name="id" value="${loginMember.id}" />
 		<button type="submit" class="btn btn-dark">위젯</button>
-	</form>
+	</form> --%>
 
 	<div id="culture-container">
-		<div class="py-5">
+		<div class="py-5" style="margin-top: 80px;">
 			<div class="container">
 				<div class="row hidden-md-up">
 					<!-- api 꺼내기 위한 반복문 시작 -->
@@ -254,29 +265,26 @@ $(() => {
 	</div>
 
 	<div class="paging">
-		<ul>
-			<c:if test="${page != 1}">
-				<li><a
-					href="${pageContext.request.contextPath}/culture/board/1">첫 페이지</a></li>
-			</c:if>
-			<c:if test="${page-1 != 0}">
-				<li><a
-					href="${pageContext.request.contextPath}/culture/board/${page-1}">이전
-						페이지</a></li>
-			</c:if>
-			<li>${page}/20</li>
-			<c:if test="${page+1 < 21}">
-				<li><a
-					href="${pageContext.request.contextPath}/culture/board/${page+1}">다음
-						페이지</a></li>
-			</c:if>
-			<c:if test="${page != 20}">
-				<li><a
-					href="${pageContext.request.contextPath}/culture/board/20">마지막
-						페이지</a></li>
-			</c:if>
-		</ul>
+		<c:if test="${page-1 != 0}">
+			<a href="${pageContext.request.contextPath}/culture/board/${page-1}">←</a>
+		</c:if>
+		<span>
+			${page}/20
+		</span>
+		<c:if test="${page+1 < 21}">
+			<a href="${pageContext.request.contextPath}/culture/board/${page+1}">→</a>
+		</c:if>
+		<div class="scrap-list">
+			<form
+			action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}"
+			method="post">
+			<input type="hidden" name="id" value="${loginMember.id}" />
+			<button type="submit" class="btn btn-dark">나다운 스크랩 목록</button>
+			</form>
+		</div>
+		
 	</div>
+	
 </div>
 </body>
 <script>
