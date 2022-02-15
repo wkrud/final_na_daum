@@ -177,6 +177,7 @@ $(() => {
 			<form class="form-inline search-form" id="searchFrm"
 				action="${pageContext.request.contextPath}/culture/search.do?${_csrf.parameterName}=${_csrf.token}"
 				method="post">
+				<label for="">검색어</label> 
 				<input type="text" class="form-control form-control-sm"
 					name="keyword" id="keyword">
 
