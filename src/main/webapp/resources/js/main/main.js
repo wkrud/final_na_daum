@@ -212,7 +212,7 @@ const drop = (ev) => {
 			location.reload();
 		},error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
-			alert("위젯 로딩에 실패했습니다.");
+			alert("위젯 삭제에 실패했습니다.");
 		}
 	});
 }
@@ -249,7 +249,7 @@ const friendWidgetInfo = () => {
 			} else {
 			//맞팔
 			for(let i = 0; i <resp.widgetFriends.length; i++) {
-				//기본 고양이 프사 (d타입 기본 프사)
+				//D타입 각자 프사
 				if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile != null) {
 					content = `
 						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
@@ -262,7 +262,7 @@ const friendWidgetInfo = () => {
 						</div>
 					`
 					$(".friendTogetherInfo").append(content);
-					//d타입 각자 프사 -> 각자 프사
+					//d타입 기본 고양이 프사
 				} else if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile == null) {
 					content = `
 						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
@@ -470,26 +470,26 @@ const gameWidgetInfo = () => {
 				}
 			} else {
 				content = `
-				<div style="width : 320px; height: 140px; padding : 15px;">
-			    <div style="text-align: center; font-size : 20px;">
-			    	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetinfo.name+`"><h4>`+resp.widgetinfo.name+`</h4></a>
-			    </div>
-			    <div>
-			    <div style="display: inline-flex;" class="lolLankImg"><img src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="" style="width : 70px; height: 70px; margin-left : 20px;"></div>
-			    <div style="display: inline-flex; position: relative; bottom : 40px; left : 10px;">
-			      <table style="text-align: center; font-size : 18px;">
-			          <tr>
-			            <td>`+resp.widgetinfo.tier+``+resp.widgetinfo.rank+`</td>
-			            <td>`+resp.widgetinfo.leaguePoints+` LP</td>
-			          </tr>
-			          <tr>
-			            <td style="width : 100px; height : 40px;"><span style="color : #00BFFF ">승리 : `+resp.widgetinfo.wins+`</span></td>
-			            <td><span style="color : #CD5C5C">패배 : `+resp.widgetinfo.losses+`</span></td>
-			          </tr>
-			      </table>
-			    </div>
-			    </div>
-			  </div>
+				<div style="width : 350px; height: 140px; padding : 10px; display : flex;">
+				  <div style="width : 120px; height : 120px; margin-top : 5px;">
+				    <img style="width : 120px; height : 120px;"src="`+$contextPath+`/resources/images/riot/`+resp.widgetinfo.tier+`.png" alt="롤 랭킹 이미지">
+				  </div>
+				    <table style="margin-left : 30px;">
+				      <tr>
+				        <td colspan="2" style="height : 40px;">
+				       	 <a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetinfo.name+`"><h4 style="margin : 0">`+resp.widgetinfo.name+`</h4></a>	 
+				        </td>
+				      </tr>
+				      <tr>
+				        <td style="width : 120px;">`+resp.widgetinfo.tier+` `+resp.widgetinfo.rank+`</td>
+				        <td>`+resp.widgetinfo.leaguePoints+`LP</td>
+				      </tr>
+				      <tr>
+				        <td><span style="color : #00BFFF">승리 : `+resp.widgetinfo.wins+`</span></td>
+				        <td><span style="color : #CD5C5C">패배 : `+resp.widgetinfo.losses+`</span></td>
+				      </tr>
+				    </table>
+				</div>
 				`
 			$(".game-widget").append(content);
 			}
@@ -553,6 +553,7 @@ const cultureWidgetInfo = () => {
      	dataType : "json",
      	headers : headers,
      	success(resp) {
+		console.log(resp);
 				let content = "";
 				if(resp.length == 0) {
 					content = `
@@ -567,9 +568,9 @@ const cultureWidgetInfo = () => {
 					<div class="page-wrapper" style="position: relative;">
 					<div class="post-slider" style="width:300px; height : 360px; margin: 0px auto; 
 						position: relative; text-align: center; margin: 0; overflow : hidden;">
-						<h1 class="slider-title" style="text-align: center; margin: 0; font-size:20px !important;">CultureScrap</h1>
-						<a href="`+$contextPath+`/culture/board/1"
-							class="post-subject">+더보기</a> 
+						<a href="`+$contextPath+`/culture/board/1"class="post-subject" style="text-decoration : none; color : black;">
+							<h1 class="slider-title" style="text-align: center; margin: 0; font-size:20px !important;">CultureScrap</h1>
+						</a> 
 						<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
 						color: gray; cursor: pointer;"></i>
 						<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
@@ -662,44 +663,45 @@ const movieWidgetInfo = () => {
      	dataType : "json",
      	headers : headers,
      	success(resp) {
-				let content = ""; 
-				content	= `
-				<div class="page-wrapper" style="position: relative;">
-				<div class="post-slider" style="width:300px; height : 360px; margin: 0px auto; 
-					position: relative; text-align: center; margin: 0; overflow : hidden;">
+			let content = ""; 
+			content	= `
+			<div class="page-wrapper" style="position: relative;">
+			<div class="post-slider" style="width:300px; height : 360px; margin: 0px auto; 
+				position: relative; text-align: center; margin: 0; overflow : hidden;">
+				<a href="`+$contextPath+`/movie/movieList.do" class="post-subject" style="text-decoration : none; color : black;">
 					<h1 class="silder-title" style="text-align: center; margin: 0; font-size:20px !important;">Upcoming Movies</h1>
-					<a href="`+$contextPath+`/movie/movieList.do"
-						class="post-subject">+더보기</a> 
-					<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
-					color: gray; cursor: pointer;"></i>
-					<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
-					color: gray; cursor: pointer;"></i>
-					<div class="post-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
-					</div>
+				</a> 
+				<i class="fas fa-chevron-left prev" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+				color: gray; cursor: pointer;"></i>
+				<i class="fas fa-chevron-right" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+				color: gray; cursor: pointer;"></i>
+				<div class="post-wrapper" style="width:300px; height : 400px; margin: 0px auto; left : 10%; overflow: hidden; padding: 10px 0px 10px 0px;">
 				</div>
-				</div>
-					`
-				$(".movie-widget").append(content);
-				for(data in resp) {
-					content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
-								<img class="card-img-top slider-image" stlye="width : 120px; height : 180px;"
-									src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
-									alt="Card image cap">
-								<div class="card-body post-info">
-									<p class="card-text widget-movie-title">`+resp[data].title+`</p>
-									<p class="card-text widget-movie-rating">평점 : `+resp[data].voteAverage+`</p>
-								</div>
-							</div>`
-					$(".post-wrapper").append(content);
-				}
-					$('.post-wrapper').slick({
-					  slidesToShow: 2,
-					  slidesToScroll: 1,
-					  autoplay: true,
-					  autoplaySpeed: 2000,
-					  nextArrow:$('.next'),
-					  prevArrow:$('.prev'),
-					});
+			</div>
+			</div>
+				`
+			$(".movie-widget").append(content);
+			for(data in resp) {
+				content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+							<img class="card-img-top slider-image" stlye="width : 120px; height : 180px;"
+								src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
+								alt="Card image cap"
+								onclick="location.href='`+$contextPath+`/movie/movieDetail/`+resp[data].apiCode+`'">
+							<div class="card-body post-info">
+								<p class="card-text widget-movie-title">`+resp[data].title+`</p>
+								<p class="card-text widget-movie-rating">평점 : `+resp[data].voteAverage+`</p>
+							</div>
+						</div>`
+				$(".post-wrapper").append(content);
+			}
+				$('.post-wrapper').slick({
+				  slidesToShow: 2,
+				  slidesToScroll: 1,
+				  autoplay: true,
+				  autoplaySpeed: 2000,
+				  nextArrow:$('.next'),
+				  prevArrow:$('.prev'),
+				});
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
