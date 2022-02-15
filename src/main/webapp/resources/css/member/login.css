@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'SUIT-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .modal-content{
 	background-color: inherit;
 }
@@ -6,10 +13,11 @@
 	font-weight: bold;
 }
 
-.remember-find-wrap{
-	display: flex;
-	width: 420px;
-	justify-content: space-between;
+.remember-find-wrap {
+    display: flex;
+    width: 420px;
+    margin-top: 20px;
+    justify-content: space-between;
 }
 .find-wrap{
 	display: flex;
@@ -25,9 +33,10 @@
 	display: flex;
 	justify-content: center;
 }
-.login-btn-wrap button{
-	width: 300px;
-	height: 45px;
+.login-btn-wrap button {
+    width: 300px;
+    margin-top: 20px;
+    height: 45px;
 }
 
 
@@ -39,11 +48,9 @@
 .enroll-wrap{
 	margin: 10px 0;
 	text-align: center;
-	font-size: .75rem;
 }
 .enroll-wrap a{
 	color: black;
-	font-weight: bold;
 }
 
 .kakao-login-wrap{
