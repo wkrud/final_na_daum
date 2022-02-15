@@ -212,15 +212,10 @@ $(() => {
 
 		</div>
 	</div>
-	<form
-		action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}"
-		method="post">
-		<input type="hidden" name="id" value="${loginMember.id}" />
-		<button type="submit" class="btn btn-dark">나다운 찜 목록</button>
-	</form>
+	
 
 	<div id="culture-container">
-		<div class="py-5">
+		<div class="py-5" style="margin-top: 80px;">
 			<div class="container">
 				<div class="row hidden-md-up">
 					<!-- api 꺼내기 위한 반복문 시작 -->
@@ -248,6 +243,12 @@ $(() => {
 
 			</div>
 		</div>
+		<form
+		action="${pageContext.request.contextPath}/culture/likes.do?${_csrf.parameterName}=${_csrf.token}"
+		method="post">
+		<input type="hidden" name="id" value="${loginMember.id}" />
+		<button type="submit" class="btn btn-dark">나다운 찜 목록</button>
+	</form>
 	</div>
 </div>
 </body>

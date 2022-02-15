@@ -233,7 +233,7 @@
 										<div class="profileimg2">
 											<label for="replyId"> <input type="text"
 												class="id-detail" name="id" id="replyId"
-												value="${loginMember.nickname}" />
+												value="${loginMember.nickname}" readonly />
 											</label>
 										</div>
 									</div>
@@ -263,7 +263,7 @@
 									</select>
 
 								</div>
-								<textarea name="content" cols="60" rows="3" id="content"
+								<textarea name="content" cols="60" rows="3" id="content" style="resize: none;"
 									class="form-control"></textarea>
 
 								<button type="submit" id="btn-comment-enroll1"
@@ -329,7 +329,7 @@
 											aria-label="Default select example">
 											<option selected>${comment.star}</option>
 										</select>
-									</div> <textarea class="form-control"
+									</div> <textarea class="form-control" style="resize: none;"
 										id="exampleFormControlTextarea1" rows="1" readonly="readonly">${comment.content}</textarea>
 
 									<%-- 회원일때만 답글 버튼이 나타남 --%>
