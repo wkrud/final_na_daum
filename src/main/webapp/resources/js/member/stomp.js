@@ -11,14 +11,6 @@ function connect(){
 		stompClient.subscribe("/topic/" + dest, function(response){
 			var resp = JSON.parse(response.body);
 			countBedge();
-			console.log('resp = ', resp);
-			if(resp.type == 'friend'){				
-				console.log('필요가 없네');
-			}else if(resp.type == 'chat'){
-				console.log('필요가 없네');				
-			}else if(resp.type == 'help'){				
-				console.log('필요가 없네');
-			}
 		});
 	});
 };

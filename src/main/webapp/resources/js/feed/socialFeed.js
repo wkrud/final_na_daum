@@ -186,7 +186,8 @@ const selectedFeed = (id, code) => {
 						<img src="${commenterProfileImg}" />
 					</div>
 					`;
-				}else{					
+				}else{		
+					deleteBtn = ``;			
 					profileOptionBtn = `
 					<div class="dropdown commenter-profile-img">
 						<img src="${commenterProfileImg}" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"/>
