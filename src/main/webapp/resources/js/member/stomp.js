@@ -1,8 +1,3 @@
-const csrfToken = $("meta[name='_csrf']").attr("content");
-const csrfHeader = $("meta[name='_csrf_header']").attr("content");
-const headers = {};
-headers[csrfHeader] = csrfToken;
-
 function connect(){
 	var socket = new SockJS("http://localhost:9090/nadaum/chat");
 	stompClient = Stomp.over(socket);
