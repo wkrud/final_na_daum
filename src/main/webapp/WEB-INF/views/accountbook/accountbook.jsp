@@ -200,18 +200,21 @@
 		<div class="account">
 			<div class="monthlyPagingBtn">
  				<button type="submit" onclick="monthly('before')" class="defaultBtn">
-					<i class="fa fa-chevron-left"></i>
+					전월 조회
 				</button>
 				<button type="submit" onclick="monthly('next')" class="defaultBtn">
-					<i class="fa fa-chevron-right"></i>
+					다음 월 조회
 				</button>
 			</div>
 			<table class="account-info">
 				<tr>
-					<td colspan="2">${loginMember.name}님의</td>
+					<td colspan="2">
+						<c:set var="TextValue" value="${today}"/>
+						${fn:substring(TextValue,0,4)}년 ${fn:substring(TextValue,5,7)}월
+					</td>
 				</tr>
 				<tr>
-					<td colspan="2">${today} 총 자산</td>
+					<td colspan="2">${loginMember.name}님의 총 자산</td>
 				</tr>
 				<tr id="total_income">
 					<td colspan="2" style="font-size:40px"><fmt:formatNumber value="${monthlyAccount}" type="number"/>원</td>

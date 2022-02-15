@@ -30,7 +30,7 @@
 		<a href="${pageContext.request.contextPath}/accountbook/accountbook.do" style="text-decoration : none; color : black;">가계부로 돌아가기</a>
 		<div type="submit" class="analyze-account-header">
 			<button class="defaultBtn" onclick="monthly('before')"><i class="fas fa-arrow-left"></i></button>
-			<p>${today}월의 나:다운 가계부</p>
+			<p><c:set var="TextValue" value="${today}"/>${fn:substring(TextValue,0,4)}년 ${fn:substring(TextValue,5,7)}월의 나:다운 가계부</p>
 			<button type="submit" class="defaultBtn" onclick="monthly('next')"><i class="fas fa-arrow-right"></i></button>
 		</div>
 		<!-- 수입 -->
