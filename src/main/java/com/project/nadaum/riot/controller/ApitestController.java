@@ -59,7 +59,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApitestController {
 
-	final static String API_KEY = "RGAPI-c2d669aa-c30a-4cba-853f-615ed8742cea";
+	final static String API_KEY = "RGAPI-068df0e9-dd04-4c78-aade-1ef0a63c4c49";
 
 	@Autowired
 	private RiotService riotService;
