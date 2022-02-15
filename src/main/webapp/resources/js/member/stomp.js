@@ -1,3 +1,6 @@
+const headers = {};
+headers[csrfHeader] = csrfToken;
+
 function connect(){
 	var socket = new SockJS("http://localhost:9090/nadaum/chat");
 	stompClient = Stomp.over(socket);
