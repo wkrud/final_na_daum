@@ -124,6 +124,9 @@ div#board-container label.custom-file-label {
 .culture-detail p{
 	font-size: 28px;
 }
+.culture-detail {
+font-size: 25px;
+}
 </style>
 
 <div class="movie-detail-container">
@@ -142,7 +145,26 @@ div#board-container label.custom-file-label {
 					<p>장르 : ${culture.realmName}</p>
 					<p>가격 : ${culture.price}</p>
 					<p>장소 : ${culture.placeAddr}</p>
+					<p>문의 : ${culture.phone}</p>
 					<a href="${culture.placeUrl}">${culture.placeUrl}</a>
+					<br /><br />
+					<button  class="btn btn-secondary" onclick="location.href=`${culture.bookingUrl}`">예약하기</button>
+					<form id="likeFrm">
+				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
+					type="hidden" name="id" value="${loginMember.id}" />
+				<button type="submit" class="btn btn-success" id="like-btn" >
+					스크랩<i class="fas fa-check-double ml-1"></i>
+				</button>
+			</form>
+			<form id="disLikeFrm">
+				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
+					type="hidden" name="id" value="${loginMember.id}" />
+				<button type="submit" class="btn btn-success" id="disLike-btn" >
+					스크랩 취소<i class="fas fa-check-double ml-1"></i>
+				</button>
+			</form>
+				<button type="button" class="btn btn-secondary" data-toggle="modal"
+               data-target="#add-calander2">약속 확인&raquo;</button>
 				</div>
 				<div class="col-md-5 order-md-1">
 					<img src="${culture.imgUrl}" class="culture-detail-img">
@@ -151,138 +173,70 @@ div#board-container label.custom-file-label {
 		</c:forEach>
 		<br />
 		
-			<form id="likeFrm">
-				<input type="hidden" name="apiCode" value="${apiCode}" /> <input
-					type="hidden" name="id" value="${loginMember.id}" />
-				<button type="submit" class="btn btn-success" id="like-btn" >
-					스크랩<i class="fas fa-check-double ml-1"></i>
-				</button>
-			</form>
-				<button type="button" class="btn btn-secondary" data-toggle="modal"
-					data-target="#add-calander2">약속 확인&raquo;</button>
+			
+					
 		</div>
-	<!-- 받을모달 -->
-	<div class="modal fade" id="add-calander2" tabindex="-1" role="dialog"
-		aria-labelledby="add-calander" aria-hidden="true">
-		<form id="promiseReceiveFrm">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-					<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">상대<br>닉네임</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="mynickname"  id="receive-mynickname"/>
-								<input type="hidden" class="form-control" name="friendnickname"  id="receive-friendnickname"/>
-							</div>
-						</div>
-					
-						<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">내용</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="receive-title" name="title">
-							</div>
-						</div>
 
-						<div class="form-group row">
-							<label for="title" class="col-sm-2 col-form-label">약속일</label>
-							<div class="col-sm-10">
-								<input type="date" class="form-control" id="receive-startDate"
-									name="startDate">
-									<input type="date" id="receive-endDate" name="endDate" style="display:none"/>
-							</div>
-						</div>
-							<input type="hidden" name="allDay" id="receive-allDay" /> 
-							<input type="hidden" name="type"  value="culture"/>
-							<input type="hidden" name="borderColor"  value="#ffbb3d"/>
-							<input type="hidden" name="backgroundColor"  value="#ffbb3d"/>
-							<input type="hidden" name="textColor"  value="#ffffff"/>
-							<input type="hidden" name="id" value="${loginMember.id}" />
-							<input type="hidden" name="friendid" id="receive-friendId" />
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">취소</button>
-							<button type="submit" class="btn btn-primary">추가</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-	</div>
-<script>
-	//약속 ======================================================================================
+	<hr style="margin-top: 30px;" />
 	
-$(document).ready(function() {
-	
-	const timeConvert = (t) => {
-	    var unixTime = Math.floor(t / 1000);
-	    var date = new Date(unixTime*1000);
-	    var year = date.getFullYear();
-	    var month = "0" + (date.getMonth()+1);
-	    var day = "0" + date.getDate();
-	    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
-	}
-			
-	const $scheduleCheckCode ='${schedulecode}';
-			
-		 	var data = {"schedulecode":$scheduleCheckCode}
-			$.ajax({
-				url : "${pageContext.request.contextPath}/culture/boardScheduleCheck.do",
-				method : "GET",
-				data : {
-					schedulecode : $scheduleCheckCode
-					
-				},
-				success(data){
-					const accept = data["accept"];
-					const allDay = data["allDay"];
-					const friendnickname = data["friendnickname"];
-					const mynickname = data["mynickname"];
-					const startDate = data["startDate"];
-					const content = data["content"];
-					const friendid = data["friendid"];
-					
-					$('#receive-title').val(content);
-					$('#receive-startDate').val(timeConvert(startDate));
-					$('#receive-endDate').val(timeConvert(startDate));
-					$('#receive-mynickname').val(mynickname);
-					$('#receive-friendnickname').val(friendnickname);
-					$('#receive-allDay').val(allDay);
-					$('#receive-friendId').val(friendid);
-					
-					 $(promiseReceiveFrm).submit((e) => {
-							e.preventDefault();
-					
-					     
-								$.ajax({
-									url:`${pageContext.request.contextPath}/culture/boardReceiveSchedule.do`,
-									method: "POST",
-									headers : headers, 
-									data : $(promiseReceiveFrm).serialize(),
-									success(resp){
-										location.reload();
-										const msg = resp["msg"];
-										alert(msg);
-										
-										},
-									error: console.log
-									});
-						}); 
-				},
-				error : function(xhr, status, err){
-					console.log(xhr, status, err);
-						alert("에러");
-				}
-			}); 
-});	
-</script>
+   <!-- 받을모달 -->
+   <div class="modal fade" id="add-calander2" tabindex="-1" role="dialog"
+      aria-labelledby="add-calander" aria-hidden="true">
+      <form id="promiseReceiveFrm">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="add-calanderTitle">약 속</h5>
+                  <button type="button" class="close" data-dismiss="modal"
+                     aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+               <div class="form-group row">
+                     <label for="title" class="col-sm-2 col-form-label">상대<br>닉네임</label>
+                     <div class="col-sm-10">
+                        <input type="text" class="form-control" name="mynickname"  id="receive-mynickname" readonly/>
+                        <input type="hidden" class="form-control" name="friendnickname"  id="receive-friendnickname"/>
+                     </div>
+                  </div>
+               
+                  <div class="form-group row">
+                     <label for="title" class="col-sm-2 col-form-label">내용</label>
+                     <div class="col-sm-10">
+                        <input type="text" class="form-control" id="receive-title" name="title"readonly>
+                     </div>
+                  </div>
 
+                  <div class="form-group row">
+                     <label for="title" class="col-sm-2 col-form-label">약속일</label>
+                     <div class="col-sm-10">
+                        <input type="date" class="form-control" id="receive-startDate"
+                           name="startDate"readonly>
+                           <input type="date" id="receive-endDate" name="endDate" style="display:none"/>
+                     </div>
+                  </div>
+                     <input type="hidden" name="allDay" id="receive-allDay" /> 
+                     <input type="hidden" name="type"  value="culture"/>
+                     <input type="hidden" name="borderColor"  value="#ffbb3d"/>
+                     <input type="hidden" name="backgroundColor"  value="#ffbb3d"/>
+                     <input type="hidden" name="textColor"  value="#ffffff"/>
+                     <input type="hidden" name="id" value="${loginMember.id}" />
+                     <input type="hidden" name="friendid" id="receive-friendId" />
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">취소</button>
+                     <button type="submit" class="btn btn-primary">추가</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+	
+
+		<!-- 영화 줄거리 -->
+		<h2 class="blog-post-title"></h2>
 
 		<p>${culture.contents1}</p>
 		<p>${culture.contents2}</p>
@@ -606,74 +560,7 @@ $(document).ready(function() {
 <hr class="featurette-divider" />
 
 
-<!-- 캘린더 Modal -->
-<div class="modal fade" id="add-calander" tabindex="-1" role="dialog"
-	aria-labelledby="add-calander" aria-hidden="true">
-	<form id="scheduleFrm">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="add-calanderTitle">약 속</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				
-				
-				<!-- 모달 내용 시작 -->
-				<div class="modal-body">
-				
-					<div class="form-group row">
-						<label for="title" class="col-sm-2 col-form-label" >제목</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="title" name="title"
-								placeholder="제목을 입력해주세요" required>
-						</div>
-					</div>
-					
-					<div class="form-group row">
-						<label for="title" class="col-sm-2 col-form-label" >약속일</label>
-						<div class="col-sm-10">
-							<input type="date" class="form-control" id="scheduleDate" name="startDate" required>
-						</div>
-					</div>
-						<div class="friend-list-wrap">
-							<div class="friends-list">
-								<div class="find-friend-search">
-								<div class="find-friend-title">
-										<span>친구 찾기</span>
-									</div>
-									<div class="input-group mb-3">
-										<div class="input-group-prepend">
-											<input id="searchFriend" type="text" name="title" class="form-control" required placeholder="닉네임을 입력하세요" aria-label="" aria-describedby="basic-addon1">
-											<button id="search-friend-start" class="btn btn-outline-secondary" type="button">검색</button>
-										</div>
-									</div>
-									<div class="search-result-list">
-										<div class="list-group">
-										
-										</div>
-									</div>
-								</div>
-							<input type="hidden" name="apiCode" value="${apiCode}" />
-							<input type="hidden" name="friendId" value="희연이" />
-							<input type="hidden" name="allDay" value="0" />
-							<input type="hidden" name="id" value="${loginMember.id}" />
-							</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">취소</button>
-						<button type="submit" class="btn btn-primary">추가</button>
-					</div>
-				</div>
-				<!-- 모달 내용 끌 -->
-			</div>
-			</div>
-				</div>
-				</form>
-				</div>
-
+</div>
 <script>
 
 /* 댓글 등록 */
@@ -814,79 +701,177 @@ $(insertCommentFrm).submit((e) => {
 		return true;
 	});
  	
- 	
- 	//스크랩===========================================================================================
+	//스크랩===========================================================================================
 
- 		$(likeFrm).submit((e) => {
-		e.preventDefault();
+		$(likeFrm).submit((e) => {
+	e.preventDefault();
 
-		const csrfHeader = "${_csrf.headerName}";
-        const csrfToken = "${_csrf.token}";
-        const headers = {};
-        headers[csrfHeader] = csrfToken;
-        
-
-
-			$.ajax({
-				url:`${pageContext.request.contextPath}/culture/boardLikeCount.do`,
-				method: "GET",
-				data : $(likeFrm).serialize(),
-				success(data){
-					const selectCountLikes = data["selectCountLikes"];
-					console.log(selectCountLikes);
-					
-					//location.reload();
-					//alert(resp.msg);
-					 if(selectCountLikes == 0 ){
-						$.ajax({
-							url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
-							method : "POST",
-							headers : headers,
-							data : $(likeFrm).serialize(),
-							success(data){
-								const result = data["result"]
-								const selectCountLikes = data["selectCountLikes"];
+	const csrfHeader = "${_csrf.headerName}";
+    const csrfToken = "${_csrf.token}";
+    const headers = {};
+    headers[csrfHeader] = csrfToken;
+    
+   	console.log($(likeFrm).serialize());
+   	
+		$.ajax({
+			url:`${pageContext.request.contextPath}/culture/boardLikeCount.do`,
+			method: "GET",
+			data : $(likeFrm).serialize(),
+			success(data){
+				const selectCountLikes = data["selectCountLikes"];
+				console.log(selectCountLikes);
+				
+				//location.reload();
+				//alert(resp.msg);
+				 if(selectCountLikes == 0 ){
+					$.ajax({
+						url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
+						method : "POST",
+						headers : headers,
+						data : $(likeFrm).serialize(),
+						success(data){
+							const result = data["result"]
+							const selectCountLikes = data["selectCountLikes"];
+							
+							if(result == 1) {
 								
-								if(result == 1) {
+								console.log("selectCountLikes = " + selectCountLikes);
+								console.log("스크랩 등록!");
+								alert("게시물이 스크랩되었습니다!");
 									
-									console.log("selectCountLikes = " + selectCountLikes);
-									console.log("좋아요 등록!");
-									alert("좋아요를 등록했습니다.");
-										
-								}
-							},
-							error : function(xhr, status, err){
-								console.log(xhr, status, err);
-									alert("좋아요 안됩니꽈,,,?");
 							}
-						});
-					}else{
-						$.ajax({
-							url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/likes`,
-							method : "DELETE",
-							headers : headers,
-							data : $(likeFrm).serialize(),
-							success(data){
-								const result = data["result"];
-								const selectCountLikes = data["selectCountLikes"];
-								
-								if(result == 1) {
-									console.log("selectCountLikes = " + selectCountLikes);
-									console.log("좋아요 취소!");
-									alert("좋아요를 취소했습니다.");
-								}
-							},
-							error : console.log
-						});
-					} 
-				},
-				error: console.log
-				});
-		});
+						},
+						error : function(xhr, status, err){
+							console.log(xhr, status, err);
+						}
+					});
+				 }else{
+					 alert("이미 스크랩한 게시글입니다.")
+				 }
+			},
+			error: console.log
+	});
 
+	});
+	
+		$(disLikeFrm).submit((e) => {
+			e.preventDefault();
+
+			const csrfHeader = "${_csrf.headerName}";
+		    const csrfToken = "${_csrf.token}";
+		    const headers = {};
+		    headers[csrfHeader] = csrfToken;
+		    
+		   	console.log($(disLikeFrm).serialize());
+		   	
+		   $.ajax({
+			url:`${pageContext.request.contextPath}/culture/boardLikeCount.do`,
+			method: "GET",
+			data : $(disLikeFrm).serialize(),
+			success(data){
+				const selectCountLikes = data["selectCountLikes"];
+				console.log(selectCountLikes);
+				
+				//location.reload();
+				//alert(resp.msg);
+				 if(selectCountLikes != 0 ){
+					 $.ajax({
+			 				url : `${pageContext.request.contextPath}/culture/board/view/${apiCode}/disLikes`,
+			 				
+			 				method: "POST",
+			 				headers : headers,
+			 				data : $(disLikeFrm).serialize(),
+			 				success(data){
+			 					const result = data["result"];
+			 					const selectCountLikes = data["selectCountLikes"];
+			 					
+			 					if(result == 1) {
+			 						console.log("selectCountLikes = " + selectCountLikes);
+			 						console.log("스크랩 취소!");
+			 						alert("스크랩이 취소되었습니다!");
+			 					}
+			 				},
+			 				error : console.log
+			 			});
+				 }else{
+					 alert("스크랩한 적 없는데요?")
+				 }
+			},
+			error: console.log
+	});
+		  
+	});
  	
 </script>
 
+<script>
+	//약속 ======================================================================================
+	
+$(document).ready(function() {
+	
+	const timeConvert = (t) => {
+	    var unixTime = Math.floor(t / 1000);
+	    var date = new Date(unixTime*1000);
+	    var year = date.getFullYear();
+	    var month = "0" + (date.getMonth()+1);
+	    var day = "0" + date.getDate();
+	    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
+	}
+			
+	const $scheduleCheckCode ='${schedulecode}';
+			
+		 	var data = {"schedulecode":$scheduleCheckCode}
+			$.ajax({
+				url : "${pageContext.request.contextPath}/culture/boardScheduleCheck.do",
+				method : "GET",
+				data : {
+					schedulecode : $scheduleCheckCode
+					
+				},
+				success(data){
+					const accept = data["accept"];
+					const allDay = data["allDay"];
+					const friendnickname = data["friendnickname"];
+					const mynickname = data["mynickname"];
+					const startDate = data["startDate"];
+					const content = data["content"];
+					const friendid = data["friendid"];
+					
+					$('#receive-title').val(content);
+					$('#receive-startDate').val(timeConvert(startDate));
+					$('#receive-endDate').val(timeConvert(startDate));
+					$('#receive-mynickname').val(mynickname);
+					$('#receive-friendnickname').val(friendnickname);
+					$('#receive-allDay').val(allDay);
+					$('#receive-friendId').val(friendid);
+					
+					 $(promiseReceiveFrm).submit((e) => {
+							e.preventDefault();
+					
+					     console.log($(promiseReceiveFrm).serialize());
+								$.ajax({
+									url:`${pageContext.request.contextPath}/culture/boardReceiveSchedule.do`,
+									method: "POST",
+									headers : headers, 
+									data : $(promiseReceiveFrm).serialize(),
+									success(resp){
+										location.reload();
+										const msg = resp["msg"];
+										alert(msg);
+										
+										},
+									error: console.log
+									});
+								
+						}); 
+				},
+				error : function(xhr, status, err){
+					console.log(xhr, status, err);
+						alert("에러");
+				}
+			}); 
+});	
+</script>
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=457ac91e7faa203823d1c0761486f8d7&libraries=services"></script>
 <script>

@@ -793,6 +793,7 @@ public class CultureController {
 				map.put("selectCountLikes", selectCountLikes);
 				
 				log.debug("selectCountLikes={}", selectCountLikes);
+				
 				System.out.println(map);
 					if(result == 1) {
 			            return ResponseEntity.ok(map);
@@ -807,10 +808,11 @@ public class CultureController {
 				}
 		}
 		
-		@DeleteMapping("/board/view/{apiCode}/likes")
-		public ResponseEntity<?> deleteLikes(@RequestParam Map<String,Object> map){
+		@PostMapping("/board/view/{apiCode}/disLikes")
+		public ResponseEntity<?> deleteLikes( @RequestParam Map<String,Object> map){
 			
 			try{
+				log.debug("map={}", map);
 				int result = cultureService.deleteCultureLike(map);
 				String msg = (result > 0) ? "스크랩 취소 완료" : "스크랩 취소 실패";	
 				
