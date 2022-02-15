@@ -1,0 +1,147 @@
+@charset "UTF-8";
+/* 페이지 설정 */
+.movie-detail-container {
+	width: 80%;
+	margin: 0 auto;
+	padding-right: 15px;
+	padding-left: 80px;
+}
+.slick-list {
+    min-height: 107px;
+    width: 90%;
+    background-color: #fffbf5;
+    margin-left: 70px;}
+.post-slider {
+	/* height: 300px; */
+	min-height: 100px;
+	/* width: 100%; */
+	background-color: #fffbf5;
+}
+
+.post-slider .silder-title {
+	/* text-align: center; */
+	/* margin: 30px auto; */
+}
+
+.post-slider .next {
+	position: absolute;
+	top: 50%;
+	right: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
+}
+
+.post-slider .prev {
+	position: absolute;
+	top: 50%;
+	left: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
+}
+
+.post-slider .post-wrapper {
+	width: 90%;
+	height: 300px;
+	margin: 0px auto;
+	overflow: hidden;
+	padding: 10px 0px 10px 0px;
+}
+
+.post-slider .post-wrapper .post {
+	width: 100%;
+	/* height: 280px; */
+	border-radius: 5px;
+	margin-right: 20px;
+}
+
+.post-slider .post-wrapper .post .post-info {
+	font-size: 15px;
+	padding-left: 10px;
+}
+
+.post-slider .post-wrapper .post .slider-image {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	height:200px;
+}
+.overView{line-height:250% !important;}
+.id-detail {
+	border: none;
+	border-right: 0px;
+	border-top: 0px;
+	boder-left: 0px;
+	boder-bottom: 0px;
+	background-color: transparent;
+	display: inline-block;
+	margin: 0px;
+	font-size: 20px;
+	pointer-events: none;
+	outline: none; }
+.movie-detail {
+	border: none;
+	border-right: 0px;
+	border-top: 0px;
+	boder-left: 0px;
+	boder-bottom: 0px;
+	display: inline-block;
+	margin: 0px;
+	background-color: transparent;
+	pointer-events: none;
+	height: 38px;
+	font-size: 24px;
+}
+/* 평점 */
+.star-2 {
+	position: relative;
+	font-size: 4rem;
+	color: #ddd;
+}
+
+.star-2 span {
+	position: absolute;
+	left: 0;
+	color: #ffd400;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.star-count {
+	position: relative;
+	font-size: 1.5rem;
+	color: #ddd;
+}
+
+.star-count span {
+	position: absolute;
+	left: 0;
+	color: #ffc57d;
+	overflow: hidden;
+	pointer-events: none;
+}
+#category-select {
+	width: 100px;
+}
+
+#category-select-commentList {
+	width: 100px;
+	display: inline-block;
+	pointer-events: none;
+	border: none;
+	appearance: none;
+}
+#exampleFormControlTextarea1 {
+	border: none;
+	border-right: 0px;
+	border-top: 0px;
+	boder-left: 0px;
+	boder-bottom: 0px;
+	background-color: #f7f7f7;
+	display: inline-block;
+	margin: 0px;
+	pointer-events: none;
+	resize:none;
+	font-size: 22px;
+}
+.comment-rating{width: 40px; padding: 0px;}
