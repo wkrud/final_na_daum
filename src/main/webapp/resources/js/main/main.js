@@ -42,6 +42,9 @@
    if (document.querySelector('.friend-widget') != null) {
 	friendWidgetInfo();
    }
+   if (document.querySelector('.weather-widget') != null) {
+	requestCoords();
+	}
    
    
  })
@@ -84,6 +87,16 @@ const drop = (ev) => {
 	}
 	
 	//위젯 생성
+	//날씨
+   if(widgetName == 'weather-widget') {
+		if(document.querySelector('.weather-widget') == null) {
+			insertWidget();
+			requestCoords();
+		} else {
+			alert('위젯은 하나만 생성할 수 있습니다.');
+			return;
+		}
+	}
    	//친구
    if(widgetName == 'friend-widget') {
 	   if(document.querySelector('.friend-widget') == null) {
@@ -219,6 +232,65 @@ const drop = (ev) => {
 
 
 //위젯 정보 로딩용
+//날씨 위젯
+var weather = (".weatherIcon");
+//|| *********** 날씨 api ************ ||
+const COORDS = "coords";
+function handleGeoSucc(position) {
+    const latitude = position.coords.latitude;  // 경도  
+    const longitude = position.coords.longitude;  // 위도
+    const coordsObj = {
+        latitude,
+        longitude
+    }
+    saveCoords(coordsObj);
+    getWeather(latitude, longitude);
+    console.log(latitude, longitude);
+}
+
+function handleGeoErr(err) {
+    console.log("geo err! " + err);
+}
+
+function requestCoords() {
+    navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr);
+}
+//추가
+function saveCoords(coordsObj) {
+  localStorage.setItem(COORDS, JSON.stringify(coordsObj));
+}
+const API_KEY = "48d8083486dafbc4ac8f913a69bbe777";
+function getWeather(lat, lon) {
+	fetch(`https://api.openweathermap.org/data/2.5/weather?lat=`+lat+`&lon=`+lon+`&appid=`+API_KEY+`&units=metric`)
+    .then(res => res.json())
+    .then(data => {  	
+        var imgURLIcon = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png"; // 아이콘        
+    console.log(data);
+    	let content = "";
+    	if(data == null) {
+			content = `
+				<div>
+					<i class="fas fa-exclamation-triangle"></i>
+					<h4>위치 정보에 동의해 주세요!</h4>
+				<div>
+			`
+			$(".weather-widget").append(content);
+		}
+		else {
+			content = `
+				<div class="weatherBox">
+					<h4>오늘의 날씨<h4>
+					<span>현재 기온 : `+data.main.temp+`도</span>
+					<span>체감 온도 : `+data.main.feels_like+`도</span>
+					<img src="`+imgURLIcon+`">
+				</div>
+			`
+			$(".weather-widget").append(content);
+		}
+    })
+}
+
+
 //친구 위젯
 const friendWidgetInfo = () => {
 	$.ajax({
