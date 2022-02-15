@@ -123,7 +123,7 @@ body {
 }
 
 /* 오렌지색 버튼*/
-.btn {
+.culture-btn {
 	border-radius: 10px;
 	text-decoration: none;
 	color: #fff;
@@ -132,7 +132,7 @@ body {
 	margin-left: 30px;
 }
 
-.btn:active {
+.culture-btn:active {
 	transform: translate(0px, 5px);
 	-webkit-transform: translate(0px, 5px);
 	box-shadow: 0px 1px 0px 0px;
@@ -218,7 +218,7 @@ $(() => {
 						<!-- D 미술  -->
 					</select>
 				</div>
-				<button type="submit" class="btn orange btn-default" id="search-btn">Search</button>
+				<button type="submit" class="culture-btn btn orange btn-default" id="search-btn">Search</button>
 			</form>
 
 		</div>
