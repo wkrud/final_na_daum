@@ -55,14 +55,14 @@
 	</select>
 	
 	<select  id="selectOneComment" resultMap="CommentMap">
-		select * from comments where code = #{code}
+		select * from comments where code like 'cm' || '%'
 	</select>
 	
 	<insert id="insertMovieComment" >
 		insert into
 				comments(code, comment_level, content, reg_date, comment_ref, id, api_code, star)
 			values(
-				concat('co-',seq_comments_no.nextval),
+				concat('cm-',seq_comments_no.nextval),
 				#{commentLevel},
 				#{content},
 				default,

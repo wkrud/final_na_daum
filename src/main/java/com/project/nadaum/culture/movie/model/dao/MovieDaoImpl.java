@@ -11,6 +11,7 @@ import com.project.nadaum.culture.schedule.model.vo.Schedule;
 import com.project.nadaum.culture.show.model.vo.Scrap;
 
 
+
 @Repository
 public class MovieDaoImpl implements MovieDao {
 
