@@ -70,28 +70,17 @@
 				<td colspan="2" rowspan="2">
 					<input type="date" name="regDate" id="regDate" />
 				</td>
-				<td>
-					<input class="checkbox-tools" type="radio" name="payment" id="cash" value ="cash"/>
-					<label class="for-checkbox-tools" for="cash">
-						<span><i class="far fa-money-bill-alt"></i> 현금</span>
-					</label>
-				</td>
-				<td>
-					<input class="checkbox-tools" type="radio" name="payment" id="card" value ="card"/>
-					<label class="for-checkbox-tools" for="card">
-						<span><i class="far fa-credit-card" id="card"></i> 카드</span>
-					</label>
-				</td>
 			</tr>
 			<tr>
 				<td>
-					<select name="incomeExpense" id="main">
+					<select name="incomeExpense" class="main">
 						<option value="I">수입</option>
 						<option value="E">지출</option>
 					</select>
 				</td>
 				<td>
-					<select name="category" id="sub">
+					<select name="category" class="sub">
+						<option value="">카테고리</option>
 						<option value="급여">급여</option>
 						<option value="용돈">용돈</option>
 						<option value="기타">기타</option>
@@ -99,10 +88,17 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="4">
+				<td colspan="3" class="detail_td">
 					<label for="detail">
 						<input type="text" name="detail" id="" placeholder="내역을 입력하세요" />
 					</label>
+				</td>
+				<td>
+					<select name="payment">
+						<option value="">결제수단</option>
+						<option value="cash">현금</option>
+						<option value="card">카드</option>
+					</select>
 				</td>
 			</tr>
 			<tr>

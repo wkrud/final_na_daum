@@ -305,7 +305,11 @@ const friendWidgetInfo = () => {
 		console.log(resp);		
 			let content = "";
 			content = `
-			<div style="display : flex; text-align : center; width : 200px;">
+			<div style="display : flex; text-align : center; width : 200px;" class="friendWidgetBox">
+				<i class="fas fa-chevron-left prevF" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+					color: gray; cursor: pointer; z-index : 5;"></i>
+				<i class="fas fa-chevron-right nextF" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+					color: gray; cursor: pointer; z-index : 5;"></i>
 				<div class="friendTogetherInfo" style="margin : 0px 30px;">
 					<p style="border-bottom : 1px solid gray; margin : 10px auto;">친구</p>
 				</div>
