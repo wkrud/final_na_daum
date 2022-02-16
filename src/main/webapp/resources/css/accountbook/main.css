@@ -495,10 +495,10 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 	background-color : rgba(255, 128, 128, 0.4);
 }
 .incomeArea-payment-count li:nth-child(2), .expenseArea-payment-count li:nth-child(2) {
-	background-color : rgba(128, 255, 255, 0.4);
+	background-color : rgba(255, 255, 128, 0.4);
 }
 .incomeArea-payment-count li:nth-child(3), .expenseArea-payment-count li:nth-child(3) {
-	background-color : rgba(255, 255, 128, 0.4);
+	background-color : rgba(128, 255, 255, 0.4);
 }
 
 .income-category-ranking, .expense-category-ranking {

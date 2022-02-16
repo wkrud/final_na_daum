@@ -208,7 +208,7 @@
 		where
 		    id=#{id}
 		    and
-		    reg_date between #{startDate} and #{endDate}
+		    to_char(reg_date, 'yyyy-mm-dd') between #{startDate} and #{endDate}
 		order by reg_date desc
 	</select>
 	
@@ -351,11 +351,11 @@
 	<!-- 현금,카드 건수 -->
 	<select id="paymentList" resultMap="monthlyCountList">
 		select
-		  nvl(payment, 'blank') as payment,
+		  payment,
 		  count(payment) as count
 		 from ( 
 		select  
-		    payment
+		    nvl(payment, 'blank') as payment
 		from
 		    account_book
 		<where>

@@ -45,8 +45,6 @@
    if (document.querySelector('.weather-widget') != null) {
 	requestCoords();
 	}
-   
-   
  })
 
  //드래그 이벤트
@@ -278,12 +276,17 @@ function getWeather(lat, lon) {
 		}
 		else {
 			content = `
-				<div class="weatherBox">
-					<h4>오늘의 날씨<h4>
-					<span>현재 기온 : `+data.main.temp+`도</span>
-					<span>체감 온도 : `+data.main.feels_like+`도</span>
-					<img src="`+imgURLIcon+`">
-				</div>
+			<div style="width : 320px; height: 100px; padding : 10px;" class="weatherBox">
+			  <div style="overflow: hidden; width : 120px; height : 100px; margin-top : 7px; float: left;">
+			    <img style="width : 100px; height : 100px;" src="`+imgURLIcon+`" alt="날씨 아이콘">
+			  </div>
+			  <div style="font-size : 18px; margin-left : 80px; text-align: center; position : relative; bottom : -5px;">
+			    <ul style="list-style: none;">
+			      <li style="margin : 10px;"><span>현재 기온 : `+data.main.temp+` °C</span></li>
+			      <li style="margin : 10px;"><span>체감 온도 : `+data.main.feels_like+` °C</span></li>
+			    </ul>
+			  </div>
+			</div>
 			`
 			$(".weather-widget").append(content);
 		}
