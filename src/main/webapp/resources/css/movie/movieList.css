@@ -14,7 +14,7 @@
 .banner-img{
     height: 400px;
     width: 60%;
-    margin-left: 250px;
+    margin-left: 200px;
     background-color: black
 }
 .movie-nav{
@@ -44,6 +44,7 @@ background-color: #fffbf5 !important;
 .post-slider .silder-title {
 	text-align: center;
 	margin: 30px auto;
+	font-weight:bold;
 }
 
 .post-slider .next {
@@ -95,3 +96,91 @@ background-color: #fffbf5 !important;
 .silk-slide{
 height: 300px;
 }
+
+/* popular-wrapper */
+.post-slider .popular-wrapper {
+	width: 90%;
+	height: 500px;
+	margin: 0px auto;
+	overflow: hidden;
+	padding: 10px 0px 10px 0px;
+}
+
+.post-slider .popular-wrapper .post {
+	width: 100%;
+	height: 410px;
+	border-radius: 5px;
+	margin-right: 20px;
+}
+
+.post-slider .popular-wrapper .post .post-info {
+	font-size: 15px;
+	padding-left: 10px;
+}
+
+.post-slider .popular-wrapper .post .slider-image {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.post-slider .nextt {
+	position: absolute;
+	top: 50%;
+	right: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
+}
+
+.post-slider .prevv {
+	position: absolute;
+	top: 50%;
+	left: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
+}
+
+/* top-wrapper */
+.post-slider .top-wrapper {
+	width: 90%;
+	height: 500px;
+	margin: 0px auto;
+	overflow: hidden;
+	padding: 10px 0px 10px 0px;
+}
+
+.post-slider .top-wrapper .post {
+	width: 100%;
+	height: 410px;
+	border-radius: 5px;
+	margin-right: 20px;
+}
+
+.post-slider .top-wrapper .post .post-info {
+	font-size: 15px;
+	padding-left: 10px;
+}
+
+.post-slider .top-wrapper .post .slider-image {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.post-slider .nexttt {
+	position: absolute;
+	top: 50%;
+	right: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
+}
+
+.post-slider .prevvv {
+	position: absolute;
+	top: 50%;
+	left: 30px;
+	font-size: 2em;
+	color: gray;
+	cursor: pointer;
+}
+.empty-search{text-align:center;}
+

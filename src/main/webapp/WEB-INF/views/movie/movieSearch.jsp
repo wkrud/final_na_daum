@@ -13,7 +13,11 @@
 	<jsp:param value="나:다움 영화리스트 " name="movieList" />
 </jsp:include>
 <link href='${pageContext.request.contextPath}/resources/css/movie/movieList.css' rel='stylesheet' />
-
+<style>
+.empty-search{text-align:center;}
+.movie-card{margin-left: 30px;margin-bottom: 20px;}
+.search-img {height:400px;}
+</style>
 <div class="movie-container">
 	<!-- 썸네일 그림, 타이틀  -->
 	<div class="movie-banner">
@@ -88,10 +92,13 @@
 
 <!-- 검색 결과 -->
 	<div class="upcoming-movie">
+		<c:choose>
+			<c:when test="${empty searchList}"><h1 class="empty-search">검색결과가 존재하지 않습니다.</h1></c:when>
+			<c:otherwise>
 		<c:forEach var="movie" items="${searchList}">
 		<div class="card movie-card" style="width: 18rem;">
 			
-  			<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="영화 포스터가 없습니다." onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
+  			<img class="card-img-top search-img" src="https://image.tmdb.org/t/p/w500${movie.posterPath}"  onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/images/movie/noimage.jpg';" onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
             						
             						
   			<div class="card-body">
@@ -99,6 +106,8 @@
   			</div>
 		</div>
 		</c:forEach>
+		</c:otherwise>
+		</c:choose>	
 	</div>
 		
 
