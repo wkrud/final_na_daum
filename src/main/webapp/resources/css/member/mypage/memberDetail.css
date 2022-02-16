@@ -220,6 +220,25 @@
 	margin-top: 10px;
 }
 
-
+.announcement-detail-wrap{
+	display:flex;
+	flex-direction: column;
+	align-items: center;
+}
+.announcement-detail-header{
+	font-size: 1.3rem;
+	width: 500px;
+	text-align: center;
+	margin: 10px;
+}
+.announcement-detail-info{
+	display: flex;
+	width: 500px;
+	justify-content: space-around;
+}
+.announcement-date{
+	opacity: .8;
+	font-size: .8rem;
+}
 
 

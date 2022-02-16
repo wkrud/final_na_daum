@@ -749,7 +749,7 @@ $(".btn-reply").click((e) => {
 
 /* 좋아요 */
  $(document).on('click', '#likeButton', function(e) {
-	console.log("좋아요 나왕?");
+	
 	
 	const csrfHeader = "${_csrf.headerName}";
 	const csrfToken = "${_csrf.token}";
