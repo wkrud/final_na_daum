@@ -389,16 +389,6 @@ public class CultureController {
 
 				int totalStartComment = cultureService.totalStarCount(apiCode);
 				
-//				int sum = 0; // 평점 합계 구하는 변수 0으로 초기화
-//				double avg = 0; // 평점 평균 구하는 변수 0으로 초기화
-//				sum = star.stream().mapToInt(Integer::intValue).sum();
-//				System.out.println("starSum : " + sum);
-//				int arraysize = star.size();
-//				avg = sum / arraysize;
-//				System.out.println("avgStar : " + avg);
-//				log.debug("avg{}", avg);
-//				model.addAttribute("avg", avg);
-				
 				double rating = cultureService.avgRating(apiCode);
 				int starCount1 = cultureService.starCount1(apiCode);
 				int starCount2 = cultureService.starCount2(apiCode);
@@ -837,24 +827,6 @@ public class CultureController {
 					return ResponseEntity.badRequest().build();
 				}
 		}
-		/*
-		@ResponseBody
-		@GetMapping("/boardLikeIdCount.do")
-		public Map<String, Object> boardLikeIdCount(@RequestParam String code, @RequestParam String id) {
-
-			Map<String, Object> param = new HashMap<>();
-			param.put("code", code);
-			param.put("id", id);
-
-			// 좋아요 추가하고 새로 추가된 좋아요 갯수 받아오기
-			int selectCountLikes = cultureService.selectCountLikes(param);
-
-			Map<String, Object> map = new HashMap<>();
-
-			map.put("selectCountLikes", selectCountLikes);
-
-			return map;
-		}*/
 		//좋아요
 				@ResponseBody
 				@GetMapping("/boardLikeCount.do")
@@ -871,6 +843,4 @@ public class CultureController {
 					
 				}
 				
-				@GetMapping("/scheduleAccept.do")
-				public void Schedule() {}
 }
