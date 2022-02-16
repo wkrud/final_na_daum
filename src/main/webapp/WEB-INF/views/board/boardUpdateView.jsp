@@ -49,7 +49,6 @@ margin: 0 auto;
 		<label for="category" class="col-sm-2 col-form-label">카테고리</label>
 		<div class="col-sm-10">
 			<input type="text" class="form-control" name="category" value="LoL">	
-		
 		</div>
 		</div>
 		
