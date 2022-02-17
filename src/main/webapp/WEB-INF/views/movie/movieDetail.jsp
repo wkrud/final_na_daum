@@ -81,8 +81,8 @@
 		<!-- 스크랩 버튼 -->
 
 		<c:if test="${ loginMember.id != null }">
-			<button type="button" class="btn btn-success" value="${apiCode}"
-				id="scrapButton" data-api-code="${apiCode}"
+			<button type="button" class="btn btn-success" name="apiCode" value="${apiCode}"
+				id="scrapButton" data-code="${apiCode}"
 				data-id="${loginMember.id}">
 				스크랩<i class="fas fa-check-double ml-1"></i>
 			</button>
@@ -652,12 +652,12 @@ $(document).on('click', '#scrapButton', function(e) {
 	const csrfToken = "${_csrf.token}";
 	headers[csrfHeader] = csrfToken;
 	
-	const $apiCode = $(e.target).data("apiCode");
+	const $apiCode = $(e.target).data("code");
 	const $id = $(e.target).data("id");
+	console.log($apiCode);
 	
 	
 	var data = {"apiCode" : $apiCode, "id":$id}
-	console.log("data");
 	console.log(data);
 	
 	$.ajax({
@@ -742,7 +742,6 @@ $(document).on('click', '#scrapButton', function(e) {
 				headers : headers, 
 				data : $(promiseFrm).serialize(),
 				success(resp){
-					//location.reload();
 					alert(resp.msg);
 					let ranNo = Math.floor(Math.random() * 10000);
 					let code = 'culture-' + ranNo;
@@ -753,6 +752,7 @@ $(document).on('click', '#scrapButton', function(e) {
 					content = `<a href='/nadaum/movie/movieDetail/${apiCode}/\${schedulecode}'>🎬${loginMember.nickname}님이 [영화] 약속을 신청을 했습니다</a>`
 					console.log(content);
 					commonAlarmSystem(code,guest,content);
+					location.reload();
 					},
 				error: console.log
 				});
