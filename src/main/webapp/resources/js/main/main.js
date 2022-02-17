@@ -42,8 +42,9 @@
    if (document.querySelector('.friend-widget') != null) {
 	friendWidgetInfo();
    }
-   
-   
+   if (document.querySelector('.weather-widget') != null) {
+	requestCoords();
+	}
  })
 
  //드래그 이벤트
@@ -84,6 +85,16 @@ const drop = (ev) => {
 	}
 	
 	//위젯 생성
+	//날씨
+   if(widgetName == 'weather-widget') {
+		if(document.querySelector('.weather-widget') == null) {
+			insertWidget();
+			requestCoords();
+		} else {
+			alert('위젯은 하나만 생성할 수 있습니다.');
+			return;
+		}
+	}
    	//친구
    if(widgetName == 'friend-widget') {
 	   if(document.querySelector('.friend-widget') == null) {
@@ -219,6 +230,70 @@ const drop = (ev) => {
 
 
 //위젯 정보 로딩용
+//날씨 위젯
+var weather = (".weatherIcon");
+//|| *********** 날씨 api ************ ||
+const COORDS = "coords";
+function handleGeoSucc(position) {
+    const latitude = position.coords.latitude;  // 경도  
+    const longitude = position.coords.longitude;  // 위도
+    const coordsObj = {
+        latitude,
+        longitude
+    }
+    saveCoords(coordsObj);
+    getWeather(latitude, longitude);
+    console.log(latitude, longitude);
+}
+
+function handleGeoErr(err) {
+    console.log("geo err! " + err);
+}
+
+function requestCoords() {
+    navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr);
+}
+//추가
+function saveCoords(coordsObj) {
+  localStorage.setItem(COORDS, JSON.stringify(coordsObj));
+}
+const API_KEY = "48d8083486dafbc4ac8f913a69bbe777";
+function getWeather(lat, lon) {
+	fetch(`https://api.openweathermap.org/data/2.5/weather?lat=`+lat+`&lon=`+lon+`&appid=`+API_KEY+`&units=metric`)
+    .then(res => res.json())
+    .then(data => {  	
+        var imgURLIcon = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png"; // 아이콘        
+    console.log(data);
+    	let content = "";
+    	if(data == null) {
+			content = `
+				<div>
+					<i class="fas fa-exclamation-triangle"></i>
+					<h4>위치 정보에 동의해 주세요!</h4>
+				<div>
+			`
+			$(".weather-widget").append(content);
+		}
+		else {
+			content = `
+			<div style="width : 320px; height: 100px; padding : 10px;" class="weatherBox">
+			  <div style="overflow: hidden; width : 120px; height : 100px; margin-top : 7px; float: left;">
+			    <img style="width : 100px; height : 100px;" src="`+imgURLIcon+`" alt="날씨 아이콘">
+			  </div>
+			  <div style="font-size : 18px; margin-left : 80px; text-align: center; position : relative; bottom : -5px;">
+			    <ul style="list-style: none;">
+			      <li style="margin : 10px;"><span>현재 기온 : `+data.main.temp+` °C</span></li>
+			      <li style="margin : 10px;"><span>체감 온도 : `+data.main.feels_like+` °C</span></li>
+			    </ul>
+			  </div>
+			</div>
+			`
+			$(".weather-widget").append(content);
+		}
+    })
+}
+
+
 //친구 위젯
 const friendWidgetInfo = () => {
 	$.ajax({
@@ -230,7 +305,11 @@ const friendWidgetInfo = () => {
 		console.log(resp);		
 			let content = "";
 			content = `
-			<div style="display : flex; text-align : center; width : 200px;">
+			<div style="display : flex; text-align : center; width : 200px;" class="friendWidgetBox">
+				<i class="fas fa-chevron-left prevF" style="position: absolute; top: 50%; left: -2px; font-size: 1em;
+					color: gray; cursor: pointer; z-index : 5;"></i>
+				<i class="fas fa-chevron-right nextF" style="position: absolute; top: 50%; right: -2px; font-size: 1em;
+					color: gray; cursor: pointer; z-index : 5;"></i>
 				<div class="friendTogetherInfo" style="margin : 0px 30px;">
 					<p style="border-bottom : 1px solid gray; margin : 10px auto;">친구</p>
 				</div>
@@ -576,7 +655,7 @@ const cultureWidgetInfo = () => {
 						`
 					$(".culture-widget").append(content);
 					for(data in resp) {
-						content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+						content = `<div class="card post" style="background-color : #EAE7E3; border : none;">
 									<img style = "width : 120px; height : 180px;"class="card-img-top slider-image"
 										src="`+resp[data].imgUrl+`"
 										alt="Card image cap">
@@ -676,7 +755,7 @@ const movieWidgetInfo = () => {
 				`
 			$(".movie-widget").append(content);
 			for(data in resp) {
-				content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+				content = `<div class="card post" style="background-color : #EAE7E3; border : none;">
 							<img class="card-img-top slider-image" stlye="width : 120px; height : 180px;"
 								src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
 								alt="Card image cap"

@@ -24,8 +24,8 @@
 			<span style="--i:2;--x:0;--y:-1" class="accept-drag" id="alert-widget">
 				<i class="far fa-bell"></i>
 			</span>
-			<span style="--i:3;--x:0;--y:1" id="memo-widget">
-				<i class="far fa-edit"></i>
+			<span style="--i:3;--x:0;--y:1" class="accept-drag" id="weather-widget">
+				<i class="fas fa-cloud-sun"></i>
 			</span>
 			<span style="--i:4;--x:1;--y:1" class="accept-drag" id="account-widget">
 				<i class="fas fa-calculator"></i>
