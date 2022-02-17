@@ -655,7 +655,7 @@ const cultureWidgetInfo = () => {
 						`
 					$(".culture-widget").append(content);
 					for(data in resp) {
-						content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+						content = `<div class="card post" style="background-color : #EAE7E3; border : none;">
 									<img style = "width : 120px; height : 180px;"class="card-img-top slider-image"
 										src="`+resp[data].imgUrl+`"
 										alt="Card image cap">
@@ -755,7 +755,7 @@ const movieWidgetInfo = () => {
 				`
 			$(".movie-widget").append(content);
 			for(data in resp) {
-				content = `<div class="card post" style="background-color : #E2DFDA; border : none;">
+				content = `<div class="card post" style="background-color : #EAE7E3; border : none;">
 							<img class="card-img-top slider-image" stlye="width : 120px; height : 180px;"
 								src="https://image.tmdb.org/t/p/w500`+resp[data].posterPath+`"
 								alt="Card image cap"
