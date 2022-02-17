@@ -74,8 +74,6 @@ var calendar = $('#calendar').fullCalendar({
    *  일정 받아옴 
    * ************** */
   events: function (start, end, timezone, callback) {
-		
-		console.log(id);
 		$.ajax({
 			url: "/nadaum/calendar/calendarList.do",
 			type: "get",
@@ -83,8 +81,6 @@ var calendar = $('#calendar').fullCalendar({
 			contentType: "application/json; charset=utf-8;",
 			data: {
 				id        : id
-				//startDate : moment(start).format('YYYY-MM-DD'),
-       			//endDate   : moment(end).format('YYYY-MM-DD')
 			},
 			success: function(response) {
 				
