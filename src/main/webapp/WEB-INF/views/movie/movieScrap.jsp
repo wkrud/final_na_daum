@@ -13,7 +13,11 @@
 	<jsp:param value="나:다움 영화리스트 " name="movieList" />
 </jsp:include>
 <link href='${pageContext.request.contextPath}/resources/css/movie/movieList.css' rel='stylesheet' />
-
+<style>
+.scrap-title{text-align:center;}
+.movie-card{margin-left: 30px;}
+.scrap-image{height: 400px;}
+</style>
 <div class="movie-container">
 	<!-- 썸네일 그림, 타이틀  -->
 	<div class="movie-banner">
@@ -85,17 +89,14 @@
 		</nav>
 	</div>
 		
-		<h1>${loginMember.nickname} 님의 영화 스크랩 목록</h1>
+		<h1 class="scrap-title">🎬${loginMember.nickname} 님의 영화 스크랩 목록🎬</h1>
 		<!-- TMDB api -->
 	<div class="upcoming-movie">
 		<c:forEach var="movie" items="${scrapList}">
 		<div class="card movie-card" style="width: 18rem;">
 			
-  			<img class="card-img-top" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
+  			<img class="card-img-top scrap-image" src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="Card image cap" onclick="location.href='${pageContext.request.contextPath}/movie/movieDetail/${movie.apiCode}'">
             						
-            						<rect width="100%" height="100%" fill="#55595c" />
-           		 					</svg>	
-  			
   			<div class="card-body">
    			 <p class="card-text">${movie.title}</p>
   			</div>
