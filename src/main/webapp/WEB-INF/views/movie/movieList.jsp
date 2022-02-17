@@ -79,7 +79,7 @@
 			<a class="navbar-brand"></a>
 			<form class="form-inline" action="${pageContext.request.contextPath}/movie/movieSearch.do?${_csrf.parameterName}=${_csrf.token}" method="post">
 				<input class="form-control mr-sm-2" type="text" name="keyword" placeholder="검색하고 싶은 영화를 입력하세요." aria-label="Search">
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+				<button class="btn btn-dark my-2 my-sm-0" type="submit">Search</button>
 			</form>
 		</nav>
 	</div>
@@ -137,11 +137,11 @@
 					<h1 class="silder-title">Popular Movie</h1>
 
 					<!-- 왼쪽 방향 버튼 -->
-					<i class="fas fa-chevron-left prev"></i>
+					<i class="fas fa-chevron-left prevv"></i>
 					<!-- 오른쪽 방향 버튼 -->
-					<i class="fas fa-chevron-right next"></i>
+					<i class="fas fa-chevron-right nextt"></i>
 
-					<div class="post-wrapper">
+					<div class="popular-wrapper">
 
 						<c:forEach var="movie" items="${popularList}">
 
@@ -179,11 +179,11 @@
 					<h1 class="silder-title">Top Rated Movie</h1>
 
 					<!-- 왼쪽 방향 버튼 -->
-					<i class="fas fa-chevron-left prev"></i>
+					<i class="fas fa-chevron-left prevvv"></i>
 					<!-- 오른쪽 방향 버튼 -->
-					<i class="fas fa-chevron-right next"></i>
+					<i class="fas fa-chevron-right nexttt"></i>
 
-					<div class="post-wrapper">
+					<div class="top-wrapper">
 
 						<c:forEach var="movie" items="${topratedList}">
 
@@ -223,6 +223,22 @@
 		autoplaySpeed : 2000,
 		nextArrow : $('.next'),
 		prevArrow : $('.prev'),
+	});
+	$('.popular-wrapper').slick({
+		slidesToShow : 6,
+		slidesToScroll : 1,
+		autoplay : true,
+		autoplaySpeed : 2000,
+		nextArrow : $('.nextt'),
+		prevArrow : $('.prevv'),
+	});
+	$('.top-wrapper').slick({
+		slidesToShow : 6,
+		slidesToScroll : 1,
+		autoplay : true,
+		autoplaySpeed : 2000,
+		nextArrow : $('.nexttt'),
+		prevArrow : $('.prevvv'),
 	});
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

@@ -1,6 +1,7 @@
 package com.project.nadaum.culture.movie.controller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -11,9 +12,11 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -102,7 +105,7 @@ public class GetMovieDetailApi {
 	            // "dates": {"maximum": "2022-03-09", "minimum": "2022-02-16"	        
 	            JSONArray parse_listArr = (JSONArray)obj.get("genres"); //name(key)안의 value값을 객체안에 배열로 담음.
 	            System.out.println("parse_listArr = "+parse_listArr); 
-	            JSONObject movie = (JSONObject) parse_listArr.get(1);
+	            JSONObject movie = (JSONObject) parse_listArr.get(0);
 	            
 //	            JSONArray id = (JSONArray)obj.get("id");
 	            String id = String.valueOf(obj.get("id"));
@@ -415,17 +418,17 @@ public class GetMovieDetailApi {
 				@GetMapping("/movieScrap.do")
 				public String scrapList(
 						@AuthenticationPrincipal Member member,
-						Model model) {
+						Model model) throws ParseException {
 					
 					try {
+						
 					String id = member.getId();
 					List<Scrap> list = movieService.selectMovieScrap(id);
 					
 					//api저장할 list
 					List<Object> resultList = new ArrayList<>();
-					List<Object> scrapList = new ArrayList<>();
-					List<Object> scrapList2 = new ArrayList<>();
-					Map<String, Object> map = new HashMap<>();			
+					
+					List<Map<String,Object>> scrapList = new ArrayList<>();
 					
 					//apiCode 꺼내서 resultList에 담기
 					for (int i = 0; i < list.size(); i++) {
@@ -435,8 +438,8 @@ public class GetMovieDetailApi {
 					}
 					
 					//resultList에 담은 apiCode 꺼내기
-					for (int j = 0; j < resultList.size(); j++) {
-						String apiCode = resultList.get(j).toString();
+					for (int i = 0; i < resultList.size(); i++) {
+						String apiCode = resultList.get(i).toString();
 						log.debug("apiCode={}",apiCode);
 						
 					 
@@ -458,55 +461,42 @@ public class GetMovieDetailApi {
 			                result = result.concat(line);
 			                System.out.println("line = "+ line); //api 불러서 그냥읽음 null이 아닌지 확인 가공x        
 			            }            
+			            br.close();
 			            
 			            // JSON parser 만들어 문자열 데이터를 객체화한다.
 			            //JSONObject -> 데이터를 key:value
+//			            for (int j = 0; j < resultList.size(); j++) {
 			            JSONParser parser = new JSONParser(); // JSONParser -> 파싱
 			            JSONObject obj = (JSONObject)parser.parse(result); 
 			            System.out.println("obj = "+ obj);
-			            
-			            
-			            // list 아래가 배열형태로 []
-			            // "dates": {"maximum": "2022-03-09", "minimum": "2022-02-16"	        
-			            JSONArray parse_listArr = (JSONArray)obj.get("genres"); //name(key)안의 value값을 객체안에 배열로 담음.
-			            System.out.println("parse_listArr = "+parse_listArr); 
-			            JSONObject movie = (JSONObject) parse_listArr.get(1);
-			            
-			            for(int h = 0; h <= 1;  h++) {
+			      
+			            Map<String, Object> map = new HashMap<>();			
 //			            JSONArray id = (JSONArray)obj.get("id");
-			            String code = String.valueOf(obj.get("id"));
-			            String overview = (String) obj.get("overview");	// 상세정보	                
+			            String code = String.valueOf(obj.get("id"));	                
 			            String posterPath = (String) obj.get("poster_path");        // 포스터
-			            String title = (String) obj.get("title");            // 제목
-			            Double voteAverage = Double.parseDouble(String.valueOf(obj.get("vote_average")));        // 평균 평점
-			            String releaseDate = (String) obj.get("release_date");	// 개봉날짜
-			            String genre = String.valueOf(movie.get("name"));
+			            String title = (String) obj.get("title");      
 //			            System.out.println("id = "+id); 
 //			            System.out.println("overview = "+overview);
 			            
-			            map.put("code", code);
-			            map.put("overview", overview);
+			            map.put("apiCode", code);
 			            map.put("posterPath", posterPath);
 			            map.put("title", title);
-			            map.put("voteAverage", voteAverage);
-			            map.put("releaseDate", releaseDate);
-			            map.put("genre", genre);
-//			            scrapList2.add(map);	                
-//			            log.debug("394 scrapList2 = {}" , scrapList2);
-			            scrapList.add(map);	                
-			            }
+//			            log.debug("398 scrapList = {}" , scrapList);
+			            log.debug("map = {}" , map);
 			            
+//			            }
+			            
+			            scrapList.add(map);	                
 			            log.debug("398 scrapList = {}" , scrapList);
-			            br.close();
-						} 
 					
-			            model.addAttribute("scrapList",scrapList);
-			            log.debug("403 scrapList = {}" , scrapList);
+						} 
+					model.addAttribute("scrapList",scrapList);
+					log.debug("403 scrapList = {}" , scrapList);
 			           
-			        } catch (Exception e) {
+			        } catch (IOException e) {
 			            e.printStackTrace();
 			        }
-			        return "/movie/movieScrap";
+					return "/movie/movieScrap";
 			    }
 }
 	
