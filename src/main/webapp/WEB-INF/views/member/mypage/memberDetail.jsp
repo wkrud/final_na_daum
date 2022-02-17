@@ -35,7 +35,7 @@
 				<li class="list-group-item"><a href="${pageContext.request.contextPath}/member/mypage/memberHelp.do">질문모음</a></li>
 				<li class="list-group-item"><a href="${pageContext.request.contextPath}/member/mypage/memberAnnouncement.do">공지사항</a></li>
 				<li class="list-group-item"><a href="${pageContext.request.contextPath}/member/mypage/changePassword.do">비밀번호 수정</a></li>
-				<sec:authorize access="hasRole('ROLE_SUPER')">
+				<sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_SUPER')">
 					<li class="list-group-item"><a class="text-danger" href="${pageContext.request.contextPath}/member/admin/adminMain.do">관리자페이지</a></li>
 				</sec:authorize>
 			</ul>
