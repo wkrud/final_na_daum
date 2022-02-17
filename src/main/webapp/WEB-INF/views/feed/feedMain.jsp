@@ -324,42 +324,6 @@ $(document).ready(function(){
 </article>
 
 <script>
-
-/* function getWeather(lat, lon){
-	var apiURI = "https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric";
-	console.log(apiURI);
-	$.ajax({
-	    url: apiURI,
-	    dataType: "json",
-	    type: "GET",
-	    async: "false",
-	    success: function(resp) {
-	        console.log(resp);
-	        console.log("현재온도 : "+ (resp.main.temp - 273.15)) ;
-	        console.log("현재습도 : "+ resp.main.humidity);
-	        console.log("날씨 : "+ resp.weather[0].main );
-	        console.log("상세날씨설명 : "+ resp.weather[0].description );
-	        console.log("날씨 이미지 : "+ resp.weather[0].icon );
-	        console.log("바람   : "+ resp.wind.speed );
-	        console.log("나라   : "+ resp.sys.country );
-	        console.log("도시이름  : "+ resp.name );
-	        console.log("구름  : "+ (resp.clouds.all) +"%" ); 
-	        var imgURLIcon = "http://openweathermap.org/img/w/" + resp.weather[0].icon + ".png"; // 아이콘 
-	        var weatherMain = resp.weather[0].main; // 날씨
-	        var weatherTemp = resp.weather[0].temp ; // 온도 
-	        var weatherHumidity = resp.weather[0].humidity; // 습도
-	        var weatherDescription = resp.weather[0].description; // 상세설명
-	        
-	        $(".weatherIcon").attr("src", imgURLIcon);
-	        $(".weatherMain").html(imgURLMain);
-	        $(".weatherTemp").text(imgURLTemp);
-	        $(".weatherHumidity").text(imgURLHumidity);
-	        $(".weatherDescription").text(imgURLDescription);
-	    }
-	});
-}; */
-//|| *********** 여기까지 날씨 api ************ ||
-
 $(document).ready(function(){ 
 	addFeedPageMain(1);
 }); 
@@ -531,8 +495,6 @@ const addFeedPageMain = (page) => {
 	});
 };
 
-onclick="commentView(this);"
-
 function likeCheck(e){
 	    let code = $(e).attr('idx');
 		let writer = '';
@@ -542,9 +504,8 @@ function likeCheck(e){
 		}else{
 			writer = $(e).find("input.id").val();
 		}
-		console.log(writer + " " + code);
 	    console.log("heart-click");
-
+	    
 	    // 빈하트를 눌렀을때
 	    if($(e).children('svg').attr('class') == "bi bi-suit-heart"){
 
@@ -559,7 +520,6 @@ function likeCheck(e){
 
 	                // 페이지에 하트수 갱신
 	                $('#m_heart'+code).text(heart);
-	                //$('#heart'+code).text(heart);
 	                
 	                let ranNo = Math.floor(Math.random() * 10000);
 	    			let alarmCode = 'fe-' + ranNo;
@@ -588,13 +548,10 @@ function likeCheck(e){
 	                code : code
 	            },
 	            success : function(e) {
-	                //페이지 새로고침
-	                //document.location.reload(true);
 					
 	                let heart = e.likes;
 	                // 페이지에 하트수 갱신
 	                $('#m_heart'+code).text(heart);
-	                //$('#heart'+code).text(heart);
 
 	                console.log("하트삭제 성공");
 	            },

@@ -95,6 +95,8 @@
 			f.reg_date desc
 	</select>
 	
+	
+	
 	<insert id="feedEnroll">
 		insert into feed values(concat('fe-',seq_feed_no.nextval), #{writer}, #{content}, default)
 		<selectKey order="AFTER" resultType="string" keyProperty="code">
@@ -105,6 +107,8 @@
 		insert into attachment
 		values(seq_attachment_no.nextval, #{code}, #{originalFilename}, #{renamedFilename}, default)
 	</insert>
+	
+	
 	<select id="addFeedMain" resultType="map">
 		select 
 			f.code code,
