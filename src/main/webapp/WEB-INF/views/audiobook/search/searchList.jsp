@@ -8,66 +8,17 @@
 <%-- <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/audiobook/track.css" /> --%>
 <style>
-.card-title {
-	text-align: center;
-}
-
-img {
-	border: 0px;
-}
-
-.search-card {
-	margin-left: 3.5vw;
-	margin-right: 3.5vw;
-}
-
-.list {
-	margin-left: 20vw;
-	margin-right: 20vw;
-	text-align: center;
-}
-
-.search-box {
-	margin-bottom: 0.1vh;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.btn {
-	margin-left: 10px;
-	margin-right: 10px;
-}
+.card-title {text-align: center;}
+img {border: 0px;}
+.search-card {margin-left: 3.5vw;margin-right: 3.5vw;}
+.list {margin-left: 20vw;margin-right: 20vw;text-align: center;}
+.search-box {margin-bottom: 0.1vh;margin-left: auto;margin-right: auto;}
+.btn {margin-left: 10px;margin-right: 10px;}
 /* Boostrap Buttons Styling */
-.search-container {
-	margin-bottom: 20px;
-}
-
-@font-face {
-	font-family: 'Pretendard-Regular';
-	src:
-		url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-		format('woff');
-	font-weight: 700;
-	font-style: normal;
-}
+.search-container {margin-bottom: 20px;}
+@font-face {font-family: 'Pretendard-Regular';src:url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')format('woff');font-weight: 700;font-style: normal;}
 /* 
-.btn-info {
-	font-family: Raleway-SemiBold;
-	font-size: 13px;
-	color: rgba(91, 192, 222, 0.75);
-	letter-spacing: 1px;
-	line-height: 15px;
-	border: 2px solid transparent;
-	border-radius: 40px;
-	background: transparent;
-	transition: all 0.3s ease 0s;
-}
-
-.btn-info:hover {
-	color: #FFF;
-	background: rgba(91, 192, 222, 0.75);
-	border: 2px solid rgba(91, 192, 222, 0.75);
-} */
+.btn-info {font-family: Raleway-SemiBold;font-size: 13px;color: rgba(91, 192, 222, 0.75);letter-spacing: 1px;line-height: 15px;border: 2px solid transparent;border-radius: 40px;background: transparent;transition: all 0.3s ease 0s;}.btn-info:hover {color: #FFF;background: rgba(91, 192, 222, 0.75);border: 2px solid rgba(91, 192, 222, 0.75);} */
 </style>
 <fmt:requestEncoding value="utf-8" />
 

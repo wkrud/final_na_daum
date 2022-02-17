@@ -15,13 +15,15 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/payment")
-public class Payment {
+public class PaymentController {
 
 	private final RestTemplate restTemplate = new RestTemplate();
 
@@ -34,7 +36,6 @@ public class Payment {
             public boolean hasError(ClientHttpResponse response) {
                 return false;
             }
-
             @Override
             public void handleError(ClientHttpResponse response) {
             }
@@ -45,7 +46,9 @@ public class Payment {
 
     @GetMapping("/")
 	@RequestMapping
-	public String paymentMain(Model model) {
+	public String paymentMain(HttpServletRequest request,Model model) {
+    	//String referer = (String)request.getHeader("REFERER")!=null? (String)request.getHeader("REFERER") : "http://localhost:8080";
+    	//model.addAttribute("referer",referer);
     	return "pay/payIndex";
     }
     
@@ -53,17 +56,19 @@ public class Payment {
     @RequestMapping("/success")
     public String confirmPayment(
             @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
+            //@RequestParam String referer,@RequestParam String customerName,
             Model model) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
         // headers.setBasicAuth(SECRET_KEY, ""); // spring framework 5.2 이상 버전에서 지원
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         Map<String, String> payloadMap = new HashMap<>();
         payloadMap.put("orderId", orderId);
         payloadMap.put("amount", String.valueOf(amount));
-
+        //payloadMap.put("referer", referer);
+        //payloadMap.put("customerName", customerName);
+        
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
@@ -72,7 +77,10 @@ public class Payment {
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             JsonNode successNode = responseEntity.getBody();
             model.addAttribute("orderId", successNode.get("orderId").asText());
-            String secret = successNode.get("secret").asText(); // 가상계좌의 경우 입금 callback 검증을 위해서 secret을 저장하기를 권장함
+            //model.addAttribute("referer",referer);
+            //model.addAttribute("customerName",customerName);
+            String secret = successNode.get("secret").asText();
+            // 가상계좌의 경우 입금 callback 검증을 위해서 secret을 저장하기를 권장함(by Toss)
             return "pay/success";
         } else {
             JsonNode failNode = responseEntity.getBody();
