@@ -28,7 +28,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="com.project.nadaum">
-		<level value="debug" />
+		<level value="INFO" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
