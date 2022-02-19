@@ -1,4 +1,3 @@
-
 //기본값
  let $id = $("#id").val();
  let $contextPath = $("#contextPath").val();
@@ -6,13 +5,47 @@
  let $csrfToken = $("#csrfToken").val();
  let $csrfParameterName = $("#csrfParameterName").val();
 
-//클릭시 커지게
+//위젯 등록 아이콘 클릭시 커지게
  let addWidget = document.querySelector('.add-widget');
  addWidget.onclick = function() {
 	 addWidget.classList.toggle('enlargement');
  };
+ 
+//시간 변환
+const timeConvert = (t) => {
+	var unixTime = Math.floor(t / 1000);
+    var date = new Date(unixTime*1000);
+    var year = date.getFullYear();
+    var month = "0" + (date.getMonth()+1);
+    var day = "0" + date.getDate();
+    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
+}
 
- $(() => {
+//원화표시 정규식
+const numberWithCommas = (n) => {
+	return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+//수입 지출 변환 함수
+const IE = (x) => {
+	if(x == 'income')
+		return "수입";
+	else if(x == 'expense')
+		return "지출";
+}
+
+//위젯 삭제 버튼
+$(".clearWidgetBtn").on('click', function(){
+		$(".delWidgetBtn").toggle();
+	});
+
+//친구 누르면 창 뜨게
+$(document).on("click", ".activeWithFriends", function() {
+	
+});
+ 
+//메인 페이지 진입 시 바로 실행되는 코드
+  $(() => {
  	//홈 진입시 draggable 속성 추가, 만들어진 위젯 존재하면 띄워주기
    $(".accept-drag").attr('draggable', 'true');
    $(".accept-drag").attr('ondragstart', 'drag(event)');
@@ -33,9 +66,6 @@
    if (document.querySelector('.movie-widget') != null) {
 	movieWidgetInfo();
    }
-   /*if (document.querySelector('.memo-widget') != null) {
-	memoWidgetInfo();
-   }*/
    if (document.querySelector('.alert-widget') != null) {
 	alertWidgetInfo();
    }
@@ -46,8 +76,8 @@
 	requestCoords();
 	}
  })
-
- //드래그 이벤트
+ 
+//드래그 이벤트
 const drag = (ev) => {
    ev.dataTransfer.setData("text", ev.target.id);
  }
@@ -55,13 +85,12 @@ const drag = (ev) => {
 const dragOver = (ev) => {
    ev.preventDefault();
  }
-
+ 
  //드롭하면서 생기는 이벤트
 const drop = (ev) => {
    ev.preventDefault();
    let widgetName = ev.dataTransfer.getData("text");
    let widget = `<div class="widget_form `+widgetName+`"draggable=true" "ondragstart=drag(event)"></div>`
-
    
 	//내려놓을 때 db 등록
    const insertWidget = () => {
@@ -95,64 +124,35 @@ const drop = (ev) => {
 			return;
 		}
 	}
-   	//친구
+	//친구
    if(widgetName == 'friend-widget') {
 	   if(document.querySelector('.friend-widget') == null) {
 	        insertWidget(); 
 	        friendWidgetInfo();
-	      } else {
-	        alert('위젯은 하나만 생성할 수 있습니다.');
-	        return;
-	      }
-   } 
-   //캘린더
-/*   else if(widgetName == 'calendar-widget') {
+      } else {
+	      alert('위젯은 하나만 생성할 수 있습니다.');
+	      return;
+      }
+   	} 
+   	 //캘린더
+   else if(widgetName == 'calendar-widget') {
 	   if(document.querySelector('.calendar-widget') == null) {
-	        insertWidget(); 
-	      } else {
-	        alert('위젯은 하나만 생성할 수 있습니다.');
-	        return;
-	      }
-   } */
-   //알림 불러오기
+	        /*insertWidget(); */
+      } else {
+        alert('위젯은 하나만 생성할 수 있습니다.');
+        return;
+      }
+   }
+    //알림 불러오기
    else if(widgetName == 'alert-widget') {
 	   if(document.querySelector('.alert-widget') == null) {
 		   insertWidget();   
 		   alertWidgetInfo();
-	   } else {
-	        alert('위젯은 하나만 생성할 수 있습니다.');
-	        return;
-	      }
-   }    
-	//메모
-/*   else if(widgetName == 'memo-widget') {
-	   if(document.querySelector('.memo-widget') == null) {
-	        insertWidget(); 
-	        //메모 자동 등록
-			$.ajax({
-		    	url : $contextPath+"/main/insertMemo.do",
-		     	method : 'GET',
-		     	contentType : "application/json; charset=UTF-8",
-		     	dataType : "json",
-		     	success(data) {
-		     		console.log(data);
-		     		//메모 insert 성공시 리스트 로딩
-		     		if(data == 1) {
-		     			memoWidgetInfo();
-		     		} else {
-		     			alert("위젯 등록에 실패했습니다.");
-		     		} //success 끝
-		     	},error(xhr, testStatus, err) {
-					console.log("error", xhr, testStatus, err);
-					alert("조회에 실패했습니다.");
-				}
-		     });
-	      } else {
-	        alert('위젯은 하나만 생성할 수 있습니다.');
-	        return;
-	      }
-     
-   } */
+  	  } else {
+ 		  alert('위젯은 하나만 생성할 수 있습니다.');
+		  return;
+  	  }
+   } 
    	//가계부
    else if(widgetName == 'account-widget') {
 	   if(document.querySelector('.account-widget') == null) {
@@ -163,75 +163,54 @@ const drop = (ev) => {
 	       return;
 	   }  
    } 
- 	//전시
+   	//전시
  	else if(widgetName == 'culture-widget') {
  		if(document.querySelector('.culture-widget') == null) {
 	        insertWidget(); 
 	        cultureWidgetInfo();
-	      } else {
-	        alert('위젯은 하나만 생성할 수 있습니다.');
-	        return;
-	      }
-   } 
+		} else {
+		    alert('위젯은 하나만 생성할 수 있습니다.');
+		    return;
+		}
+ 	} 
  	//영화
  	else if(widgetName == 'movie-widget') {
  		if(document.querySelector('.movie-widget') == null) {
 	        insertWidget(); 
 	      	movieWidgetInfo();
-	      } else {
+	    } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
-	      }
-   } 
- 	//게임
+	    }
+    } 
+    //게임
  	else if(widgetName == 'game-widget') {
  		if(document.querySelector('.game-widget') == null) {
 			insertWidget();
 		    gameWidgetInfo();
- 		 } else {
+ 		} else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
-	      }
-   } 
- 	//오디오북
+	    }
+    } 
+     //오디오북
  	else if(widgetName == 'audio-widget') {
  		if(document.querySelector('.audio-widget') == null) {
 	        insertWidget(); 
 	        audiobookWidgetInfo();
-	      } else {
+	     } else {
 	        alert('위젯은 하나만 생성할 수 있습니다.');
 	        return;
-	      }
-   } 
- 	//생성한 내용을 dragZone에 추가
+	     }
+  	 }
+    //생성한 내용을 dragZone에 추가
    $("#dragZone").append(widget);
-
  }
  
- //위젯 delete
- const delWidget = (no) => {
-	$.ajax({
-    	url : $contextPath+"/main/deleteWidget.do",
-     	method : 'POST',
-     	data : {
-     		"no" : no,
-     	},
-		headers : headers,
-     	success(data) {
-			console.log(data);
-			alert("위젯 삭제 완료");
-			location.reload();
-		},error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("위젯 삭제에 실패했습니다.");
-		}
-	});
-}
-
-
+ 
 //위젯 정보 로딩용
 //날씨 위젯
-var weather = (".weatherIcon");
+let weather = (".weatherIcon");
 //|| *********** 날씨 api ************ ||
 const COORDS = "coords";
 function handleGeoSucc(position) {
@@ -293,7 +272,6 @@ function getWeather(lat, lon) {
     })
 }
 
-
 //친구 위젯
 const friendWidgetInfo = () => {
 	$.ajax({
@@ -312,122 +290,85 @@ const friendWidgetInfo = () => {
 					color: gray; cursor: pointer; z-index : 5;"></i>
 				<div class="friendTogetherInfo" style="margin : 0px 30px;">
 					<p style="border-bottom : 1px solid gray; margin : 10px auto;">친구</p>
-				</div>
+					`
+			//맞팔
+			if(resp.widgetFriends.length == 0) {
+				content += `
+					<span>친구 목록이<br/>존재하지<br/>않습니다.</span>
+				`
+			} else {
+				for(let i = 0; i < resp.widgetFriends.length; i++) {
+					content += `
+						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
+							<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
+							<div class="friendProfileImg">
+						`
+					//D타입 - 각자 프사
+					if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile != null) {
+						content += `<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/`+resp.widgetFriends[i].profile+`">`
+					} 
+					//D타입 - 기본 고양이 프사
+					else if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile == null) {
+						content += `<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">`
+					}
+					//K타입(사용자가 프사 업로드한 경우) - 주소 필요 없이 이미지 경로
+					else {
+						content +=`<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>`
+					}
+				content +=`
+							<span>`+resp.widgetFriends[i].nickname+`</span>
+							</div>
+							</a>
+						</div>
+						`
+				}
+				content += `</div>`
+			}
+			content +=`
 				<div class="friendStraightInfo">
 					<p style="border-bottom : 1px solid gray; margin : 10px auto;">팔로워</p>
-				</div>
-			</div>
 			`
-			$(".friend-widget").append(content);
-
-			if(resp.widgetFriends.length == 0) {
-				content = `
-					<span>친구 목록이<br/>존재하지<br/>않습니다.</span>
-				`			
-				$(".friendTogetherInfo").append(content);	
-			} else {
-			//맞팔
-			for(let i = 0; i <resp.widgetFriends.length; i++) {
-				//D타입 각자 프사
-				if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile != null) {
-					content = `
-						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/`+resp.widgetFriends[i].profile+`">
-						</div>
-						<span>`+resp.widgetFriends[i].nickname+`</span>
-						</a>
-						</div>
-					`
-					$(".friendTogetherInfo").append(content);
-					//d타입 기본 고양이 프사
-				} else if(resp.widgetFriends[i].loginType == 'D' && resp.widgetFriends[i].profile == null) {
-					content = `
-						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
-						</div>
-						<span>`+resp.widgetFriends[i].nickname+`</span>
-						</a>
-						</div>
-					`
-					$(".friendTogetherInfo").append(content);
-					}
-					//k타입은 주소 필요 없이 이미지 경로
-					else {
-					content = `
-						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFriends[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFriends[i].profile+`>
-						</div>
-						<span>`+resp.widgetFriends[i].nickname+`</span>
-						</a>
-						</div>
-					`
-					$(".friendTogetherInfo").append(content);
-
-				}
-			}
-		}
 			//팔로워
 			if(resp.widgetFollowers.length == 0) {
-				content = `
+				content += `
 					<span>팔로워 목록이<br/>존재하지<br/>않습니다.</span>
-				`			
-				$(".friendStraightInfo").append(content);	
+				`
 			} else {
-			for(let i = 0; i <resp.widgetFollowers.length; i++) {
-				if(resp.widgetFollowers[i].loginType == 'D' && resp.widgetFollowers[i].profile != null) {
-					content = `
+				for(let i = 0; i < resp.widgetFollowers.length; i++) {
+					content += `
 						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/`+resp.widgetFollowers[i].profile+`">
-						</div>
-						<span>`+resp.widgetFollowers[i].nickname+`</span>
+							<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
+							<div class="friendProfileImg">
+						`
+					//D타입 - 각자 프사
+					if(resp.widgetFollowers[i].loginType == 'D' && resp.widgetFollowers[i].profile != null) {
+						content += `<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/`+rresp.widgetFollowers[i].profile+`">`
+					} 
+					//D타입 - 기본 고양이 프사
+					else if(resp.widgetFollowers[i].loginType == 'D' && resp.widgetFollowers[i].profile == null) {
+						content += `<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">`
+					}
+					//K타입(사용자가 프사 업로드한 경우) - 주소 필요 없이 이미지 경로
+					else {
+						content +=`<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>`
+					}
+				content +=`
+							<span>`+resp.widgetFollowers[i].nickname+`</span>
+							</div>
 						</a>
 						</div>
-					`
-					$(".friendStraightInfo").append(content);
-				} else if(resp.widgetFollowers[i].loginType == 'D' && resp.widgetFollowers[i].profile == null) {
-					content = `
-						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src="`+$contextPath+`/resources/upload/member/profile/default_profile_cat.png">
-						</div>
-						<span>`+resp.widgetFollowers[i].nickname+`</span>
-						</a>
-						</div>
-					`
-					$(".friendStraightInfo").append(content);
-				} else {
-					content = `
-						<div class="activeWithFriends" style="width : 50px; height : 80px; margin : 10px auto; border-bottom : 1px solid gray;">
-						<a style="text-decoration : none; color : black;" href="`+$contextPath+`/feed/socialFeed.do?id=`+resp.widgetFollowers[i].id+`")>
-						<div class="friendProfileImg">
-							<img style = "width : 50px; height : 50px; border-radius : 50%;" src=`+resp.widgetFollowers[i].profile+`>
-						</div>
-						<span>`+resp.widgetFollowers[i].nickname+`</span>
-						</a>
-						</div>
-					`
-					$(".friendStraightInfo").append(content);
-
+						`
 				}
+				content += `</div>`
 			}
-		}
-			
+			$(".friend-widget").append(content);
 		}, //success 끝
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
 		}	
-	})
-}
+	});
+};
 
 //알림 불러오기
 const alertWidgetInfo = () => {
@@ -443,67 +384,34 @@ const alertWidgetInfo = () => {
 					<p>최신 알림 내역이 존재하지 않습니다 :(<br/>지금 나:다움에서 친구들과 소통해 보는 건 어떠세요?</p>
 					<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/feed/feedMain.do">나:다움 피드 구경가기</a></p>
 				`
-				$(".alert-widget").append(content);
 			} else {
-			content = `
-				<div style="width : 360px; padding : 10px; border-radius : 5px;" class="alertList"></div>
-			`
-			$(".alert-widget").append(content);
-			$(resp).each((i, v) => {
-				if(i < 5) {
-					content = `
-					<div style="border-bottom: 1px solid lightgray;">
-				      <p style="margin : 5px 0px;"><span style="color : rgb(238, 210, 88);"><i class="fas fa-bell"></i></span> 
-				       `+resp[i].content+`<br><span style="color : gray; margin-left : 20px;">`+timeConvert(resp[i].regDate)+`</span>
-				      </p>
-				    </div>
+				content = `
+					<div style="width : 360px; padding : 10px; border-radius : 5px;">
 				`
-				$(".alertList").append(content);
-				}
-			});
-			content = `
-				<span style="margin:10px; float : right;"><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/member/mypage/memberDetail.do?tPage=alarm"> + 지난 알림 보러 가기 </a></span>
-			`
-			$(".alertList").append(content);
+				$(resp).each((i, v) => {
+					if(i < 5) {
+						content += `
+						<div style="border-bottom: 1px solid lightgray;">
+					      <p style="margin : 5px 0px;"><span style="color : rgb(238, 210, 88);"><i class="fas fa-bell"></i></span> 
+					       `+resp[i].content+`<br><span style="color : gray; margin-left : 20px;">`+timeConvert(resp[i].regDate)+`</span>
+					      </p>
+					    </div>
+					`
+					}
+				});
+				content += `
+					</div>
+					<span style="margin:10px; float : right;"><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/member/mypage/memberDetail.do?tPage=alarm"> + 지난 알림 보러 가기 </a></span>
+				`
 			}
+				$(".alert-widget").append(content);
 		}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
 		}
-	})
-}
-
-/*//메모
-const memoWidgetInfo = () => {
-	$.ajax({
-		url : $contextPath+"/main/userMemoList.do",
-		method : 'GET',
-	 	contentType : "application/json; charset=UTF-8",
-	 	dataType : "json",
-	 	success(resp) {
-	 		console.log(resp);
-	 		console.log(resp.length);
-	 		let content = `
-	 			<div class="memoContentDiv">
-	 			<form 
-	 				action="`+$contextPath+`/main/updateMemoList.do"
-	 				method="POST">
-	 				<textarea name="content" id="memoBox" cols="20" rows="10" style="resize:none;">`+resp[0].content+`</textarea>
-	 				<input type="hidden" id ="csrfToken" name="`+$csrfParameterName+`" value="`+$csrfToken+`"/>
-	 				<input type="hidden" name="code" value="`+resp[0].code+`">
-	 			<button type="submit">메모 저장</button>
-	 			</form>
-	 			</div>
-	 		`
-	 		$(".memo-widget").append(content);
-	 	}, 
-	 	error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
 	});
-}*/
+};
 
 //게임
 const gameWidgetInfo = () => {
@@ -527,9 +435,8 @@ const gameWidgetInfo = () => {
 						<p><a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riotheader.do">LOL 유저 검색하러 가기</a><span style="color : rgb(238, 210, 88);"> <i class="fas fa-star"></i></span></p>
 					</div>
 					`
-					$(".game-widget").append(content);
 				} else {
-					content = `
+				content = `
 					<div style="width : 450px; height: 160px; padding : 10px; box-sizing : border-box;">
 					    <div style="text-align: center; font-size : 20px;">
 					    	<a style="text-decoration : none; color : #0D5FB7;" href="`+$contextPath+`/riot/riot1.do?nickname=`+resp.widgetnullcheck.name+`"><h4>`+resp.widgetnullcheck.name+`</h4></a>
@@ -545,7 +452,6 @@ const gameWidgetInfo = () => {
 					    </div>
 					  </div>
 					`
-					$(".game-widget").append(content);
 				}
 			} else {
 				content = `
@@ -564,16 +470,15 @@ const gameWidgetInfo = () => {
 				  </div>
 				</div>
 				`
-			$(".game-widget").append(content);
 			}
+			$(".game-widget").append(content);
 	 	}, 
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
 		}
 	});
-}
-
+};
 
 //가계부
 const accountbookWidgetInfo = () => {
@@ -597,25 +502,26 @@ const accountbookWidgetInfo = () => {
 								<td><span>지출</span></td>
 							</tr>
 							<tr class="accountList">
-							</tr>
-						</table>
-					</div>
 				`;
-				$(".account-widget").append(content);
 				for(let i = 0; i < 1; i++) {
-					content = `
+					content += `
 					<td style="width : 150px;"><span style="color : green;">+`+numberWithCommas(resp.income)+`원</span></td>
 					<td style="width : 150px;"><span style="color : red;">-`+numberWithCommas(resp.expense)+`원</span></td>
 					`
-					$(".accountList").append(content);
 				}
+				content +=`
+							</tr>
+						</table>
+					</div>
+				`
+			$(".account-widget").append(content);
 		}, //success 끝
 	 	error(xhr, testStatus, err) {
 			console.log("error", xhr, testStatus, err);
 			alert("조회에 실패했습니다.");
 		}
 	});
-}
+};
 
 //전시
 const cultureWidgetInfo = () => {
@@ -679,53 +585,7 @@ const cultureWidgetInfo = () => {
 		}
      	
 	});
-}
-
-
-//캘린더
-const calendarWidgetInfo = () => {
-	
-}
-
-
-//오디오북
-const audiobookWidgetInfo = () => {
-	$.ajax({
-		url : $contextPath+"/audiobook/widget",
-		method : 'POST',
-		contentType : "application/json; charset=UTF-8",
-     	dataType : "json",
-     	headers : headers,
-     	success(resp) {
-				let content = `
-				<div style="width : 360px; height : 120px; padding : 10px; box-sizing: border-box;">
-				    
-				    <div style="display: inline-flex;">
-				      <div style="margin : 0px 20px"><img src="`+$contextPath+``+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
-				      <div>
-				        <span style="font-size: 20px; display: block;">`+resp.albumInfo.title+`</span>
-				        <span style="color : gray;">`+resp.albumInfo.creator+`</span>
-				        <a style="text-decoration : none; color : black;" href="`+$contextPath+`/audiobook/detail?code=`+resp.albumInfo.code+`">
-					        <div style="font-size : 18px; justify-content: space-between; width : 150px; display: flex; margin : 20px;">
-					          <i class="fas fa-step-backward"></i>
-					          <i class="fas fa-play"></i>
-					          <i class="fas fa-fast-forward"></i>
-					        </div>
-				        </a>
-				    </div>
-				    </div>
-				  </div>			
-				`
-				$(".audio-widget").append(content);
-		}, 
-	 	error(xhr, testStatus, err) {
-			console.log("error", xhr, testStatus, err);
-			alert("조회에 실패했습니다.");
-		}
-     	
-	});
-}
-
+};
 
 //영화 
 const movieWidgetInfo = () => {
@@ -782,39 +642,41 @@ const movieWidgetInfo = () => {
 		}
      	
 	});
-}
+};
 
-
-//위젯 삭제 버튼
-$(".clearWidgetBtn").on('click', function(){
-		$(".delWidgetBtn").toggle();
+//오디오북
+const audiobookWidgetInfo = () => {
+	$.ajax({
+		url : $contextPath+"/audiobook/widget",
+		method : 'POST',
+		contentType : "application/json; charset=UTF-8",
+     	dataType : "json",
+     	headers : headers,
+     	success(resp) {
+				let content = `
+				<div style="width : 360px; height : 120px; padding : 10px; box-sizing: border-box;">
+				    <div style="display: inline-flex;">
+				      <div style="margin : 0px 20px"><img src="`+$contextPath+``+resp.imgLink+`" style="width : 100px; height : 100px; border-radius: 5px;" alt=""></div>
+				      <div>
+				        <span style="font-size: 20px; display: block;">`+resp.albumInfo.title+`</span>
+				        <span style="color : gray;">`+resp.albumInfo.creator+`</span>
+				        <a style="text-decoration : none; color : black;" href="`+$contextPath+`/audiobook/detail?code=`+resp.albumInfo.code+`">
+					        <div style="font-size : 18px; justify-content: space-between; width : 150px; display: flex; margin : 20px;">
+					          <i class="fas fa-step-backward"></i>
+					          <i class="fas fa-play"></i>
+					          <i class="fas fa-fast-forward"></i>
+					        </div>
+				        </a>
+				    </div>
+				    </div>
+				  </div>			
+				`
+				$(".audio-widget").append(content);
+		}, 
+	 	error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+     	
 	});
-
-//친구 누르면 창 뜨게
-$(document).on("click", ".activeWithFriends", function() {
-	
-});
- 
-//수입 지출 변환 함수
-const IE = (x) => {
-	if(x == 'income')
-		return "수입";
-	else if(x == 'expense')
-		return "지출";
-}
-
-//원화표시 정규식
-const numberWithCommas = (n) => {
-	return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-//시간 변환
-const timeConvert = (t) => {
-	var unixTime = Math.floor(t / 1000);
-    var date = new Date(unixTime*1000);
-    var year = date.getFullYear();
-    var month = "0" + (date.getMonth()+1);
-    var day = "0" + date.getDate();
-    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
-}
-
+};
