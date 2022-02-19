@@ -269,8 +269,8 @@ function getWeather(lat, lon) {
 			`
 			$(".weather-widget").append(content);
 		}
-    })
-}
+    });
+};
 
 //친구 위젯
 const friendWidgetInfo = () => {
