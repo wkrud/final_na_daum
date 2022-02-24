@@ -44,6 +44,9 @@ public class MainController {
 		model.addAttribute("widgetList", widgetList);
 	}
 	
+	@RequestMapping(value="/fullCal") 
+	public void fullCal() {}
+	
 	//드래그존에 드롭시 위젯 테이블에 insert
 	@ResponseBody
 	@GetMapping(value="/insertWidget.do")

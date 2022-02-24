@@ -4,7 +4,7 @@ var editTitle = $('#edit-title');
 var id = $('#id').val();
 var nickname = $('#nickname').val();
 
-var calendar = $('.calendar-widget').fullCalendar({
+var calendar = $('#mini-cal').fullCalendar({
 
  /** ******************
    *  OPTIONS

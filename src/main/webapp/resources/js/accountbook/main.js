@@ -108,284 +108,264 @@ $(document).on("change", ".main", function() {
 	} else {
 	}
 });
-	
-   //가계부 전체 리스트 조회
-  const AllList = () => {	
- 	$.ajax({
-		url: $contextPath+"/accountbook/selectAllAccountList.do",
-		type: "GET",
-		data: {
-			id : $id
-		},
-		contentType : "application/json; charset=UTF-8",
-		success : function(result){
-			$("#account_list").html(result);
 
+//삭제
+const deleteDetail = (code) => {
+	var code = {"code" : code};
+	$.ajax ({
+		url : $contextPath+"/accountbook/accountDelete.do",
+		type : "POST",
+		data : JSON.stringify(code),
+		dataType : "json",
+		contentType : "application/json; charset=UTF-8",
+		headers : headers,
+		success(resp) {
+			location.reload();
 		},
 		error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
-			}	
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
 	});
 };
-	//삭제
-	const deleteDetail = (code) => {
-		var code = {"code" : code};
-  		$.ajax ({
-			url : $contextPath+"/accountbook/accountDelete.do",
-			type : "POST",
-			data : JSON.stringify(code),
-			dataType : "json",
-			contentType : "application/json; charset=UTF-8",
-			headers : headers,
-			success(result) {
-				location.reload();
-			},
-			error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
-			}
-		});
-	};
 	
-	//수정
-	const updateDetail = (code) => {
-		$.ajax ({
-			url : $contextPath+"/accountbook/selectOneAccount",
-			type : "Get",
-			dataType : "json",
-			data : {
-				"code" : code
-			},
-			contentType : "application/json; charset=UTF-8",
-			success(result) {
-				console.log(result);
-				$('.updateAccountTable').empty();
-				for(const detail in result) {
-					let detailList = "";
-					detailList = `
-					<thead>
-					<tr>
-						<th colspan="4" style="margin : 10px; padding : 10px; text-align : center; font-size : 20px;">거래내역 수정</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td colspan="2" rowspan="2" style="margin : 10px; padding : 10px; text-align : center;">
-							<input type="date" name="regDate" id="regDate" value="`+timeConvert(result[detail].regDate)+`"/>
-						</td>
-					</tr>
-					<tr>
-						<td style="margin : 10px; padding : 10px; text-align : center;">
-							<select name="incomeExpense" class="main">
-							`
-					if(result[detail].incomeExpense == "I") {
-						detailList += `
-									<option value="I" selected>수입</option>
-									<option value="E">지출</option>
-								</select>
-							</td>
-							<td style="margin : 10px; padding : 10px; text-align : center;">
-								<select name="category" class="sub">
-							`
-							if(result[detail].category == "급여") {
-								detailList += `
-											<option value="">카테고리</option>
-											<option value="급여" selected>급여</option>
-											<option value="용돈">용돈</option>
-											<option value="기타">기타</option>
-										`
-							} else if(result[detail].category == "용돈") {
-								detailList += `
-											<option value="">카테고리</option>
-											<option value="급여">급여</option>
-											<option value="용돈" selected>용돈</option>
-											<option value="기타">기타</option>
-										`
-							} else if(result[detail].category == "기타")	{
-								detailList += `
-											<option value="">카테고리</option>
-											<option value="급여">급여</option>
-											<option value="용돈">용돈</option>
-											<option value="기타" selected>기타</option>
-										`
-							} else {
-								detailList += `
-											<option value="">카테고리</option>
-											<option value="급여">급여</option>
-											<option value="용돈">용돈</option>
-											<option value="기타">기타</option>
-										`
-							}	
-					} else if(result[detail].incomeExpense == "E"){
-						detailList += `
-								<option value="I">수입</option>
-								<option value="E" selected>지출</option>
+//수정
+const updateDetail = (code) => {
+	$.ajax ({
+		url : $contextPath+"/accountbook/selectOneAccount",
+		type : "Get",
+		dataType : "json",
+		data : {
+			"code" : code
+		},
+		contentType : "application/json; charset=UTF-8",
+		success(resp) {
+			$('.updateAccountTable').empty();
+			for(const detail in resp) {
+				let detailList = "";
+				detailList = `
+				<thead>
+				<tr>
+					<th colspan="4" style="margin : 10px; padding : 10px; text-align : center; font-size : 20px;">거래내역 수정</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td colspan="2" rowspan="2" style="margin : 10px; padding : 10px; text-align : center;">
+						<input type="date" name="regDate" id="regDate" value="`+timeConvert(resp[detail].regDate)+`"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="margin : 10px; padding : 10px; text-align : center;">
+						<select name="incomeExpense" class="main">
+						`
+				if(resp[detail].incomeExpense == "I") {
+					detailList += `
+								<option value="I" selected>수입</option>
+								<option value="E">지출</option>
 							</select>
 						</td>
 						<td style="margin : 10px; padding : 10px; text-align : center;">
 							<select name="category" class="sub">
-						`	
-						if(result[detail].category == "식비") {
+						`
+						if(resp[detail].category == "급여") {
 							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비" selected>식비</option>
-											<option value="쇼핑">쇼핑</option>
-											<option value="생활비">생활비</option>
-											<option value="자기계발">자기계발</option>
-											<option value="유흥">유흥</option>
-											<option value="저축">저축</option>
-											<option value="기타">기타</option>
-										`
-						} else if(result[detail].category == "쇼핑") {
+										<option value="">카테고리</option>
+										<option value="급여" selected>급여</option>
+										<option value="용돈">용돈</option>
+										<option value="기타">기타</option>
+									`
+						} else if(resp[detail].category == "용돈") {
 							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비">식비</option>
-											<option value="쇼핑" selected>쇼핑</option>
-											<option value="생활비">생활비</option>
-											<option value="자기계발">자기계발</option>
-											<option value="유흥">유흥</option>
-											<option value="저축">저축</option>
-											<option value="기타">기타</option>
-										`
-						} else if(result[detail].category == "생활비") {
+										<option value="">카테고리</option>
+										<option value="급여">급여</option>
+										<option value="용돈" selected>용돈</option>
+										<option value="기타">기타</option>
+									`
+						} else if(resp[detail].category == "기타")	{
 							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비">식비</option>
-											<option value="쇼핑">쇼핑</option>
-											<option value="생활비" selected>생활비</option>
-											<option value="자기계발">자기계발</option>
-											<option value="유흥">유흥</option>
-											<option value="저축">저축</option>
-											<option value="기타">기타</option>
-										`
-						} else if(result[detail].category == "자기계발") {
-							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비">식비</option>
-											<option value="쇼핑">쇼핑</option>
-											<option value="생활비">생활비</option>
-											<option value="자기계발" selected>자기계발</option>
-											<option value="유흥">유흥</option>
-											<option value="저축">저축</option>
-											<option value="기타">기타</option>
-										`
-						} else if(result[detail].category == "유흥") {
-							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비">식비</option>
-											<option value="쇼핑">쇼핑</option>
-											<option value="생활비">생활비</option>
-											<option value="자기계발">자기계발</option>
-											<option value="유흥" selected>유흥</option>
-											<option value="저축">저축</option>
-											<option value="기타">기타</option>
-										`
-						} else if(result[detail].category == "저축") {
-							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비">식비</option>
-											<option value="쇼핑">쇼핑</option>
-											<option value="생활비">생활비</option>
-											<option value="자기계발">자기계발</option>
-											<option value="유흥">유흥</option>
-											<option value="저축" selected>저축</option>
-											<option value="기타">기타</option>
-										`
-						} else if(result[detail].category == "기타") {
-							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비">식비</option>
-											<option value="쇼핑">쇼핑</option>
-											<option value="생활비">생활비</option>
-											<option value="자기계발">자기계발</option>
-											<option value="유흥">유흥</option>
-											<option value="저축">저축</option>
-											<option value="기타" selected>기타</option>
-										`
+										<option value="">카테고리</option>
+										<option value="급여">급여</option>
+										<option value="용돈">용돈</option>
+										<option value="기타" selected>기타</option>
+									`
 						} else {
 							detailList += `
-											<option value="">카테고리</option>
-											<option value="식비">식비</option>
-											<option value="쇼핑">쇼핑</option>
-											<option value="생활비">생활비</option>
-											<option value="자기계발">자기계발</option>
-											<option value="유흥">유흥</option>
-											<option value="저축">저축</option>
-											<option value="기타">기타</option>
-										`
-						}
+										<option value="">카테고리</option>
+										<option value="급여">급여</option>
+										<option value="용돈">용돈</option>
+										<option value="기타">기타</option>
+									`
+						}	
+				} else if(resp[detail].incomeExpense == "E"){
+					detailList += `
+							<option value="I">수입</option>
+							<option value="E" selected>지출</option>
+						</select>
+					</td>
+					<td style="margin : 10px; padding : 10px; text-align : center;">
+						<select name="category" class="sub">
+					`	
+					if(resp[detail].category == "식비") {
+						detailList += `
+										<option value="">카테고리</option>
+										<option value="식비" selected>식비</option>
+										<option value="쇼핑">쇼핑</option>
+										<option value="생활비">생활비</option>
+										<option value="자기계발">자기계발</option>
+										<option value="유흥">유흥</option>
+										<option value="저축">저축</option>
+										<option value="기타">기타</option>
+									`
+					} else if(resp[detail].category == "쇼핑") {
+						detailList += `
+										<option value="">카테고리</option>
+										<option value="식비">식비</option>
+										<option value="쇼핑" selected>쇼핑</option>
+										<option value="생활비">생활비</option>
+										<option value="자기계발">자기계발</option>
+										<option value="유흥">유흥</option>
+										<option value="저축">저축</option>
+										<option value="기타">기타</option>
+									`
+					} else if(resp[detail].category == "생활비") {
+						detailList += `
+										<option value="">카테고리</option>
+										<option value="식비">식비</option>
+										<option value="쇼핑">쇼핑</option>
+										<option value="생활비" selected>생활비</option>
+										<option value="자기계발">자기계발</option>
+										<option value="유흥">유흥</option>
+										<option value="저축">저축</option>
+										<option value="기타">기타</option>
+									`
+					} else if(resp[detail].category == "자기계발") {
+						detailList += `
+										<option value="">카테고리</option>
+										<option value="식비">식비</option>
+										<option value="쇼핑">쇼핑</option>
+										<option value="생활비">생활비</option>
+										<option value="자기계발" selected>자기계발</option>
+										<option value="유흥">유흥</option>
+										<option value="저축">저축</option>
+										<option value="기타">기타</option>
+									`
+					} else if(resp[detail].category == "유흥") {
+						detailList += `
+										<option value="">카테고리</option>
+										<option value="식비">식비</option>
+										<option value="쇼핑">쇼핑</option>
+										<option value="생활비">생활비</option>
+										<option value="자기계발">자기계발</option>
+										<option value="유흥" selected>유흥</option>
+										<option value="저축">저축</option>
+										<option value="기타">기타</option>
+									`
+					} else if(resp[detail].category == "저축") {
+						detailList += `
+										<option value="">카테고리</option>
+										<option value="식비">식비</option>
+										<option value="쇼핑">쇼핑</option>
+										<option value="생활비">생활비</option>
+										<option value="자기계발">자기계발</option>
+										<option value="유흥">유흥</option>
+										<option value="저축" selected>저축</option>
+										<option value="기타">기타</option>
+									`
+					} else if(resp[detail].category == "기타") {
+						detailList += `
+										<option value="">카테고리</option>
+										<option value="식비">식비</option>
+										<option value="쇼핑">쇼핑</option>
+										<option value="생활비">생활비</option>
+										<option value="자기계발">자기계발</option>
+										<option value="유흥">유흥</option>
+										<option value="저축">저축</option>
+										<option value="기타" selected>기타</option>
+									`
 					} else {
 						detailList += `
-									<option value="I">수입</option>
-									<option value="E">지출</option>
-								</select>
-							</td>
-							<td style="margin : 10px; padding : 10px; text-align : center;">
-								<select name="category" class="sub">
-									<option value="">카테고리</option>
-									<option value="급여">급여</option>
-									<option value="용돈">용돈</option>
-									<option value="기타">기타</option>
+										<option value="">카테고리</option>
+										<option value="식비">식비</option>
+										<option value="쇼핑">쇼핑</option>
+										<option value="생활비">생활비</option>
+										<option value="자기계발">자기계발</option>
+										<option value="유흥">유흥</option>
+										<option value="저축">저축</option>
+										<option value="기타">기타</option>
 									`
-						
 					}
+				} else {
 					detailList += `
+								<option value="I">수입</option>
+								<option value="E">지출</option>
 							</select>
 						</td>
-					</tr>
-					<tr>
-						<td colspan="3" style="margin : 10px; padding : 10px; text-align : center; position : relative; top : 5px; left : 15px;">
-							<label for="detail">
-								<input type="text" name="detail" id="" placeholder="내역을 입력하세요" value="`+result[detail].detail+`" />
-							</label>
-						</td>
 						<td style="margin : 10px; padding : 10px; text-align : center;">
-							<select name="payment">`
-							if(result[detail].payment == "cash") {
-								detailList += `
-								<option value="">결제수단</option>
-								<option value="cash" selected>현금</option>
-								<option value="card">카드</option>
+							<select name="category" class="sub">
+								<option value="">카테고리</option>
+								<option value="급여">급여</option>
+								<option value="용돈">용돈</option>
+								<option value="기타">기타</option>
 								`
-							} else if(result[detail].payment == "card") {
-								detailList += `
-								<option value="">결제수단</option>
-								<option value="cash">현금</option>
-								<option value="card" selected>카드</option>
-								`
-							} else {
-								detailList += `
-								<option value="">결제수단</option>
-								<option value="cash">현금</option>
-								<option value="card">카드</option>
-								`
-							}
-							detailList += `
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="4" style="margin : 10px; padding : 10px; text-align : center;">
-							<label for="price">
-								<input type="text" name="price" id="insertPrice" placeholder="금액을 입력하세요" onkeyup="numberWithCommas(this.value)" value=`+result[detail].price+` />
-							</label>
-						</td>
-						<td style="margin : 10px; padding : 10px; text-align : center;">
-							<input type="hidden" name="code" id="code" value="`+result[detail].code+`"/>
-					</tr>
-					</tbody>
-					`
-				$('.updateAccountTable').append(detailList);
+					
 				}
-					$(".updateModal").fadeIn();
-			},
-			error(xhr, testStatus, err) {
-				console.log("error", xhr, testStatus, err);
-				alert("조회에 실패했습니다.");
+				detailList += `
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="margin : 10px; padding : 10px; text-align : center; position : relative; top : 5px; left : 15px;">
+						<label for="detail">
+							<input type="text" name="detail" id="" placeholder="내역을 입력하세요" value="`+resp[detail].detail+`" />
+						</label>
+					</td>
+					<td style="margin : 10px; padding : 10px; text-align : center;">
+						<select name="payment">`
+						if(resp[detail].payment == "cash") {
+							detailList += `
+							<option value="">결제수단</option>
+							<option value="cash" selected>현금</option>
+							<option value="card">카드</option>
+							`
+						} else if(resp[detail].payment == "card") {
+							detailList += `
+							<option value="">결제수단</option>
+							<option value="cash">현금</option>
+							<option value="card" selected>카드</option>
+							`
+						} else {
+							detailList += `
+							<option value="">결제수단</option>
+							<option value="cash">현금</option>
+							<option value="card">카드</option>
+							`
+						}
+						detailList += `
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" style="margin : 10px; padding : 10px; text-align : center;">
+						<label for="price">
+							<input type="text" name="price" id="insertPrice" placeholder="금액을 입력하세요" value=`+resp[detail].price+` />
+						</label>
+					</td>
+					<td style="margin : 10px; padding : 10px; text-align : center;">
+						<input type="hidden" name="code" id="code" value="`+resp[detail].code+`"/>
+				</tr>
+				</tbody>
+				`
+			$('.updateAccountTable').append(detailList);
 			}
-		});
-	};
+				$(".updateModal").fadeIn();
+		},
+		error(xhr, testStatus, err) {
+			console.log("error", xhr, testStatus, err);
+			alert("조회에 실패했습니다.");
+		}
+	});
+};
 
 	
 	//차트
@@ -408,13 +388,12 @@ $(document).on("change", ".main", function() {
 			dataType : "json",
 			headers : headers,
 			async : false, //ajax는 비동기 통신이기 때문에 해당 옵션을 동기식으로 변경해서 차트가 그려지기 전에 다른 작업을 못하도록 막음
-			success(data) {
-				console.log(data);
+			success(resp) {
 				let outer =[['Category', 'Total']];
-				for(const obj in data) {
+				for(const obj in resp) {
 					let inner = [];
-					inner.push(data[obj].category);
-					inner.push(data[obj].total);
+					inner.push(resp[obj].category);
+					inner.push(resp[obj].total);
 					outer.push(inner);
 				}
 			var chartData = google.visualization.arrayToDataTable(outer);
@@ -447,13 +426,12 @@ $(document).on("change", ".main", function() {
 			dataType : "json",
 			headers : headers,
 			async : false, //ajax는 비동기 통신이기 때문에 해당 옵션을 동기식으로 변경해서 차트가 그려지기 전에 다른 작업을 못하도록 막음
-			success(data) {
-				console.log(data);
+			success(resp) {
 				let outer =[['Category', 'Total']];
-				for(const obj in data) {
+				for(const obj in resp) {
 					let inner = [];
-					inner.push(data[obj].category);
-					inner.push(data[obj].total);
+					inner.push(resp[obj].category);
+					inner.push(resp[obj].total);
 					outer.push(inner);
 				}
 			var chartData = google.visualization.arrayToDataTable(outer);
