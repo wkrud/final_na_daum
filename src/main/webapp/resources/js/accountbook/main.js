@@ -85,20 +85,20 @@
 	});
 	
 	//대분류 선택에 따른 소분류 출력 - 모달
-	$(document).on("change", "#main", function() {
-		const $mainCategory = $("#main").val();
+	$(document).on("change", ".main", function() {
+		const $mainCategory = $(".main").val();
 
-		$('#sub').empty();
-		$('#sub').append(`<option value="">카테고리</option>`);
+		$('.sub').empty();
+		$('.sub').append(`<option value="">카테고리</option>`);
 
 		if($mainCategory == "I") {
 			for (let i = 0; i < income.length; i++) {
-				$('#sub').append(`<option value=`+income[i]+`>`+income[i]+`</option>`);
+				$('.sub').append(`<option value=`+income[i]+`>`+income[i]+`</option>`);
 			}
 		}
 		else if($mainCategory == "E") {
 			for (let i = 0; i < expense.length; i++) {
-				$('#sub').append(`<option value=`+expense[i]+`>`+expense[i]+`</option>`);
+				$('.sub').append(`<option value=`+expense[i]+`>`+expense[i]+`</option>`);
 			}
 		} else {
 		}
@@ -154,60 +154,248 @@
 			},
 			contentType : "application/json; charset=UTF-8",
 			success(result) {
+				console.log(result);
 				$('.updateAccountTable').empty();
 				for(const detail in result) {
-					let detailList = `
+					let detailList = "";
+					detailList = `
 					<thead>
 					<tr>
-						<th colspan="4">거래내역 수정</th>
+						<th colspan="4" style="margin : 10px; padding : 10px; text-align : center; font-size : 20px;">거래내역 수정</th>
 					</tr>
 					</thead>
 					<tbody>
 					<tr>
-						<td colspan="2" rowspan="2">
+						<td colspan="2" rowspan="2" style="margin : 10px; padding : 10px; text-align : center;">
 							<input type="date" name="regDate" id="regDate" value="`+timeConvert(result[detail].regDate)+`"/>
 						</td>
-						<td>
-							<input class="checkbox-tools" type="radio" name="payment" id="cash" value ="cash"/>
-							<label class="for-checkbox-tools" for="cash">
-								<span><i class="far fa-money-bill-alt"></i></span>
-							</label>
-						</td>
-						<td>
-							<input class="checkbox-tools" type="radio" name="payment" id="card" value ="card"/>
-							<label class="for-checkbox-tools" for="card">
-								<span><i class="far fa-credit-card" id="card"></i></span>
-							</label>
-						</td>
 					</tr>
 					<tr>
-						<td>
-							<select name="incomeExpense" id="main">
-								<option value="">대분류</option>
+						<td style="margin : 10px; padding : 10px; text-align : center;">
+							<select name="incomeExpense" class="main">
+							`
+					if(result[detail].incomeExpense == "I") {
+						detailList += `
+									<option value="I" selected>수입</option>
+									<option value="E">지출</option>
+								</select>
+							</td>`
+							if(result[detail].category == "급여") {
+								detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="급여" selected>급여</option>
+											<option value="용돈">용돈</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+							} else if(result[detail].category == "용돈") {
+								detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="급여">급여</option>
+											<option value="용돈" selected>용돈</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+							} else if(result[detail].category == "기타")	{
+								detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="급여">급여</option>
+											<option value="용돈">용돈</option>
+											<option value="기타" selected>기타</option>
+										</select>
+									</td>`
+							} else {
+								detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="급여">급여</option>
+											<option value="용돈">용돈</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+							}	
+					} else if(result[detail].incomeExpense == "E"){
+						detailList += `
 								<option value="I">수입</option>
-								<option value="E">지출</option>
+								<option value="E" selected>지출</option>
 							</select>
-						</td>
-						<td>
-							<select name="category" id="sub">
-								<option value="">소분류</option>
+						</td>`	
+						if(result[detail].category == "식비") {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비" selected>식비</option>
+											<option value="쇼핑">쇼핑</option>
+											<option value="생활비">생활비</option>
+											<option value="자기계발">자기계발</option>
+											<option value="유흥">유흥</option>
+											<option value="저축">저축</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+						} else if(result[detail].category == "쇼핑") {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비">식비</option>
+											<option value="쇼핑" selected>쇼핑</option>
+											<option value="생활비">생활비</option>
+											<option value="자기계발">자기계발</option>
+											<option value="유흥">유흥</option>
+											<option value="저축">저축</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+						} else if(result[detail].category == "생활비") {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비">식비</option>
+											<option value="쇼핑">쇼핑</option>
+											<option value="생활비" selected>생활비</option>
+											<option value="자기계발">자기계발</option>
+											<option value="유흥">유흥</option>
+											<option value="저축">저축</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+						} else if(result[detail].category == "자기계발") {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비">식비</option>
+											<option value="쇼핑">쇼핑</option>
+											<option value="생활비">생활비</option>
+											<option value="자기계발" selected>자기계발</option>
+											<option value="유흥">유흥</option>
+											<option value="저축">저축</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+						} else if(result[detail].category == "유흥") {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비">식비</option>
+											<option value="쇼핑">쇼핑</option>
+											<option value="생활비">생활비</option>
+											<option value="자기계발">자기계발</option>
+											<option value="유흥" selected>유흥</option>
+											<option value="저축">저축</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+						} else if(result[detail].category == "저축") {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비">식비</option>
+											<option value="쇼핑">쇼핑</option>
+											<option value="생활비">생활비</option>
+											<option value="자기계발">자기계발</option>
+											<option value="유흥">유흥</option>
+											<option value="저축" selected>저축</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+						} else if(result[detail].category == "기타") {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비">식비</option>
+											<option value="쇼핑">쇼핑</option>
+											<option value="생활비">생활비</option>
+											<option value="자기계발">자기계발</option>
+											<option value="유흥">유흥</option>
+											<option value="저축">저축</option>
+											<option value="기타" selected>기타</option>
+										</select>
+									</td>`
+						} else {
+							detailList += `
+									<td style="margin : 10px; padding : 10px; text-align : center;">
+										<select name="category" class="sub">
+											<option value="">카테고리</option>
+											<option value="식비">식비</option>
+											<option value="쇼핑">쇼핑</option>
+											<option value="생활비">생활비</option>
+											<option value="자기계발">자기계발</option>
+											<option value="유흥">유흥</option>
+											<option value="저축">저축</option>
+											<option value="기타">기타</option>
+										</select>
+									</td>`
+						}
+					} else {
+						detailList += `
+									<option value="I">수입</option>
+									<option value="E">지출</option>
+								</select>
+							</td>
+						<td style="margin : 10px; padding : 10px; text-align : center;">
+							<select name="category" class="sub">
+								<option value="">카테고리</option>
+								<option value="급여">급여</option>
+								<option value="용돈">용돈</option>
+								<option value="기타">기타</option>
 							</select>
-						</td>
+						</td>`
+						
+					}
+					detailList += `
 					</tr>
 					<tr>
-						<td colspan="4">
+						<td colspan="3" style="margin : 10px; padding : 10px; text-align : center; position : relative; top : 5px; left : 15px;">
 							<label for="detail">
 								<input type="text" name="detail" id="" placeholder="내역을 입력하세요" value="`+result[detail].detail+`" />
 							</label>
 						</td>
+						<td style="margin : 10px; padding : 10px; text-align : center;">
+							<select name="payment">`
+							if(result[detail].payment == "cash") {
+								detailList += `
+								<option value="">결제수단</option>
+								<option value="cash" selected>현금</option>
+								<option value="card">카드</option>
+								`
+							} else if(result[detail].payment == "card") {
+								detailList += `
+								<option value="">결제수단</option>
+								<option value="cash">현금</option>
+								<option value="card" selected>카드</option>
+								`
+							} else {
+								detailList += `
+								<option value="">결제수단</option>
+								<option value="cash">현금</option>
+								<option value="card">카드</option>
+								`
+							}
+							detailList += `
+							</select>
+						</td>
 					</tr>
 					<tr>
-						<td colspan="4">
+						<td colspan="4" style="margin : 10px; padding : 10px; text-align : center;">
 							<label for="price">
 								<input type="text" name="price" id="insertPrice" placeholder="금액을 입력하세요" onkeyup="numberWithCommas(this.value)" value=`+result[detail].price+` />
 							</label>
 						</td>
-						<td>
+						<td style="margin : 10px; padding : 10px; text-align : center;">
 							<input type="hidden" name="code" id="code" value="`+result[detail].code+`"/>
 					</tr>
 					</tbody>

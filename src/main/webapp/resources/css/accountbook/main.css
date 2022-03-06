@@ -339,17 +339,25 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 	font-size : 20px;
 }
 
+.detail_td {
+	position : relative;
+	top : 5px;
+	left : 15px;
+}
+
 .addAccountBtn {
 	margin : 10px;
 	font-size : 18px;
 	width : 150px;
 	height : 50px;
 	border-radius : 10px;
-	background-color : #c7ecf5;
+	background-color : #0A1F33;
+	color : #FFFBF5;
 }
 
 .addAccountBtn:hover {
-	background-color : #88d7ea;
+	background-color : #0A1F33;
+	color : #FFFBF5;
 }
 
 
@@ -495,10 +503,10 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
 	background-color : rgba(255, 128, 128, 0.4);
 }
 .incomeArea-payment-count li:nth-child(2), .expenseArea-payment-count li:nth-child(2) {
-	background-color : rgba(128, 255, 255, 0.4);
+	background-color : rgba(255, 255, 128, 0.4);
 }
 .incomeArea-payment-count li:nth-child(3), .expenseArea-payment-count li:nth-child(3) {
-	background-color : rgba(255, 255, 128, 0.4);
+	background-color : rgba(128, 255, 255, 0.4);
 }
 
 .income-category-ranking, .expense-category-ranking {

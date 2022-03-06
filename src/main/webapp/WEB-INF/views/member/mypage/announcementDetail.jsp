@@ -22,9 +22,6 @@
 			<div class="announcement-date">
 				<span><fmt:formatDate value="${announce.regDate}" pattern="yyyy.MM.dd"/></span>
 			</div>
-			<div class="announcement-read-count">
-				<span>${announce.readCount}</span>
-			</div>
 		</div>
 		<div class="announcement-detail-body-wrap">
 			<div class="announcement-detail-section">

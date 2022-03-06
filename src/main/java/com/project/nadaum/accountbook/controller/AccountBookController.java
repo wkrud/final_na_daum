@@ -51,7 +51,7 @@ public class AccountBookController {
 	// 가계부 첫 화면에 보여질 값들
 	@RequestMapping(value = "/accountbook.do")
 	public void accountbook(@RequestParam(defaultValue = "1") int cPage, @AuthenticationPrincipal Member member,
-			Model model, String date, HttpServletRequest request) {
+											Model model, String date, HttpServletRequest request) {
 		int limit = 4;
 		int offset = (cPage - 1) * limit;
 		String id = member.getId();
@@ -306,14 +306,17 @@ public class AccountBookController {
 		map.put("incomeExpense", incomeExpense);
 		map.put("category", category);
 		map.put("detail", detail);
-		map.put("id", member.getId());
+		map.put("id", id);
 		map.put("limit", limit);
 		map.put("offset", offset);
 		map.put("date", date);
-		log.info("map={}", map);
 
 		List<AccountBook> accountList = accountBookService.searchList(map);
 		log.info("list={}", accountList);
+		
+		//이달의 월 조회
+		String today = accountBookService.searchToday(map);
+		log.info("today={}",today);
 
 		// 전체리스트 개수
 		int totalAccountList = accountBookService.countAccountList(map);
@@ -343,11 +346,9 @@ public class AccountBookController {
 			incomeExpenseList.put("income", incomeList.get(1).get("total"));
 			incomeExpenseList.put("expense", incomeList.get(0).get("total"));
 		}
-		log.info("incomeExpenseList={}", incomeExpenseList);
 
 		// 월간 총 합계 금액
 		String monthlyAccount = accountBookService.monthlyAccount(map);
-		log.info("monthlyAccount={}", monthlyAccount);
 		// 만약 사용자 입력값이 없어서 monthlyAccount합계가 null값이 넘어온다면 해당 변수에 0 대입
 		if (monthlyAccount == null) {
 			monthlyAccount = "0";
@@ -358,6 +359,7 @@ public class AccountBookController {
 		model.addAttribute("monthlyAccount", monthlyAccount);
 		model.addAttribute("accountList", accountList);
 		model.addAttribute("searchKeyword", map);
+		model.addAttribute("today", today);
 
 		return "/accountbook/accountbook";
 	}
