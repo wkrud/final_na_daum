@@ -348,7 +348,7 @@ $(id).keyup((e) => {
 	if(idVal.length < 4){
 		$idError.hide();
 		$idOk.hide();
-		$idValid.val(0);
+		$idVal.val(0);
 		return;
 	}
 	
@@ -364,16 +364,16 @@ $(id).keyup((e) => {
 				if(/^[A-Z|가-힣|0-9|a-z]{4,10}$/.test(idVal)){
 					$idError.hide();
 					$idOk.show();
-					$idValid.val(1);					
+					$idVal.val(1);					
 				}else{
 					$idError.show();
 					$idOk.hide();
-					$idValid.val(0);
+					$idVal.val(0);
 				}
 			}else{
 				$idError.show();
 				$idOk.hide();
-				$idValid.val(0);
+				$idVal.val(0);
 			}
 		},
 		error: console.log
