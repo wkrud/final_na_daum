@@ -18,7 +18,7 @@
 
 
 ### 페이지 설명이 포함된 노션
-- https://www.notion.so/8cfdbaf4cec84a46904f747acfa320a8
+- https://ossified-crane-9ed.notion.site/6949b33456a44c3fb51a9b4b77247274
 ### 팀원 및 좌우명
 - 김재경 : 밤새면 다 돼요
 - 전혜린 : 0과 1의 끝없는 전쟁
